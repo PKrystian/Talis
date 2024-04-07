@@ -23,7 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
-DATABASE_PASSWORD = os.environ.get('DB_SECRET_KEY', default='your db secret key')
 DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
@@ -81,7 +80,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgres://postgres:' + DATABASE_PASSWORD + '@localhost:5432/postgres',
+        default='postgres://dbname_77xc_user:fBEAtQl1JcukRKySEBnHKcSOpa2gw5uJ@dpg-co98vkdjm4es73ar6hjg-a.frankfurt-postgres.render.com/dbname_77xc',
         conn_max_age=600
     )
 }
