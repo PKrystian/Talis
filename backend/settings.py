@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-SECRET_KEY = config('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
+DATABASE_PASSWORD = os.environ.get('DB_SECRET_KEY', default='your db secret key')
 DEBUG = 'RENDER' not in os.environ
-DATABASE_PASSWORD = config('DATABASE_PASSWORD_LOCAL')
 
 ALLOWED_HOSTS = []
 
