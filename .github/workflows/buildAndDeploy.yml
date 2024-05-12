@@ -24,8 +24,8 @@ jobs:
           npm install
           npm run build
 
-      - name: Deploy to DigitalOcean App Platform
-        uses: digitalocean/action-do-app-deploy@v2
+      - name: DigitalOcean App Platform deployment
+        uses: digitalocean/app_action@v1.1.6
         with:
-          app_id: ${{ secrets.DIGITALOCEAN_APP_ID }}
+          app_name: 'talis'
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
