@@ -2,6 +2,8 @@ asgiref==3.8.1
 dj-database-url==2.1.0
 Django==5.0.5
 gunicorn==22.0.0
+nodejs-bin==18.4.0a4
+nodejs-cmd==0.0.1a0
 packaging==24.0
 psycopg2-binary==2.9.9
 sqlparse==0.5.0
