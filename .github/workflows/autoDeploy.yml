@@ -33,6 +33,9 @@ jobs:
                 github:
                   repo: talis
                   branch: main
+                buildpacks:
+                  - https://github.com/heroku/heroku-buildpack-nodejs
+                  - https://github.com/heroku/heroku-buildpack-python
                 build_command: |
                   cd frontend && npm install && npm run build && cd ..
                   # Add any other build steps for your Django app here
