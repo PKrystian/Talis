@@ -5,13 +5,9 @@ from django.core.management.utils import get_random_secret_key
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
-
 DEBUG = os.getenv("DEBUG", "True") == "True"
-
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1, localhost").split(",")
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -19,21 +15,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "app",
 ]
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
 ROOT_URLCONF = "backend.urls"
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -51,9 +46,7 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = "backend.wsgi.application"
-
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 if DEVELOPMENT_MODE is True:
@@ -87,19 +80,14 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
-
+CORS_ORIGIN_ALLOW_ALL = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'frontend/build/static'),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
