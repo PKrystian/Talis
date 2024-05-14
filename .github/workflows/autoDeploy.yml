@@ -26,3 +26,17 @@ jobs:
         with:
           app_name: 'talis'
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          spec: |
+            name: talis
+            services:
+              - name: web
+                github:
+                  repo: talis
+                  branch: main
+                build_command: |
+                  cd frontend && npm install && npm run build && cd ..
+                  # Add any other build steps for your Django app here
+                run_command: python manage.py runserver 0.0.0.0:8080
+                envs:
+                  - key: DJANGO_SETTINGS_MODULE
+                    value: myapp.settings
