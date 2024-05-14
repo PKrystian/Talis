@@ -1,17 +1,14 @@
 import './App.css';
+import React from 'react';
+import AnimalList from './components/AnimalList';
 
-function App() {
-  return (
+const App = () => {
+return (
     <div className="App">
-      <header className="App-header">
-        <h1>React App</h1>
-        <span>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </span>
-      </header>
+        <header className="App-header">
+            <AnimalList/>
+        </header>
     </div>
-  );
-}
+);}
 
 export default App;
