@@ -21,7 +21,8 @@ cd Talis
 3. **Create a virtual environment**
 ```bash
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate # Linux, Mac
+source venv/Scripts/activate # Windows
 ```
 
 4. **Install dependencies**
