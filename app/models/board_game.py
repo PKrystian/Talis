@@ -2,27 +2,30 @@ from django.db import models
 
 
 class BoardGame(models.Model):
-    def default_category(self):
+    @staticmethod
+    def __default_category() -> dict[str, list]:
         return {'category': []}
 
-    def default_mechanic(self):
+    @staticmethod
+    def __default_mechanic() -> dict[str, list]:
         return {'mechanic': []}
 
-    def default_expansion(self):
+    @staticmethod
+    def __default_expansion() -> dict[str, list]:
         return {'expansion': []}
 
     objects = None
     name = models.CharField(max_length=256, unique=True)
     year_published = models.PositiveSmallIntegerField(null=True)
     publisher = models.CharField(max_length=128, null=True)
-    category = models.JSONField(default=default_category)
-    mechanic = models.JSONField(default=default_mechanic)
+    category = models.JSONField(default=__default_category)
+    mechanic = models.JSONField(default=__default_mechanic)
     min_players = models.PositiveSmallIntegerField(default=0, null=True)
     max_players = models.PositiveSmallIntegerField(default=0, null=True)
     age = models.PositiveSmallIntegerField(default=0, null=True)
     min_playtime = models.PositiveIntegerField(default=0, null=True)
     max_playtime = models.PositiveIntegerField(default=0, null=True)
-    expansion = models.JSONField(default=default_expansion)
+    expansion = models.JSONField(default=__default_expansion)
     description = models.TextField(default='', null=True)
     image_url = models.CharField(max_length=256, unique=True, null=True)
 

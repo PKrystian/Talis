@@ -14,7 +14,7 @@ def board_game_list(request):
             'id': board_game.id,
             'name': board_game.name,
             'year_published': board_game.year_published,
-            'age': board_game.description
+            'description': board_game.description
         }
         for board_game in board_games
     ]
