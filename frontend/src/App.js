@@ -1,12 +1,12 @@
 import './App.css';
 import React from 'react';
-import AnimalList from './components/AnimalList';
+import BoardGameList from './components/BoardGameList';
 
 const App = () => {
 return (
     <div className="App">
         <header className="App-header">
-            <AnimalList/>
+            <BoardGameList/>
         </header>
     </div>
 );}
