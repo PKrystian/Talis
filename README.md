@@ -4,10 +4,10 @@ Application to help select board games and organize them.
 
 ## Prerequisites
 
-- [Python 3.8](https://www.python.org/downloads/) or higher
+- [Python 3.10](https://www.python.org/downloads/) or higher
 - [Node.js $ npm](https://nodejs.org/en/download/package-manager/current)
 - [PostgresSQL](https://www.postgresql.org/download/)
-- [PyCharm Professional](https://www.jetbrains.com/pycharm/download/) (optional)
+- [PyCharm Professional or Community](https://www.jetbrains.com/pycharm/download/) (optional)
 
 ## Setup
 
@@ -18,11 +18,9 @@ git clone git@github.com:PKrystian/Talis.git
 cd Talis
 ```
 
-3. **Create a virtual environment**
+3. **Install poetry**
 ```bash
-python3 -m venv venv
-source venv/bin/activate # Linux, Mac
-source venv/Scripts/activate # Windows
+pipx install poetry
 ```
 
 4. **Install dependencies**
@@ -30,11 +28,9 @@ source venv/Scripts/activate # Windows
 - TODO: Add script which will install the dependencies automatically.
 
 ```bash
-pip3 install -r requirements.txt
-cd frontend && npm install && cd ..
+chmod +x build.sh
+./build.sh install
 ```
-
-- If you're on macOS replace requirements.txt with requirements-macos.txt.
 
 5. **Create local postgres database**
     
@@ -53,20 +49,13 @@ export DEVELOPMENT_MODE=True
 ```
 
 7. **Build the project**
-
-- TODO: Add script which will build the project automatically.
-
 ```bash
-python3 manage.py migrate
-cd frontend && npm run build && cd ..
-python3 manage.py collectstatic --noinput
-python3 manage.py runserver
+./build.sh run
 ```
 
 8. **Create superuser**
-
 ```bash
-python3 manage.py createsuperuser
+poetry run manage.py createsuperuser
 ```
 
 - Follow the instructions in the terminal.
