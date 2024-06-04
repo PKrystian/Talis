@@ -20,15 +20,12 @@ cd Talis
 
 3. **Install poetry**
 ```bash
-pipx install poetry
+chmod +x build.sh
+./build.sh install-poetry
 ```
 
 4. **Install dependencies**
-
-- TODO: Add script which will install the dependencies automatically.
-
 ```bash
-chmod +x build.sh
 ./build.sh install
 ```
 
