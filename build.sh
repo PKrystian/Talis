@@ -10,8 +10,14 @@ case $1 in
   ;;
   'install')
     poetry install && cd frontend && npm install && cd ..
+    poetry export --without-hashes --format=requirements.txt > requirements.txt
+  ;;
+  'install-poetry')
+    pipx install poetry
+    pipx inject poetry poetry-plugin-export
+    poetry config warnings.export false
   ;;
   *)
-    echo -e "Please specify ${startRed}run${endRed} or ${startRed}install${endRed}"
+    echo -e "Please specify ${startRed}run${endRed}, ${startRed}install${endRed} or ${startRed}poetry-install${endRed}"
   ;;
 esac
