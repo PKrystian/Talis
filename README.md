@@ -18,18 +18,24 @@ git clone git@github.com:PKrystian/Talis.git
 cd Talis
 ```
 
-3. **Install poetry**
+3. **Install pipx**
+```bash
+python -m pip install --user pipx
+export PATH="$PATH:`python -m site --user-base`/Scripts"
+```
+
+4. **Install poetry**
 ```bash
 chmod +x build.sh
 ./build.sh install-poetry
 ```
 
-4. **Install dependencies**
+5. **Install dependencies**
 ```bash
 ./build.sh install
 ```
 
-5. **Create local postgres database**
+6. **Create local postgres database**
     
 ```bash
 psql
@@ -38,27 +44,27 @@ CREATE USER postgres WITH PASSWORD 'local';
 ```
 - If this doesn't work, try to create the database and user in [pgAdmin manually.](https://www.youtube.com/watch?v=IugEHi_5kMA)
 
-6. **Set up environment variables**
+7. **Set up environment variables**
 
 ```bash
 export DEBUG=True
 export DEVELOPMENT_MODE=True
 ```
 
-7. **Build the project**
+8. **Build the project**
 ```bash
 ./build.sh run
 ```
 
-8. **Create superuser**
+9. **Create superuser**
 ```bash
 poetry run manage.py createsuperuser
 ```
 
 - Follow the instructions in the terminal.
 
-9. **Open the browser and go to link from the terminal and test the application**
-10. **Add /admin to the link and log in with the superuser credentials to see the admin panel**
+10. **Open the browser and go to link from the terminal and test the application**
+11. **Add /admin to the link and log in with the superuser credentials to see the admin panel**
 
 ## License
 
