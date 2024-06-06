@@ -4,10 +4,10 @@ Application to help select board games and organize them.
 
 ## Prerequisites
 
-- [Python 3.8](https://www.python.org/downloads/) or higher
+- [Python 3.10](https://www.python.org/downloads/) or higher
 - [Node.js $ npm](https://nodejs.org/en/download/package-manager/current)
 - [PostgresSQL](https://www.postgresql.org/download/)
-- [PyCharm Professional](https://www.jetbrains.com/pycharm/download/) (optional)
+- [PyCharm Professional or Community](https://www.jetbrains.com/pycharm/download/) (optional)
 
 ## Setup
 
@@ -18,25 +18,24 @@ git clone git@github.com:PKrystian/Talis.git
 cd Talis
 ```
 
-3. **Create a virtual environment**
+3. **Install pipx**
 ```bash
-python3 -m venv venv
-source venv/bin/activate # Linux, Mac
-source venv/Scripts/activate # Windows
+python -m pip install --user pipx
+export PATH="$PATH:`python -m site --user-base`/Scripts"
 ```
 
-4. **Install dependencies**
-
-- TODO: Add script which will install the dependencies automatically.
-
+4. **Install poetry**
 ```bash
-pip3 install -r requirements.txt
-cd frontend && npm install && cd ..
+chmod +x build.sh
+./build.sh install-poetry
 ```
 
-- If you're on macOS replace requirements.txt with requirements-macos.txt.
+5. **Install dependencies**
+```bash
+./build.sh install
+```
 
-5. **Create local postgres database**
+6. **Create local postgres database**
     
 ```bash
 psql
@@ -45,34 +44,27 @@ CREATE USER postgres WITH PASSWORD 'local';
 ```
 - If this doesn't work, try to create the database and user in [pgAdmin manually.](https://www.youtube.com/watch?v=IugEHi_5kMA)
 
-6. **Set up environment variables**
+7. **Set up environment variables**
 
 ```bash
 export DEBUG=True
 export DEVELOPMENT_MODE=True
 ```
 
-7. **Build the project**
-
-- TODO: Add script which will build the project automatically.
-
+8. **Build the project**
 ```bash
-python3 manage.py migrate
-cd frontend && npm run build && cd ..
-python3 manage.py collectstatic --noinput
-python3 manage.py runserver
+./build.sh run
 ```
 
-8. **Create superuser**
-
+9. **Create superuser**
 ```bash
-python3 manage.py createsuperuser
+poetry run manage.py createsuperuser
 ```
 
 - Follow the instructions in the terminal.
 
-9. **Open the browser and go to link from the terminal and test the application**
-10. **Add /admin to the link and log in with the superuser credentials to see the admin panel**
+10. **Open the browser and go to link from the terminal and test the application**
+11. **Add /admin to the link and log in with the superuser credentials to see the admin panel**
 
 ## License
 
