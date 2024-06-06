@@ -12,8 +12,9 @@ def index(request):
 
 
 def get_shuffled_games(board_games):
-    random.shuffle(board_games)
-    return board_games
+    board_games_list = list(board_games)
+    random.shuffle(board_games_list)
+    return board_games_list
 
 
 def categorize_games(board_games):
