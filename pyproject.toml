@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "talis"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+poetry-core = "^1.9.0"
+asgiref = "3.8.1"
+dj-database-url = "2.1.0"
+django = "5.0.5"
+django-cors-headers = "4.3.1"
+gunicorn = "22.0.0"
+nodejs-bin = "18.4.0a4"
+nodejs-cmd = "0.0.1a0"
+packaging = "24.0"
+psycopg2 = "2.9.9"
+sqlparse = "0.5.0"
+typing-extensions = "4.11.0"
+tzdata = "2024.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
