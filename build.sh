@@ -6,7 +6,7 @@ endRed='\e[0m'
 case $1 in
   'run')
     poetry run manage.py migrate && cd frontend && npm run build && cd ..
-    poetry run manage.py collectstatic --noinput && poetry run manage.py runserver
+    poetry run python manage.py collectstatic --noinput && poetry run python manage.py runserver
   ;;
   'install')
     poetry install && cd frontend && npm install && cd ..
@@ -18,6 +18,6 @@ case $1 in
     poetry config warnings.export false
   ;;
   *)
-    echo -e "Please specify ${startRed}run${endRed}, ${startRed}install${endRed} or ${startRed}poetry-install${endRed}"
+    echo -e "Please specify ${startRed}run${endRed}, ${startRed}install${endRed} or ${startRed}install-poetry${endRed}"
   ;;
 esac
