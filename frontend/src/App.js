@@ -1,28 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import LandingPage from './components/LandingPage';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faStarOfLife, faListCheck, faChartLine, faUsers, faHandsClapping } from '@fortawesome/free-solid-svg-icons';
+import useFetch from './hooks/useFetch';
 
 library.add(faStarOfLife, faListCheck, faChartLine, faUsers, faHandsClapping);
 
 const App = () => {
-  const [boardGames, setBoardGames] = useState({});
+  const apiUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/board-games/' : '/api/board-games/';
+  const { data: boardGames, isLoading, error } = useFetch(apiUrl);
 
-  useEffect(() => {
-    const apiUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/board-games/' : '/api/board-games/';
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    const fetchBoardGames = async () => {
-      try {
-        const response = await axios.get(apiUrl);
-        setBoardGames(response.data);
-      } catch (error) {
-        console.error('Error fetching boardGames:', error);
-      }
-    };
-
-    fetchBoardGames().then();
-  }, []);
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div>
