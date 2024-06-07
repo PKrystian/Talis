@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TableItem = ({ boardGame }) => {
   return (
     <div key={boardGame.id} className="card bg-dark text-white m-2" style={{ minWidth: '200px' }}>
