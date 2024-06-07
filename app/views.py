@@ -4,7 +4,7 @@ from .models.board_game import BoardGame
 import json
 import random
 
-LIMIT = 10
+LIMIT = 16
 
 
 def index(request):
