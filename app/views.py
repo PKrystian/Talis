@@ -1,23 +1,24 @@
+import json
+import random
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models.board_game import BoardGame
-import json
-import random
 
 LIMIT = 16
 
 
-def index(request):
+def index(request) -> None:
     return render(request, 'index.html')
 
 
-def get_shuffled_games(board_games):
+def get_shuffled_games(board_games) -> list:
     board_games_list = list(board_games)
     random.shuffle(board_games_list)
     return board_games_list
 
 
-def categorize_games(board_games):
+def categorize_games(board_games) -> dict:
     categories = [
         'Based on your games',
         'Wishlist',
@@ -30,24 +31,12 @@ def categorize_games(board_games):
     return categorized_games
 
 
-def parse_json_data(json_str):
-    try:
-        if json_str.strip():
-            categories = json.loads(json_str.replace("'", '"'))
-            return ', '.join(categories)
-        else:
-            return ''
-    except (json.JSONDecodeError, TypeError):
-        print(f"Error decoding JSON data: {json_str}")
-        return ''
-
-
-def board_game_list(request):
+def board_game_list(request) -> JsonResponse:
     board_games = BoardGame.objects.all()[:LIMIT]
     data = []
 
     for board_game in board_games:
-        category = parse_json_data(board_game.category)
+        category = json.dumps(board_game.category[BoardGame.CATEGORY_FIELD])
 
         data.append({
             'id': board_game.id,
