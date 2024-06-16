@@ -49,7 +49,9 @@ CREATE USER postgres WITH PASSWORD 'local';
 ```bash
 export DEBUG=True
 export DEVELOPMENT_MODE=True
+export DEVELOPMENT_PASSWORD="your_password"
 ```
+- If your password in pgAdmin is 'local' you can ignore the last command
 
 8. **Build the project**
 ```bash
@@ -58,7 +60,7 @@ export DEVELOPMENT_MODE=True
 
 9. **Create superuser**
 ```bash
-poetry run manage.py createsuperuser
+poetry run python manage.py createsuperuser
 ```
 
 - Follow the instructions in the terminal.
