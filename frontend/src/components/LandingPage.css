@@ -24,6 +24,7 @@ body {
 }
 
 .container {
+  padding-top: 80px;
   background-color: #121212;
 }
 
