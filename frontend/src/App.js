@@ -1,10 +1,11 @@
 import React from 'react';
-import LandingPage from './components/LandingPage';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faStarOfLife, faListCheck, faChartLine, faUsers, faHandsClapping } from '@fortawesome/free-solid-svg-icons';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import useFetch from './hooks/useFetch';
-
-library.add(faStarOfLife, faListCheck, faChartLine, faUsers, faHandsClapping);
+import LandingPage from './components/LandingPage';
+import AboutPage from './components/AboutPage';
+import ContactPage from './components/ContactPage';
+import UserPage from './components/UserPage';
+import Navbar from './components/Navbar';
 
 const App = () => {
   const apiUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/board-games/' : '/api/board-games/';
@@ -19,9 +20,17 @@ const App = () => {
   }
 
   return (
-    <div>
-      <LandingPage boardGames={boardGames} />
-    </div>
+    <Router>
+      <div>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<LandingPage boardGames={boardGames} />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/user" element={<UserPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

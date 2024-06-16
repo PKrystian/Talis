@@ -50,12 +50,13 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 if DEVELOPMENT_MODE is True:
+    DEVELOPMENT_PASSWORD = os.getenv("DEVELOPMENT_PASSWORD", "local")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'db_dev',
             'USER': 'postgres',
-            'PASSWORD': 'local',
+            'PASSWORD': DEVELOPMENT_PASSWORD,
             'HOST': 'localhost',
         }
     }
@@ -88,6 +89,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'frontend/build/static'),
+    os.path.join(BASE_DIR, 'frontend', 'public'),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

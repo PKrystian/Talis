@@ -5,7 +5,7 @@ endRed='\e[0m'
 
 case $1 in
   'run')
-    poetry run manage.py migrate && cd frontend && npm run build && cd ..
+    poetry run python manage.py migrate && cd frontend && npm run build && cd ..
     poetry run python manage.py collectstatic --noinput && poetry run python manage.py runserver
   ;;
   'install')
