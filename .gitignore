@@ -22,3 +22,6 @@ venv.bak/
 # PyCharm
 /.idea/
 **/.DS_Store
+
+# Testing files
+app/management/commands/foo.py
