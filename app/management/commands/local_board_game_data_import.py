@@ -35,7 +35,13 @@ class Command(BaseCommand):
         for i in range(limit):
             self.stdout.write(f'Importing game number {i}')
             board_game_df = dataset.iloc[i]
-            board_game = BoardGameCreator.create_from_dataframe(board_game_df)
+
+            board_game_creator = BoardGameCreator()
+            board_game = (board_game_creator
+                          .create()
+                          .load_from_dataframe(board_game_df)
+                          .get_board_game()
+                          )
             board_game.save()
 
         os.remove(self.FILE_NAME)

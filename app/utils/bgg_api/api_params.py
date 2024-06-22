@@ -19,15 +19,27 @@ RATINGS = 'ratings'
 BAYES_AVERAGE = 'bayesaverage'
 
 TEXT_FIELD_PARAM = '#text'
+ID_FIELD_PARAM = '@id'
+TOTAL_COUNT_FIELD_PARAM = '@total'
 
 # Main xml field names
 BASE_XML_PARAM = 'boardgames'
 BOARDGAME_XML_PARAM = 'boardgame'
 
+# Search field names
+BASE_XML_SEARCH_PARAM = 'items'
+SUB_XML_SEARCH_PARAM = 'item'
+
 BASE_API_URL = 'https://api.geekdo.com/xmlapi/boardgame/'
+BASE_API_SEARCH_URL = 'https://boardgamegeek.com/xmlapi2/search'
 API_DATA_LIMIT = 99
 
+# Boardgame fetch params
 ADDITIONAL_URL_PARAM_STATS = '?stats=1'
+
+# Search params
+ADDITIONAL_URL_SEARCH_PARAM_EXACT = '&exact=1'
+ADDITIONAL_URL_SEARCH_PARAM_QUERY = '?query='
 
 ALL_FIELDS = [
     NAME,
