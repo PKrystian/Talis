@@ -1,6 +1,6 @@
 const TableItem = ({ boardGame }) => {
   return (
-    <div key={boardGame.id} className="card bg-dark text-white m-2" style={{ minWidth: '200px' }}>
+    <div key={boardGame.id} className="card bg-dark text-white m-2" style={{ minWidth: '200px', maxWidth: '200px' }}>
       <img src={boardGame.image_url} className="card-img-top" alt={boardGame.name} />
       <div className="card-body">
         <h5 className="card-title">{boardGame.name}</h5>
