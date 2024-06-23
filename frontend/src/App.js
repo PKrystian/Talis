@@ -25,11 +25,11 @@ const App = () => {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<LandingPage boardGames={boardGames} />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/user" element={<UserPage />} />
-          <Route path="/game" element={<GamePage />} />
+          <Route path="/" element={ <LandingPage boardGames={ boardGames } />} />
+          <Route path="/about" element={ <AboutPage /> } />
+          <Route path="/contact" element={ <ContactPage /> } />
+          <Route path="/user" element={ <UserPage /> } />
+          <Route path="/game" element={ <GamePage /> } />
         </Routes>
       </div>
     </Router>

@@ -1,23 +1,19 @@
-.container{
+.game-page {
     display: flex;
 }
 
-.game-page{
-
-}
-
-.game-image{
+.game-image {
     max-width: 350px;
     text-align: left;
     padding-right: 20px;
 }
 
-.basic-info{
+.basic-info {
     display: flex;
     padding-bottom: 5px;
 }
 
-.basic-info-item{
+.basic-info-item {
     padding-right: 15px;
     font-size: 1.2em;
 }
