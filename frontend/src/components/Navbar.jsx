@@ -8,7 +8,9 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <div className="navbar-logo">
+          <Link to='/'>
             <img src={'/static/favicon.ico'} alt="Logo"  />
+          </Link>
         </div>
         <form className="search-bar">
           <FontAwesomeIcon icon={faSearch} className="nav-icon" />
