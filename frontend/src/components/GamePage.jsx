@@ -9,7 +9,7 @@ const GamePage = () => {
     return (
       <div className="container game-page">
         <div className="game-image">
-            <img src={ boardGame.image_url } className="card-img-top" alt={ boardGame.name }/>
+            <img src={ boardGame.image_url } className="boardgame-img" alt={ boardGame.name }/>
         </div>
         <div className="game-info">
             <h1 className="game-title">{ boardGame.name }</h1>

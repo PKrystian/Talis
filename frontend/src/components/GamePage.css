@@ -21,3 +21,8 @@
 .bold-text {
     font-weight: bold; /* Make the text bold */
 }
+
+.boardgame-img {
+    max-width: 350px;
+    padding-right: 20px;
+}
