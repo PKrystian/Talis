@@ -1,9 +1,19 @@
+import { useNavigate } from "react-router-dom";
+import './TableItem.css';
+
 const TableItem = ({ boardGame }) => {
+  const navigate = useNavigate();
+
+  const onClick = (boardGame) => {
+    const boardGameString = encodeURIComponent(JSON.stringify(boardGame));
+    navigate(`/game?boardGame=${boardGameString}`);
+  }
+
   return (
     <div key={boardGame.id} className="card bg-dark text-white m-2" style={{ minWidth: '200px' }}>
-      <img src={boardGame.image_url} className="card-img-top" alt={boardGame.name} />
+      <img src={boardGame.image_url} className="card-img-top" alt={boardGame.name} onClick={() => onClick(boardGame)}/>
       <div className="card-body">
-        <h5 className="card-title">{boardGame.name}</h5>
+        <h5 className="card-title" onClick={() => onClick(boardGame)}>{boardGame.name}</h5>
         <p className="card-text">Producer: {boardGame.publisher}</p>
         <p className="card-text">Categories: {boardGame.category}</p>
         <p className="card-text">Year: {boardGame.year_published}</p>
