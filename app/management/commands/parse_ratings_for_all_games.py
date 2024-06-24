@@ -43,4 +43,4 @@ class Command(BaseCommand):
                 game.save()
 
                 downloaded_counter += 1
-                self.stdout.write(f'Ratings set: {downloaded_counter} / {self.__game_count}')
+                self.stdout.write(f'Ratings set: {downloaded_counter} / {game_count}')
