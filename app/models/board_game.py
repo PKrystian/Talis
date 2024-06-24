@@ -30,7 +30,7 @@ class BoardGame(models.Model):
     expansion = models.JSONField(default=default_expansion)
     description = models.TextField(default='', null=True)
     image_url = models.CharField(max_length=256, null=True)
-    rating = models.FloatField(default=0)
+    rating = models.FloatField(null=True)
     created_at = models.DateField(auto_now_add=True, null=True)
     modified_at = models.DateField(auto_now=True)
 
