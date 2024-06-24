@@ -106,6 +106,8 @@ class BoardGameDataAPIDownloader:
                    + api_params.ADDITIONAL_URL_SEARCH_PARAM_QUERY
                    + board_game.get_name().replace(' ', separator)
                    + api_params.ADDITIONAL_URL_SEARCH_PARAM_EXACT
+                   + api_params.ADDITIONAL_URL_SEARCH_PARAM_TYPE
+                   + api_params.BOARDGAME_XML_PARAM
                    )
 
             dict_response = self.__send_and_parse_request(url)
