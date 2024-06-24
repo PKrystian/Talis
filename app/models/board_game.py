@@ -1,5 +1,7 @@
 from django.db import models
 
+from app.utils.bgg_api import api_params
+
 
 def default_category() -> dict[str, list]:
     return {'category': []}
@@ -28,12 +30,34 @@ class BoardGame(models.Model):
     expansion = models.JSONField(default=default_expansion)
     description = models.TextField(default='', null=True)
     image_url = models.CharField(max_length=256, null=True)
+    rating = models.FloatField(null=True)
     created_at = models.DateField(auto_now_add=True, null=True)
     modified_at = models.DateField(auto_now=True)
+
+    setter_mapper: dict
 
     CATEGORY_FIELD = 'category'
     MECHANIC_FIELD = 'mechanic'
     EXPANSION_FIELD = 'expansion'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.setter_mapper = {
+            api_params.NAME: self.set_name,
+            api_params.YEAR_PUBLISHED: self.set_year_published,
+            api_params.BOARD_GAME_CATEGORY: self.set_category,
+            api_params.BOARD_GAME_PUBLISHER: self.set_publisher,
+            api_params.BOARD_GAME_MECHANIC: self.set_mechanic,
+            api_params.MIN_PLAYERS: self.set_min_players,
+            api_params.MAX_PLAYERS: self.set_max_players,
+            api_params.AGE: self.set_age,
+            api_params.MIN_PLAYTIME: self.set_min_playtime,
+            api_params.MAX_PLAYTIME: self.set_max_playtime,
+            api_params.BOARD_GAME_EXPANSION: self.set_expansion,
+            api_params.DESCRIPTION: self.set_description,
+            api_params.IMAGE: self.set_image_url,
+        }
 
     def __str__(self):
         return self.name
@@ -77,8 +101,20 @@ class BoardGame(models.Model):
     def set_image_url(self, image_url: str) -> None:
         self.image_url = image_url
 
+    def set_rating(self, rating: float) -> None:
+        self.rating = rating
+
+    def get_name(self) -> str:
+        return self.name
+
+    def get_description(self) -> str:
+        return self.description
+
     def get_categories(self) -> list:
         return self.category[self.CATEGORY_FIELD].values()
 
     def add_categories(self, categories: list) -> None:
         self.category[self.CATEGORY_FIELD].extend(categories)
+
+    def get_rating(self) -> float:
+        return self.rating

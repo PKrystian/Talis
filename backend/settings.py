@@ -51,6 +51,7 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 if DEVELOPMENT_MODE is True:
     DEVELOPMENT_PASSWORD = os.getenv("DEVELOPMENT_PASSWORD", "local")
+    DEVELOPMENT_PORT = os.getenv("DEVELOPMENT_PORT", "")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -58,6 +59,7 @@ if DEVELOPMENT_MODE is True:
             'USER': 'postgres',
             'PASSWORD': DEVELOPMENT_PASSWORD,
             'HOST': 'localhost',
+            'PORT': DEVELOPMENT_PORT,
         }
     }
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':

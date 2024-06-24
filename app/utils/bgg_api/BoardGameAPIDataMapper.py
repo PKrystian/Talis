@@ -1,7 +1,7 @@
 from app.utils.bgg_api import api_params
 
 
-class BoardGameDataMapper:
+class BoardGameAPIDataMapper:
     def map_with_fields(self, board_game, api_fields: list) -> dict | None:
         if 'error' in board_game.keys():
             return None
