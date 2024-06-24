@@ -51,7 +51,7 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 if DEVELOPMENT_MODE is True:
     DEVELOPMENT_PASSWORD = os.getenv("DEVELOPMENT_PASSWORD", "local")
-    DEVELOPMENT_PORT = os.getenv("DEVELOPMENT_PORT", "5432")
+    DEVELOPMENT_PORT = os.getenv("DEVELOPMENT_PORT", "")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
