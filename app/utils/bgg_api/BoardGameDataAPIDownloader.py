@@ -133,6 +133,9 @@ class BoardGameDataAPIDownloader:
                         api_fields=[api_params.NAME, api_params.DESCRIPTION]
                     )[0]
 
+                    if not params_to_match:
+                        continue
+
                     match_name = None
                     match_description = None
 
