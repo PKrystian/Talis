@@ -58,7 +58,6 @@ if DEVELOPMENT_MODE is True:
             'USER': 'postgres',
             'PASSWORD': DEVELOPMENT_PASSWORD,
             'HOST': 'localhost',
-            'PORT': 5433,
         }
     }
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
