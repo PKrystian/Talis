@@ -131,8 +131,13 @@ class BoardGameDataAPIDownloader:
                         api_fields=[api_params.NAME, api_params.DESCRIPTION]
                     )[0]
 
-                    match_name = params_to_match[api_params.NAME]
-                    match_description = params_to_match[api_params.DESCRIPTION]
+                    match_name = None
+                    match_description = None
+
+                    if api_params.NAME in params_to_match:
+                        match_name = params_to_match[api_params.NAME]
+                    if api_params.DESCRIPTION in params_to_match:
+                        match_description = params_to_match[api_params.DESCRIPTION]
 
                     if (match_name and (board_game.get_name() == match_name)) and (match_description and (board_game.get_description() == match_description)):
                         game_id = potential_game_id
