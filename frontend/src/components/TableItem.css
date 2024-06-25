@@ -1,0 +1,17 @@
+.card-img-top {
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+  
+.card-img-top:hover {
+  transform: scale(1.05);
+}
+
+.card-title {
+  transition: color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.card-title:hover {
+  color: #6B6B6B;
+}
