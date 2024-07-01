@@ -16,6 +16,7 @@ def default_expansion() -> dict[str, list]:
 
 
 class BoardGame(models.Model):
+    DoesNotExist = None
     objects = None
     name = models.CharField(max_length=256)
     year_published = models.SmallIntegerField(null=True)
@@ -31,8 +32,8 @@ class BoardGame(models.Model):
     description = models.TextField(default='', null=True)
     image_url = models.CharField(max_length=256, null=True)
     rating = models.FloatField(null=True)
-    created_at = models.DateField(auto_now_add=True, null=True)
-    modified_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     setter_mapper: dict
 
