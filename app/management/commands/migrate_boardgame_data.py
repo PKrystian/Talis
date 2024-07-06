@@ -46,8 +46,8 @@ class Command(BaseCommand):
         for idx, game in enumerate(games, start=1):
             publisher = game.publisher
             if publisher:
-                publisher_obj, created = Publisher.objects.get_or_create(name=publisher)
-                board_game_publisher, created = BoardGamePublisher.objects.get_or_create(
+                publisher_obj, _ = Publisher.objects.get_or_create(name=publisher)
+                _, _ = BoardGamePublisher.objects.get_or_create(
                     board_game=game,
                     publisher=publisher_obj
                 )
