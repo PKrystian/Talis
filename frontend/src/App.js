@@ -6,6 +6,7 @@ import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactPage';
 import UserPage from './components/UserPage';
 import Navbar from './components/Navbar';
+import GamePage from './components/GamePage'
 import SearchPage from './components/SearchPage';
 
 const App = () => {
@@ -25,10 +26,11 @@ const App = () => {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<LandingPage boardGames={boardGames} />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/user" element={<UserPage />} />
+          <Route path="/" element={ <LandingPage boardGames={ boardGames } />} />
+          <Route path="/about" element={ <AboutPage /> } />
+          <Route path="/contact" element={ <ContactPage /> } />
+          <Route path="/user" element={ <UserPage /> } />
+          <Route path="/game" element={ <GamePage /> } />
           <Route path="/search" element={<SearchPage boardGames={boardGames} />} />
         </Routes>
       </div>
