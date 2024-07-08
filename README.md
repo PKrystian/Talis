@@ -50,6 +50,9 @@ CREATE USER postgres WITH PASSWORD 'local';
 export DEBUG=True
 export DEVELOPMENT_MODE=True
 export DEVELOPMENT_PASSWORD="your_password"
+
+# only change this if you have problems with ports
+export DEVELOPMENT_PORT="your_port"
 ```
 - If your password in pgAdmin is 'local' you can ignore the last command
 

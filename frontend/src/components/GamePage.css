@@ -1,0 +1,28 @@
+.game-page {
+    display: flex;
+}
+
+.game-image {
+    max-width: 350px;
+    text-align: left;
+    padding-right: 20px;
+}
+
+.basic-info {
+    display: flex;
+    padding-bottom: 5px;
+}
+
+.basic-info-item {
+    padding-right: 15px;
+    font-size: 1.2em;
+}
+
+.bold-text {
+    font-weight: bold; /* Make the text bold */
+}
+
+.boardgame-img {
+    max-width: 350px;
+    padding-right: 20px;
+}
