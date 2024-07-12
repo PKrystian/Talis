@@ -1,17 +1,3 @@
-.d-flex {
-    padding-bottom: 10px;
+.search-results {
+  flex-wrap: wrap;
 }
-  
-  .d-flex::-webkit-scrollbar {
-    height: 8px;
-  }
-  
-  .d-flex::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 4px;
-  }
-  
-  .d-flex::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-  
