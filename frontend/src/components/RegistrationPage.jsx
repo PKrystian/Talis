@@ -18,7 +18,7 @@ const RegistrationPage = () => {
   const [submitButtonStyle, setSubmitButtonStyle] = useState("btn-outline-secondary")
 
   const FIRST_NAME_FIELD = "firstName"
-  const lAST_NAME_FIELD = "lastName"
+  const LAST_NAME_FIELD = "lastName"
   const BIRTH_DATE_FIELD = "birthDate"
   const EMAIL_FIELD = "email"
   const PASSWORD_FIELD = "password"
@@ -27,7 +27,7 @@ const RegistrationPage = () => {
 
   const setterMap = {
     [FIRST_NAME_FIELD]: setFirstName,
-    [lAST_NAME_FIELD]: setLastName,
+    [LAST_NAME_FIELD]: setLastName,
     [BIRTH_DATE_FIELD]: setBirthDate,
     [EMAIL_FIELD]: setEmail,
     [PASSWORD_FIELD]: setPassword,
@@ -92,10 +92,10 @@ const RegistrationPage = () => {
               </div>
 
               <div className="col">
-                <label htmlFor={ lAST_NAME_FIELD } className="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="optional field" >
+                <label htmlFor={ LAST_NAME_FIELD } className="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="optional field" >
                     Last Name *
                   </label>
-                <input id={ lAST_NAME_FIELD } className="form-control" type="text" value={ lastName } onChange={ handleFormOnChange } placeholder="surname"
+                <input id={ LAST_NAME_FIELD } className="form-control" type="text" value={ lastName } onChange={ handleFormOnChange } placeholder="surname"
                   />
               </div>
             </div>
