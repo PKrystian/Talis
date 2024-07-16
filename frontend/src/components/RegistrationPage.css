@@ -1,0 +1,33 @@
+.backplate {
+  background: #2D2D2D;
+  border-radius: 30px;
+}
+
+.form-label {
+  color: #FFFFFF80;
+  font-size: 12px;
+}
+
+.form-group input, input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, input[type=email]:focus {
+  color: #FFFFFF80;
+  background-color: #2D2D2D;
+  border-color: #6c757d;
+}
+
+.form-group input::placeholder {
+  color: #FFFFFF;
+  opacity: 0.3;
+  font-size: 12px;
+}
+
+.info-icon-container {
+  padding-inline-end: 5px;
+}
+
+.info-icon {
+  height: 20px;
+}
+
+.login-tooltip {
+  color: #FFFFFF80;
+}
