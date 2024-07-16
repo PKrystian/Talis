@@ -6,6 +6,7 @@ const GamePage = () => {
     const params = new URLSearchParams(location.search);
     const boardGameString = params.get('boardGame');
     const boardGame = boardGameString ? JSON.parse(decodeURIComponent(boardGameString)) : null;
+
     return (
       <div className="container game-page">
         <div className="game-image">
@@ -30,7 +31,7 @@ const GamePage = () => {
             </div>
         </div>
       </div>
-    );
+    )
   }
   
   export default GamePage;

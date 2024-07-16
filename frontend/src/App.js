@@ -7,6 +7,7 @@ import ContactPage from './components/ContactPage';
 import UserPage from './components/UserPage';
 import Navbar from './components/Navbar';
 import GamePage from './components/GamePage'
+import RegistrationPage from './components/RegistrationPage';
 import SearchPage from './components/SearchPage';
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/about" element={ <AboutPage /> } />
           <Route path="/contact" element={ <ContactPage /> } />
           <Route path="/user" element={ <UserPage /> } />
+          <Route path="/register" element={ <RegistrationPage /> } />
           <Route path="/game" element={ <GamePage /> } />
           <Route path="/search" element={<SearchPage boardGames={boardGames} />} />
         </Routes>
