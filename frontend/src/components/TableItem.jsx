@@ -10,7 +10,7 @@ const TableItem = ({ boardGame }) => {
   }
 
   return (
-    <div key={ boardGame.id } className="card bg-dark text-white m-2" style={{ minWidth: '200px' }}>
+    <div key={ boardGame.id } className="card bg-dark text-white m-2">
       <img src={ boardGame.image_url } className="card-img-top" alt={ boardGame.name } onClick={() => onClick(boardGame)}/>
       <div className="card-body">
         <h5 className="card-title" onClick={() => onClick(boardGame)}>{ boardGame.name }</h5>
