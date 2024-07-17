@@ -4,8 +4,6 @@ import { faSearch, faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import './Navbar.css';
 
-
-
 const Navbar = () => {
 
   const [query, setQuery] = useState('');
@@ -29,7 +27,7 @@ const Navbar = () => {
       </div>
       <ul className="navbar-links">
         <li><Link to="/"><FontAwesomeIcon icon={faBars} className="nav-icon" /> My Collection</Link></li>
-        <li><Link to="/search">Local Game Meetings</Link></li>
+        <li><Link to="/about">Local Game Meetings</Link></li>
         <li><Link to="/contact">Marketplace</Link></li>
       </ul>
       <div className="navbar-user">

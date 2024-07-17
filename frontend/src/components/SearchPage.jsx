@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router-dom';
 import TableItem from './TableItem';
-import './SearchPage.css';
 
 const SearchPage = ({boardGames}) => {
     const recommended_placeholder = "Wishlist";
@@ -13,13 +12,13 @@ const SearchPage = ({boardGames}) => {
       <div>
         <div className="container text-left">
           <h1>Based on the search phrase: "{query}"</h1>
-          <div className="d-flex search-results">
+          <div className="d-flex flex-wrap">
               {sgame.map(game => (
                   <TableItem key={game.id} boardGame={game} />
                   ))}
           </div>
           <h1>Related to the search phrase</h1>
-          <div className="d-flex search-results">
+          <div className="d-flex flex-wrap">
             {boardGames[recommended_placeholder].map(boardGame => (
               <TableItem key={boardGame.id} boardGame={boardGame} />
             ))}
