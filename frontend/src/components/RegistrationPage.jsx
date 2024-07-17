@@ -62,8 +62,6 @@ const RegistrationPage = () => {
     }
 
     setterMap[key](value)
-
-    validateForm()
   }
 
   function register(e) {
@@ -76,7 +74,7 @@ const RegistrationPage = () => {
 
   useEffect(() => {
     validateForm()
-  }, [firstName, lastName, birthDate, email, password, repeatPassword, termsAndConditions])
+  })
 
   return (
     <div className="container d-flex justify-content-center mt-4">
