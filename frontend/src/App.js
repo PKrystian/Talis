@@ -7,6 +7,7 @@ import ContactPage from './components/ContactPage';
 import UserPage from './components/UserPage';
 import Navbar from './components/Navbar';
 import GamePage from './components/GamePage'
+import SearchPage from './components/SearchPage';
 
 const App = () => {
   const apiUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/board-games/' : '/api/board-games/';
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/contact" element={ <ContactPage /> } />
           <Route path="/user" element={ <UserPage /> } />
           <Route path="/game" element={ <GamePage /> } />
+          <Route path="/search" element={<SearchPage boardGames={boardGames} />} />
         </Routes>
       </div>
     </Router>

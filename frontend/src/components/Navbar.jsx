@@ -1,9 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react';
 import './Navbar.css';
 
 const Navbar = () => {
+
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/search?query=${query}`);
+  };
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -12,9 +20,9 @@ const Navbar = () => {
             <img src={'/static/favicon.ico'} alt="Logo"  />
           </Link>
         </div>
-        <form className="search-bar">
+        <form className="search-bar" onSubmit={handleSubmit}>
           <FontAwesomeIcon icon={faSearch} className="nav-icon" />
-          <input type="text" className="search-input" placeholder="Search..." />
+          <input type="text" className="search-input" placeholder="Search..."  onChange={(e) => setQuery(e.target.value)}/>
         </form>
       </div>
       <ul className="navbar-links">
