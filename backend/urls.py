@@ -13,5 +13,6 @@ urlpatterns = [
     re_path(r'^about/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^user/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^game/', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^register/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^search/', TemplateView.as_view(template_name='index.html')),
 ]
