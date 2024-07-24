@@ -17,7 +17,7 @@ const App = () => {
 
   if (isLoading) {
     return (
-      <div className="text-center">
+      <div className="text-center vh-100 align-content-center">
         <div className='spinner-border'>
           <span className="visually-hidden">Loading...</span>
         </div>
