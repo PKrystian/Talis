@@ -1,11 +1,11 @@
-const AboutPage = () => {
+const CollectionPage = () => {
   return (
     <div>
       <div className="container text-center">
-        <h1>About Page</h1>
+        <h1>Collection Page</h1>
       </div>
     </div>
   );
 }
 
-export default AboutPage;
+export default CollectionPage;
