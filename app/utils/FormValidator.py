@@ -5,7 +5,7 @@ import re
 
 class FormValidator:
     __email_pattern = r"^\S+@\S+\.\S+$"
-    __password_pattern = r'[A-Za-z0-9@#$%^&+=]{8,}'
+    __password_pattern = r'[A-Za-z0-9@#$%^&+=!":\']{8,}'
 
     FORM_FIELD_FIRST_NAME = 'firstName'
     FORM_FIELD_LAST_NAME = 'lastName'
