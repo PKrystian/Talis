@@ -20,6 +20,15 @@
   font-size: 12px;
 }
 
+.form-group .wrong-input {
+  border-color: red;
+}
+
+.form-group p {
+  font-size: 12px;
+  color: red;
+}
+
 .info-icon-container {
   padding-inline-end: 5px;
 }
@@ -30,4 +39,9 @@
 
 .login-tooltip {
   color: #FFFFFF80;
+}
+
+.spinner-border {
+  width: 4rem;
+  height: 4rem;
 }
