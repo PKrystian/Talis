@@ -21,9 +21,13 @@ const Navbar = () => {
   const categoryOptions = TOP_CATEGORY_LIST;
   const mechanicOptions = TOP_MECHANIC_LIST;
 
+  const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
+  const apiUrl = apiPrefix + 'search/'
+
   useEffect(() => {
     if (query.length >= 3 && isInputFocused) {
-      axios.get('/api/search/', { params: { query, limit: 5, filterType, filter } })
+
+      axios.get(apiUrl, { params: { query, limit: 5, filterType, filter } })
         .then(response => {
           setSuggestions(response.data.results);
         })
