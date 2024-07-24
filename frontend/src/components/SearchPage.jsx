@@ -75,9 +75,11 @@ const SearchPage = () => {
     const searchParams = new URLSearchParams(location.search);
     const query = searchParams.get('query') || '';
     const filters = searchParams.getAll('filters');
+    const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
+    const apiUrl = apiPrefix + 'search/'
 
     setIsLoading(true);
-    axios.get('/api/search/', {
+    axios.get(apiUrl, {
       params: {
         query,
         limit: 48,
