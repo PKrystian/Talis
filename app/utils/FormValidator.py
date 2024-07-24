@@ -22,7 +22,9 @@ class FormValidator:
 
     def validate(self, form_data: QueryDict) -> bool:
         if all([field in form_data.keys() for field in self.FORM_REQUIRED_FIELDS]):
-            return True
+            if (self.__validate_email(form_data[self.FORM_FIELD_EMAIL])
+                    and self.__validate_password(form_data[self.FORM_FIELD_PASSWORD])):
+                return True
         return False
 
     def __validate_email(self, email: str) -> bool:
