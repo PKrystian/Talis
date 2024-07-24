@@ -95,7 +95,6 @@ CORS_ALLOW_HEADERS = list(default_headers)
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'http://127.0.0.1:3000',
     'https://talis.live'
 ]
 CORS_ORIGIN_WHITELIST = [
@@ -125,7 +124,6 @@ SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
-CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'https://talis.live'
