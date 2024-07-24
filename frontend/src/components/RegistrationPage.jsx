@@ -93,7 +93,6 @@ const RegistrationPage = ({ apiPrefix }) => {
 
   function validateEmail() {
     if (!emailPattern.test(email)) {
-      console.log('email')
       setEmailError('Email has wrong format')
       setEmailErrorStyle(' wrong-input')
       return false
@@ -106,7 +105,6 @@ const RegistrationPage = ({ apiPrefix }) => {
 
   function validatePassword() {
     if (!passwordPattern.test(password)) {
-      console.log('password')
       setPasswordError('Password has wrong format')
       setPasswordErrorStyle(' wrong-input')
       return false
