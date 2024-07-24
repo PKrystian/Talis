@@ -7,3 +7,4 @@ from models.board_game_publisher import BoardGamePublisher
 from models.board_game_category import BoardGameCategory
 from models.board_game_mechanic import BoardGameMechanic
 from models.board_game_expansion import BoardGameExpansion
+from models.registered_user import RegisteredUser

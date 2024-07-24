@@ -1,10 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import "./RegistrationPage.css"
 
-const RegistrationPage = () => {
+const RegistrationPage = ({ apiPrefix }) => {
+  const navigate = useNavigate()
+
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [birthDate, setBirthDate] = useState("")
@@ -13,9 +16,22 @@ const RegistrationPage = () => {
   const [repeatPassword, setRepeatPassword] = useState("")
   const [termsAndConditions, setTermsAndConditions] = useState(false)
 
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [repeatPasswordError, setRepeatPasswordError] = useState('')
+
+  const [emailErrorStyle, setEmailErrorStyle] = useState('')
+  const [passwordErrorStyle, setPasswordErrorStyle] = useState('')
+  const [repeatPasswordErrorStyle, setRepeatPasswordErrorStyle] = useState('')
+
+  const [submitClickedOnce, setSubmitClickedOnce] = useState(false)
+
   const [isFormValid, setIsFormValid] = useState(false)
 
   const [submitButtonStyle, setSubmitButtonStyle] = useState("btn-outline-secondary")
+
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9 ])(?=.*[ -/:-@[-`{-~]).{6,64}$/
 
   const FIRST_NAME_FIELD = "firstName"
   const LAST_NAME_FIELD = "lastName"
@@ -35,12 +51,23 @@ const RegistrationPage = () => {
     [TERMS_AND_CONDITIONS_CHECKBOX]: setTermsAndConditions,
   }
 
+  const validators = [
+    validateForm,
+    validateEmail,
+    validatePassword
+  ]
+
   function validateForm() {
-    if (password !== repeatPassword) {
+    if (password && repeatPassword && password !== repeatPassword) {
+      setRepeatPasswordError('Repeat Password has to match password')
+      setRepeatPasswordErrorStyle(' wrong-input')
       setIsFormValid(false)
       setSubmitButtonStyle('btn-outline-secondary')
       return false
     }
+
+    setRepeatPasswordError('')
+    setRepeatPasswordErrorStyle('')
 
     if (firstName && birthDate && email && password && repeatPassword && termsAndConditions) {
       setIsFormValid(true)
@@ -64,58 +91,119 @@ const RegistrationPage = () => {
     setterMap[key](value)
   }
 
-  function register(e) {
-    e.preventDefault()
+  function validateEmail() {
+    if (!emailPattern.test(email)) {
+      setEmailError('Email has wrong format')
+      setEmailErrorStyle(' wrong-input')
+      return false
+    }
 
-    if (validateForm()) {
-      alert("Registered!")
+    setEmailError('')
+    setEmailErrorStyle('')
+    return true
+  }
+
+  function validatePassword() {
+    if (!passwordPattern.test(password)) {
+      setPasswordError('Password has wrong format')
+      setPasswordErrorStyle(' wrong-input')
+      return false
+    }
+
+    setPasswordError('')
+    setPasswordErrorStyle('')
+    return true
+  }
+
+  function handleSubmit() {
+    setSubmitClickedOnce(true)
+    let validations = []
+
+    validators.forEach(validator => {
+      validations.push(validator())
+    })
+
+    if (validations.every(v => v === true)) {
+      let newUser = {
+        [FIRST_NAME_FIELD]: firstName,
+        [LAST_NAME_FIELD]: lastName,
+        [BIRTH_DATE_FIELD]: birthDate,
+        [EMAIL_FIELD]: email,
+        [PASSWORD_FIELD]: password,
+      }
+
+      let url = apiPrefix + 'register/'
+
+      axios.post(
+        url,
+        newUser,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      ).then(resp => {
+        if (resp.status === 200) {
+          alert('Registered successfully')
+          navigate("/")
+        }
+      }).catch(error => {
+      })
     }
   }
 
   useEffect(() => {
+    if (submitClickedOnce) {
+      validators.forEach(validator => {
+        validator()
+      })
+    }
     validateForm()
   })
 
   return (
     <div className="container d-flex justify-content-center mt-4">
-      <div className="backplate">
+      <div className="backplate fade-in-1s">
         <div className="mt-4 mb-4 mx-5">
           <h2>Sign up</h2>
           <hr></hr>
-          <form>
+          <form onSubmit={ e => e.preventDefault() } noValidate>
             <div className="form-group row mt-2">
-              <div className="col">
+              <div className="col fade-in-2s">
                 <label htmlFor={ FIRST_NAME_FIELD } className="form-label">First Name</label>
                 <input id={ FIRST_NAME_FIELD } className="form-control" type="text" value={ firstName } onChange={ handleFormOnChange } placeholder="name" required />
               </div>
 
-              <div className="col">
+              <div className="col fade-in-2s">
                 <label htmlFor={ LAST_NAME_FIELD } className="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="optional field" >
                     Last Name *
-                  </label>
-                <input id={ LAST_NAME_FIELD } className="form-control" type="text" value={ lastName } onChange={ handleFormOnChange } placeholder="surname"
-                  />
+                </label>
+                <input id={ LAST_NAME_FIELD } className="form-control" type="text" value={ lastName } onChange={ handleFormOnChange } placeholder="surname" />
               </div>
             </div>
 
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 fade-in-2s">
               <label htmlFor={ BIRTH_DATE_FIELD } className="form-label">Date of birth</label>
               <input id={ BIRTH_DATE_FIELD } className="form-control" type="date" onChange={ handleFormOnChange } required />
             </div>
 
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 fade-in-2s">
               <label htmlFor={ EMAIL_FIELD } className="form-label">Email</label>
-              <input id={ EMAIL_FIELD } className="form-control" type="email" value={ email } onChange={ handleFormOnChange } placeholder="example@mail.com" required />
+              <input id={ EMAIL_FIELD } className={ `form-control${emailErrorStyle}` } type="email" value={ email } onChange={ handleFormOnChange } placeholder="example@mail.com" required />
+              { emailError && <p className='mb-0'>{ emailError }</p> }
             </div>
 
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 fade-in-2s">
               <label htmlFor={ PASSWORD_FIELD } className="form-label">Password</label>
-              <input id={ PASSWORD_FIELD } className="form-control" type="password" value={ password } onChange={ handleFormOnChange } placeholder="your password" required />
+              <input id={ PASSWORD_FIELD } className={ `form-control${passwordErrorStyle}` } type="password" value={ password } onChange={ handleFormOnChange } placeholder="your password" required />
+              { passwordError && <p className='mb-0'>{ passwordError }</p> }
             </div>
 
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 fade-in-2s">
               <label htmlFor={ REPEAT_PASSWORD_FIELD } className="form-label">Repeat Password</label>
-              <input id={ REPEAT_PASSWORD_FIELD } className="form-control" value={ repeatPassword } onChange={ handleFormOnChange } type="password" required />
+              <input id={ REPEAT_PASSWORD_FIELD } className={ `form-control${repeatPasswordErrorStyle}` } value={ repeatPassword } onChange={ handleFormOnChange } type="password" required />
+              { repeatPasswordError && <p className='mb-0'>{ repeatPasswordError }</p> }
             </div>
 
             <div className="form-group form-check mt-3 d-flex justify-content-between">
@@ -134,7 +222,7 @@ const RegistrationPage = () => {
               </div>
             </div>
 
-            <button type="submit" className={ `btn ${submitButtonStyle} form-control mt-2` } onClick={ register } disabled={ ! isFormValid }>
+            <button type="submit" className={ `btn ${submitButtonStyle} form-control mt-2` } onClick={ handleSubmit } disabled={ ! isFormValid }>
               Sign up
             </button>
           </form>
