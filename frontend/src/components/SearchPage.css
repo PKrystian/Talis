@@ -1,0 +1,31 @@
+.filter-group {
+  margin-bottom: 1rem;
+}
+
+.filter-header {
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-options {
+  margin-left: 1rem;
+}
+
+.form-check-label {
+  color: #fff;
+}
+
+.form-check-input:checked {
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
+.form-check-input {
+  background-color: #495057;
+  border-color: #495057;
+}

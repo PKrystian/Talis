@@ -1,40 +1,158 @@
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faUser, faBars } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import { FaSearch, FaUser } from 'react-icons/fa';
+import { FaLocationDot, FaShop } from "react-icons/fa6";
+import { HiSquaresPlus } from "react-icons/hi2";
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './Navbar.css';
+import {TOP_CATEGORY_LIST, TOP_MECHANIC_LIST} from "../messages/suggestions";
 
 const Navbar = () => {
-
   const [query, setQuery] = useState('');
+  const [filterType, setFilterType] = useState('');
+  const [filter, setFilter] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const navigate = useNavigate();
+  const searchFormRef = useRef(null);
+
+  const categoryOptions = TOP_CATEGORY_LIST;
+  const mechanicOptions = TOP_MECHANIC_LIST;
+
+  useEffect(() => {
+    if (query.length >= 3 && isInputFocused) {
+      axios.get('/api/search/', { params: { query, limit: 5, filterType, filter } })
+        .then(response => {
+          setSuggestions(response.data.results);
+        })
+        .catch(error => {
+          console.error("There was an error fetching the search results!", error);
+        });
+    } else {
+      setSuggestions([]);
+    }
+  }, [query, filterType, filter, isInputFocused]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/search?query=${query}`);
+    navigate(`/search?query=${query}&filterType=${filterType}&filter=${filter}`);
   };
+
+  const handleFilterChange = (e) => {
+    const selectedValue = e.target.value;
+    let selectedFilterType = '';
+
+    if (categoryOptions.includes(selectedValue)) {
+      selectedFilterType = 'Category';
+    } else if (mechanicOptions.includes(selectedValue)) {
+      selectedFilterType = 'Mechanic';
+    }
+
+    setFilter(selectedValue);
+    setFilterType(selectedFilterType);
+  };
+
+  const handleClickOutside = (e) => {
+    if (searchFormRef.current && !searchFormRef.current.contains(e.target)) {
+      setSuggestions([]);
+      setIsInputFocused(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <nav className="navbar">
-      <div className="navbar-left">
-        <div className="navbar-logo">
-          <Link to='/'>
-            <img src={ '/static/favicon.ico' } alt="Logo"  />
-          </Link>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div className="container-fluid">
+        <Link className="navbar-brand" to='/'>
+          <div className="d-flex align-items-center">
+            <img src='/static/favicon.ico' alt="Logo" className="navbar-logo me-2"/>
+            <span className="site-name">Talis</span>
+            <span className="wip-badge ms-2">WIP</span>
+          </div>
+        </Link>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <form ref={searchFormRef} className="d-flex mx-auto flex-nowrap form-search mt-2" onSubmit={handleSubmit}>
+            <select className="form-select flex-shrink-0 w-auto" value={filter} onChange={handleFilterChange}>
+              <option value="">All</option>
+              <optgroup label="Category:">
+                {categoryOptions.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </optgroup>
+              <optgroup label="Mechanic:">
+                {mechanicOptions.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </optgroup>
+            </select>
+            <input
+              className="form-control flex-grow-1"
+              type="search"
+              placeholder="Search Talis"
+              aria-label="Search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setIsInputFocused(true)}
+            />
+            <button
+              className="btn btn-outline-light flex-shrink-0"
+              type="submit"
+              disabled={!query.trim()}>
+              <FaSearch />
+            </button>
+            <button
+              className="btn btn-outline-light flex-shrink-0"
+              type="button"
+              onClick={() => navigate(`/search?query=${query}&filterType=${filterType}&filter=${filter}`)}>
+              Advanced
+            </button>
+            {suggestions.length > 0 && isInputFocused && (
+              <div className="search-suggestions bg-dark position-absolute w-50 top-100">
+                <ul className="list-group">
+                  {suggestions.map(suggestion => (
+                    <li
+                      key={suggestion.id}
+                      className="list-group-item list-group-item-action list-group-item-dark"
+                      onClick={() => navigate(`/game?boardGame=${encodeURIComponent(JSON.stringify(suggestion))}`)}
+                    >
+                      {suggestion.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </form>
+          <div className="navbar-nav-wrapper">
+            <ul className="navbar-nav me-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/collection"><HiSquaresPlus className="me-1"/>My Collection</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/meetings"><FaLocationDot className="me-1"/>Local Game Meetings</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/marketplace"><FaShop className="me-1"/>Marketplace</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/user"><FaUser className="me-1" />User</Link>
+              </li>
+            </ul>
+          </div>
         </div>
-        <form className="search-bar" onSubmit={ handleSubmit }>
-          <FontAwesomeIcon icon={ faSearch } className="nav-icon" />
-          <input type="text" className="search-input" placeholder="Search..."  onChange={(e) => setQuery(e.target.value)}/>
-        </form>
-      </div>
-      <ul className="navbar-links">
-        <li><Link to="/"><FontAwesomeIcon icon={ faBars } className="nav-icon" /> My Collection</Link></li>
-        <li><Link to="/about">Local Game Meetings</Link></li>
-        <li><Link to="/contact">Marketplace</Link></li>
-      </ul>
-      <div className="navbar-user">
-        <li><a href="/user"><FontAwesomeIcon icon={ faUser } className="nav-icon px-4" /> User</a></li>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;

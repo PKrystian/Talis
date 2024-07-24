@@ -82,7 +82,7 @@ const RegistrationPage = () => {
         <div className="mt-4 mb-4 mx-5">
           <h2>Sign up</h2>
           <hr></hr>
-          <form>
+          <form id="register-form">
             <div className="form-group row mt-2">
               <div className="col">
                 <label htmlFor={ FIRST_NAME_FIELD } className="form-label">First Name</label>

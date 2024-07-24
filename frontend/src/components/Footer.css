@@ -1,0 +1,22 @@
+.footer {
+  color: #b0b0b0;
+}
+
+.footer a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 2rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+.jump-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
