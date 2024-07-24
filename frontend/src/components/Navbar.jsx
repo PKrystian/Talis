@@ -9,7 +9,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './Navbar.css';
 import {TOP_CATEGORY_LIST, TOP_MECHANIC_LIST} from "../messages/suggestions";
 
-const Navbar = () => {
+const Navbar = ({ apiPrefix }) => {
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState('');
   const [filter, setFilter] = useState('');
@@ -21,13 +21,10 @@ const Navbar = () => {
   const categoryOptions = TOP_CATEGORY_LIST;
   const mechanicOptions = TOP_MECHANIC_LIST;
 
-  const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
-  const apiUrl = apiPrefix + 'search/'
-
   useEffect(() => {
     if (query.length >= 3 && isInputFocused) {
 
-      axios.get(apiUrl, { params: { query, limit: 5, filterType, filter } })
+      axios.get(apiPrefix + 'search/', { params: { query, limit: 5, filterType, filter } })
         .then(response => {
           setSuggestions(response.data.results);
         })
@@ -87,7 +84,7 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <form ref={searchFormRef} className="d-flex mx-auto flex-nowrap form-search mt-2" onSubmit={handleSubmit}>
-            <select className="form-select flex-shrink-0 w-auto" value={filter} onChange={handleFilterChange}>
+            <select className="form-select flex-shrink-0 w-auto mx-lg-1" value={filter} onChange={handleFilterChange}>
               <option value="">All</option>
               <optgroup label="Category:">
                 {categoryOptions.map(option => (
@@ -101,7 +98,7 @@ const Navbar = () => {
               </optgroup>
             </select>
             <input
-              className="form-control flex-grow-1"
+              className="form-control flex-grow-1 mx-lg-1"
               type="search"
               placeholder="Search Talis"
               aria-label="Search"
@@ -110,13 +107,13 @@ const Navbar = () => {
               onFocus={() => setIsInputFocused(true)}
             />
             <button
-              className="btn btn-outline-light flex-shrink-0"
+              className="btn form-button btn-outline-light flex-shrink-0 mx-lg-1"
               type="submit"
-              disabled={!query.trim()}>
+            >
               <FaSearch />
             </button>
             <button
-              className="btn btn-outline-light flex-shrink-0"
+              className="btn form-button btn-outline-light flex-shrink-0 mx-lg-1"
               type="button"
               onClick={() => navigate(`/search?query=${query}&filterType=${filterType}&filter=${filter}`)}>
               Advanced

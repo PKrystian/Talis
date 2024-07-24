@@ -5,7 +5,7 @@
   --text-color-light: #ffffff;
   --text-color-light-medium: #b0b0b0;
   --text-color-dark: #e0e0e0;
-  --text-color-error: red;
+  --text-color-error: #FF0000FF;
   --border-color: #333;
   --border-color-light: #6c757d;
   --border-color-dark: #444;
@@ -14,6 +14,7 @@
   --scrollbar-thumb: #444;
   --scrollbar-thumb-hover: #555;
 
+  --font-size-badge: 0.75rem;
   --font-size-small: 12px;
   --font-size-medium: 1.2em;
   --font-size-large: 1.5rem;

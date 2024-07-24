@@ -6,7 +6,7 @@ import TableItem from './TableItem';
 import './SearchPage.css';
 import { CATEGORY_LIST, MECHANIC_LIST } from "../messages/search";
 
-const SearchPage = () => {
+const SearchPage = ({ apiPrefix }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const query = new URLSearchParams(location.search).get('query') || '';
@@ -75,11 +75,9 @@ const SearchPage = () => {
     const searchParams = new URLSearchParams(location.search);
     const query = searchParams.get('query') || '';
     const filters = searchParams.getAll('filters');
-    const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
-    const apiUrl = apiPrefix + 'search/'
 
     setIsLoading(true);
-    axios.get(apiUrl, {
+    axios.get(apiPrefix + 'search/', {
       params: {
         query,
         limit: 48,
