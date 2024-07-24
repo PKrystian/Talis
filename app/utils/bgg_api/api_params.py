@@ -31,15 +31,17 @@ BASE_XML_SEARCH_PARAM = 'items'
 SUB_XML_SEARCH_PARAM = 'item'
 
 BASE_API_URL = 'https://api.geekdo.com/xmlapi/boardgame/'
+BASE_API_URL_V2 = 'https://boardgamegeek.com/xmlapi2/thing?id=1&type=boardgame&stats=1'
 BASE_API_SEARCH_URL = 'https://boardgamegeek.com/xmlapi2/search'
-API_DATA_LIMIT = 99
+API_DATA_LIMIT = 20
 
 # Boardgame fetch params
-ADDITIONAL_URL_PARAM_STATS = '?stats=1'
+ADDITIONAL_URL_PARAM_ID = '?id='
+ADDITIONAL_URL_PARAM_STATS = '&stats=1'
+ADDITIONAL_URL_SEARCH_PARAM_TYPE = '&type=boardgame'
 
 # Search params
 ADDITIONAL_URL_SEARCH_PARAM_EXACT = '&exact=1'
-ADDITIONAL_URL_SEARCH_PARAM_TYPE = '?type='
 ADDITIONAL_URL_SEARCH_PARAM_QUERY = '?query='
 
 ALL_FIELDS = [

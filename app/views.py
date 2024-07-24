@@ -2,6 +2,10 @@ import random
 
 from django.db.models import Prefetch
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt, csrf_protect, requires_csrf_token
+
+from .controllers.RegistrationController import RegistrationController
 from django.http import JsonResponse
 from .models import BoardGameCategory, BoardGamePublisher
 from .models.board_game import BoardGame
@@ -71,6 +75,23 @@ def board_game_list(request) -> JsonResponse:
     categorized_data = categorize_games(data)
 
     return JsonResponse(categorized_data, safe=False)
+
+
+@ensure_csrf_cookie
+def set_cookies(request):
+    return JsonResponse({'detail': 'Cookies set'})
+
+
+@csrf_exempt
+def register(request):
+    response = HttpResponse('Wrong request')
+    response.status_code = 400
+
+    if request.method == 'POST' and request.POST:
+        registration_controller = RegistrationController()
+        response = registration_controller.action_register(request.POST)
+
+    return response
 
 def search_board_games(request):
     query = request.GET.get('query', '')
