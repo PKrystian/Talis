@@ -31,7 +31,7 @@ const RegistrationPage = ({ apiPrefix }) => {
   const [submitButtonStyle, setSubmitButtonStyle] = useState("btn-outline-secondary")
 
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ -/:-@\[-`{-~]).{6,64}$/
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9 ])(?=.*[ -/:-@[-`{-~]).{6,64}$/
 
   const FIRST_NAME_FIELD = "firstName"
   const LAST_NAME_FIELD = "lastName"
@@ -166,18 +166,18 @@ const RegistrationPage = ({ apiPrefix }) => {
 
   return (
     <div className="container d-flex justify-content-center mt-4">
-      <div className="backplate">
+      <div className="backplate fade-in-1s">
         <div className="mt-4 mb-4 mx-5">
           <h2>Sign up</h2>
           <hr></hr>
           <form onSubmit={ e => e.preventDefault() } noValidate>
             <div className="form-group row mt-2">
-              <div className="col">
+              <div className="col fade-in-2s">
                 <label htmlFor={ FIRST_NAME_FIELD } className="form-label">First Name</label>
                 <input id={ FIRST_NAME_FIELD } className="form-control" type="text" value={ firstName } onChange={ handleFormOnChange } placeholder="name" required />
               </div>
 
-              <div className="col">
+              <div className="col fade-in-2s">
                 <label htmlFor={ LAST_NAME_FIELD } className="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="optional field" >
                     Last Name *
                 </label>
@@ -185,24 +185,24 @@ const RegistrationPage = ({ apiPrefix }) => {
               </div>
             </div>
 
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 fade-in-2s">
               <label htmlFor={ BIRTH_DATE_FIELD } className="form-label">Date of birth</label>
               <input id={ BIRTH_DATE_FIELD } className="form-control" type="date" onChange={ handleFormOnChange } required />
             </div>
 
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 fade-in-2s">
               <label htmlFor={ EMAIL_FIELD } className="form-label">Email</label>
               <input id={ EMAIL_FIELD } className={ `form-control${emailErrorStyle}` } type="email" value={ email } onChange={ handleFormOnChange } placeholder="example@mail.com" required />
               { emailError && <p className='mb-0'>{ emailError }</p> }
             </div>
 
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 fade-in-2s">
               <label htmlFor={ PASSWORD_FIELD } className="form-label">Password</label>
               <input id={ PASSWORD_FIELD } className={ `form-control${passwordErrorStyle}` } type="password" value={ password } onChange={ handleFormOnChange } placeholder="your password" required />
               { passwordError && <p className='mb-0'>{ passwordError }</p> }
             </div>
 
-            <div className="form-group mt-2">
+            <div className="form-group mt-2 fade-in-2s">
               <label htmlFor={ REPEAT_PASSWORD_FIELD } className="form-label">Repeat Password</label>
               <input id={ REPEAT_PASSWORD_FIELD } className={ `form-control${repeatPasswordErrorStyle}` } value={ repeatPassword } onChange={ handleFormOnChange } type="password" required />
               { repeatPasswordError && <p className='mb-0'>{ repeatPasswordError }</p> }
