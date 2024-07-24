@@ -23,9 +23,12 @@ class BoardGameDataAPIDownloader:
     ) -> list:
         dict_response = self.__send_and_parse_request(url)
 
+        if not dict_response:
+            return []
+
         data = dict_response[api_params.BASE_XML_PARAM][api_params.BOARDGAME_XML_PARAM]
 
-        if data is not list:
+        if type(data) is not list:
             data = [data]
 
         parsed_games = []
@@ -107,7 +110,6 @@ class BoardGameDataAPIDownloader:
                    + board_game.get_name().replace(' ', separator)
                    + api_params.ADDITIONAL_URL_SEARCH_PARAM_EXACT
                    + api_params.ADDITIONAL_URL_SEARCH_PARAM_TYPE
-                   + api_params.BOARDGAME_XML_PARAM
                    )
 
             dict_response = self.__send_and_parse_request(url)
@@ -158,6 +160,7 @@ class BoardGameDataAPIDownloader:
 
     def __send_and_parse_request(self, url: str) -> dict:
         number_of_tries = 1
+        response = None
 
         for number_of_tries in range(1, self.__API_FETCH_MAX_TRIES):
             try:
@@ -171,6 +174,9 @@ class BoardGameDataAPIDownloader:
 
         if number_of_tries >= self.__API_FETCH_MAX_TRIES:
             raise Exception
+
+        if not response:
+            return dict()
 
         xml_response = response.text
 
