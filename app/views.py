@@ -2,7 +2,10 @@ import json
 import random
 
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt, csrf_protect, requires_csrf_token
+
+from .controllers.RegistrationController import RegistrationController
 from .models.board_game import BoardGame
 
 LIMIT = 16
@@ -55,3 +58,20 @@ def board_game_list(request) -> JsonResponse:
     categorized_data = categorize_games(data)
 
     return JsonResponse(categorized_data, safe=False)
+
+
+@ensure_csrf_cookie
+def set_cookies(request):
+    return JsonResponse({'detail': 'Cookies set'})
+
+
+@csrf_exempt
+def register(request):
+    response = HttpResponse('Wrong request')
+    response.status_code = 400
+
+    if request.method == 'POST' and request.POST:
+        registration_controller = RegistrationController()
+        response = registration_controller.action_register(request.POST)
+
+    return response

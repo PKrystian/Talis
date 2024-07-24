@@ -11,11 +11,18 @@ import RegistrationPage from './components/RegistrationPage';
 import SearchPage from './components/SearchPage';
 
 const App = () => {
-  const apiUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/board-games/' : '/api/board-games/';
+  const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
+  const apiUrl = apiPrefix + 'board-games/'
   const { data: boardGames, isLoading, error } = useFetch(apiUrl);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="text-center vh-100 align-content-center">
+        <div className='spinner-border'>
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -31,7 +38,7 @@ const App = () => {
           <Route path="/about" element={ <AboutPage /> } />
           <Route path="/contact" element={ <ContactPage /> } />
           <Route path="/user" element={ <UserPage /> } />
-          <Route path="/register" element={ <RegistrationPage /> } />
+          <Route path="/register" element={ <RegistrationPage apiPrefix={ apiPrefix } /> } />
           <Route path="/game" element={ <GamePage /> } />
           <Route path="/search" element={<SearchPage boardGames={boardGames} />} />
         </Routes>
