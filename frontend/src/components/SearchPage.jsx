@@ -82,7 +82,7 @@ const SearchPage = () => {
       params: {
         query,
         limit: 48,
-        filters // Pass the filters directly as they are now in the correct format
+        filters
       }
     })
       .then(response => {
@@ -93,7 +93,7 @@ const SearchPage = () => {
         setError(error);
         setIsLoading(false);
       });
-  }, [location.search]); // Listen for changes in the search part of the URL
+  }, [location.search]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);

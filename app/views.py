@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from .controllers.RegistrationController import RegistrationController
-from .models import BoardGame, BoardGameCategory, BoardGamePublisher
+from .models import BoardGame
 import random
 from urllib.parse import parse_qs
 
@@ -11,13 +11,16 @@ BIG_LIMIT = 48
 MEDIUM_LIMIT = 18
 SMALL_LIMIT = 5
 
+
 def index(request) -> None:
     return render(request, 'index.html')
+
 
 def get_shuffled_games(board_games) -> list:
     board_games_list = list(board_games)
     random.shuffle(board_games_list)
     return board_games_list
+
 
 def categorize_games(board_games) -> dict:
     categories = [
@@ -30,6 +33,7 @@ def categorize_games(board_games) -> dict:
 
     categorized_games = {category: get_shuffled_games(board_games) for category in categories}
     return categorized_games
+
 
 def board_game_list(request) -> JsonResponse:
     board_games = BoardGame.objects.exclude(rating__isnull=True).prefetch_related(
@@ -88,18 +92,16 @@ def register(request):
 def search_board_games(request):
     try:
         query = request.GET.get('query', '')
-        limit = int(request.GET.get('limit', 10))  # Default to 10 or another appropriate value if not specified
+        limit = int(request.GET.get('limit', MEDIUM_LIMIT))
 
-        # Manually parse query parameters to handle 'filters[]'
         query_params = parse_qs(request.META['QUERY_STRING'])
-        combined_filters = query_params.get('filters[]', [])  # Adjusted to handle 'filters[]'
+        combined_filters = query_params.get('filters[]', [])
 
         board_games = BoardGame.objects.exclude(rating__isnull=True)
 
         if query:
             board_games = board_games.filter(name__icontains=query)
 
-        # Process each combined filter
         for combined_filter in combined_filters:
             if 'players|' in combined_filter:
                 min_players, max_players = combined_filter.replace('players|', '').split('-')
@@ -112,12 +114,12 @@ def search_board_games(request):
                 elif max_players:
                     board_games = board_games.filter(min_players__lte=max_players)
             else:
-                filter_type, filter_value = combined_filter.split('|', 1)  # Split into type and value
+                filter_type, filter_value = combined_filter.split('|', 1)
                 filter_type_to_field = {
                     'category': 'boardgamecategory__category__name__icontains',
                     'mechanic': 'boardgamemechanic__mechanic__name__icontains',
-                    'age': 'age',  # Assuming age is handled as a list or range
-                    'playtime': 'min_playtime',  # Adjust based on how you handle playtime
+                    'age': 'age',
+                    'playtime': 'min_playtime',
                 }
                 if filter_type == 'age':
                     age_ranges = {
