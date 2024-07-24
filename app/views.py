@@ -73,12 +73,12 @@ def board_game_list(request) -> JsonResponse:
 
 
 @ensure_csrf_cookie
-def set_cookies(request):
+def set_cookies(request) -> JsonResponse:
     return JsonResponse({'detail': 'Cookies set'})
 
 
 @csrf_exempt
-def register(request):
+def register(request) -> HttpResponse:
     response = HttpResponse('Wrong request')
     response.status_code = 400
 
@@ -89,7 +89,7 @@ def register(request):
     return response
 
 
-def search_board_games(request):
+def search_board_games(request) -> JsonResponse:
     try:
         query = request.GET.get('query', '')
         limit = int(request.GET.get('limit', MEDIUM_LIMIT))
