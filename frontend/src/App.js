@@ -34,18 +34,18 @@ const App = () => {
 
   return (
     <Router>
-      <div>
+      <div className="page-content">
         <Navbar />
-        <Routes>
-          <Route path="/" element={ <LandingPage boardGames={ boardGames } />} />
+        <Routes apiPrefix={ apiPrefix } >
+          <Route path="/" element={ <LandingPage boardGames={ boardGames } /> } />
           <Route path="/collection" element={ <CollectionPage /> } />
           <Route path="/meetings" element={ <MeetingsPage /> } />
           <Route path="/marketplace" element={ <MarketplacePage /> } />
           <Route path="/user" element={ <UserPage /> } />
           <Route path="/register" element={ <RegistrationPage apiPrefix={ apiPrefix } /> } />
           <Route path="/game" element={ <GamePage /> } />
-          <Route path="/search" element={<SearchPage boardGames={boardGames} />} />
-          <Route path="/policy" element={< PolicyPage />} />
+          <Route path="/search" element={ <SearchPage apiPrefix={ apiPrefix } /> } />
+          <Route path="/policy" element={ < PolicyPage /> } />
         </Routes>
         <Footer />
       </div>

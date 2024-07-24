@@ -12,7 +12,7 @@
 }
 
 .wip-badge {
-  font-size: 0.75rem;
+  font-size: var(--font-size-badge);
   color: var(--text-color-light);
   background-color: var(--highlight-color);
   padding: 2px 6px;
@@ -103,16 +103,21 @@
 }
 
 .navbar-nav .nav-link {
-  font-size: 1.1rem;
+  font-size: var(--font-size-medium);
   color: var(--text-color-light);
   margin-left: 15px;
 }
 
 .navbar-nav .nav-link:hover {
-  background-color: #575757;
-  border-radius: 5px;
+  background-color: var(--hover-background-color);
+  border-radius: var(--border-radius);
 }
 
 .navbar-nav .nav-link .me-2 {
-  font-size: 1.2rem;
+  font-size: var(--font-size-medium);
+}
+
+.form-button {
+  background-color: var(--background-color-dark-light);
+  border-color: var(--border-color-dark);
 }
