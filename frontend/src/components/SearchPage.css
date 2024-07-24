@@ -6,7 +6,7 @@
   cursor: pointer;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #fff;
+  color: var(--text-color-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -17,15 +17,15 @@
 }
 
 .form-check-label {
-  color: #fff;
+  color: var(--text-color-light);
 }
 
 .form-check-input:checked {
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: var(--background-color-dark-light);
+  border-color: var(--background-color-dark-light);
 }
 
 .form-check-input {
-  background-color: #495057;
-  border-color: #495057;
+  background-color: var(--hover-background-color);
+  border-color: var(--hover-background-color);
 }

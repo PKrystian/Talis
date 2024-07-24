@@ -1,32 +1,36 @@
 .backplate {
-  background: #2D2D2D;
+  background: var(--background-color-dark-light);
   border-radius: 30px;
 }
 
 .form-label {
-  color: #FFFFFF80;
-  font-size: 12px;
+  color: var(--text-color-light)80;
+  font-size: var(--font-size-small);
 }
 
-.form-group input, input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, input[type=email]:focus {
-  color: #FFFFFF80;
-  background-color: #2D2D2D;
-  border-color: #6c757d;
+.form-group input,
+input[type=text]:focus,
+input[type=date]:focus,
+input[type=password]:focus,
+input[type=email]:focus {
+  color: var(--text-color-light);
+  background-color: var(--background-color-dark-light);
+  border-color: var(--border-color-light);
 }
 
 .form-group input::placeholder {
-  color: #FFFFFF;
+  color: var(--text-color-light);
   opacity: 0.3;
-  font-size: 12px;
+  font-size: var(--font-size-small);
 }
 
 .form-group .wrong-input {
-  border-color: red;
+  border-color: var(--text-color-error);
 }
 
 .form-group p {
-  font-size: 12px;
-  color: red;
+  font-size: var(--font-size-small);
+  color: var(--text-color-error);
 }
 
 .info-icon-container {
@@ -38,7 +42,7 @@
 }
 
 .login-tooltip {
-  color: #FFFFFF80;
+  color: var(--text-color-light);
 }
 
 .spinner-border {

@@ -6,17 +6,17 @@
 }
 
 .site-name {
-  font-size: 1.5rem;
+  font-size: var(--font-size-large);
   font-family: "Gothic A1", sans-serif;
   font-weight: bold;
 }
 
 .wip-badge {
   font-size: 0.75rem;
-  color: #fff;
-  background-color: #f00;
+  color: var(--text-color-light);
+  background-color: var(--highlight-color);
   padding: 2px 6px;
-  border-radius: 3px;
+  border-radius: var(--border-radius-small);
   margin-top: -10px;
 }
 
@@ -24,37 +24,37 @@
   max-height: 300px;
   overflow-y: auto;
   z-index: 1000;
-  color: #fff;
-  background-color: #343a40;
-  border: 1px solid #444;
+  color: var(--text-color-light);
+  background-color: var(--background-color-dark-light);
+  border: 1px solid var(--border-color-dark);
 }
 
 .search-suggestions .list-group-item {
   cursor: pointer;
-  background-color: #343a40;
-  color: #fff;
+  background-color: var(--background-color-dark-light);
+  color: var(--text-color-light);
 }
 
 .search-suggestions .list-group-item:hover {
-  background-color: #495057;
+  background-color: var(--hover-background-color);
 }
 
 .form-control,
 .form-select {
-  background-color: #343a40;
-  color: #fff;
-  border: 1px solid #444;
+  background-color: var(--background-color-dark-light);
+  color: var(--text-color-light);
+  border: 1px solid var(--border-color-dark);
 }
 
 .form-control:focus,
 .form-select:focus {
-  background-color: #343a40;
-  color: #fff;
+  background-color: var(--background-color-dark-light);
+  color: var(--text-color-light);
 }
 
 .form-control::placeholder,
 .form-select::placeholder {
-  color: #aaaaaa;
+  color: var(--text-color-light-medium);
 }
 
 .optgroup {
@@ -104,7 +104,7 @@
 
 .navbar-nav .nav-link {
   font-size: 1.1rem;
-  color: white;
+  color: var(--text-color-light);
   margin-left: 15px;
 }
 

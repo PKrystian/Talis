@@ -4,7 +4,7 @@
 }
 
 .card-img-top {
-  transition: transform 0.2s ease-in-out;
+  transition: transform var(--transition);
   cursor: pointer;
 }
 
@@ -13,7 +13,7 @@
 }
 
 .card-title {
-  transition: color 0.2s ease-in-out;
+  transition: color var(--transition);
   cursor: pointer;
 }
 

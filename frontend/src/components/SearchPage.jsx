@@ -4,7 +4,6 @@ import axios from 'axios';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import TableItem from './TableItem';
 import './SearchPage.css';
-import { TOP_MECHANIC_LIST } from "../messages/suggestions";
 import { CATEGORY_LIST, MECHANIC_LIST } from "../messages/search";
 
 const SearchPage = () => {

@@ -1,17 +1,17 @@
 .footer {
-  color: #b0b0b0;
+  color: var(--text-color-light-medium);
 }
 
 .footer a {
   text-decoration: none;
-  color: #ffffff;
+  color: var(--text-color-light);
 }
 
 .btn-sm {
   padding: 0.25rem 0.5rem;
-  font-size: 2rem;
+  font-size: var(--font-size-xlarge);
   line-height: 1.5;
-  border-radius: 0.2rem;
+  border-radius: var(--border-radius-small);
 }
 
 .jump-to-top {
