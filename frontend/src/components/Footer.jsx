@@ -53,7 +53,7 @@ const Footer = () => {
           </div>
           <div className="col-md-4 text-center text-md-right">
             <p>This project is part of engineering thesis.</p>
-            <p>&copy; 2024 - {currentYear} Talis. All rights reserved.</p>
+            <p>&copy; 2024 - {currentYear} Talis. <Link to='/license'>MIT License</Link></p>
           </div>
         </div>
       </div>
