@@ -41,3 +41,8 @@ html, body {
   display: flex;
   flex-direction: column;
 }
+
+.footer a:hover {
+  background-color: var(--hover-background-color);
+  border-radius: var(--border-radius);
+}

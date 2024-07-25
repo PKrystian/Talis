@@ -18,4 +18,5 @@ urlpatterns = [
     re_path(r'^register/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^search/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^advanced-search/', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^license/', TemplateView.as_view(template_name='index.html')),
 ]

@@ -12,6 +12,7 @@ import SearchPage from './components/SearchPage';
 import CollectionPage from "./components/CollectionPage";
 import Footer from "./components/Footer";
 import PolicyPage from "./components/PolicyPage";
+import LicensePage from "./components/LicensePage";
 
 const App = () => {
   const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
@@ -45,7 +46,8 @@ const App = () => {
           <Route path="/register" element={ <RegistrationPage apiPrefix={ apiPrefix } /> } />
           <Route path="/game" element={ <GamePage /> } />
           <Route path="/search" element={ <SearchPage apiPrefix={ apiPrefix } /> } />
-          <Route path="/policy" element={ < PolicyPage /> } />
+          <Route path="/policy" element={ <PolicyPage /> } />
+          <Route path="/license" element={ <LicensePage /> } />
         </Routes>
         <Footer />
       </div>
