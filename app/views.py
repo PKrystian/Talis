@@ -1,14 +1,13 @@
-import json
-import random
-
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt, csrf_protect, requires_csrf_token
-
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from .controllers.RegistrationController import RegistrationController
-from .models.board_game import BoardGame
+from .models import BoardGame
+import random
 
-LIMIT = 16
+BIG_LIMIT = 48
+MEDIUM_LIMIT = 18
+SMALL_LIMIT = 5
 
 
 def index(request) -> None:
@@ -35,18 +34,29 @@ def categorize_games(board_games) -> dict:
 
 
 def board_game_list(request) -> JsonResponse:
-    board_games = BoardGame.objects.all()[:LIMIT]
+    board_games = BoardGame.objects.exclude(rating__isnull=True).prefetch_related(
+        'boardgamepublisher_set__publisher',
+        'boardgamecategory_set__category',
+        'expansions__expansion_board_game'
+    ).order_by('-rating')[:MEDIUM_LIMIT]
+
     data = []
 
     for board_game in board_games:
-        category = json.dumps(board_game.category[BoardGame.CATEGORY_FIELD])
+        publishers = ', '.join([bp.publisher.name for bp in board_game.boardgamepublisher_set.all()])
+        categories = ', '.join([bc.category.name for bc in board_game.boardgamecategory_set.all()])
+        expansions = [{
+            'expansion_id': expansion.expansion_board_game.id,
+            'expansion_name': expansion.expansion_board_game.name
+        } for expansion in board_game.expansions.all()]
 
         data.append({
             'id': board_game.id,
             'name': board_game.name,
             'year_published': board_game.year_published,
-            'publisher': board_game.publisher,
-            'category': category,
+            'publisher': publishers,
+            'category': categories,
+            'expansions': expansions,
             'min_players': board_game.min_players,
             'max_players': board_game.max_players,
             'age': board_game.age,
@@ -61,12 +71,12 @@ def board_game_list(request) -> JsonResponse:
 
 
 @ensure_csrf_cookie
-def set_cookies(request):
+def set_cookies(request) -> JsonResponse:
     return JsonResponse({'detail': 'Cookies set'})
 
 
 @csrf_exempt
-def register(request):
+def register(request) -> HttpResponse:
     response = HttpResponse('Wrong request')
     response.status_code = 400
 
