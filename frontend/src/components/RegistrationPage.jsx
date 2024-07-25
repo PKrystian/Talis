@@ -168,7 +168,7 @@ const RegistrationPage = ({ apiPrefix }) => {
         <div className="mt-4 mb-4 mx-5">
           <h2>Sign up</h2>
           <hr></hr>
-          <form onSubmit={ e => e.preventDefault() } noValidate>
+          <form id="register-form" onSubmit={ e => e.preventDefault() } noValidate>
             <div className="form-group row mt-2">
               <div className="col fade-in-2s">
                 <label htmlFor={ FIRST_NAME_FIELD } className="form-label">First Name</label>

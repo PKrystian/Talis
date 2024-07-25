@@ -1,0 +1,31 @@
+.filter-group {
+  margin-bottom: 1rem;
+}
+
+.filter-header {
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--text-color-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-options {
+  margin-left: 1rem;
+}
+
+.form-check-label {
+  color: var(--text-color-light);
+}
+
+.form-check-input:checked {
+  background-color: var(--background-color-dark-light);
+  border-color: var(--background-color-dark-light);
+}
+
+.form-check-input {
+  background-color: var(--hover-background-color);
+  border-color: var(--hover-background-color);
+}
