@@ -8,12 +8,11 @@
     padding-right: 20px;
 }
 
-.game-content {
+.game-page-basic-info {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     padding: 20px;
-    flex: 1;
 }
 
 .bold-text {
@@ -26,10 +25,8 @@
 }
 
 .basic-game-info {
-    position: relative;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    align-items: top;
     margin-bottom: 20px;
     padding-top: 20px;
 }
@@ -37,7 +34,7 @@
 .basic-info-item {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding-right: 20px;
 }
   
 .basic-game-icon {
@@ -51,26 +48,38 @@
 }
 
 .circle {
-    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 15px;
     width: 50px;
     height: 50px;
     border-radius: 50%;
     border: 4px solid #737373;
-    color: #fff;
     font-size: 1.2em;
 }
 
 .additional-info {
     margin-left: auto;
     padding: 20px;
-    border-radius: 5px;
-    flex-direction: column;
+}
+
+.game-page-user-action {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+}
+
+.game-page-user-action-item {
+    text-align: center;
+    width: 100px;
 }
 
 .game-rating {
-    
+    display: flex;
+    flex-direction: column;
+}
+
+.game-page-friend-icons {
+    display: flex;
+    flex-direction: row;
 }
