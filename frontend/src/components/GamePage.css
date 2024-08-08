@@ -1,50 +1,26 @@
-.game-page {
-    display: flex;
-}
-
-.game-image {
-    max-width: 350px;
-    text-align: left;
-    padding-right: 20px;
+.game-image, .boardgame-img {
+  max-width: 350px;
 }
 
 .game-page-basic-info {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 20px;
+  display: flex;
+  padding-bottom: 5px;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.basic-info-item {
+  padding-right: 15px;
+  font-size: var(--font-size-medium);
 }
 
 .bold-text {
-    font-weight: bold;
-}
-
-.boardgame-img {
-    max-width: 350px;
-    padding-right: 20px;
-}
-
-.basic-game-info {
-    display: flex;
-    align-items: top;
-    margin-bottom: 20px;
-    padding-top: 20px;
-}
-  
-.basic-info-item {
-    display: flex;
-    flex-direction: column;
-    padding-right: 20px;
+  font-weight: bold;
 }
   
 .basic-game-icon {
     font-size: 2em;
-    margin-bottom: 8px;
-}
-  
-.basic-info-text {
-    font-size: 1em;
-    text-align: center;
 }
 
 .circle {
@@ -58,28 +34,17 @@
     font-size: 1.2em;
 }
 
-.additional-info {
-    margin-left: auto;
-    padding: 20px;
-}
-
-.game-page-user-action {
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-}
-
 .game-page-user-action-item {
-    text-align: center;
     width: 100px;
 }
 
-.game-rating {
-    display: flex;
-    flex-direction: column;
+.description .text.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.game-page-friend-icons {
-    display: flex;
-    flex-direction: row;
+.description .text.expanded {
+  display: block;
 }

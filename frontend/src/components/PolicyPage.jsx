@@ -1,11 +1,11 @@
-const ContactPage = () => {
+const PolicyPage = () => {
   return (
     <div>
       <div className="container text-center">
-        <h1>Contact Page</h1>
+        <h1>Policy Page</h1>
       </div>
     </div>
   );
 }
 
-export default ContactPage;
+export default PolicyPage;
