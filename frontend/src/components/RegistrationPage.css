@@ -1,0 +1,72 @@
+.backplate {
+  background: var(--background-color-dark-light);
+  border-radius: 30px;
+}
+
+.form-label {
+  color: var(--text-color-light);
+  font-size: var(--font-size-small);
+}
+
+.form-group input,
+input[type=text]:focus,
+input[type=date]:focus,
+input[type=password]:focus,
+input[type=email]:focus {
+  color: var(--text-color-light);
+  background-color: var(--background-color-dark-light);
+  border-color: var(--border-color-light);
+}
+
+.form-group input::placeholder {
+  color: var(--text-color-light);
+  opacity: 0.3;
+  font-size: var(--font-size-small);
+}
+
+.form-group .wrong-input {
+  border-color: var(--text-color-error);
+}
+
+.form-group p {
+  font-size: var(--font-size-small);
+  color: var(--text-color-error);
+}
+
+.info-icon-container {
+  padding-inline-end: 5px;
+}
+
+.info-icon {
+  height: 20px;
+}
+
+.login-tooltip {
+  color: var(--text-color-light);
+}
+
+.spinner-border {
+  width: 4rem;
+  height: 4rem;
+}
+
+.fade-in-1s {
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.fade-in-2s {
+  animation: fadeInAnimation ease 2s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
