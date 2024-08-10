@@ -1,5 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, QueryDict
+from django.http import QueryDict
+from django.http import JsonResponse
+from django.contrib.auth import authenticate, login
 
 from app.utils.FormValidator import FormValidator
 from django.contrib.auth.models import User
@@ -9,18 +11,16 @@ from app.utils.RegisteredUserCreator import RegisteredUserCreator
 class RegistrationController:
     ROUTE = 'register/'
 
-    def action_register(self, form_data: QueryDict) -> HttpResponse:
+    def action_register(self, request) -> JsonResponse:
+        form_data = request.POST
+
         form_validator = FormValidator()
 
         if not form_validator.validate(form_data):
-            response = HttpResponse('Failed to register')
-            response.status_code = 400
-            return response
+            return JsonResponse({'error': 'Failed to register'}, status=400)
 
         if self.__check_for_existing_user(form_data[FormValidator.FORM_FIELD_EMAIL]):
-            response = HttpResponse('User with this email already exists')
-            response.status_code = 400
-            return response
+            return JsonResponse({'error': 'User with this email already exists'}, status=400)
 
         registered_user_creator = RegisteredUserCreator()
 
@@ -35,9 +35,16 @@ class RegistrationController:
 
         new_registered_user.save()
 
-        response = HttpResponse('Registered successfully')
-        response.status_code = 200
-        return response
+        login(request, new_registered_user.user)
+
+        return JsonResponse(
+            {
+                'detail': 'Registered successfully',
+                'username': new_registered_user.user.username,
+                'is_authenticated': True,
+            },
+            status=200
+        )
 
     @staticmethod
     def __check_for_existing_user(username: str) -> bool:
