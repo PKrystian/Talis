@@ -5,8 +5,12 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./RegistrationPage.css"
 
-const RegistrationPage = ({ apiPrefix }) => {
+const RegistrationPage = ({ apiPrefix, userState, setUserData, setUserState }) => {
   const navigate = useNavigate()
+
+  if (userState) {
+    navigate('/')
+  }
 
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -142,13 +146,16 @@ const RegistrationPage = ({ apiPrefix }) => {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-        }
-      ).then(resp => {
+      })
+      .then(resp => {
         if (resp.status === 200) {
+          setUserState(resp.data.is_authenticated)
+          setUserData({ 'username': resp.data.username })
           alert('Registered successfully')
           navigate("/")
         }
       }).catch(error => {
+        console.log(error)
       })
     }
   }

@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
+from django.views.decorators.http import require_POST
+import random
+
 from .controllers.RegistrationController import RegistrationController
 from .models import BoardGame
-import random
 
 BIG_LIMIT = 48
 MEDIUM_LIMIT = 18
@@ -71,17 +73,28 @@ def board_game_list(request) -> JsonResponse:
 
 
 @ensure_csrf_cookie
-def set_cookies(request) -> JsonResponse:
-    return JsonResponse({'detail': 'Cookies set'})
+def set_session(request) -> JsonResponse:
+    if not request.user.is_authenticated:
+        return JsonResponse({'is_authenticated': False})
+    return JsonResponse({
+            'is_authenticated': True,
+            'username': request.user.username,
+            })
 
 
+def whoami(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'is_authenticated': False})
+    return JsonResponse({
+            'username': request.user.username,
+            'is_authenticated': False,
+            })
+
+
+@require_POST
 @csrf_exempt
-def register(request) -> HttpResponse:
-    response = HttpResponse('Wrong request')
-    response.status_code = 400
-
-    if request.method == 'POST' and request.POST:
-        registration_controller = RegistrationController()
-        response = registration_controller.action_register(request.POST)
+def register(request) -> JsonResponse:
+    registration_controller = RegistrationController()
+    response = registration_controller.action_register(request)
 
     return response
