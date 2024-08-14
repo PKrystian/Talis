@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from app.utils.RegisteredUserCreator import RegisteredUserCreator
 
 
-class RegistrationController:
+class UserController:
     ROUTE = 'register/'
 
     def action_register(self, request) -> JsonResponse:

@@ -24,7 +24,7 @@ const App = () => {
   const [user, setUser] = useState({})
 
   const updateUserState = (userStateData) => {
-    setUser(userStateData)
+    setUserState(userStateData)
   }
 
   const updateUser = (userData) => {
@@ -50,9 +50,6 @@ const App = () => {
   }
 
   function getSession() {
-    console.log(user)
-    console.log(userState)
-
     axios.get(
       apiPrefix + 'session/',
       { withCredentials: true }
@@ -74,13 +71,13 @@ const App = () => {
   return (
     <Router>
       <div className="page-content">
-        <Navbar userState={ userState } />
+        <Navbar apiPrefix={ apiPrefix } userState={ userState } user={ user } />
         <Routes apiPrefix={ apiPrefix } >
           <Route path="/" element={ <LandingPage boardGames={ boardGames } userState={ userState } /> } />
           <Route path="/collection" element={ <CollectionPage /> } />
           <Route path="/meetings" element={ <MeetingsPage /> } />
           <Route path="/marketplace" element={ <MarketplacePage /> } />
-          <Route path="/user" element={ <UserPage /> } />
+          <Route path="/user" element={ <UserPage user={ user } /> } />
           <Route path="/register" element={ <RegistrationPage apiPrefix={ apiPrefix } userState={ userState } setUserData={ updateUser } setUserState={ updateUserState } /> } />
           <Route path="/game" element={ <GamePage /> } />
           <Route path="/search" element={ <SearchPage apiPrefix={ apiPrefix } /> } />
