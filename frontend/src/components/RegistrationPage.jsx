@@ -149,6 +149,7 @@ const RegistrationPage = ({ apiPrefix, userState, setUserData, setUserState }) =
       })
       .then(resp => {
         if (resp.status === 200) {
+          console.log(resp.data.is_authenticated, resp.data.username)
           setUserState(resp.data.is_authenticated)
           setUserData({ 'username': resp.data.username })
           alert('Registered successfully')

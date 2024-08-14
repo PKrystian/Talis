@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_p
 from django.views.decorators.http import require_POST
 import random
 
-from .controllers.RegistrationController import RegistrationController
+from .controllers.UserController import UserController
 from .models import BoardGame
 
 BIG_LIMIT = 48
@@ -82,19 +82,10 @@ def set_session(request) -> JsonResponse:
             })
 
 
-def whoami(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'is_authenticated': False})
-    return JsonResponse({
-            'username': request.user.username,
-            'is_authenticated': False,
-            })
-
-
 @require_POST
 @csrf_exempt
 def register(request) -> JsonResponse:
-    registration_controller = RegistrationController()
+    registration_controller = UserController()
     response = registration_controller.action_register(request)
 
     return response
