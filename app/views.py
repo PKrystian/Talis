@@ -57,6 +57,7 @@ def board_game_list(request) -> JsonResponse:
             'publisher': publishers,
             'category': categories,
             'expansions': expansions,
+            'description': board_game.description,
             'min_players': board_game.min_players,
             'max_players': board_game.max_players,
             'age': board_game.age,
