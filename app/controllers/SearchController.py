@@ -88,6 +88,7 @@ class SearchController:
                 'year_published': game.year_published,
                 'publisher': ', '.join([bp.publisher.name for bp in game.boardgamepublisher_set.all()]),
                 'category': ', '.join([bc.category.name for bc in game.boardgamecategory_set.all()]),
+                'description': game.description,
                 'expansions': [{'expansion_id': expansion.expansion_board_game.id,
                                 'expansion_name': expansion.expansion_board_game.name} for expansion in
                                game.expansions.all()],
