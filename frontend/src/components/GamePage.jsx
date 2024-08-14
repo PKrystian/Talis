@@ -13,10 +13,8 @@ const GamePage = () => {
     const params = new URLSearchParams(location.search);
     const boardGameString = params.get('boardGame');
     const boardGame = boardGameString ? JSON.parse(decodeURIComponent(boardGameString)) : null;
-    console.log(boardGame);
     const { min_playtime, max_playtime} = boardGame;
     const playtime = min_playtime !== max_playtime ? `${min_playtime}-${max_playtime}` : min_playtime;
-    console.log(playtime);
 
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
