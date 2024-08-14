@@ -54,7 +54,6 @@ if DEVELOPMENT_MODE is True:
     DEVELOPMENT_PASSWORD = os.getenv("DEVELOPMENT_PASSWORD", "local")
     DEVELOPMENT_PORT = os.getenv("DEVELOPMENT_PORT", "")
     DATABASES = {
-        # 'default': dj_database_url.parse('postgresql://db:AVNS_52HbaQZz86_HfB0qYJ4@app-5d8dca9d-9afc-4311-ae08-0b4df374e27f-do-user-16253034-0.c.db.ondigitalocean.com:25060/db?sslmode=require')
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'db_dev',
