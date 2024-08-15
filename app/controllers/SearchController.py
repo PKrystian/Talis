@@ -1,39 +1,35 @@
 from django.db.models import Q
 from django.http import JsonResponse
-from urllib.parse import parse_qs
 from app.models import BoardGame
 
-BIG_LIMIT = 48
-MEDIUM_LIMIT = 18
-SMALL_LIMIT = 5
-
-AGE_RANGES = {
-    'up to 3 years': (None, 3),
-    '3-4 years': (3, 4),
-    '5-7 years': (5, 7),
-    '8-11 years': (8, 11),
-    '12-14 years': (12, 14),
-    '15-17 years': (15, 17),
-    '18+ years': (18, None),
-}
-
-PLAYTIME_RANGES = {
-    '< 15 min': (None, 15),
-    '< 30 min': (None, 30),
-    '< 1h': (None, 60),
-    '< 2h': (None, 120),
-    '2h+': (120, None),
-}
 
 class SearchController:
-    ROUTE = 'search/'
+    ROUTE: str = 'search/'
 
-    def action_search_board_games(request) -> JsonResponse:
+    BIG_LIMIT: int = 48
+    MEDIUM_LIMIT: int = 18
+    SMALL_LIMIT: int = 5
+
+    AGE_RANGES = {
+        'up to 3 years': (None, 3),
+        '3-4 years': (3, 4),
+        '5-7 years': (5, 7),
+        '8-11 years': (8, 11),
+        '12-14 years': (12, 14),
+        '15-17 years': (15, 17),
+        '18+ years': (18, None),
+    }
+
+    PLAYTIME_RANGES = {
+        '< 15 min': (None, 15),
+        '< 30 min': (None, 30),
+        '< 1h': (None, 60),
+        '< 2h': (None, 120),
+        '2h+': (120, None),
+    }
+
+    def action_search_board_games(self, query, limit, query_params) -> JsonResponse:
         try:
-            query = request.GET.get('query', '')
-            limit = int(request.GET.get('limit', MEDIUM_LIMIT))
-
-            query_params = parse_qs(request.META['QUERY_STRING'])
             combined_filters = query_params.get('filters[]', [])
 
             board_games = BoardGame.objects.exclude(rating__isnull=True)
@@ -61,7 +57,7 @@ class SearchController:
                         'playtime': 'min_playtime',
                     }
                     if filter_type == 'age':
-                        age_min, age_max = AGE_RANGES.get(filter_value, (0, None))
+                        age_min, age_max = self.AGE_RANGES.get(filter_value, (0, None))
                         if age_min and age_max:
                             board_games = board_games.filter(age__gte=age_min, age__lte=age_max)
                         elif age_min:
@@ -69,7 +65,7 @@ class SearchController:
                         elif age_max:
                             board_games = board_games.filter(age__lte=age_max)
                     elif filter_type == 'playtime':
-                        min_playtime, max_playtime = PLAYTIME_RANGES.get(filter_value, (0, None))
+                        min_playtime, max_playtime = self.PLAYTIME_RANGES.get(filter_value, (0, None))
                         if min_playtime:
                             board_games = board_games.filter(min_playtime__gte=min_playtime)
                         elif max_playtime:
