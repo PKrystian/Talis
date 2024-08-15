@@ -9,13 +9,14 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './Navbar.css';
 import {TOP_CATEGORY_LIST, TOP_MECHANIC_LIST} from "../messages/suggestions";
 
-const Navbar = ({ apiPrefix }) => {
+const Navbar = ({ apiPrefix, user, userState }) => {
+  const navigate = useNavigate();
+
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState('');
   const [filter, setFilter] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const navigate = useNavigate();
   const searchFormRef = useRef(null);
 
   const categoryOptions = TOP_CATEGORY_LIST;
@@ -146,7 +147,7 @@ const Navbar = ({ apiPrefix }) => {
                 <Link className="nav-link" to="/marketplace"><FaShop className="me-1"/>Marketplace</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/user"><FaUser className="me-1" />User</Link>
+                <Link className="nav-link" to="/user"><FaUser className="me-1" />{ userState ? user.username : 'User' }</Link>
               </li>
             </ul>
           </div>
