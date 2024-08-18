@@ -1,9 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import "./RegistrationPage.css"
+import LoginButton from '../utils/LoginButton'
 
 const RegistrationPage = ({ apiPrefix, userState, setUserData, setUserState }) => {
   const navigate = useNavigate()
@@ -236,7 +237,7 @@ const RegistrationPage = ({ apiPrefix, userState, setUserData, setUserState }) =
           </form>
           <div className="text-center mt-3">
             <p className="login-tooltip">Already have an account?
-              <Link to="/" className="mx-2 text-decoration-none">Login</Link>
+              <LoginButton ButtonTag={ "a" } buttonClass={ "mx-2 text-decoration-none" } buttonText={ "Login" } />
             </p>
           </div>
         </div>

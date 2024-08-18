@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import useFetch from './hooks/useFetch';
-import LandingPage from './components/LandingPage';
-import MeetingsPage from './components/MeetingsPage';
-import MarketplacePage from './components/MarketplacePage';
-import UserPage from './components/UserPage';
-import Navbar from './components/Navbar';
+import React, { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import useFetch from './hooks/useFetch'
+import LandingPage from './components/LandingPage'
+import MeetingsPage from './components/MeetingsPage'
+import MarketplacePage from './components/MarketplacePage'
+import Navbar from './components/Navbar'
 import GamePage from './components/GamePage'
-import RegistrationPage from './components/RegistrationPage';
-import SearchPage from './components/SearchPage';
-import CollectionPage from "./components/CollectionPage";
-import Footer from "./components/Footer";
-import PolicyPage from "./components/PolicyPage";
-import LicensePage from "./components/LicensePage";
+import UserPage from './components/user/UserPage'
+import RegistrationPage from './components/user/RegistrationPage'
+import SearchPage from './components/SearchPage'
+import CollectionPage from "./components/CollectionPage"
+import Footer from "./components/Footer"
+import PolicyPage from "./components/PolicyPage"
+import LicensePage from "./components/LicensePage"
 import axios from "axios"
 
 const App = () => {
