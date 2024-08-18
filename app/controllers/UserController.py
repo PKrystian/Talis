@@ -9,14 +9,15 @@ from app.utils.RegisteredUserCreator import RegisteredUserCreator
 
 
 class UserController:
-    ROUTE = 'register/'
+    ROUTE_REGISTER = 'register/'
+    ROUTE_LOGIN = 'login/'
 
     def action_register(self, request) -> JsonResponse:
         form_data = request.POST
 
         form_validator = FormValidator()
 
-        if not form_validator.validate(form_data):
+        if not form_validator.validate_registration(form_data):
             return JsonResponse({'error': 'Failed to register'}, status=400)
 
         if self.__check_for_existing_user(form_data[FormValidator.FORM_FIELD_EMAIL]):
@@ -53,3 +54,27 @@ class UserController:
             return True
         except ObjectDoesNotExist:
             return False
+
+    def action_login(self, request) -> JsonResponse:
+        form_data = request.POST
+
+        form_validator = FormValidator()
+
+        if not form_validator.validate_login(form_data):
+            return JsonResponse({'error': 'Failed to login'}, status=400)
+
+        user = self.get_user_by_username(form_data[FormValidator.FORM_FIELD_EMAIL])
+
+        if not user:
+            return JsonResponse({'error': 'User doesn\'t exist'}, status=400)
+
+        login(request, user)
+
+        return JsonResponse({'detail': 'Successfully logged in'})
+
+    @staticmethod
+    def get_user_by_username(self, username: str) -> User | None:
+        if self.__check_for_existing_user(username):
+            return User.objects.filter(username__exact=username).get()
+        else:
+            return None

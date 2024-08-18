@@ -43,8 +43,17 @@ def search(request) -> JsonResponse:
 
 @require_POST
 @csrf_exempt
+def login(request) -> JsonResponse:
+    user_controller = UserController()
+    response = user_controller.action_login(request)
+
+    return response
+
+
+@require_POST
+@csrf_exempt
 def register(request) -> JsonResponse:
-    registration_controller = UserController()
-    response = registration_controller.action_register(request)
+    user_controller = UserController()
+    response = user_controller.action_register(request)
 
     return response
