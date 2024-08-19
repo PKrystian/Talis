@@ -14,6 +14,7 @@ import Footer from "./components/Footer"
 import PolicyPage from "./components/PolicyPage"
 import LicensePage from "./components/LicensePage"
 import axios from "axios"
+import LoginModal from './components/utils/LoginModal'
 
 const App = () => {
   const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
@@ -71,7 +72,8 @@ const App = () => {
   return (
     <Router>
       <div className="page-content">
-        <Navbar apiPrefix={ apiPrefix } userState={ userState } user={ user } />
+        <Navbar apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } user={ user } setUserData={ updateUser } />
+        { !userState && <LoginModal apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } setUserData={ updateUser } /> }
         <Routes apiPrefix={ apiPrefix } >
           <Route path="/" element={ <LandingPage boardGames={ boardGames } userState={ userState } /> } />
           <Route path="/collection" element={ <CollectionPage /> } />
