@@ -11,7 +11,7 @@ import {TOP_CATEGORY_LIST, TOP_MECHANIC_LIST} from "../messages/suggestions";
 import LoginModal from './utils/LoginModal';
 import LoginButton from './utils/LoginButton';
 
-const Navbar = ({ apiPrefix, user, userState }) => {
+const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState }) => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState('');
@@ -148,13 +148,18 @@ const Navbar = ({ apiPrefix, user, userState }) => {
               <li className="nav-item">
                 <Link className="nav-link" to="/marketplace"><FaShop className="me-1"/>Marketplace</Link>
               </li>
-              <li className="nav-item mx-1">
-                <Link className="btn btn-secondary" to="/register">Register</Link>
-              </li>
-              <li className="nav-item mx-1">
-                <LoginButton ButtonTag={ "button" } buttonClass={ "btn btn-primary" } buttonText={ "Login" } />
-                <LoginModal />
-              </li>
+              { userState ? 
+                <li className="nav-item mx-1">
+                  <Link className="nav-link" to="/user"><FaUser className="me-1" />{ user.username }</Link>
+                </li> :
+                <li className="d-inline-flex">
+                  <div className='mx-1'>
+                    <Link className="btn btn-secondary" to="/register">Register</Link>
+                  </div>
+                  <div className='mx-1'>
+                    <LoginButton ButtonTag={ "button" } buttonClass={ "btn btn-primary" } buttonText={ "Login" } />
+                  </div>
+                </li> }
             </ul>
           </div>
         </div>

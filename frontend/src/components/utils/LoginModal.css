@@ -4,6 +4,10 @@
   border-color: white;
 }
 
+.fix {
+  z-index: 50;
+}
+
 .form-label {
   color: var(--text-color-light);
   font-size: var(--font-size-small);
