@@ -10,7 +10,6 @@ from app.utils.RegisteredUserCreator import RegisteredUserCreator
 
 class UserController:
     ROUTE_REGISTER = 'register/'
-    ROUTE_LOGIN = 'login/'
 
     def action_register(self, request) -> JsonResponse:
         form_data = request.POST
@@ -53,6 +52,8 @@ class UserController:
             return True
         except ObjectDoesNotExist:
             return False
+
+    ROUTE_LOGIN = 'login/'
 
     def action_login(self, request) -> JsonResponse:
         form_data = request.POST

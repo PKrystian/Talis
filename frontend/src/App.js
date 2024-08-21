@@ -64,8 +64,8 @@ const App = () => {
         setUserState(false)
       }
     })
-    .catch((error) => {
-      console.log(error)
+    .catch(() => {
+      console.error
     })
   }
 
