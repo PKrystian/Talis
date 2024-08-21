@@ -101,8 +101,8 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
           alert('Logged in successfully')
           navigate("/")
         }
-      }).catch(() => {
-        console.error
+      }).catch((error) => {
+        console.error(error)
       })
     }
   }
