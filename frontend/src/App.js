@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import useFetch from './hooks/useFetch';
-import LandingPage from './components/LandingPage';
-import MeetingsPage from './components/MeetingsPage';
-import MarketplacePage from './components/MarketplacePage';
-import UserPage from './components/UserPage';
-import Navbar from './components/Navbar';
+import React, { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import useFetch from './hooks/useFetch'
+import LandingPage from './components/LandingPage'
+import MeetingsPage from './components/MeetingsPage'
+import MarketplacePage from './components/MarketplacePage'
+import Navbar from './components/Navbar'
 import GamePage from './components/GamePage'
-import RegistrationPage from './components/RegistrationPage';
-import SearchPage from './components/SearchPage';
-import CollectionPage from "./components/CollectionPage";
-import Footer from "./components/Footer";
-import PolicyPage from "./components/PolicyPage";
-import LicensePage from "./components/LicensePage";
+import UserPage from './components/user/UserPage'
+import RegistrationPage from './components/user/RegistrationPage'
+import SearchPage from './components/SearchPage'
+import CollectionPage from "./components/CollectionPage"
+import Footer from "./components/Footer"
+import PolicyPage from "./components/PolicyPage"
+import LicensePage from "./components/LicensePage"
 import axios from "axios"
+import LoginModal from './components/utils/LoginModal'
 
 const App = () => {
   const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
@@ -63,15 +64,16 @@ const App = () => {
         setUserState(false)
       }
     })
-    .catch((error) => {
-      console.log(error)
+    .catch(() => {
+      console.error
     })
   }
 
   return (
     <Router>
       <div className="page-content">
-        <Navbar apiPrefix={ apiPrefix } userState={ userState } user={ user } />
+        <Navbar apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } user={ user } setUserData={ updateUser } />
+        { !userState && <LoginModal apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } setUserData={ updateUser } /> }
         <Routes apiPrefix={ apiPrefix } >
           <Route path="/" element={ <LandingPage boardGames={ boardGames } userState={ userState } /> } />
           <Route path="/collection" element={ <CollectionPage /> } />

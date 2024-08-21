@@ -13,15 +13,27 @@ class FormValidator:
     FORM_FIELD_PASSWORD = 'password'
     FORM_FIELD_BIRTH_DATE = 'birthDate'
 
-    FORM_REQUIRED_FIELDS = [
+    REGISTER_FORM_REQUIRED_FIELDS = [
         FORM_FIELD_FIRST_NAME,
         FORM_FIELD_EMAIL,
         FORM_FIELD_PASSWORD,
         FORM_FIELD_BIRTH_DATE,
     ]
 
-    def validate(self, form_data: QueryDict) -> bool:
-        if all([field in form_data.keys() for field in self.FORM_REQUIRED_FIELDS]):
+    LOGIN_FORM_REQUIRED_FIELDS = [
+        FORM_FIELD_EMAIL,
+        FORM_FIELD_PASSWORD,
+    ]
+
+    def validate_registration(self, form_data: QueryDict) -> bool:
+        if all([field in form_data.keys() for field in self.REGISTER_FORM_REQUIRED_FIELDS]):
+            if (self.__validate_email(form_data[self.FORM_FIELD_EMAIL])
+                    and self.__validate_password(form_data[self.FORM_FIELD_PASSWORD])):
+                return True
+        return False
+
+    def validate_login(self, form_data: QueryDict) -> bool:
+        if all([field in form_data.keys() for field in self.LOGIN_FORM_REQUIRED_FIELDS]):
             if (self.__validate_email(form_data[self.FORM_FIELD_EMAIL])
                     and self.__validate_password(form_data[self.FORM_FIELD_PASSWORD])):
                 return True
