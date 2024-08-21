@@ -145,8 +145,8 @@ const RegistrationPage = ({ apiPrefix, userState, setUserData, setUserState }) =
           alert('Registered successfully')
           navigate("/")
         }
-      }).catch(() => {
-        console.error
+      }).catch((error) => {
+        console.error(error)
       })
     }
   }
