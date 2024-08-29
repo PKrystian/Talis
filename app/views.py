@@ -31,6 +31,13 @@ def board_game_list(request) -> JsonResponse:
 
 
 @require_GET
+def board_game_details(request, game_id) -> JsonResponse:
+    board_game_controller = BoardGameController()
+
+    return board_game_controller.action_board_game_detail(request, game_id)
+
+
+@require_GET
 def search(request) -> JsonResponse:
     search_controller = SearchController()
 

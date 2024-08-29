@@ -81,7 +81,7 @@ const App = () => {
           <Route path="/marketplace" element={ <MarketplacePage /> } />
           <Route path="/user" element={ <UserPage user={ user } /> } />
           <Route path="/register" element={ <RegistrationPage apiPrefix={ apiPrefix } userState={ userState } setUserData={ updateUser } setUserState={ updateUserState } /> } />
-          <Route path="/game" element={ <GamePage /> } />
+          <Route path="/game/:id" element={<GamePage />} />
           <Route path="/search" element={ <SearchPage apiPrefix={ apiPrefix } /> } />
           <Route path="/policy" element={ <PolicyPage /> } />
           <Route path="/license" element={ <LicensePage /> } />
