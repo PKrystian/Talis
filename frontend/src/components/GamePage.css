@@ -4,7 +4,6 @@
 
 .game-page-basic-info {
   display: flex;
-  padding-bottom: 5px;
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
@@ -47,4 +46,14 @@
 
 .description .text.expanded {
   display: block;
+}
+
+.expansion-link {
+  color: var(--text-color-link);
+  text-decoration: none;
+}
+
+.expansion-link:hover {
+  color: #e9ecef;
+  text-decoration: underline;
 }
