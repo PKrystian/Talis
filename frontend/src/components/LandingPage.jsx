@@ -19,9 +19,11 @@ const LandingPage = ({ boardGames }) => {
           <h3 className="text-light">
             { iconMap[category] } <span className="me-3">{ category }</span>
           </h3>
-          <div className="d-flex overflow-auto">
+          <div className="row g-2">
             {boardGames[category].map(boardGame => (
-              <TableItem key={boardGame.id} boardGame={boardGame} />
+              <div key={boardGame.id} className="col-12 col-sm-5 col-lg-2">
+                <TableItem boardGame={boardGame} />
+              </div>
             ))}
           </div>
         </div>
