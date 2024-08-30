@@ -1,10 +1,26 @@
 .card {
   min-width: 200px;
   max-width: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card-img-wrapper {
+  height: 250px;
+  overflow: hidden;
+  position: relative;
 }
 
 .card-img-top {
-  transition: transform var(--transition);
+  transition: transform 0.3s ease-in-out;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
   cursor: pointer;
 }
 
@@ -13,10 +29,16 @@
 }
 
 .card-title {
-  transition: color var(--transition);
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 5px 10px;
+  font-size: 1rem;
+  text-align: center;
+  background-color: var(--basic-shadow);
+  color: var(--text-color-light);
+  transition: background-color 0.3s ease-in-out;
   cursor: pointer;
-}
-
-.card-title:hover {
-  color: var(--hover-background-color);
 }
