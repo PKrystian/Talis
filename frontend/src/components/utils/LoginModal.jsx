@@ -94,11 +94,13 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
       .then(resp => {
         if (resp.status === 200) {
           setUserState(resp.data.is_authenticated)
-          setUserData({ 'username': resp.data.username })
+          setUserData({
+            'username': resp.data.username,
+            'user_id': resp.data.user_id,
+          })
 
           document.getElementById('quitModal').click()
           
-          alert('Logged in successfully')
           navigate("/")
         }
       }).catch((error) => {

@@ -1,5 +1,4 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import QueryDict
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
 
@@ -72,6 +71,7 @@ class UserController:
                 'detail': 'Logged in successfully',
                 'username': user.username,
                 'is_authenticated': True,
+                'user_id': user.id,
             },
             status=200
         )
