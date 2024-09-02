@@ -76,12 +76,12 @@ const App = () => {
         { !userState && <LoginModal apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } setUserData={ updateUser } /> }
         <Routes apiPrefix={ apiPrefix } >
           <Route path="/" element={ <LandingPage boardGames={ boardGames } userState={ userState } /> } />
-          <Route path="/collection" element={ <CollectionPage /> } />
+          <Route path="/collection" element={ <CollectionPage user={ user } /> } />
           <Route path="/meetings" element={ <MeetingsPage /> } />
           <Route path="/marketplace" element={ <MarketplacePage /> } />
           <Route path="/user" element={ <UserPage user={ user } /> } />
           <Route path="/register" element={ <RegistrationPage apiPrefix={ apiPrefix } userState={ userState } setUserData={ updateUser } setUserState={ updateUserState } /> } />
-          <Route path="/game/:id" element={<GamePage />} />
+          <Route path="/game/:id" element={<GamePage apiPrefix ={ apiPrefix } user={ user } />} />
           <Route path="/search" element={ <SearchPage apiPrefix={ apiPrefix } /> } />
           <Route path="/policy" element={ <PolicyPage /> } />
           <Route path="/license" element={ <LicensePage /> } />
