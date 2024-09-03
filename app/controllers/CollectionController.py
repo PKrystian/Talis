@@ -4,7 +4,7 @@ from app.models import UserBoardGameCollection, BoardGame
 
 
 class CollectionController:
-    ROUTE: str = 'user_collection/'
+    ROUTE: str = 'user-collection/'
 
     def action_user_collection(self, request) -> JsonResponse:
         user_id = request.POST.get('user_id')

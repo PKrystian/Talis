@@ -8,7 +8,7 @@ const CollectionPage = ({ user }) => {
   const [error, setError] = useState(null);
 
   const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
-  const collectionUrl = apiPrefix + 'user_collection/';
+  const collectionUrl = apiPrefix + 'user-collection/';
 
   const fetchCollectionData = async () => {
     if (!user || !user.user_id) {
