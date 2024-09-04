@@ -26,7 +26,6 @@ const CollectionPage = ({ user }) => {
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
       );
       setCollectionData(response.data);
-      console.log('Collection data:', response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
       setError(error);

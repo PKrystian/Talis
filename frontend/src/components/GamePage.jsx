@@ -60,7 +60,6 @@ const GamePage = ({ apiPrefix, user }) => {
       },
     })
     .then(response => {
-      console.log(`Game ${collectionStatus[status] ? 'removed from' : 'added to'} ${status}:`, response.data);
       setCollectionStatus((prevState) => ({
         ...prevState,
         [status]: !prevState[status]
