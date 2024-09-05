@@ -8,7 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './Navbar.css';
 import {TOP_CATEGORY_LIST, TOP_MECHANIC_LIST} from "../messages/suggestions";
-import LoginModal from './utils/LoginModal';
 import LoginButton from './utils/LoginButton';
 
 const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState }) => {

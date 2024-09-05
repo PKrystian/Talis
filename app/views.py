@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_p
 from django.views.decorators.http import require_POST, require_GET
 
 from .controllers.BoardGameController import BoardGameController
+from .controllers.CollectionController import CollectionController
 from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 
@@ -62,5 +63,32 @@ def login(request) -> JsonResponse:
 def register(request) -> JsonResponse:
     user_controller = UserController()
     response = user_controller.action_register(request)
+
+    return response
+
+
+@require_POST
+@csrf_exempt
+def add_to_collection(request) -> JsonResponse:
+    collection_controller = CollectionController()
+    response = collection_controller.action_add_to_collection(request)
+
+    return response
+
+
+@require_POST
+@csrf_exempt
+def remove_from_collection(request) -> JsonResponse:
+    collection_controller = CollectionController()
+    response = collection_controller.action_remove_from_collection(request)
+
+    return response
+
+
+@require_POST
+@csrf_exempt
+def user_collection(request) -> JsonResponse:
+    collection_controller = CollectionController()
+    response = collection_controller.action_user_collection(request)
 
     return response

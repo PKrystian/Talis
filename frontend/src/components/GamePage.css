@@ -57,3 +57,7 @@
   color: #e9ecef;
   text-decoration: underline;
 }
+
+.pointer-cursor {
+  cursor: pointer;
+}
