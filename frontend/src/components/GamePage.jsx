@@ -5,13 +5,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faClock, faStar, faClipboardList, faPlus, faShare } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
+import LoginButton from "./utils/LoginButton";
 
-const GamePage = () => {
+const GamePage = ({ apiPrefix, user }) => {
   const { id } = useParams();
   const [boardGame, setBoardGame] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
+   const [collectionStatus, setCollectionStatus] = useState({
+    wishlist: user.wishlist || false,
+    library: user.library || false,
+  });
 
   useEffect(() => {
     axios.get(`/api/board-games/${id}/`)
@@ -30,9 +35,40 @@ const GamePage = () => {
     }
   }, [boardGame]);
 
+    useEffect(() => {
+    setCollectionStatus({
+      wishlist: user.wishlist || false,
+      library: user.library || false,
+    });
+  }, [user]);
+
   if (!boardGame) {
     return <div>Loading...</div>;
   }
+
+  const handleToggleCollection = (status) => {
+    const apiAction = collectionStatus[status] ? 'remove_from_collection/' : 'add_to_collection/';
+    const requestUrl = apiPrefix + apiAction;
+
+    axios.post(requestUrl, {
+      user_id: user.user_id,
+      board_game_id: boardGame.id,
+      status: status,
+    }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    })
+    .then(response => {
+      setCollectionStatus((prevState) => ({
+        ...prevState,
+        [status]: !prevState[status]
+      }));
+    })
+    .catch(error => {
+      console.error(`Error updating ${status}:`, error);
+    });
+  };
 
   const { min_playtime, max_playtime } = boardGame;
   const playtime = min_playtime !== max_playtime ? `${min_playtime}-${max_playtime}` : min_playtime;
@@ -89,16 +125,45 @@ const GamePage = () => {
             </p>
           ) : null }
           <div className="game-page-user-action d-flex">
+            {user && user.user_id ? (
+              <>
+                <div
+                  className="game-page-user-action-item text-center"
+                  onClick={() => handleToggleCollection('wishlist')}
+                  title={collectionStatus.wishlist ? 'Click to remove from wishlist' : 'Click to add to wishlist'}
+                >
+                  <p><FontAwesomeIcon icon={faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                  <p className="pointer-cursor">{collectionStatus.wishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</p>
+                </div>
+                <div
+                  className="game-page-user-action-item text-center"
+                  onClick={() => handleToggleCollection('library')}
+                  title={collectionStatus.library ? 'Click to remove from library' : 'Click to add to library'}
+                >
+                  <p><FontAwesomeIcon icon={faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                  <p className="pointer-cursor">{collectionStatus.library ? 'Remove from Library' : 'Add to Library'}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  className="game-page-user-action-item text-center"
+                  title="Login to add to Wishlist"
+                >
+                  <p><FontAwesomeIcon icon={faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                  <LoginButton ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"} buttonText={"Add to Wishlist"} />
+                </div>
+                <div
+                  className="game-page-user-action-item text-center"
+                  title="Login to add to Library"
+                >
+                  <p><FontAwesomeIcon icon={faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                  <LoginButton ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"} buttonText={"Add to Library"} />
+                </div>
+              </>
+            )}
             <div className="game-page-user-action-item text-center">
-              <p><FontAwesomeIcon icon={faClipboardList} className="nav-icon basic-game-icon" /></p>
-              <p>Add to Wishlist</p>
-            </div>
-            <div className="game-page-user-action-item text-center">
-              <p><FontAwesomeIcon icon={faPlus} className="nav-icon basic-game-icon" /></p>
-              <p>Add to Library</p>
-            </div>
-            <div className="game-page-user-action-item text-center">
-              <p><FontAwesomeIcon icon={faShare} className="nav-icon basic-game-icon" /></p>
+              <p><FontAwesomeIcon icon={faShare} className="nav-icon basic-game-icon"/></p>
               <p>Share</p>
             </div>
           </div>
