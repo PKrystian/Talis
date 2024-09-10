@@ -19,14 +19,18 @@ class BoardGameDataAPIDownloader:
     def __fetch(
         self,
         api_fields: list,
-        url: str
+        url: str,
+        use_new_version: bool = False,
     ) -> list:
         dict_response = self.__send_and_parse_request(url)
 
         if not dict_response:
             return []
 
-        data = dict_response[api_params.BASE_XML_PARAM][api_params.BOARDGAME_XML_PARAM]
+        if not use_new_version:
+            data = dict_response[api_params.BASE_XML_PARAM][api_params.BOARDGAME_XML_PARAM]
+        else:
+            data = dict_response[api_params.BASE_XML2_PARAM][api_params.ITEM_XML_PARAM]
 
         if type(data) is not list:
             data = [data]
@@ -50,11 +54,11 @@ class BoardGameDataAPIDownloader:
         if not limit:
             return []
 
-        extra_url_params = None
+        extra_url_params = []
         game_ids = self.__create_id_string_for_fetch(limit, offset)
 
         if api_params.STATISTICS in api_fields:
-            extra_url_params = api_params.ADDITIONAL_URL_PARAM_STATS
+            extra_url_params.append(api_params.ADDITIONAL_URL_PARAM_STATS)
 
         url = self.__setup_url(api_params.BASE_API_URL, game_ids, extra_url_params)
 
@@ -70,6 +74,7 @@ class BoardGameDataAPIDownloader:
         self,
         game_ids: list,
         api_fields: list = api_params.ALL_FIELDS,
+        api_url: str = api_params.BASE_API_URL,
     ) -> list:
         if len(game_ids) <= 0:
             return []
@@ -89,14 +94,14 @@ class BoardGameDataAPIDownloader:
 
             game_ids = self.URL_GAME_ID_SEPARATOR.join(game_ids)
 
-            extra_url_params = None
+            extra_url_params = []
 
             if api_params.STATISTICS in api_fields:
-                extra_url_params = api_params.ADDITIONAL_URL_PARAM_STATS
+                extra_url_params.append(api_params.ADDITIONAL_URL_PARAM_STATS)
 
-            url = self.__setup_url(api_params.BASE_API_URL, game_ids, extra_url_params)
+            url = self.__setup_url(api_url, game_ids, extra_url_params)
 
-            parsed_games_list.extend(self.__fetch(api_fields, url))
+            parsed_games_list.extend(self.__fetch(api_fields, url, True))
 
         return parsed_games_list
 
@@ -183,7 +188,7 @@ class BoardGameDataAPIDownloader:
         return xmltodict.parse(xml_response)
 
     @staticmethod
-    def __setup_url(base_url: str, url_ids: str, extra_url_params: list | None) -> str:
+    def __setup_url(base_url: str, url_ids: str, extra_url_params: list) -> str:
         url = base_url + url_ids
 
         if not extra_url_params:
