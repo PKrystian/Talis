@@ -25,6 +25,7 @@ tzdata = "2024.1"
 pandas = "^2.2.2"
 kaggle = "1.6.14"
 xmltodict = "^0.13.0"
+langdetect = "^1.0.9"
 
 
 [build-system]
