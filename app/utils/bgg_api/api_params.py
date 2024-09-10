@@ -1,4 +1,6 @@
 # Main API parameters for fetching xml fields
+OBJECT_ID = '@objectid'
+TYPE = '@type'
 NAME = 'name'
 YEAR_PUBLISHED = 'yearpublished'
 BOARD_GAME_PUBLISHER = 'boardgamepublisher'
@@ -19,6 +21,7 @@ RATINGS = 'ratings'
 BAYES_AVERAGE = 'bayesaverage'
 
 TEXT_FIELD_PARAM = '#text'
+PRIMARY_NAME_FIELD_PARAM = '@primary'
 ID_FIELD_PARAM = '@id'
 TOTAL_COUNT_FIELD_PARAM = '@total'
 
@@ -26,25 +29,30 @@ TOTAL_COUNT_FIELD_PARAM = '@total'
 BASE_XML_PARAM = 'boardgames'
 BOARDGAME_XML_PARAM = 'boardgame'
 
+BASE_XML2_PARAM = 'items'
+ITEM_XML_PARAM = 'item'
+
 # Search field names
 BASE_XML_SEARCH_PARAM = 'items'
 SUB_XML_SEARCH_PARAM = 'item'
 
 BASE_API_URL = 'https://api.geekdo.com/xmlapi/boardgame/'
-BASE_API_URL_V2 = 'https://boardgamegeek.com/xmlapi2/thing?id=1&type=boardgame&stats=1'
+BASE_API_URL_V2 = 'https://boardgamegeek.com/xmlapi2/thing?id='
 BASE_API_SEARCH_URL = 'https://boardgamegeek.com/xmlapi2/search'
 API_DATA_LIMIT = 20
 
 # Boardgame fetch params
 ADDITIONAL_URL_PARAM_ID = '?id='
 ADDITIONAL_URL_PARAM_STATS = '&stats=1'
-ADDITIONAL_URL_SEARCH_PARAM_TYPE = '&type=boardgame'
+ADDITIONAL_URL_SEARCH_PARAM_TYPE = '&type=boardgame,boardgameexpansion'
 
 # Search params
 ADDITIONAL_URL_SEARCH_PARAM_EXACT = '&exact=1'
 ADDITIONAL_URL_SEARCH_PARAM_QUERY = '?query='
 
 ALL_FIELDS = [
+    OBJECT_ID,
+    TYPE,
     NAME,
     YEAR_PUBLISHED,
     BOARD_GAME_PUBLISHER,
