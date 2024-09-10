@@ -1,7 +1,11 @@
 from app.utils.bgg_api import api_params
+from langdetect import DetectorFactory, detect
 
 
 class BoardGameAPIDataMapper:
+    def __init__(self):
+        DetectorFactory.seed = 0
+
     def map_with_fields(self, board_game, api_fields: list) -> dict | None:
         if 'error' in board_game.keys():
             return None
@@ -42,15 +46,16 @@ class BoardGameAPIDataMapper:
 
         return extracted_keys
 
-    @staticmethod
-    def __extract_name(board_game_names: list | dict) -> str:
+    def __extract_name(self, board_game_names: list | dict) -> str:
         if isinstance(board_game_names, list):
-            if '#text' in board_game_names[0].keys():
-                return board_game_names[0][api_params.TEXT_FIELD_PARAM]
-            else:
-                for board_game_name in board_game_names:
-                    if '#text' in board_game_name.keys():
-                        return board_game_name[api_params.TEXT_FIELD_PARAM]
+            primary_name = ''
+            alternate_names = []
+            for board_game_name in board_game_names:
+                if {api_params.PRIMARY_NAME_FIELD_PARAM, api_params.TEXT_FIELD_PARAM}.issubset(board_game_name.keys()):
+                    primary_name = board_game_name[api_params.TEXT_FIELD_PARAM]
+                else:
+                    alternate_names.append(board_game_name[api_params.TEXT_FIELD_PARAM])
+            return self.__resolve_name(primary_name, alternate_names)
         else:
             return board_game_names[api_params.TEXT_FIELD_PARAM]
 
@@ -73,3 +78,20 @@ class BoardGameAPIDataMapper:
         extracted_string = extracted_string.replace('"', '')
 
         return extracted_string
+
+    @staticmethod
+    def __resolve_name(primary_name: str, alternate_names: list) -> str:
+        try:
+            if detect(primary_name) == 'en':
+                return primary_name
+        except Exception:
+            return primary_name
+
+        for alternate_name in alternate_names:
+            try:
+                if detect(alternate_name) == 'en':
+                    return alternate_name
+            except Exception:
+                continue
+
+        return primary_name
