@@ -19,6 +19,7 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState }) => {
   const [filter, setFilter] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const searchFormRef = useRef(null);
 
   const categoryOptions = TOP_CATEGORY_LIST;
@@ -72,6 +73,8 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState }) => {
     };
   }, []);
 
+  const onUserProfileClick = () => setShowUserDropdown(!showUserDropdown);
+  
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div className="container-fluid">
@@ -150,19 +153,20 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState }) => {
               </li>
               { userState ? 
                 <li className="nav-item nav-user-profile mx-1">
-                  <Link className="nav-link" to="/user"><FaUser className="me-1" />{ user.username }</Link>
+                  <button className="nav-link" onClick={onUserProfileClick}><FaUser className="me-1" />{ user.username }</button>
+                  { showUserDropdown ? 
                   <div className="user-dropdown row bg-dark">
-                      <FaUser className="me-1 pt-4 display-1" />
-                      <li className="text-center pt-2">UserName</li>
-                      <li className="text-center pt-1">userEmail.com</li>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaUser className="me-1" />Profile</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaUserFriends className="me-1" />Friends</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaMapPin className="me-1" />Scheduled Meetings</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaCog className="me-1" />Settings</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaCalendarAlt className="me-1" />Calendar</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaBullhorn className="me-1" />Send Feedback</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaSignOutAlt className="me-1" />Log Out</Link>
-                  </div>
+                    <FaUser className="me-1 pt-4 display-1" />
+                    <li className="text-center pt-2">UserName</li>
+                    <li className="text-center pt-1">userEmail.com</li>
+                    <Link className="nav-user-profile-link pb-2" to="/user"><FaUser className="me-1" />Profile</Link>
+                    <Link className="nav-user-profile-link pb-2" to="/user"><FaUserFriends className="me-1" />Friends</Link>
+                    <Link className="nav-user-profile-link pb-2" to="/user"><FaMapPin className="me-1" />Scheduled Meetings</Link>
+                    <Link className="nav-user-profile-link pb-2" to="/user"><FaCog className="me-1" />Settings</Link>
+                    <Link className="nav-user-profile-link pb-2" to="/user"><FaCalendarAlt className="me-1" />Calendar</Link>
+                    <Link className="nav-user-profile-link pb-2" to="/user"><FaBullhorn className="me-1" />Send Feedback</Link>
+                    <Link className="nav-user-profile-link pb-2" to="/user"><FaSignOutAlt className="me-1" />Log Out</Link>
+                  </div> : null }
                 </li> :
                 <li className="d-inline-flex">
                   <div className='mx-1'>
