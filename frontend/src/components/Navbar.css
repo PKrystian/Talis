@@ -123,14 +123,10 @@
 }
 
 .user-dropdown {
-  display: none;
+  display: flex;
   position: absolute;
   width: 300px;
   right: 0;
-}
-
-.nav-user-profile:hover .user-dropdown {
-  display: flex;
 }
 
 .nav-user-profile-link {
