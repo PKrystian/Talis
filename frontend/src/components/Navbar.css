@@ -121,3 +121,22 @@
   background-color: var(--background-color-dark-light);
   border-color: var(--border-color-dark);
 }
+
+.user-dropdown {
+  display: flex;
+  position: absolute;
+  width: 300px;
+  right: 0;
+}
+
+.nav-user-profile-link {
+  font-size: var(--font-size-medium);
+  color: var(--text-color-light);
+  width: 100%;
+  text-decoration: none;
+}
+
+.nav-user-profile-link:hover {
+  background-color: var(--hover-background-color);
+  border-radius: var(--border-radius);
+}
