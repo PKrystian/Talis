@@ -51,18 +51,26 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 if DEVELOPMENT_MODE is True:
-    DEVELOPMENT_PASSWORD = os.getenv("DEVELOPMENT_PASSWORD", "local")
-    DEVELOPMENT_PORT = os.getenv("DEVELOPMENT_PORT", "")
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'db_dev',
-            'USER': 'postgres',
-            'PASSWORD': DEVELOPMENT_PASSWORD,
-            'HOST': 'localhost',
-            'PORT': DEVELOPMENT_PORT,
+    if 'test' in sys.argv:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': ':memory:',
+            }
         }
-    }
+    else:
+        DEVELOPMENT_PASSWORD = os.getenv("DEVELOPMENT_PASSWORD", "local")
+        DEVELOPMENT_PORT = os.getenv("DEVELOPMENT_PORT", "5432")
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'db_dev',
+                'USER': 'postgres',
+                'PASSWORD': DEVELOPMENT_PASSWORD,
+                'HOST': 'localhost',
+                'PORT': DEVELOPMENT_PORT,
+            }
+        }
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
     if os.getenv("DATABASE_URL", None) is None:
         raise Exception("DATABASE_URL environment variable not defined")
