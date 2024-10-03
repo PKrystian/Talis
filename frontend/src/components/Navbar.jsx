@@ -10,7 +10,7 @@ import './Navbar.css';
 import {TOP_CATEGORY_LIST, TOP_MECHANIC_LIST} from "../messages/suggestions";
 import LoginButton from './utils/LoginButton';
 
-const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState }) => {
+const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUser }) => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState('');
@@ -64,6 +64,26 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState }) => {
       setIsInputFocused(false);
     }
   };
+
+  const logout = () => {
+    axios.post(
+      apiPrefix + 'logout/',
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    })
+    .then(resp => {
+      if (resp.status === 200) {
+        resetUser()
+        alert('Logged out')
+        navigate('/')
+      }
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -164,7 +184,7 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState }) => {
                     <Link className="nav-user-profile-link pb-2" to="/user"><FaCog className="me-1" />Settings</Link>
                     <Link className="nav-user-profile-link pb-2" to="/user"><FaCalendarAlt className="me-1" />Calendar</Link>
                     <Link className="nav-user-profile-link pb-2" to="/user"><FaBullhorn className="me-1" />Send Feedback</Link>
-                    <Link className="nav-user-profile-link pb-2" to="/user"><FaSignOutAlt className="me-1" />Log Out</Link>
+                    <Link className="nav-user-profile-link pb-2" onClick={ logout }><FaSignOutAlt className="me-1" />Log Out</Link>
                   </div> : null }
                 </li> :
                 <li className="d-inline-flex">

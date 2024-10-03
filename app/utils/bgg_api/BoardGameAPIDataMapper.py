@@ -53,7 +53,7 @@ class BoardGameAPIDataMapper:
             for board_game_name in board_game_names:
                 if {api_params.PRIMARY_NAME_FIELD_PARAM, api_params.TEXT_FIELD_PARAM}.issubset(board_game_name.keys()):
                     primary_name = board_game_name[api_params.TEXT_FIELD_PARAM]
-                else:
+                elif api_params.TEXT_FIELD_PARAM in board_game_name.keys():
                     alternate_names.append(board_game_name[api_params.TEXT_FIELD_PARAM])
             return self.__resolve_name(primary_name, alternate_names)
         else:
