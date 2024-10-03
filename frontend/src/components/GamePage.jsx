@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faClock, faStar, faClipboardList, faPlus, faShare } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faClock, faStar, faClipboardList, faPlus, faShare, faCheck } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
 import LoginButton from "./utils/LoginButton";
 
@@ -17,6 +17,31 @@ const GamePage = ({ apiPrefix, user }) => {
     wishlist: user.wishlist || false,
     library: user.library || false,
   });
+
+  const fetchCollectionData = async () => {
+    const collectionUrl = apiPrefix + 'user-collection/';
+    if (!user || !user.user_id) {
+      setCollectionStatus({
+        wishlist: false,
+        library: false,
+      });
+    }
+
+    try {
+      const response = await axios.post(
+        collectionUrl,
+        { user_id: user.user_id },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+      );
+      setCollectionStatus({
+        wishlist: response.data.wishlist.find((wishlist) => wishlist.id == id),
+        library: response.data.library.find((library) => library.id == id)
+      });
+      console.log(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   useEffect(() => {
     const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
@@ -36,11 +61,8 @@ const GamePage = ({ apiPrefix, user }) => {
     }
   }, [boardGame]);
 
-    useEffect(() => {
-    setCollectionStatus({
-      wishlist: user.wishlist || false,
-      library: user.library || false,
-    });
+  useEffect(() => {
+      fetchCollectionData();
   }, [user]);
 
   if (!boardGame) {
@@ -133,7 +155,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   onClick={() => handleToggleCollection('wishlist')}
                   title={collectionStatus.wishlist ? 'Click to remove from wishlist' : 'Click to add to wishlist'}
                 >
-                  <p><FontAwesomeIcon icon={faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                  <p><FontAwesomeIcon icon={collectionStatus.wishlist ? faCheck : faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
                   <p className="pointer-cursor">{collectionStatus.wishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</p>
                 </div>
                 <div
@@ -141,7 +163,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   onClick={() => handleToggleCollection('library')}
                   title={collectionStatus.library ? 'Click to remove from library' : 'Click to add to library'}
                 >
-                  <p><FontAwesomeIcon icon={faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                  <p><FontAwesomeIcon icon={collectionStatus.library ? faCheck : faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
                   <p className="pointer-cursor">{collectionStatus.library ? 'Remove from Library' : 'Add to Library'}</p>
                 </div>
               </>
