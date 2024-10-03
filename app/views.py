@@ -60,6 +60,15 @@ def login(request) -> JsonResponse:
 
 @require_POST
 @csrf_exempt
+def logout(request) -> JsonResponse:
+    user_controller = UserController()
+    response = user_controller.action_logout(request)
+
+    return response
+
+
+@require_POST
+@csrf_exempt
 def register(request) -> JsonResponse:
     user_controller = UserController()
     response = user_controller.action_register(request)

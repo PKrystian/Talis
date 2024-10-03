@@ -32,6 +32,11 @@ const App = () => {
     setUser(userData)
   }
 
+  const resetUser = () => {
+    setUser({})
+    setUserState(false)
+  }
+
   useEffect(() => {
     getSession()
   }, [])
@@ -72,7 +77,7 @@ const App = () => {
   return (
     <Router>
       <div className="page-content">
-        <Navbar apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } user={ user } setUserData={ updateUser } />
+        <Navbar apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } user={ user } setUserData={ updateUser } resetUser={ resetUser } />
         { !userState && <LoginModal apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } setUserData={ updateUser } /> }
         <Routes apiPrefix={ apiPrefix } >
           <Route path="/" element={ <LandingPage boardGames={ boardGames } userState={ userState } /> } />
