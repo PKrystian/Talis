@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 from app.utils.FormValidator import FormValidator
 from django.contrib.auth.models import User
@@ -15,10 +15,10 @@ class UserController:
         form_validator = FormValidator()
 
         if not form_validator.validate_registration(form_data):
-            return JsonResponse({'error': 'Failed to register'}, status=400)
+            return JsonResponse(data={'error': 'Failed to register'}, status=400)
 
         if self.__check_for_existing_user(form_data[FormValidator.FORM_FIELD_EMAIL]):
-            return JsonResponse({'error': 'User with this email already exists'}, status=400)
+            return JsonResponse(data={'error': 'User with this email already exists'}, status=400)
 
         registered_user_creator = RegisteredUserCreator()
 
@@ -36,7 +36,7 @@ class UserController:
         login(request, new_registered_user.user)
 
         return JsonResponse(
-            {
+            data={
                 'detail': 'Registered successfully',
                 'username': new_registered_user.user.username,
                 'is_authenticated': True,
@@ -59,19 +59,31 @@ class UserController:
         form_validator = FormValidator()
 
         if not form_validator.validate_login(form_data):
-            return JsonResponse({'error': 'Failed to login'}, status=400)
+            return JsonResponse(data={'error': 'Failed to login'}, status=400)
 
         user = authenticate(username=form_data[FormValidator.FORM_FIELD_EMAIL], password=form_data[FormValidator.FORM_FIELD_PASSWORD])
 
         if not user:
-            return JsonResponse({'error': 'User doesn\'t exist'}, status=400)
+            return JsonResponse(data={'error': 'User does not exist'}, status=400)
 
         return JsonResponse(
-            {
+            data={
                 'detail': 'Logged in successfully',
                 'username': user.username,
                 'is_authenticated': True,
                 'user_id': user.id,
+            },
+            status=200
+        )
+
+    ROUTE_LOGOUT = 'logout/'
+
+    def action_logout(self, request) -> JsonResponse:
+        logout(request)
+
+        return JsonResponse(
+            data={
+                'detail': 'Logged out'
             },
             status=200
         )

@@ -66,6 +66,12 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
     }
   }
 
+  function submitOnEnter(e) {
+    if (e.key == 'Enter') {
+      handleSubmit()
+    }
+  }
+
   function handleSubmit() {
     setSubmitClickedOnce(true)
     let validations = []
@@ -118,7 +124,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
   })
 
   return (
-    <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div onKeyDown={ submitOnEnter } className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content backplate">
           <div className="modal-header">
