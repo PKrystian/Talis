@@ -19,7 +19,8 @@ const GamePage = ({ apiPrefix, user }) => {
   });
 
   useEffect(() => {
-    axios.get(`/api/board-games/${id}/`)
+    const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
+    axios.get(apiPrefix + `board-games/${id}/`)
       .then(response => {
         setBoardGame(response.data);
       })
