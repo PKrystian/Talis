@@ -6,6 +6,7 @@ class LogError(models.Model):
     WARNING = 'WARNING'
     CRITICAL = 'CRITICAL'
 
+    objects = None
     class_reference = models.CharField(max_length=128)
     message = models.CharField(max_length=1024)
     trigger = models.CharField(max_length=256)

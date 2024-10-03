@@ -14,6 +14,7 @@ urlpatterns = [
     path(API_PREFIX + BoardGameController.ROUTE, views.board_game_list, name='board-game-list'),
     path(API_PREFIX + BoardGameController.ROUTE_GAME_DETAIL, views.board_game_details, name='board-game-detail'),
     path(API_PREFIX + UserController.ROUTE_LOGIN, views.login, name='login'),
+    path(API_PREFIX + UserController.ROUTE_LOGOUT, views.logout, name='logout'),
     path(API_PREFIX + UserController.ROUTE_REGISTER, views.register, name='register'),
     path(API_PREFIX + SearchController.ROUTE, views.search, name='action_search_board_games'),
     path(API_PREFIX + CollectionController.ROUTE_ADD, views.add_to_collection, name='add_to_collection'),
