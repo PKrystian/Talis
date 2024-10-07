@@ -72,6 +72,7 @@ class UserController:
                 'username': user.username,
                 'is_authenticated': True,
                 'user_id': user.id,
+                'is_superuser': user.is_superuser,
             },
             status=200
         )
