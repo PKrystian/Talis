@@ -104,6 +104,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
             'username': resp.data.username,
             'user_id': resp.data.user_id,
             'is_superuser': resp.data.is_superuser,
+            'profile_image_url': resp.data.profile_image_url,
           })
 
           document.getElementById('quitModal').click()
@@ -123,6 +124,24 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
       })
     }
   })
+
+  useEffect(() => {
+  axios.get(apiPrefix + 'check-auth/', { withCredentials: true })
+    .then(resp => {
+      if (resp.status === 200) {
+        setUserState(resp.data.is_authenticated);
+        setUserData({
+          'username': resp.data.username,
+          'user_id': resp.data.user_id,
+          'profile_image_url': resp.data.profile_image_url,
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching user authentication status', error);
+    });
+}, []);
+
 
   return (
     <div onKeyDown={ submitOnEnter } className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
