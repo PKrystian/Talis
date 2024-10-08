@@ -17,9 +17,10 @@ urlpatterns = [
     path(API_PREFIX + UserController.ROUTE_LOGIN, views.login, name='login'),
     path(API_PREFIX + UserController.ROUTE_LOGOUT, views.logout, name='logout'),
     path(API_PREFIX + UserController.ROUTE_REGISTER, views.register, name='register'),
-    path(API_PREFIX + SearchController.ROUTE, views.search, name='action-search-board-games'),
-    path(API_PREFIX + CollectionController.ROUTE_ADD, views.add_to_collection, name='add-to-collection'),
-    path(API_PREFIX + CollectionController.ROUTE_REMOVE, views.remove_from_collection, name='remove-from-collection'),
+    path(API_PREFIX + UserController.ROUTE_CHECK_AUTH, views.check_auth, name='check-auth'),
+    path(API_PREFIX + SearchController.ROUTE, views.search, name='action_search_board_games'),
+    path(API_PREFIX + CollectionController.ROUTE_ADD, views.add_to_collection, name='add_to_collection'),
+    path(API_PREFIX + CollectionController.ROUTE_REMOVE, views.remove_from_collection, name='remove_from_collection'),
     path(API_PREFIX + CollectionController.ROUTE, views.user_collection, name='user-collection'),
     path(API_PREFIX + EventController.ROUTE_GET, views.get_events, name='get-events'),
 ]

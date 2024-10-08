@@ -77,6 +77,13 @@ def register(request) -> JsonResponse:
     return response
 
 
+def check_auth(request) -> JsonResponse:
+    user_controller = UserController()
+    response = user_controller.check_auth(request)
+
+    return response
+
+
 @require_POST
 @csrf_exempt
 def add_to_collection(request) -> JsonResponse:
