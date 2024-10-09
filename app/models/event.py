@@ -17,6 +17,7 @@ class Event(models.Model):
     ATTENDEES = 'attendees'
     MAX_PLAYERS = 'max_players'
     EVENT_START_DATE = 'event_start_date'
+    COORDINATES = 'coordinates'
 
     objects = None
     title = models.CharField(max_length=128, null=False)
@@ -30,6 +31,7 @@ class Event(models.Model):
     attendees = models.ManyToManyField(User, related_name='attendees')
     max_players = models.PositiveSmallIntegerField(default=0, null=True)
     event_start_date = models.DateField(null=False)
+    coordinates = models.JSONField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -101,6 +103,7 @@ class Event(models.Model):
             self.ATTENDEES: self.serialize_attendees(),
             self.MAX_PLAYERS: self.max_players,
             self.EVENT_START_DATE: self.event_start_date,
+            self.COORDINATES: self.coordinates,
         }
     
     def serialize_host(self) -> dict:

@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 
 from app.models import BoardGame
 from app.utils.LogErrorCreator import LogErrorCreator
-from app.utils.bgg_api import api_params
+from app.utils.bgg_api import bgg_api_params
 from app.utils.bgg_api.BoardGameDataAPIDownloader import BoardGameDataAPIDownloader
 
 
@@ -36,15 +36,15 @@ class Command(BaseCommand):
                 offset=offset
             )
 
-            offset += api_params.API_DATA_LIMIT
+            offset += bgg_api_params.API_DATA_LIMIT
 
             for api_board_game in api_board_games:
                 try:
-                    board_game = BoardGame.objects.filter(description__exact=api_board_game[api_params.DESCRIPTION]).get()
+                    board_game = BoardGame.objects.filter(description__exact=api_board_game[bgg_api_params.DESCRIPTION]).get()
                     api_v2_game_ids = board_game_data_api_downloader.fetch_with_ids(
-                        [api_board_game[api_params.OBJECT_ID]],
-                        api_fields=[api_params.TYPE],
-                        api_url=api_params.BASE_API_URL_V2,
+                        [api_board_game[bgg_api_params.OBJECT_ID]],
+                        api_fields=[bgg_api_params.TYPE],
+                        api_url=bgg_api_params.BASE_API_URL_V2,
                     )
 
                     if not api_v2_game_ids:
@@ -52,13 +52,13 @@ class Command(BaseCommand):
                             .create()
                             .warning()
                             .log(
-                                message=f'Not found: API ID - {api_board_game[api_params.OBJECT_ID]}, {board_game.name}',
+                                message=f'Not found: API ID - {api_board_game[bgg_api_params.OBJECT_ID]}, {board_game.name}',
                                 trigger='GameNotFound',
                                 class_reference='cleanup_board_games'
                             ))
                         continue
 
-                    if api_v2_game_ids[0] and api_v2_game_ids[0][api_params.TYPE] not in ('boardgame', 'boardgameexpansion'):
+                    if api_v2_game_ids[0] and api_v2_game_ids[0][bgg_api_params.TYPE] not in ('boardgame', 'boardgameexpansion'):
                         board_game.delete()
                         removed_games += 1
                         continue
@@ -73,7 +73,7 @@ class Command(BaseCommand):
                         .create()
                         .warning()
                         .log(
-                            message=f'{api_board_game[api_params.OBJECT_ID]};{api_board_game[api_params.NAME]}',
+                            message=f'{api_board_game[bgg_api_params.OBJECT_ID]};{api_board_game[bgg_api_params.NAME]}',
                             trigger='ObjectDoesNotExist',
                             class_reference='cleanup_board_games'
                         ))
@@ -84,7 +84,7 @@ class Command(BaseCommand):
                         .create()
                         .warning()
                         .log(
-                            message=f'{api_board_game[api_params.OBJECT_ID]};{api_board_game[api_params.NAME]}',
+                            message=f'{api_board_game[bgg_api_params.OBJECT_ID]};{api_board_game[bgg_api_params.NAME]}',
                             trigger='MultipleObjectsReturned',
                             class_reference='cleanup_board_games'
                         ))
