@@ -3,7 +3,7 @@ import xmltodict
 from typing import List
 
 from app.models.board_game import BoardGame
-from app.utils.bgg_api import api_params
+from app.utils.bgg_api import bgg_api_params
 from app.utils.bgg_api.BoardGameAPIDataMapper import BoardGameAPIDataMapper
 
 
@@ -11,7 +11,6 @@ class BoardGameDataAPIDownloader:
     __board_game_data_mapper: BoardGameAPIDataMapper
 
     URL_GAME_ID_SEPARATOR = ','
-    __API_FETCH_MAX_TRIES = 10
 
     def __init__(self) -> None:
         self.__board_game_data_mapper = BoardGameAPIDataMapper()
@@ -28,9 +27,9 @@ class BoardGameDataAPIDownloader:
             return []
 
         if not use_new_version:
-            data = dict_response[api_params.BASE_XML_PARAM][api_params.BOARDGAME_XML_PARAM]
+            data = dict_response[bgg_api_params.BASE_XML_PARAM][bgg_api_params.BOARDGAME_XML_PARAM]
         else:
-            data = dict_response[api_params.BASE_XML2_PARAM][api_params.ITEM_XML_PARAM]
+            data = dict_response[bgg_api_params.BASE_XML2_PARAM][bgg_api_params.ITEM_XML_PARAM]
 
         if type(data) is not list:
             data = [data]
@@ -47,8 +46,8 @@ class BoardGameDataAPIDownloader:
 
     def fetch_with_offset(
             self,
-            api_fields: list = api_params.ALL_FIELDS,
-            limit: int = api_params.API_DATA_LIMIT,
+            api_fields: list = bgg_api_params.ALL_FIELDS,
+            limit: int = bgg_api_params.API_DATA_LIMIT,
             offset: int = 0,
     ) -> list:
         if not limit:
@@ -57,10 +56,10 @@ class BoardGameDataAPIDownloader:
         extra_url_params = []
         game_ids = self.__create_id_string_for_fetch(limit, offset)
 
-        if api_params.STATISTICS in api_fields:
-            extra_url_params.append(api_params.ADDITIONAL_URL_PARAM_STATS)
+        if bgg_api_params.STATISTICS in api_fields:
+            extra_url_params.append(bgg_api_params.ADDITIONAL_URL_PARAM_STATS)
 
-        url = self.__setup_url(api_params.BASE_API_URL, game_ids, extra_url_params)
+        url = self.__setup_url(bgg_api_params.BASE_API_URL, game_ids, extra_url_params)
 
         return self.__fetch(api_fields, url)
 
@@ -73,8 +72,8 @@ class BoardGameDataAPIDownloader:
     def fetch_with_ids(
         self,
         game_ids: list,
-        api_fields: list = api_params.ALL_FIELDS,
-        api_url: str = api_params.BASE_API_URL,
+        api_fields: list = bgg_api_params.ALL_FIELDS,
+        api_url: str = bgg_api_params.BASE_API_URL,
     ) -> list:
         if len(game_ids) <= 0:
             return []
@@ -82,22 +81,22 @@ class BoardGameDataAPIDownloader:
         if game_ids[0] is not str:
             game_ids = [str(game_id) for game_id in game_ids]
 
-        if len(game_ids) < api_params.API_DATA_LIMIT:
-            until = api_params.API_DATA_LIMIT + 1
+        if len(game_ids) < bgg_api_params.API_DATA_LIMIT:
+            until = bgg_api_params.API_DATA_LIMIT + 1
         else:
             until = len(game_ids)
 
         parsed_games_list = []
 
-        for offset in range(api_params.API_DATA_LIMIT, until, api_params.API_DATA_LIMIT):
+        for offset in range(bgg_api_params.API_DATA_LIMIT, until, bgg_api_params.API_DATA_LIMIT):
             game_ids = game_ids[:offset]
 
             game_ids = self.URL_GAME_ID_SEPARATOR.join(game_ids)
 
             extra_url_params = []
 
-            if api_params.STATISTICS in api_fields:
-                extra_url_params.append(api_params.ADDITIONAL_URL_PARAM_STATS)
+            if bgg_api_params.STATISTICS in api_fields:
+                extra_url_params.append(bgg_api_params.ADDITIONAL_URL_PARAM_STATS)
 
             url = self.__setup_url(api_url, game_ids, extra_url_params)
 
@@ -110,34 +109,34 @@ class BoardGameDataAPIDownloader:
         separator = '+'
 
         for board_game in board_games:
-            url = (api_params.BASE_API_SEARCH_URL
-                   + api_params.ADDITIONAL_URL_SEARCH_PARAM_QUERY
+            url = (bgg_api_params.BASE_API_SEARCH_URL
+                   + bgg_api_params.ADDITIONAL_URL_SEARCH_PARAM_QUERY
                    + board_game.get_name().replace(' ', separator)
-                   + api_params.ADDITIONAL_URL_SEARCH_PARAM_EXACT
-                   + api_params.ADDITIONAL_URL_SEARCH_PARAM_TYPE
+                   + bgg_api_params.ADDITIONAL_URL_SEARCH_PARAM_EXACT
+                   + bgg_api_params.ADDITIONAL_URL_SEARCH_PARAM_TYPE
                    )
 
             dict_response = self.__send_and_parse_request(url)
 
-            if api_params.BASE_XML_SEARCH_PARAM in dict_response.keys():
-                items = dict_response[api_params.BASE_XML_SEARCH_PARAM]
+            if bgg_api_params.BASE_XML_SEARCH_PARAM in dict_response.keys():
+                items = dict_response[bgg_api_params.BASE_XML_SEARCH_PARAM]
             else:
                 continue
 
-            if int(items[api_params.TOTAL_COUNT_FIELD_PARAM]) == 0:
+            if int(items[bgg_api_params.TOTAL_COUNT_FIELD_PARAM]) == 0:
                 continue
 
-            data = items[api_params.SUB_XML_SEARCH_PARAM]
+            data = items[bgg_api_params.SUB_XML_SEARCH_PARAM]
 
             game_id = 0
 
             if type(data) is list:
                 for potential_game in data:
-                    potential_game_id = potential_game[api_params.ID_FIELD_PARAM]
+                    potential_game_id = potential_game[bgg_api_params.ID_FIELD_PARAM]
 
                     params_to_match = self.fetch_with_ids(
                         game_ids=[potential_game_id],
-                        api_fields=[api_params.NAME, api_params.DESCRIPTION]
+                        api_fields=[bgg_api_params.NAME, bgg_api_params.DESCRIPTION]
                     )[0]
 
                     if not params_to_match:
@@ -146,17 +145,17 @@ class BoardGameDataAPIDownloader:
                     match_name = None
                     match_description = None
 
-                    if api_params.NAME in params_to_match:
-                        match_name = params_to_match[api_params.NAME]
-                    if api_params.DESCRIPTION in params_to_match:
-                        match_description = params_to_match[api_params.DESCRIPTION]
+                    if bgg_api_params.NAME in params_to_match:
+                        match_name = params_to_match[bgg_api_params.NAME]
+                    if bgg_api_params.DESCRIPTION in params_to_match:
+                        match_description = params_to_match[bgg_api_params.DESCRIPTION]
 
                     if (match_name and (board_game.get_name() == match_name)) and (match_description and (board_game.get_description() == match_description)):
                         game_id = potential_game_id
                         break
 
             else:
-                game_id = data[api_params.ID_FIELD_PARAM]
+                game_id = data[bgg_api_params.ID_FIELD_PARAM]
 
             if game_id:
                 game_ids.append(game_id)
