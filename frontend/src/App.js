@@ -13,7 +13,6 @@ import CollectionPage from "./components/CollectionPage"
 import Footer from "./components/Footer"
 import PolicyPage from "./components/PolicyPage"
 import LicensePage from "./components/LicensePage"
-import axios from "axios"
 import LoginModal from './components/utils/LoginModal'
 
 const App = () => {
