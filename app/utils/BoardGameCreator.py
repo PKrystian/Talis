@@ -12,6 +12,10 @@ class BoardGameCreator:
     def create(self) -> Self:
         self.__board_game = BoardGame()
         return self
+    
+    def load_from_dict(self, dict_data: dict) -> Self:
+        for key, value in dict_data.items():
+            self.__board_game.setter_mapper[key](value)
 
     def load_from_dataframe(self, df: pd.DataFrame) -> Self:
         for column in df.keys():
