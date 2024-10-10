@@ -1,4 +1,4 @@
-from app.utils.bgg_api import api_params
+from app.utils.bgg_api import bgg_api_params
 from langdetect import DetectorFactory, detect
 
 
@@ -17,15 +17,15 @@ class BoardGameAPIDataMapper:
 
         for field in api_fields:
             if field in board_game and board_game[field] != '':
-                if field in api_params.ARRAY_FIELDS:
+                if field in bgg_api_params.ARRAY_FIELDS:
                     board_game_dict[field] = self.__extract_from_list(board_game[field])
                     continue
 
-                if field in api_params.SINGLE_KEY_FIELDS:
+                if field in bgg_api_params.SINGLE_KEY_FIELDS:
                     board_game_dict[field] = self.__extract_name(board_game[field])
                     continue
 
-                if field == api_params.STATISTICS:
+                if field == bgg_api_params.STATISTICS:
                     board_game_dict[field] = self.__extract_rating(board_game[field])
                     continue
 
@@ -38,10 +38,10 @@ class BoardGameAPIDataMapper:
 
         if isinstance(board_game_key_list, list):
             for key_element in board_game_key_list:
-                clean_key_element = self.__clean_string(key_element[api_params.TEXT_FIELD_PARAM])
+                clean_key_element = self.__clean_string(key_element[bgg_api_params.TEXT_FIELD_PARAM])
                 extracted_keys.append(clean_key_element)
         else:
-            clean_key_element = self.__clean_string(board_game_key_list[api_params.TEXT_FIELD_PARAM])
+            clean_key_element = self.__clean_string(board_game_key_list[bgg_api_params.TEXT_FIELD_PARAM])
             extracted_keys.append(clean_key_element)
 
         return extracted_keys
@@ -51,21 +51,21 @@ class BoardGameAPIDataMapper:
             primary_name = ''
             alternate_names = []
             for board_game_name in board_game_names:
-                if {api_params.PRIMARY_NAME_FIELD_PARAM, api_params.TEXT_FIELD_PARAM}.issubset(board_game_name.keys()):
-                    primary_name = board_game_name[api_params.TEXT_FIELD_PARAM]
-                elif api_params.TEXT_FIELD_PARAM in board_game_name.keys():
-                    alternate_names.append(board_game_name[api_params.TEXT_FIELD_PARAM])
+                if {bgg_api_params.PRIMARY_NAME_FIELD_PARAM, bgg_api_params.TEXT_FIELD_PARAM}.issubset(board_game_name.keys()):
+                    primary_name = board_game_name[bgg_api_params.TEXT_FIELD_PARAM]
+                elif bgg_api_params.TEXT_FIELD_PARAM in board_game_name.keys():
+                    alternate_names.append(board_game_name[bgg_api_params.TEXT_FIELD_PARAM])
             return self.__resolve_name(primary_name, alternate_names)
         else:
-            return board_game_names[api_params.TEXT_FIELD_PARAM]
+            return board_game_names[bgg_api_params.TEXT_FIELD_PARAM]
 
     @staticmethod
     def __extract_rating(statistics) -> float:
         rating = 0
 
-        if api_params.RATINGS in statistics.keys():
-            if api_params.BAYES_AVERAGE in statistics[api_params.RATINGS].keys():
-                rating = statistics[api_params.RATINGS][api_params.BAYES_AVERAGE]
+        if bgg_api_params.RATINGS in statistics.keys():
+            if bgg_api_params.BAYES_AVERAGE in statistics[bgg_api_params.RATINGS].keys():
+                rating = statistics[bgg_api_params.RATINGS][bgg_api_params.BAYES_AVERAGE]
 
         return rating
 

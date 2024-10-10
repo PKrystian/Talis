@@ -8,6 +8,7 @@ from .controllers.BoardGameController import BoardGameController
 from .controllers.CollectionController import CollectionController
 from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
+from .controllers.EventController import EventController
 
 
 def index(request) -> None:
@@ -76,6 +77,13 @@ def register(request) -> JsonResponse:
     return response
 
 
+def check_auth(request) -> JsonResponse:
+    user_controller = UserController()
+    response = user_controller.check_auth(request)
+
+    return response
+
+
 @require_POST
 @csrf_exempt
 def add_to_collection(request) -> JsonResponse:
@@ -99,5 +107,12 @@ def remove_from_collection(request) -> JsonResponse:
 def user_collection(request) -> JsonResponse:
     collection_controller = CollectionController()
     response = collection_controller.action_user_collection(request)
+
+    return response
+
+@require_GET
+def get_events(request) -> JsonResponse:
+    event_controller = EventController()
+    response = event_controller.action_get_events()
 
     return response

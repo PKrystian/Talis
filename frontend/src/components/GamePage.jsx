@@ -1,9 +1,9 @@
-import {Link, useParams} from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faClock, faStar, faClipboardList, faPlus, faShare, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faClock, faStar, faClipboardList, faPlus, faShare, faCheck, faEdit } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
 import LoginButton from "./utils/LoginButton";
 
@@ -13,7 +13,7 @@ const GamePage = ({ apiPrefix, user }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
-   const [collectionStatus, setCollectionStatus] = useState({
+  const [collectionStatus, setCollectionStatus] = useState({
     wishlist: user.wishlist || false,
     library: user.library || false,
   });
@@ -37,7 +37,6 @@ const GamePage = ({ apiPrefix, user }) => {
         wishlist: response.data.wishlist.find((wishlist) => wishlist.id === id),
         library: response.data.library.find((library) => library.id === id)
       });
-      console.log(response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -62,7 +61,7 @@ const GamePage = ({ apiPrefix, user }) => {
   }, [boardGame]);
 
   useEffect(() => {
-      fetchCollectionData();
+    fetchCollectionData().then(r => (r));
   }, [user]);
 
   if (!boardGame) {
@@ -93,6 +92,10 @@ const GamePage = ({ apiPrefix, user }) => {
     });
   };
 
+  const handleAdminRedirect = () => {
+    window.location.href = `/admin/app/boardgame/${id}/change/`;
+  };
+
   const { min_playtime, max_playtime } = boardGame;
   const playtime = min_playtime !== max_playtime ? `${min_playtime}-${max_playtime}` : min_playtime;
 
@@ -107,7 +110,14 @@ const GamePage = ({ apiPrefix, user }) => {
           <img src={boardGame.image_url} className="boardgame-img" alt={boardGame.name} />
         </div>
         <div className="col flex-grow">
-          <h1 className="game-title">{boardGame.name}</h1>
+          <div className="d-flex justify-content-between">
+            <h1 className="game-title">{boardGame.name}</h1>
+            {user.is_superuser && (
+              <button className="btn btn-success btn-sm" onClick={handleAdminRedirect}>
+                <FontAwesomeIcon icon={faEdit} /> Edit
+              </button>
+            )}
+          </div>
           <div className="basic-game-info mb-3 mt-4 d-flex">
             <div className="basic-info-item px-3 d-flex flex-column">
               <FontAwesomeIcon icon={faUsers} className="nav-icon basic-game-icon" />
@@ -169,24 +179,18 @@ const GamePage = ({ apiPrefix, user }) => {
               </>
             ) : (
               <>
-                <div
-                  className="game-page-user-action-item text-center"
-                  title="Login to add to Wishlist"
-                >
+                <div className="game-page-user-action-item text-center" title="Login to add to Wishlist">
                   <p><FontAwesomeIcon icon={faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
                   <LoginButton ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"} buttonText={"Add to Wishlist"} />
                 </div>
-                <div
-                  className="game-page-user-action-item text-center"
-                  title="Login to add to Library"
-                >
+                <div className="game-page-user-action-item text-center" title="Login to add to Library">
                   <p><FontAwesomeIcon icon={faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
                   <LoginButton ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"} buttonText={"Add to Library"} />
                 </div>
               </>
             )}
             <div className="game-page-user-action-item text-center">
-              <p><FontAwesomeIcon icon={faShare} className="nav-icon basic-game-icon"/></p>
+              <p><FontAwesomeIcon icon={faShare} className="nav-icon basic-game-icon pointer-cursor" /></p>
               <p>Share</p>
             </div>
           </div>
