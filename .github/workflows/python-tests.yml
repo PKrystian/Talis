@@ -36,28 +36,23 @@ jobs:
           pip install poetry
           poetry install
 
-      - name: Run tests and generate JSON report
+      - name: Run tests and generate JUnit report
         env:
           DATABASE_URL: postgres://postgres:local@localhost:5432/db_dev
         run: |
-          poetry run pytest --json-report --json-report-file=pytest_report.json
+          poetry run pytest --junitxml=pytest_report.xml
+
+      - name: Display test results
+        run: |
+          if [ -f pytest_report.xml ]; then
+            echo "Test Results:"
+            cat pytest_report.xml
+          else
+            echo "No test report found."
+          fi
 
       - name: Upload test results
         uses: actions/upload-artifact@v3
         with:
           name: pytest-report
-          path: pytest_report.json
-
-      - name: Report test results
-        uses: dorny/test-reporter@v1
-        with:
-          name: Pytest Tests
-          path: pytest_report.json
-          reporter: pytest-json
-          fail-on-error: true
-          path-replace-backslashes: false
-          list-suites: all
-          list-tests: all
-          max-annotations: 10
-          fail-on-empty: true
-          only-summary: false
+          path: pytest_report.xml
