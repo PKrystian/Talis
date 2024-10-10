@@ -17,6 +17,8 @@ class BoardGameCreator:
         for key, value in dict_data.items():
             self.__board_game.setter_mapper[key](value)
 
+        return self
+
     def load_from_dataframe(self, df: pd.DataFrame) -> Self:
         for column in df.keys():
             if pd.isna(df[column]) is not True:
