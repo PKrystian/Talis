@@ -41,12 +41,10 @@ class FormValidator:
 
     def __validate_email(self, email: str) -> bool:
         if re.fullmatch(self.__email_pattern, email):
-            print(email)
             return True
         return False
 
     def __validate_password(self, password: str) -> bool:
         if re.fullmatch(self.__password_pattern, password):
-            print(password, 'HOW')
             return True
         return False
