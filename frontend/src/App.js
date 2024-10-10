@@ -13,7 +13,6 @@ import CollectionPage from "./components/CollectionPage"
 import Footer from "./components/Footer"
 import PolicyPage from "./components/PolicyPage"
 import LicensePage from "./components/LicensePage"
-import axios from "axios"
 import LoginModal from './components/utils/LoginModal'
 
 const App = () => {
@@ -37,10 +36,6 @@ const App = () => {
     setUserState(false)
   }
 
-  useEffect(() => {
-    getSession()
-  }, [])
-
   if (isLoading) {
     return (
       <div className="text-center vh-100 align-content-center">
@@ -53,25 +48,6 @@ const App = () => {
 
   if (error) {
     return <div>Error: {error.message}</div>;
-  }
-
-  function getSession() {
-    axios.get(
-      apiPrefix + 'session/',
-      { withCredentials: true }
-    )
-    .then((res) => (res.data))
-    .then((data) => {
-      if (data.isauthenticated) {
-        setUserState(true)
-        setUser({ 'username': data.username })
-      } else {
-        setUserState(false)
-      }
-    })
-    .catch((error) => {
-      console.error(error)
-    })
   }
 
   return (

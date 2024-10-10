@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaUser, FaUserFriends, FaMapPin, FaCog, FaCalendarAlt, FaBullhorn, FaSignOutAlt } from 'react-icons/fa';
+import { FaSearch, FaUserFriends, FaMapPin, FaCog, FaCalendarAlt, FaBullhorn, FaSignOutAlt } from 'react-icons/fa';
 import { FaLocationDot, FaShop } from "react-icons/fa6";
 import { HiSquaresPlus } from "react-icons/hi2";
 import axios from 'axios';
@@ -26,7 +26,6 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
 
   useEffect(() => {
     if (query.length >= 3 && isInputFocused) {
-
       axios.get(apiPrefix + 'search/', { params: { query, limit: 5, filterType, filter } })
         .then(response => {
           setSuggestions(response.data.results);
@@ -170,15 +169,17 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
               <li className="nav-item">
                 <Link className="nav-link" to="/marketplace"><FaShop className="me-1"/>Marketplace</Link>
               </li>
-              { userState ? 
+              { userState ?
                 <li className="nav-item nav-user-profile mx-1">
-                  <button className="nav-link" onClick={onUserProfileClick}><FaUser className="me-1" />{ user.username }</button>
-                  { showUserDropdown ? 
+                  <button className="nav-link" onClick={onUserProfileClick}>
+                    <img
+                      src={user.profile_image_url || '/static/default-profile.png'}
+                      alt="User Profile"
+                      className="rounded-circle me-1 small-avatar"
+                    />
+                  </button>
+                  { showUserDropdown ?
                   <div className="user-dropdown row bg-dark">
-                    <FaUser className="me-1 pt-4 display-1" />
-                    <li className="text-center pt-2">UserName</li>
-                    <li className="text-center pt-1">userEmail.com</li>
-                    <Link className="nav-user-profile-link pb-2" to="/user"><FaUser className="me-1" />Profile</Link>
                     <Link className="nav-user-profile-link pb-2" to="/user"><FaUserFriends className="me-1" />Friends</Link>
                     <Link className="nav-user-profile-link pb-2" to="/user"><FaMapPin className="me-1" />Scheduled Meetings</Link>
                     <Link className="nav-user-profile-link pb-2" to="/user"><FaCog className="me-1" />Settings</Link>
@@ -192,15 +193,16 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
                     <Link className="btn btn-secondary" to="/register">Register</Link>
                   </div>
                   <div className='mx-1'>
-                    <LoginButton ButtonTag={ "button" } buttonClass={ "btn btn-primary" } buttonText={ "Login" } />
+                    <LoginButton ButtonTag={ "button" } buttonClass={ "btn btn-primary" } buttonText={ "Login" }/>
                   </div>
-                </li> }
+                </li>
+              }
             </ul>
           </div>
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
 export default Navbar;

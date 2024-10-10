@@ -1,6 +1,6 @@
 from django.db import models
 
-from app.utils.bgg_api import api_params
+from app.utils.bgg_api import bgg_api_params
 
 
 def default_category() -> dict[str, list]:
@@ -37,15 +37,15 @@ class BoardGame(models.Model):
         super().__init__(*args, **kwargs)
 
         self.setter_mapper = {
-            api_params.NAME: self.set_name,
-            api_params.YEAR_PUBLISHED: self.set_year_published,
-            api_params.MIN_PLAYERS: self.set_min_players,
-            api_params.MAX_PLAYERS: self.set_max_players,
-            api_params.AGE: self.set_age,
-            api_params.MIN_PLAYTIME: self.set_min_playtime,
-            api_params.MAX_PLAYTIME: self.set_max_playtime,
-            api_params.DESCRIPTION: self.set_description,
-            api_params.IMAGE: self.set_image_url,
+            bgg_api_params.NAME: self.set_name,
+            bgg_api_params.YEAR_PUBLISHED: self.set_year_published,
+            bgg_api_params.MIN_PLAYERS: self.set_min_players,
+            bgg_api_params.MAX_PLAYERS: self.set_max_players,
+            bgg_api_params.AGE: self.set_age,
+            bgg_api_params.MIN_PLAYTIME: self.set_min_playtime,
+            bgg_api_params.MAX_PLAYTIME: self.set_max_playtime,
+            bgg_api_params.DESCRIPTION: self.set_description,
+            bgg_api_params.IMAGE: self.set_image_url,
         }
 
     def __str__(self):

@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 
+from app.models.registered_user import RegisteredUser
 from app.utils.FormValidator import FormValidator
 from django.contrib.auth.models import User
 from app.utils.RegisteredUserCreator import RegisteredUserCreator
@@ -61,10 +62,19 @@ class UserController:
         if not form_validator.validate_login(form_data):
             return JsonResponse(data={'error': 'Failed to login'}, status=400)
 
-        user = authenticate(username=form_data[FormValidator.FORM_FIELD_EMAIL], password=form_data[FormValidator.FORM_FIELD_PASSWORD])
+        user = authenticate(username=form_data[FormValidator.FORM_FIELD_EMAIL],
+                            password=form_data[FormValidator.FORM_FIELD_PASSWORD])
 
         if not user:
             return JsonResponse(data={'error': 'User does not exist'}, status=400)
+
+        login(request, user)
+
+        try:
+            registered_user = RegisteredUser.objects.get(user=user)
+            profile_image_url = registered_user.profile_image_url
+        except RegisteredUser.DoesNotExist:
+            profile_image_url = None
 
         return JsonResponse(
             data={
@@ -72,6 +82,8 @@ class UserController:
                 'username': user.username,
                 'is_authenticated': True,
                 'user_id': user.id,
+                'is_superuser': user.is_superuser,
+                'profile_image_url': profile_image_url,
             },
             status=200
         )
@@ -87,3 +99,25 @@ class UserController:
             },
             status=200
         )
+
+    ROUTE_CHECK_AUTH = 'check-auth/'
+
+    def check_auth(self, request) -> JsonResponse:
+        if request.user.is_authenticated:
+            try:
+                registered_user = RegisteredUser.objects.get(user=request.user)
+                profile_image_url = registered_user.profile_image_url
+            except RegisteredUser.DoesNotExist:
+                profile_image_url = None
+
+            return JsonResponse(
+                data={
+                    'is_authenticated': True,
+                    'username': request.user.username,
+                    'user_id': request.user.id,
+                    'profile_image_url': profile_image_url,
+                },
+                status=200
+            )
+        else:
+            return JsonResponse({'is_authenticated': False}, status=200)
