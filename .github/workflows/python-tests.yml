@@ -47,3 +47,11 @@ jobs:
         with:
           name: pytest-report
           path: pytest_report.xml
+
+      - name: Report test results
+        uses: dorny/test-reporter@v1
+        with:
+          name: Pytest Tests
+          path: pytest_report.xml
+          reporter: junit
+          fail-on-error: true
