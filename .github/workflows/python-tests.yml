@@ -35,22 +35,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-          poetry add pytest
+
+      - name: Run tests and generate report
+        env:
+          DATABASE_URL: postgres://postgres:local@localhost:5432/db_dev
+        run: |
+          OUTPUT=$(poetry run pytest --tb=short -q)
+          
+          echo "$OUTPUT" | while read line; do
+            if [[ $line == *"PASSED"* ]]; then
+              echo "# Test $line"
+            elif [[ $line == *"FAILED"* ]]; then
+              echo "# Test $line"
+            fi
+          done
 
       - name: Run tests and generate JUnit report
         env:
           DATABASE_URL: postgres://postgres:local@localhost:5432/db_dev
         run: |
-          poetry run pytest --junitxml=pytest_report.xml -v
-
-      - name: Display test results
-        run: |
-          if [ -f pytest_report.xml ]; then
-            echo "Test Results:"
-            cat pytest_report.xml
-          else
-            echo "No test report found."
-          fi
+          poetry run pytest --junitxml=pytest_report.xml
 
       - name: Upload test results
         uses: actions/upload-artifact@v3
