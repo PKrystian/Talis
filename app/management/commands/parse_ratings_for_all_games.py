@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 
 from app.utils.bgg_api.BoardGameDataAPIDownloader import BoardGameDataAPIDownloader
-from app.utils.bgg_api import api_params
+from app.utils.bgg_api import bgg_api_params
 from app.models.board_game import BoardGame
 
 
@@ -32,11 +32,11 @@ class Command(BaseCommand):
                 api_game_id = board_game_data_downloader.get_ids_from_search([game])
                 api_game = board_game_data_downloader.fetch_with_ids(
                     game_ids=api_game_id,
-                    api_fields=[api_params.STATISTICS]
+                    api_fields=[bgg_api_params.STATISTICS]
                 )
 
-                if api_game and api_params.STATISTICS in api_game[0].keys():
-                    game.set_rating(api_game[0][api_params.STATISTICS])
+                if api_game and bgg_api_params.STATISTICS in api_game[0].keys():
+                    game.set_rating(api_game[0][bgg_api_params.STATISTICS])
                 else:
                     game.set_rating(0)
 
