@@ -34,8 +34,8 @@ const GamePage = ({ apiPrefix, user }) => {
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
       );
       setCollectionStatus({
-        wishlist: response.data.wishlist.find((wishlist) => wishlist.id == id),
-        library: response.data.library.find((library) => library.id == id)
+        wishlist: response.data.wishlist.find((wishlist) => wishlist.id === id),
+        library: response.data.library.find((library) => library.id === id)
       });
       console.log(response);
     } catch (error) {
