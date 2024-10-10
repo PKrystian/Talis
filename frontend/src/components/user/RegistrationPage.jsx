@@ -142,7 +142,6 @@ const RegistrationPage = ({ apiPrefix, userState, setUserData, setUserState }) =
         if (resp.status === 200) {
           setUserState(resp.data.is_authenticated)
           setUserData({ 'username': resp.data.username })
-          alert('Registered successfully')
           navigate("/")
         }
       }).catch((error) => {
