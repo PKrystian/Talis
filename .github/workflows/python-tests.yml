@@ -53,7 +53,7 @@ jobs:
         with:
           name: Pytest Tests
           path: pytest_report.xml
-          reporter: junit-xml
+          reporter: junit
           fail-on-error: true
           path-replace-backslashes: false
           list-suites: all
