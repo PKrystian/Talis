@@ -112,11 +112,6 @@ const GamePage = ({ apiPrefix, user }) => {
         <div className="col flex-grow">
           <div className="d-flex justify-content-between">
             <h1 className="game-title">{boardGame.name}</h1>
-            {user.is_superuser && (
-              <button className="btn btn-success btn-sm" onClick={handleAdminRedirect}>
-                <FontAwesomeIcon icon={faEdit} /> Edit
-              </button>
-            )}
           </div>
           <div className="basic-game-info mb-3 mt-4 d-flex">
             <div className="basic-info-item px-3 d-flex flex-column">
@@ -127,6 +122,12 @@ const GamePage = ({ apiPrefix, user }) => {
               <FontAwesomeIcon icon={faClock} className="nav-icon basic-game-icon" />
               <div className="basic-info-text">{playtime} Min</div>
             </div>
+            {boardGame.rating ? (
+              <div className="basic-info-item px-3 d-flex flex-column">
+                <FontAwesomeIcon icon={faStar} className="nav-icon basic-game-icon"/>
+                <div className="basic-info-text">{boardGame.rating.toFixed(2)}/10</div>
+              </div>
+            ) : null}
             <div className="basic-info-item px-3 d-flex flex-column">
               <div className="circle">{boardGame.age}+</div>
             </div>
@@ -135,6 +136,9 @@ const GamePage = ({ apiPrefix, user }) => {
             { boardGame.publisher ? ( <p><span className="bold-text">Publisher:</span> {boardGame.publisher}</p> ) : null }
             { boardGame.year_published ? ( <p><span className="bold-text">Year:</span> {boardGame.year_published}</p> ) : null }
             { boardGame.category ? ( <p><span className="bold-text">Category:</span> {boardGame.category}</p> ) : null }
+            { boardGame.main_game ? ( <p><span className="bold-text">Main Game: </span>
+              <Link to={`/game/${boardGame.main_game.id}`} className="expansion-link">{boardGame.main_game.name}</Link></p> ) : null
+            }
             { Array.isArray(boardGame.expansions) && boardGame.expansions.length > 0 ? (
               <p>
                 <span className="bold-text">Expansions: </span>
@@ -149,14 +153,26 @@ const GamePage = ({ apiPrefix, user }) => {
               </p>
             ) : null }
           </div>
+           { user.is_superuser && (
+              <div className="mt-3">
+                <h2>Admin actions:</h2>
+                <div className="game-page-user-action d-flex">
+                  <button className="btn btn-success btn-sm" onClick={handleAdminRedirect}>
+                    <FontAwesomeIcon icon={faEdit} /> Edit
+                  </button>
+                </div>
+               <h2>Admin only data:</h2>
+                <div className="other-info">
+                  { boardGame.id ? ( <p><span className="bold-text">ID:</span> {boardGame.id}</p> ) : null }
+                  { boardGame.image_url ? ( <p><span className="bold-text">Image Url:</span> {boardGame.image_url}</p> ) : null }
+                  { boardGame.rating ? ( <p><span className="bold-text">Full rating:</span> {boardGame.rating}</p> ) : null }
+                  { boardGame.created_at ? ( <p><span className="bold-text">Created At:</span> {boardGame.created_at}</p> ) : null }
+                  { boardGame.updated_at ? ( <p><span className="bold-text">Updated At:</span> {boardGame.updated_at}</p> ) : null }
+                </div>
+             </div>
+           )}
         </div>
         <div className="mt-3 col">
-          { boardGame.rating ? (
-            <p>
-              <FontAwesomeIcon icon={faStar} className="nav-icon basic-game-icon" />
-              <span style={{ marginLeft: '5px', verticalAlign: '12px' }}> { boardGame.rating }/10</span>
-            </p>
-          ) : null }
           <div className="game-page-user-action d-flex">
             {user && user.user_id ? (
               <>
