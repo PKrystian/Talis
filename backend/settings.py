@@ -61,16 +61,17 @@ if DEVELOPMENT_MODE is True:
     else:
         DEVELOPMENT_PASSWORD = os.getenv("DEVELOPMENT_PASSWORD", "local")
         DEVELOPMENT_PORT = os.getenv("DEVELOPMENT_PORT", "5432")
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': 'db_dev',
-                'USER': 'postgres',
-                'PASSWORD': DEVELOPMENT_PASSWORD,
-                'HOST': 'localhost',
-                'PORT': DEVELOPMENT_PORT,
-            }
-        }
+        DATABASES = { "default": dj_database_url.parse("postgresql://db:AVNS_52HbaQZz86_HfB0qYJ4@app-5d8dca9d-9afc-4311-ae08-0b4df374e27f-do-user-16253034-0.c.db.ondigitalocean.com:25060/db?sslmode=require") }
+        # DATABASES = {
+        #     'default': {
+        #         'ENGINE': 'django.db.backends.postgresql',
+        #         'NAME': 'db_dev',
+        #         'USER': 'postgres',
+        #         'PASSWORD': DEVELOPMENT_PASSWORD,
+        #         'HOST': 'localhost',
+        #         'PORT': DEVELOPMENT_PORT,
+        #     }
+        # }
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
     if os.getenv("DATABASE_URL", None) is None:
         raise Exception("DATABASE_URL environment variable not defined")

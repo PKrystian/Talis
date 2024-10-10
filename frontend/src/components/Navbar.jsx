@@ -20,18 +20,29 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const searchFormRef = useRef(null);
+  const cancelTokenSource = useRef(null);
 
   const categoryOptions = TOP_CATEGORY_LIST;
   const mechanicOptions = TOP_MECHANIC_LIST;
 
   useEffect(() => {
     if (query.length >= 3 && isInputFocused) {
-      axios.get(apiPrefix + 'search/', { params: { query, limit: 5, filterType, filter } })
+      if (cancelTokenSource.current) {
+        cancelTokenSource.current.cancel();
+      }
+      cancelTokenSource.current = axios.CancelToken.source();
+
+      axios.get(apiPrefix + 'search/', {
+        params: { query, limit: 5, filterType, filter },
+        cancelToken: cancelTokenSource.current.token
+      })
         .then(response => {
           setSuggestions(response.data.results);
         })
         .catch(error => {
-          console.error("There was an error fetching the search results!", error);
+          if (! axios.isCancel(error)) {
+            console.error('Error fetching suggestions:', error);
+          }
         });
     } else {
       setSuggestions([]);
@@ -40,6 +51,9 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (cancelTokenSource.current) {
+      cancelTokenSource.current.cancel();
+    }
     navigate(`/search?query=${query}&filterType=${filterType}&filter=${filter}`);
   };
 
@@ -149,7 +163,7 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
                     <li
                       key={suggestion.id}
                       className="list-group-item list-group-item-action list-group-item-dark"
-                      onClick={() => navigate(`/game?boardGame=${encodeURIComponent(JSON.stringify(suggestion))}`)}
+                      onClick={() => navigate(`/game/${suggestion.id}`)}
                     >
                       {suggestion.name}
                     </li>
