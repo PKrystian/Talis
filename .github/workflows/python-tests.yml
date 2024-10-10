@@ -33,8 +33,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-      - name: Run tests
+
+      - name: Install pytest plugins for better reporting
+        run: |
+          poetry add pytest-split pytest-check
+
+      - name: Run tests with verbose output
         env:
           DATABASE_URL: postgres://postgres:local@localhost:5432/db_dev
         run: |
-          poetry run pytest
+          poetry run pytest -v --tb=short --maxfail=1
