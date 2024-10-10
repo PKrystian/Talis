@@ -35,12 +35,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
+          poetry add pytest
 
       - name: Run tests and generate JUnit report
         env:
           DATABASE_URL: postgres://postgres:local@localhost:5432/db_dev
         run: |
-          poetry run pytest --junitxml=pytest_report.xml
+          poetry run pytest --junitxml=pytest_report.xml -v
 
       - name: Display test results
         run: |
