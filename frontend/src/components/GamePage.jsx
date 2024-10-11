@@ -1,11 +1,11 @@
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faClock, faStar, faClipboardList, faPlus, faShare, faCheck, faEdit } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
-import LoginButton from "./utils/LoginButton";
+import LoginContainer from "./utils/LoginContainer";
 
 const GamePage = ({ apiPrefix, user }) => {
   const { id } = useParams();
@@ -153,24 +153,6 @@ const GamePage = ({ apiPrefix, user }) => {
               </p>
             ) : null }
           </div>
-           { user.is_superuser && (
-              <div className="mt-3">
-                <h2>Admin actions:</h2>
-                <div className="game-page-user-action d-flex">
-                  <button className="btn btn-success btn-sm" onClick={handleAdminRedirect}>
-                    <FontAwesomeIcon icon={faEdit} /> Edit
-                  </button>
-                </div>
-               <h2>Admin only data:</h2>
-                <div className="other-info">
-                  { boardGame.id ? ( <p><span className="bold-text">ID:</span> {boardGame.id}</p> ) : null }
-                  { boardGame.image_url ? ( <p><span className="bold-text">Image Url:</span> {boardGame.image_url}</p> ) : null }
-                  { boardGame.rating ? ( <p><span className="bold-text">Full rating:</span> {boardGame.rating}</p> ) : null }
-                  { boardGame.created_at ? ( <p><span className="bold-text">Created At:</span> {boardGame.created_at}</p> ) : null }
-                  { boardGame.updated_at ? ( <p><span className="bold-text">Updated At:</span> {boardGame.updated_at}</p> ) : null }
-                </div>
-             </div>
-           )}
         </div>
         <div className="mt-3 col">
           <div className="game-page-user-action d-flex">
@@ -196,12 +178,16 @@ const GamePage = ({ apiPrefix, user }) => {
             ) : (
               <>
                 <div className="game-page-user-action-item text-center" title="Login to add to Wishlist">
-                  <p><FontAwesomeIcon icon={faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
-                  <LoginButton ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"} buttonText={"Add to Wishlist"} />
+                  <LoginContainer ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"}>
+                    <p><FontAwesomeIcon icon={faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                    <p className="pointer-cursor">Add to Wishlist</p>
+                  </LoginContainer>
                 </div>
                 <div className="game-page-user-action-item text-center" title="Login to add to Library">
-                  <p><FontAwesomeIcon icon={faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
-                  <LoginButton ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"} buttonText={"Add to Library"} />
+                  <LoginContainer ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"}>
+                    <p><FontAwesomeIcon icon={faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                    <p className="pointer-cursor">Add to Library</p>
+                  </LoginContainer>
                 </div>
               </>
             )}
@@ -238,6 +224,24 @@ const GamePage = ({ apiPrefix, user }) => {
           </button>
         )}
       </div>
+      { user.is_superuser && (
+        <div className="mt-3">
+          <h2>Admin actions:</h2>
+          <div className="game-page-user-action d-flex">
+            <button className="btn btn-success btn-sm" onClick={handleAdminRedirect}>
+            <FontAwesomeIcon icon={faEdit} /> Edit
+          </button>
+          </div>
+          <h2>Admin only data:</h2>
+          <div className="other-info">
+            { boardGame.id ? ( <p><span className="bold-text">ID:</span> {boardGame.id}</p> ) : null }
+            { boardGame.image_url ? ( <p><span className="bold-text">Image Url:</span> {boardGame.image_url}</p> ) : null }
+            { boardGame.rating ? ( <p><span className="bold-text">Full rating:</span> {boardGame.rating}</p> ) : null }
+            { boardGame.created_at ? ( <p><span className="bold-text">Created At:</span> {boardGame.created_at}</p> ) : null }
+            { boardGame.updated_at ? ( <p><span className="bold-text">Updated At:</span> {boardGame.updated_at}</p> ) : null }
+          </div>
+        </div>
+      )}
     </div>
   );
 };
