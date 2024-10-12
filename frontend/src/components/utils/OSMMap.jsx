@@ -23,15 +23,16 @@ const OSMMap = ({ coordinates }) => {
                 }),
             ],
             view: new View({
-                center: fromLonLat([coordinates.latitude, coordinates.longitude]),
+                center: fromLonLat([coordinates.longitude, coordinates.latitude]),
                 zoom: 16,
             }),
+            controls: [],
         });
     }
 
     function createMarker() {
         let feature = new Feature({
-            geometry: new Point(fromLonLat([coordinates.latitude, coordinates.longitude]))
+            geometry: new Point(fromLonLat([coordinates.longitude, coordinates.latitude]))
         })
 
         let iconStyle = new Style({
@@ -69,7 +70,7 @@ const OSMMap = ({ coordinates }) => {
     return (
         <div
             ref={ mapRef }
-            style={{ width: '100%', height: '500px' }}
+            style={{ height: '100%' }}
         />
     )
 }

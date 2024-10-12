@@ -31,7 +31,8 @@
 }
 
 .event-map {
-  min-height: 300px;
+  height: 16vw;
+  overflow: hidden;
 }
 
 .description .text.collapsed {

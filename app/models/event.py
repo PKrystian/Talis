@@ -53,6 +53,7 @@ class Event(models.Model):
             self.ATTENDEES: self.set_attendees,
             self.MAX_PLAYERS: self.set_max_players,
             self.EVENT_START_DATE: self.set_event_start_date,
+            self.COORDINATES: self.set_coordinates,
         }
 
     def __str__(self):
@@ -90,6 +91,9 @@ class Event(models.Model):
 
     def set_event_start_date(self, event_start_date) -> None:
         self.event_start_date = event_start_date
+
+    def set_coordinates(self, coordinates: dict) -> None:
+        self.coordinates = coordinates
 
     def serialize(self) -> dict:
         return {
