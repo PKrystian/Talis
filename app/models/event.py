@@ -6,6 +6,7 @@ from app.models.category import Category
 
 
 class Event(models.Model):
+    ID = "id"
     TITLE = 'title'
     HOST = 'host'
     CITY = 'city'
@@ -92,6 +93,7 @@ class Event(models.Model):
 
     def serialize(self) -> dict:
         return {
+            self.ID: self.id,
             self.TITLE: self.title,
             self.HOST: self.serialize_host(),
             self.CITY: self.city,
@@ -117,7 +119,11 @@ class Event(models.Model):
     def serialize_board_games(self) -> list:
         if self.board_games:
             board_games = self.board_games.all()
-            return [board_game.name for board_game in board_games]
+            return [{
+                'id': board_game.id,
+                'name': board_game.name,
+                'image_url': board_game.image_url,
+                } for board_game in board_games]
         return []
 
     def serialize_tags(self) -> list:
