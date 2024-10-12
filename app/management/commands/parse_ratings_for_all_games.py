@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from app.utils.bgg_api.BoardGameDataAPIDownloader import BoardGameDataAPIDownloader
+from app.utils.bgg_api.BoardGameAPIDataDownloader import BoardGameDataAPIDownloader
 from app.utils.bgg_api import bgg_api_params
 from app.models.board_game import BoardGame
 
