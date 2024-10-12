@@ -10,6 +10,7 @@ from app.utils.bgg_api.BoardGameAPIDataMapper import BoardGameAPIDataMapper
 class BoardGameDataAPIDownloader:
     __board_game_data_mapper: BoardGameAPIDataMapper
 
+    __API_FETCH_MAX_TRIES = 10
     URL_GAME_ID_SEPARATOR = ','
 
     def __init__(self) -> None:
@@ -86,6 +87,10 @@ class BoardGameDataAPIDownloader:
         else:
             until = len(game_ids)
 
+        use_new_version = True
+        if api_url == bgg_api_params.BASE_API_URL:
+            use_new_version = False
+
         parsed_games_list = []
 
         for offset in range(bgg_api_params.API_DATA_LIMIT, until, bgg_api_params.API_DATA_LIMIT):
@@ -100,7 +105,7 @@ class BoardGameDataAPIDownloader:
 
             url = self.__setup_url(api_url, game_ids, extra_url_params)
 
-            parsed_games_list.extend(self.__fetch(api_fields, url, True))
+            parsed_games_list.extend(self.__fetch(api_fields, url, use_new_version))
 
         return parsed_games_list
 
