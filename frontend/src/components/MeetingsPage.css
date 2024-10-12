@@ -10,12 +10,28 @@
 }
 
 .meeting-list {
+    min-height: 700px;
     max-height: 700px;
     overflow-y: auto;
 }
 
+.event-boardgame-img {
+  max-height: 200px;
+}
+
 .event-details-box {
+  min-height: 700px;
   max-height: 700px;
+}
+
+.event-box {
+  max-height: 150px;
+}
+
+.event-list-img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .event-map {
