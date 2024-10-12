@@ -3,8 +3,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './MeetingsPage.css';
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 
-const MeetingsPage = ({user}) => {
+const MeetingsPage = ({apiPrefix, user}) => {
   const [collectionData, setCollectionData] = useState(null);
   const [eventData, setEventData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,22 +13,23 @@ const MeetingsPage = ({user}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
+  const navigate = useNavigate();
 
-  const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
   const eventsUrl = apiPrefix + 'event/get/';
 
   const fetchEventData = async () => {
     if (!user || !user.user_id) {
       console.error('User ID is not available');
+      navigate('/');
       return;
     }
     setIsLoading(true);
     try {
-      const response1 = await axios.get(
+      const response = await axios.get(
         eventsUrl,
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
       );
-      setEventData(response1.data);
+      setEventData(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -47,7 +49,6 @@ const MeetingsPage = ({user}) => {
   });
 
   const changeDisplayedEvent = (id) => {
-    console.log(eventData);
     setChosenEvent(eventData.find((event) => event.id === id));
   }
 
@@ -126,11 +127,11 @@ const MeetingsPage = ({user}) => {
                     if (index % 2 === 0) {
                       return (
                         <div className="row align-items-center" key={index}>
-                          <div className="col event-boardgame-img">
+                          <div className="col">
                             <img className="img-fluid" src={boardGame.image_url} />
                           </div>
                           {chosenEvent.board_games[index + 1] && (
-                            <div className="col event-boardgame-img">
+                            <div className="col">
                               <img className="img-fluid" src={chosenEvent.board_games[index + 1].image_url} />
                             </div>
                           )}

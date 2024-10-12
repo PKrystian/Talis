@@ -15,10 +15,6 @@
     overflow-y: auto;
 }
 
-.event-boardgame-img {
-  max-height: 200px;
-}
-
 .event-details-box {
   min-height: 700px;
   max-height: 700px;
