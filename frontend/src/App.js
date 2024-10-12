@@ -58,7 +58,7 @@ const App = () => {
         <Routes apiPrefix={ apiPrefix } >
           <Route path="/" element={ <LandingPage boardGames={ boardGames } userState={ userState } /> } />
           <Route path="/collection" element={ <CollectionPage user={ user } /> } />
-          <Route path="/meetings" element={ <MeetingsPage /> } />
+          <Route path="/meetings" element={ <MeetingsPage apiPrefix={ apiPrefix } user={ user } /> } />
           <Route path="/marketplace" element={ <MarketplacePage /> } />
           <Route path="/user" element={ <UserPage user={ user } /> } />
           <Route path="/register" element={ <RegistrationPage apiPrefix={ apiPrefix } userState={ userState } setUserData={ updateUser } setUserState={ updateUserState } /> } />
