@@ -20,18 +20,30 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const searchFormRef = useRef(null);
+  const userDropdownRef = useRef(null);
+  const cancelTokenSource = useRef(null);
 
   const categoryOptions = TOP_CATEGORY_LIST;
   const mechanicOptions = TOP_MECHANIC_LIST;
 
   useEffect(() => {
     if (query.length >= 3 && isInputFocused) {
-      axios.get(apiPrefix + 'search/', { params: { query, limit: 5, filterType, filter } })
+      if (cancelTokenSource.current) {
+        cancelTokenSource.current.cancel();
+      }
+      cancelTokenSource.current = axios.CancelToken.source();
+
+      axios.get(apiPrefix + 'search/', {
+        params: { query, limit: 5, filterType, filter },
+        cancelToken: cancelTokenSource.current.token
+      })
         .then(response => {
           setSuggestions(response.data.results);
         })
         .catch(error => {
-          console.error("There was an error fetching the search results!", error);
+          if (! axios.isCancel(error)) {
+            console.error('Error fetching suggestions:', error);
+          }
         });
     } else {
       setSuggestions([]);
@@ -40,6 +52,9 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (cancelTokenSource.current) {
+      cancelTokenSource.current.cancel();
+    }
     navigate(`/search?query=${query}&filterType=${filterType}&filter=${filter}`);
   };
 
@@ -57,10 +72,16 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
     setFilterType(selectedFilterType);
   };
 
-  const handleClickOutside = (e) => {
+  const handleClickOutsideSuggestions = (e) => {
     if (searchFormRef.current && !searchFormRef.current.contains(e.target)) {
       setSuggestions([]);
       setIsInputFocused(false);
+    }
+  };
+
+  const handleClickOutsideUserDropdown = (e) => {
+    if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
+      setShowUserDropdown(false);
     }
   };
 
@@ -72,22 +93,23 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-    })
-    .then(resp => {
+      }
+    ).then(resp => {
       if (resp.status === 200) {
-        resetUser()
-        alert('Logged out')
-        navigate('/')
+        resetUser();
+        navigate('/');
       }
     }).catch((error) => {
-      console.error(error)
-    })
-  }
+      console.error(error);
+    });
+  };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutsideSuggestions);
+    document.addEventListener('mousedown', handleClickOutsideUserDropdown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutsideSuggestions);
+      document.removeEventListener('mousedown', handleClickOutsideUserDropdown);
     };
   }, []);
 
@@ -149,7 +171,7 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
                     <li
                       key={suggestion.id}
                       className="list-group-item list-group-item-action list-group-item-dark"
-                      onClick={() => navigate(`/game?boardGame=${encodeURIComponent(JSON.stringify(suggestion))}`)}
+                      onClick={() => navigate(`/game/${suggestion.id}`)}
                     >
                       {suggestion.name}
                     </li>
@@ -178,15 +200,16 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
                       className="rounded-circle me-1 small-avatar"
                     />
                   </button>
-                  { showUserDropdown ?
-                  <div className="user-dropdown row bg-dark">
-                    <Link className="nav-user-profile-link pb-2" to="/user"><FaUserFriends className="me-1" />Friends</Link>
-                    <Link className="nav-user-profile-link pb-2" to="/user"><FaMapPin className="me-1" />Scheduled Meetings</Link>
-                    <Link className="nav-user-profile-link pb-2" to="/user"><FaCog className="me-1" />Settings</Link>
-                    <Link className="nav-user-profile-link pb-2" to="/user"><FaCalendarAlt className="me-1" />Calendar</Link>
-                    <Link className="nav-user-profile-link pb-2" to="/user"><FaBullhorn className="me-1" />Send Feedback</Link>
-                    <Link className="nav-user-profile-link pb-2" onClick={ logout }><FaSignOutAlt className="me-1" />Log Out</Link>
-                  </div> : null }
+                  { showUserDropdown ? (
+                    <div ref={userDropdownRef} className="user-dropdown row bg-dark">
+                      <Link className="nav-user-profile-link pb-2" to="/user"><FaUserFriends className="me-1" />Friends</Link>
+                      <Link className="nav-user-profile-link pb-2" to="/user"><FaMapPin className="me-1" />Scheduled Meetings</Link>
+                      <Link className="nav-user-profile-link pb-2" to="/user"><FaCog className="me-1" />Settings</Link>
+                      <Link className="nav-user-profile-link pb-2" to="/user"><FaCalendarAlt className="me-1" />Calendar</Link>
+                      <Link className="nav-user-profile-link pb-2" to="/user"><FaBullhorn className="me-1" />Send Feedback</Link>
+                      <Link className="nav-user-profile-link pb-2" onClick={logout}><FaSignOutAlt className="me-1" />Log Out</Link>
+                    </div>
+                  ) : null }
                 </li> :
                 <li className="d-inline-flex">
                   <div className='mx-1'>
