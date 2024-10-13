@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import useFetch from './hooks/useFetch'
 import LandingPage from './components/LandingPage'
@@ -56,7 +56,7 @@ const App = () => {
         <Navbar apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } user={ user } setUserData={ updateUser } resetUser={ resetUser } />
         { !userState && <LoginModal apiPrefix={ apiPrefix } userState={ userState } setUserState={ updateUserState } setUserData={ updateUser } /> }
         <Routes apiPrefix={ apiPrefix } >
-          <Route path="/" element={ <LandingPage boardGames={ boardGames } userState={ userState } /> } />
+          <Route path="/" element={ <LandingPage boardGames={ boardGames } apiPrefix={ apiPrefix } /> } />
           <Route path="/collection" element={ <CollectionPage user={ user } /> } />
           <Route path="/meetings" element={ <MeetingsPage apiPrefix={ apiPrefix } user={ user } /> } />
           <Route path="/marketplace" element={ <MarketplacePage /> } />

@@ -23,4 +23,5 @@ urlpatterns = [
     path(API_PREFIX + CollectionController.ROUTE_REMOVE, views.remove_from_collection, name='remove_from_collection'),
     path(API_PREFIX + CollectionController.ROUTE, views.user_collection, name='user-collection'),
     path(API_PREFIX + EventController.ROUTE_GET, views.get_events, name='get-events'),
+    path(API_PREFIX + EventController.ROUTE_NEW, views.new_event, name='new-event')
 ]
