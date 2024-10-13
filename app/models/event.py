@@ -47,10 +47,7 @@ class Event(models.Model):
             self.CITY: self.set_city,
             self.ZIP_CODE: self.set_zip_code,
             self.STREET: self.set_street,
-            self.BOARD_GAMES: self.set_board_games,
-            self.TAGS: self.set_tags,
             self.DESCRIPTION: self.set_description,
-            self.ATTENDEES: self.set_attendees,
             self.MAX_PLAYERS: self.set_max_players,
             self.EVENT_START_DATE: self.set_event_start_date,
             self.COORDINATES: self.set_coordinates,
@@ -86,7 +83,9 @@ class Event(models.Model):
     def set_attendees(self, attendees: List) -> None:
         self.attendees.add(*attendees)
 
-    def set_max_players(self, max_players: int) -> None:
+    def set_max_players(self, max_players: int | str) -> None:
+        if type(max_players) is str:
+            max_players = int(max_players)
         self.max_players = max_players
 
     def set_event_start_date(self, event_start_date) -> None:

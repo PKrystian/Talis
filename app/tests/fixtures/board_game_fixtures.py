@@ -1,6 +1,6 @@
 import pytest
 
-from app.utils.BoardGameCreator import BoardGameCreator
+from app.utils.creators.BoardGameCreator import BoardGameCreator
 from app.utils.bgg_api import bgg_api_params
 
 
