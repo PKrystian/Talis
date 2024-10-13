@@ -2,9 +2,8 @@ import pandas as pd
 import pytest
 
 from app.models.board_game import BoardGame
-from app.utils.BoardGameCreator import BoardGameCreator
+from app.utils.creators.BoardGameCreator import BoardGameCreator
 from app.utils.bgg_api import bgg_api_params
-from app.views import index
 
 
 class TestBoardGameCreator:

@@ -1,9 +1,9 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import pandas as pd
 import os
 from zipfile import ZipFile
 
-from app.utils.BoardGameCreator import BoardGameCreator
+from app.utils.creators.BoardGameCreator import BoardGameCreator
 
 
 class Command(BaseCommand):

@@ -1,7 +1,7 @@
 import pytest
 
 from app.models.log_error import LogError
-from app.utils.LogErrorCreator import LogErrorCreator
+from app.utils.creators.LogErrorCreator import LogErrorCreator
 
 
 class TestLogErrorCreator:

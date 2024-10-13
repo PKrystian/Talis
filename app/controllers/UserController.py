@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from app.models.registered_user import RegisteredUser
 from app.utils.FormValidator import FormValidator
 from django.contrib.auth.models import User
-from app.utils.RegisteredUserCreator import RegisteredUserCreator
+from app.utils.creators.RegisteredUserCreator import RegisteredUserCreator
 
 
 class UserController:
