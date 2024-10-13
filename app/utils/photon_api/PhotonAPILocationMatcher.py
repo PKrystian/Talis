@@ -7,10 +7,8 @@ class PhotonAPILocationMatcher:
     __API_FETCH_MAX_TRIES = 3
     __RESPONSE_LIMIT = '1'
 
-    def get_lat_long_for_address(self, city: str, street: str = '', zip_code: str = ''):
-        url_params = []
-
-        url_params.append(city)
+    def get_lat_long_for_address(self, city: str, street: str = '', zip_code: str = '') -> dict | None:
+        url_params = [city]
 
         if street:
             url_params.append(street)
@@ -19,9 +17,10 @@ class PhotonAPILocationMatcher:
 
         url = self.__prepare_url(url_params, True)
 
-        print(url)
-
         json_response = self.__fetch(url)
+
+        if not json_response[photon_api_params.FEATURES]:
+            return None
 
         lat_long = json_response[photon_api_params.FEATURES][0][photon_api_params.GEOMETRY][photon_api_params.COORDINATES]
 
@@ -33,7 +32,7 @@ class PhotonAPILocationMatcher:
         return coordinates
 
 
-    def __prepare_url(self, params: str, with_limit: bool):
+    def __prepare_url(self, params: list, with_limit: bool):
         base_url = photon_api_params.BASE_API_URL + photon_api_params.SEARCH_URL_PARAM_QUERY
         parsed_params = ''
         commas = len(params) - 1
