@@ -10,6 +10,8 @@ class BoardGameAPIDataMapper:
         if 'error' in board_game.keys():
             return None
 
+        print(board_game)
+
         if len(board_game.keys()) == 0:
             return None
 
