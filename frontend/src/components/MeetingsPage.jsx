@@ -4,6 +4,7 @@ import './MeetingsPage.css';
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
+import OSMMap from './utils/OSMMap';
 
 const MeetingsPage = ({apiPrefix, user}) => {
   const [collectionData, setCollectionData] = useState(null);
@@ -120,7 +121,10 @@ const MeetingsPage = ({apiPrefix, user}) => {
                     <div className="circle me-2"></div>
                     <div className="circle me-2"></div>
                   </div>
-                  <div className="bg-black mt-1 event-map">Here is space for map</div>
+                  { chosenEvent.coordinates &&
+                  <div className="bg-black mt-2 event-map">
+                    <OSMMap coordinates={ chosenEvent.coordinates } />
+                  </div> }
                 </div>
                 <div className="col-5">
                   {chosenEvent.board_games.map((boardGame, index) => {

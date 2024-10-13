@@ -26,8 +26,8 @@ class PhotonAPILocationMatcher:
         lat_long = json_response[photon_api_params.FEATURES][0][photon_api_params.GEOMETRY][photon_api_params.COORDINATES]
 
         coordinates = {
-            'latitude': lat_long[0],
-            'longitude': lat_long[1],
+            'longitude': lat_long[0],
+            'latitude': lat_long[1],
         }
 
         return coordinates
