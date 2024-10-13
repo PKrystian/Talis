@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.core.management.base import BaseCommand
 
 from app.models import BoardGame
-from app.utils.LogErrorCreator import LogErrorCreator
+from app.utils.creators.LogErrorCreator import LogErrorCreator
 from app.utils.bgg_api import bgg_api_params
 from app.utils.bgg_api.BoardGameAPIDataDownloader import BoardGameDataAPIDownloader
 
