@@ -89,3 +89,14 @@ class BoardGame(models.Model):
 
     def get_rating(self) -> float:
         return self.rating
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['rating']),
+            models.Index(fields=['name']),
+            models.Index(fields=['min_players']),
+            models.Index(fields=['max_players']),
+            models.Index(fields=['age']),
+            models.Index(fields=['min_playtime']),
+            models.Index(fields=['max_playtime']),
+        ]
