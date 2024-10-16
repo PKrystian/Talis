@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import './TableItem.css';
+import React from 'react';
 
 const TableItem = ({ boardGame }) => {
   const navigate = useNavigate();
@@ -24,5 +26,9 @@ const TableItem = ({ boardGame }) => {
     </div>
   );
 };
+
+TableItem.propTypes = {
+  boardGame: PropTypes.object.isRequired,
+}.isRequired;
 
 export default TableItem;
