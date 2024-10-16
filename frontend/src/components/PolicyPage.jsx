@@ -6,6 +6,6 @@ const PolicyPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default PolicyPage;
