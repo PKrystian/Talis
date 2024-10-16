@@ -24,4 +24,4 @@ jobs:
         run: cd frontend && npm install
 
       - name: Run Jest tests
-        run: npm test -- --watchAll=false
+        run: cd frontend && npm test -- --watchAll=false
