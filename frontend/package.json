@@ -19,7 +19,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "lint": "eslint src/**/*.{js,jsx}",
+    "lint": "cross-env NODE_ENV=development eslint src/**/*.{js,jsx}",
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -68,6 +68,7 @@
     "@testing-library/jest-dom": "^6.6.1",
     "@testing-library/react": "^16.0.1",
     "babel-jest": "^29.7.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
