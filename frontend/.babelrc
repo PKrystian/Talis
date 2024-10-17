@@ -1,4 +1,9 @@
 {
   "presets": ["react-app"],
-  "plugins": ["@babel/plugin-proposal-private-property-in-object"]
+  "plugins": [
+    "@babel/plugin-proposal-private-property-in-object",
+    "@babel/plugin-transform-nullish-coalescing-operator",
+    "@babel/plugin-transform-optional-chaining",
+    "@babel/plugin-transform-private-methods"
+  ]
 }
