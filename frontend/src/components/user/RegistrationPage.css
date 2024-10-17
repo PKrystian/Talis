@@ -9,10 +9,10 @@
 }
 
 .form-group input,
-input[type=text]:focus,
-input[type=date]:focus,
-input[type=password]:focus,
-input[type=email]:focus {
+input[type='text']:focus,
+input[type='date']:focus,
+input[type='password']:focus,
+input[type='email']:focus {
   color: var(--text-color-light);
   background-color: var(--background-color-dark-light);
   border-color: var(--border-color-light);
@@ -64,9 +64,9 @@ input[type=email]:focus {
 
 @keyframes fadeInAnimation {
   0% {
-      opacity: 0;
+    opacity: 0;
   }
   100% {
-      opacity: 1;
+    opacity: 1;
   }
 }
