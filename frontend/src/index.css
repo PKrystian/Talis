@@ -5,7 +5,7 @@
   --text-color-light: #ffffff;
   --text-color-light-medium: #b0b0b0;
   --text-color-dark: #e0e0e0;
-  --text-color-error: #FF0000FF;
+  --text-color-error: #ff0000ff;
   --text-color-link: #559fd5;
   --border-color: #333;
   --border-color-light: #6c757d;
@@ -31,7 +31,9 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-color-dark-light);
@@ -39,5 +41,6 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }

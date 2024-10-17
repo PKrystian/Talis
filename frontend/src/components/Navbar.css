@@ -7,7 +7,7 @@
 
 .site-name {
   font-size: var(--font-size-large);
-  font-family: "Gothic A1", sans-serif;
+  font-family: 'Gothic A1', sans-serif;
   font-weight: bold;
 }
 
@@ -87,7 +87,8 @@
     text-align: center;
   }
 
-  .form-select, .form-control {
+  .form-select,
+  .form-control {
     width: 100%;
   }
 
