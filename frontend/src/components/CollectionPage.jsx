@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import TableItem from './TableItem';
 
 const CollectionPage = ({ user }) => {
@@ -7,10 +8,13 @@ const CollectionPage = ({ user }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
+  const apiPrefix =
+    process.env.NODE_ENV === 'development'
+      ? 'http://127.0.0.1:8000/api/'
+      : '/api/';
   const collectionUrl = apiPrefix + 'user-collection/';
 
-  const fetchCollectionData = async () => {
+  const fetchCollectionData = useCallback(async () => {
     if (!user || !user.user_id) {
       console.error('User ID is not available');
       return;
@@ -23,7 +27,7 @@ const CollectionPage = ({ user }) => {
       const response = await axios.post(
         collectionUrl,
         { user_id: user.user_id },
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
       );
       setCollectionData(response.data);
     } catch (error) {
@@ -32,13 +36,13 @@ const CollectionPage = ({ user }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user, collectionUrl]);
 
   useEffect(() => {
     if (user && user.user_id) {
       fetchCollectionData();
     }
-  }, [user]);
+  }, [user, fetchCollectionData]);
 
   if (isLoading) {
     return (
@@ -63,7 +67,7 @@ const CollectionPage = ({ user }) => {
             <div className="mb-5">
               <h3 className="text-light">Wishlist</h3>
               <div className="row g-2">
-                {collectionData.wishlist.map(boardGame => (
+                {collectionData.wishlist.map((boardGame) => (
                   <div key={boardGame.id} className="col-12 col-sm-5 col-lg-2">
                     <TableItem boardGame={boardGame} />
                   </div>
@@ -76,7 +80,7 @@ const CollectionPage = ({ user }) => {
             <div className="mb-5">
               <h3 className="text-light">Library</h3>
               <div className="row g-2">
-                {collectionData.library.map(boardGame => (
+                {collectionData.library.map((boardGame) => (
                   <div key={boardGame.id} className="col-12 col-sm-5 col-lg-2">
                     <TableItem boardGame={boardGame} />
                   </div>
@@ -88,6 +92,12 @@ const CollectionPage = ({ user }) => {
       )}
     </div>
   );
+};
+
+CollectionPage.propTypes = {
+  user: PropTypes.shape({
+    user_id: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default CollectionPage;

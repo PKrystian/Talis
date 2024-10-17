@@ -1,16 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaUserFriends, FaMapPin, FaCog, FaCalendarAlt, FaBullhorn, FaSignOutAlt } from 'react-icons/fa';
-import { FaLocationDot, FaShop } from "react-icons/fa6";
-import { HiSquaresPlus } from "react-icons/hi2";
+import PropsTypes from 'prop-types';
+import {
+  FaSearch,
+  FaUserFriends,
+  FaMapPin,
+  FaCog,
+  FaCalendarAlt,
+  FaBullhorn,
+  FaSignOutAlt,
+} from 'react-icons/fa';
+import { FaLocationDot, FaShop } from 'react-icons/fa6';
+import { HiSquaresPlus } from 'react-icons/hi2';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './Navbar.css';
-import {TOP_CATEGORY_LIST, TOP_MECHANIC_LIST} from "../messages/suggestions";
+import { TOP_CATEGORY_LIST, TOP_MECHANIC_LIST } from '../messages/suggestions';
 import LoginButton from './utils/LoginButton';
 
-const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUser }) => {
+const Navbar = ({
+  apiPrefix,
+  user,
+  setUserData,
+  userState,
+  setUserState,
+  resetUser,
+}) => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState('');
@@ -33,29 +49,32 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
       }
       cancelTokenSource.current = axios.CancelToken.source();
 
-      axios.get(apiPrefix + 'search/', {
-        params: { query, limit: 5, filterType, filter },
-        cancelToken: cancelTokenSource.current.token
-      })
-        .then(response => {
+      axios
+        .get(apiPrefix + 'search/', {
+          params: { query, limit: 5, filterType, filter },
+          cancelToken: cancelTokenSource.current.token,
+        })
+        .then((response) => {
           setSuggestions(response.data.results);
         })
-        .catch(error => {
-          if (! axios.isCancel(error)) {
+        .catch((error) => {
+          if (!axios.isCancel(error)) {
             console.error('Error fetching suggestions:', error);
           }
         });
     } else {
       setSuggestions([]);
     }
-  }, [query, filterType, filter, isInputFocused]);
+  }, [query, filterType, filter, isInputFocused, apiPrefix]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (cancelTokenSource.current) {
       cancelTokenSource.current.cancel();
     }
-    navigate(`/search?query=${query}&filterType=${filterType}&filter=${filter}`);
+    navigate(
+      `/search?query=${query}&filterType=${filterType}&filter=${filter}`,
+    );
   };
 
   const handleFilterChange = (e) => {
@@ -80,28 +99,31 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
   };
 
   const handleClickOutsideUserDropdown = (e) => {
-    if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
+    if (
+      userDropdownRef.current &&
+      !userDropdownRef.current.contains(e.target)
+    ) {
       setShowUserDropdown(false);
     }
   };
 
   const logout = () => {
-    axios.post(
-      apiPrefix + 'logout/',
-      {
+    axios
+      .post(apiPrefix + 'logout/', {
         withCredentials: true,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-      }
-    ).then(resp => {
-      if (resp.status === 200) {
-        resetUser();
-        navigate('/');
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
+      })
+      .then((resp) => {
+        if (resp.status === 200) {
+          resetUser();
+          navigate('/');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -114,32 +136,56 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
   }, []);
 
   const onUserProfileClick = () => setShowUserDropdown(!showUserDropdown);
-  
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div className="container-fluid">
-        <Link className="navbar-brand" to='/'>
+        <Link className="navbar-brand" to="/">
           <div className="d-flex align-items-center">
-            <img src='/static/favicon.ico' alt="Logo" className="navbar-logo me-2"/>
+            <img
+              src="/static/favicon.ico"
+              alt="Logo"
+              className="navbar-logo me-2"
+            />
             <span className="site-name">Talis</span>
             <span className="wip-badge ms-2">WIP</span>
           </div>
         </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <form ref={searchFormRef} className="d-flex mx-auto flex-nowrap form-search mt-2" onSubmit={handleSubmit}>
-            <select className="form-select flex-shrink-0 w-auto mx-lg-1" value={filter} onChange={handleFilterChange}>
+          <form
+            ref={searchFormRef}
+            className="d-flex mx-auto flex-nowrap form-search mt-2"
+            onSubmit={handleSubmit}
+          >
+            <select
+              className="form-select flex-shrink-0 w-auto mx-lg-1"
+              value={filter}
+              onChange={handleFilterChange}
+            >
               <option value="">All</option>
               <optgroup label="Category:">
-                {categoryOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
+                {categoryOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
                 ))}
               </optgroup>
               <optgroup label="Mechanic:">
-                {mechanicOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
+                {mechanicOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
                 ))}
               </optgroup>
             </select>
@@ -161,13 +207,18 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
             <button
               className="btn form-button btn-outline-light flex-shrink-0 mx-lg-1"
               type="button"
-              onClick={() => navigate(`/search?query=${query}&filterType=${filterType}&filter=${filter}`)}>
+              onClick={() =>
+                navigate(
+                  `/search?query=${query}&filterType=${filterType}&filter=${filter}`,
+                )
+              }
+            >
               Advanced
             </button>
             {suggestions.length > 0 && isInputFocused && (
               <div className="search-suggestions bg-dark position-absolute w-50 top-100">
                 <ul className="list-group">
-                  {suggestions.map(suggestion => (
+                  {suggestions.map((suggestion) => (
                     <li
                       key={suggestion.id}
                       className="list-group-item list-group-item-action list-group-item-dark"
@@ -183,49 +234,100 @@ const Navbar = ({ apiPrefix, user, setUserData, userState, setUserState, resetUs
           <div className="navbar-nav-wrapper">
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
-                <Link className="nav-link" to="/collection"><HiSquaresPlus className="me-1"/>My Collection</Link>
+                <Link className="nav-link" to="/collection">
+                  <HiSquaresPlus className="me-1" />
+                  My Collection
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/meetings"><FaLocationDot className="me-1"/>Local Game Meetings</Link>
+                <Link className="nav-link" to="/meetings">
+                  <FaLocationDot className="me-1" />
+                  Local Game Meetings
+                </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/marketplace"><FaShop className="me-1"/>Marketplace</Link>
+                <Link className="nav-link" to="/marketplace">
+                  <FaShop className="me-1" />
+                  Marketplace
+                </Link>
               </li>
-              { userState ?
+              {userState ? (
                 <li className="nav-item nav-user-profile mx-1">
                   <button className="nav-link" onClick={onUserProfileClick}>
                     <img
-                      src={user.profile_image_url || '/static/default-profile.png'}
+                      src={
+                        user.profile_image_url || '/static/default-profile.png'
+                      }
                       alt="User Profile"
                       className="rounded-circle me-1 small-avatar"
                     />
                   </button>
-                  { showUserDropdown ? (
-                    <div ref={userDropdownRef} className="user-dropdown row bg-dark">
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaUserFriends className="me-1" />Friends</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaMapPin className="me-1" />Scheduled Meetings</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaCog className="me-1" />Settings</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaCalendarAlt className="me-1" />Calendar</Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user"><FaBullhorn className="me-1" />Send Feedback</Link>
-                      <Link className="nav-user-profile-link pb-2" onClick={logout}><FaSignOutAlt className="me-1" />Log Out</Link>
+                  {showUserDropdown ? (
+                    <div
+                      ref={userDropdownRef}
+                      className="user-dropdown row bg-dark"
+                    >
+                      <Link className="nav-user-profile-link pb-2" to="/user">
+                        <FaUserFriends className="me-1" />
+                        Friends
+                      </Link>
+                      <Link className="nav-user-profile-link pb-2" to="/user">
+                        <FaMapPin className="me-1" />
+                        Scheduled Meetings
+                      </Link>
+                      <Link className="nav-user-profile-link pb-2" to="/user">
+                        <FaCog className="me-1" />
+                        Settings
+                      </Link>
+                      <Link className="nav-user-profile-link pb-2" to="/user">
+                        <FaCalendarAlt className="me-1" />
+                        Calendar
+                      </Link>
+                      <Link className="nav-user-profile-link pb-2" to="/user">
+                        <FaBullhorn className="me-1" />
+                        Send Feedback
+                      </Link>
+                      <Link
+                        className="nav-user-profile-link pb-2"
+                        onClick={logout}
+                      >
+                        <FaSignOutAlt className="me-1" />
+                        Log Out
+                      </Link>
                     </div>
-                  ) : null }
-                </li> :
+                  ) : null}
+                </li>
+              ) : (
                 <li className="d-inline-flex">
-                  <div className='mx-1'>
-                    <Link className="btn btn-secondary" to="/register">Register</Link>
+                  <div className="mx-1">
+                    <Link className="btn btn-secondary" to="/register">
+                      Register
+                    </Link>
                   </div>
-                  <div className='mx-1'>
-                    <LoginButton ButtonTag={ "button" } buttonClass={ "btn btn-primary" } buttonText={ "Login" }/>
+                  <div className="mx-1">
+                    <LoginButton
+                      ButtonTag={'button'}
+                      buttonClass={'btn btn-primary'}
+                      buttonText={'Login'}
+                    />
                   </div>
                 </li>
-              }
+              )}
             </ul>
           </div>
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
+
+Navbar.propTypes = {
+  apiPrefix: PropsTypes.string.isRequired,
+  user: PropsTypes.object,
+  setUserData: PropsTypes.func.isRequired,
+  userState: PropsTypes.bool.isRequired,
+  setUserState: PropsTypes.func.isRequired,
+  resetUser: PropsTypes.func.isRequired,
+}.isRequired;
 
 export default Navbar;
