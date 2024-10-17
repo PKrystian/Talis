@@ -1,11 +1,21 @@
-import { Link, useParams } from "react-router-dom";
-import React, { useState, useEffect, useRef } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faClock, faStar, faClipboardList, faPlus, faShare, faCheck, faEdit } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUsers,
+  faClock,
+  faStar,
+  faClipboardList,
+  faPlus,
+  faShare,
+  faCheck,
+  faEdit,
+} from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
-import LoginContainer from "./utils/LoginContainer";
+import LoginContainer from './utils/LoginContainer';
 
 const GamePage = ({ apiPrefix, user }) => {
   const { id } = useParams();
@@ -18,7 +28,7 @@ const GamePage = ({ apiPrefix, user }) => {
     library: user.library || false,
   });
 
-  const fetchCollectionData = async () => {
+  const fetchCollectionData = useCallback(async () => {
     const collectionUrl = apiPrefix + 'user-collection/';
     if (!user || !user.user_id) {
       setCollectionStatus({
@@ -31,25 +41,29 @@ const GamePage = ({ apiPrefix, user }) => {
       const response = await axios.post(
         collectionUrl,
         { user_id: user.user_id },
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
       );
       setCollectionStatus({
         wishlist: response.data.wishlist.find((wishlist) => wishlist.id === id),
-        library: response.data.library.find((library) => library.id === id)
+        library: response.data.library.find((library) => library.id === id),
       });
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  }, [apiPrefix, user, id]);
 
   useEffect(() => {
-    const apiPrefix = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000/api/' : '/api/';
-    axios.get(apiPrefix + `board-games/${id}/`)
-      .then(response => {
+    const apiPrefix =
+      process.env.NODE_ENV === 'development'
+        ? 'http://127.0.0.1:8000/api/'
+        : '/api/';
+    axios
+      .get(apiPrefix + `board-games/${id}/`)
+      .then((response) => {
         setBoardGame(response.data);
       })
-      .catch(error => {
-        console.error("Error fetching board game:", error);
+      .catch((error) => {
+        console.error('Error fetching board game:', error);
       });
   }, [id]);
 
@@ -61,35 +75,42 @@ const GamePage = ({ apiPrefix, user }) => {
   }, [boardGame]);
 
   useEffect(() => {
-    fetchCollectionData().then(r => (r));
-  }, [user]);
+    fetchCollectionData().then((r) => r);
+  }, [user, fetchCollectionData]);
 
   if (!boardGame) {
     return <div>Loading...</div>;
   }
 
   const handleToggleCollection = (status) => {
-    const apiAction = collectionStatus[status] ? 'remove_from_collection/' : 'add_to_collection/';
+    const apiAction = collectionStatus[status]
+      ? 'remove_from_collection/'
+      : 'add_to_collection/';
     const requestUrl = apiPrefix + apiAction;
 
-    axios.post(requestUrl, {
-      user_id: user.user_id,
-      board_game_id: boardGame.id,
-      status: status,
-    }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    })
-    .then(response => {
-      setCollectionStatus((prevState) => ({
-        ...prevState,
-        [status]: !prevState[status]
-      }));
-    })
-    .catch(error => {
-      console.error(`Error updating ${status}:`, error);
-    });
+    axios
+      .post(
+        requestUrl,
+        {
+          user_id: user.user_id,
+          board_game_id: boardGame.id,
+          status: status,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then((response) => {
+        setCollectionStatus((prevState) => ({
+          ...prevState,
+          [status]: !prevState[status],
+        }));
+      })
+      .catch((error) => {
+        console.error(`Error updating ${status}:`, error);
+      });
   };
 
   const handleAdminRedirect = () => {
@@ -97,7 +118,10 @@ const GamePage = ({ apiPrefix, user }) => {
   };
 
   const { min_playtime, max_playtime } = boardGame;
-  const playtime = min_playtime !== max_playtime ? `${min_playtime}-${max_playtime}` : min_playtime;
+  const playtime =
+    min_playtime !== max_playtime
+      ? `${min_playtime}-${max_playtime}`
+      : min_playtime;
 
   const toggleReadMore = () => {
     setIsExpanded(!isExpanded);
@@ -107,7 +131,11 @@ const GamePage = ({ apiPrefix, user }) => {
     <div className="container">
       <div className="row ml-0 mt-4">
         <div className="col-sm-auto text-center">
-          <img src={boardGame.image_url} className="boardgame-img" alt={boardGame.name} />
+          <img
+            src={boardGame.image_url}
+            className="boardgame-img"
+            alt={boardGame.name}
+          />
         </div>
         <div className="col flex-grow">
           <div className="d-flex justify-content-between">
@@ -115,17 +143,30 @@ const GamePage = ({ apiPrefix, user }) => {
           </div>
           <div className="basic-game-info mb-3 mt-4 d-flex">
             <div className="basic-info-item px-3 d-flex flex-column">
-              <FontAwesomeIcon icon={faUsers} className="nav-icon basic-game-icon" />
-              <div className="basic-info-text">{boardGame.min_players}-{boardGame.max_players} Players</div>
+              <FontAwesomeIcon
+                icon={faUsers}
+                className="nav-icon basic-game-icon"
+              />
+              <div className="basic-info-text">
+                {boardGame.min_players}-{boardGame.max_players} Players
+              </div>
             </div>
             <div className="basic-info-item px-3 d-flex flex-column">
-              <FontAwesomeIcon icon={faClock} className="nav-icon basic-game-icon" />
+              <FontAwesomeIcon
+                icon={faClock}
+                className="nav-icon basic-game-icon"
+              />
               <div className="basic-info-text">{playtime} Min</div>
             </div>
             {boardGame.rating ? (
               <div className="basic-info-item px-3 d-flex flex-column">
-                <FontAwesomeIcon icon={faStar} className="nav-icon basic-game-icon"/>
-                <div className="basic-info-text">{boardGame.rating.toFixed(2)}/10</div>
+                <FontAwesomeIcon
+                  icon={faStar}
+                  className="nav-icon basic-game-icon"
+                />
+                <div className="basic-info-text">
+                  {boardGame.rating.toFixed(2)}/10
+                </div>
               </div>
             ) : null}
             <div className="basic-info-item px-3 d-flex flex-column">
@@ -133,25 +174,52 @@ const GamePage = ({ apiPrefix, user }) => {
             </div>
           </div>
           <div className="other-info">
-            { boardGame.publisher ? ( <p><span className="bold-text">Publisher:</span> {boardGame.publisher}</p> ) : null }
-            { boardGame.year_published ? ( <p><span className="bold-text">Year:</span> {boardGame.year_published}</p> ) : null }
-            { boardGame.category ? ( <p><span className="bold-text">Category:</span> {boardGame.category}</p> ) : null }
-            { boardGame.main_game ? ( <p><span className="bold-text">Main Game: </span>
-              <Link to={`/game/${boardGame.main_game.id}`} className="expansion-link">{boardGame.main_game.name}</Link></p> ) : null
-            }
-            { Array.isArray(boardGame.expansions) && boardGame.expansions.length > 0 ? (
+            {boardGame.publisher ? (
+              <p>
+                <span className="bold-text">Publisher:</span>{' '}
+                {boardGame.publisher}
+              </p>
+            ) : null}
+            {boardGame.year_published ? (
+              <p>
+                <span className="bold-text">Year:</span>{' '}
+                {boardGame.year_published}
+              </p>
+            ) : null}
+            {boardGame.category ? (
+              <p>
+                <span className="bold-text">Category:</span>{' '}
+                {boardGame.category}
+              </p>
+            ) : null}
+            {boardGame.main_game ? (
+              <p>
+                <span className="bold-text">Main Game: </span>
+                <Link
+                  to={`/game/${boardGame.main_game.id}`}
+                  className="expansion-link"
+                >
+                  {boardGame.main_game.name}
+                </Link>
+              </p>
+            ) : null}
+            {Array.isArray(boardGame.expansions) &&
+            boardGame.expansions.length > 0 ? (
               <p>
                 <span className="bold-text">Expansions: </span>
                 {boardGame.expansions.map((expansion, index) => (
                   <React.Fragment key={expansion.expansion_id}>
-                    <Link to={`/game/${expansion.expansion_id}`} className="expansion-link">
+                    <Link
+                      to={`/game/${expansion.expansion_id}`}
+                      className="expansion-link"
+                    >
                       {expansion.expansion_name}
                     </Link>
                     {index < boardGame.expansions.length - 1 && ', '}
                   </React.Fragment>
                 ))}
               </p>
-            ) : null }
+            ) : null}
           </div>
         </div>
         <div className="mt-3 col">
@@ -161,38 +229,97 @@ const GamePage = ({ apiPrefix, user }) => {
                 <div
                   className="game-page-user-action-item text-center"
                   onClick={() => handleToggleCollection('wishlist')}
-                  title={collectionStatus.wishlist ? 'Click to remove from wishlist' : 'Click to add to wishlist'}
+                  title={
+                    collectionStatus.wishlist
+                      ? 'Click to remove from wishlist'
+                      : 'Click to add to wishlist'
+                  }
                 >
-                  <p><FontAwesomeIcon icon={collectionStatus.wishlist ? faCheck : faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
-                  <p className="pointer-cursor">{collectionStatus.wishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</p>
+                  <p>
+                    <FontAwesomeIcon
+                      icon={
+                        collectionStatus.wishlist ? faCheck : faClipboardList
+                      }
+                      className="nav-icon basic-game-icon pointer-cursor"
+                    />
+                  </p>
+                  <p className="pointer-cursor">
+                    {collectionStatus.wishlist
+                      ? 'Remove from Wishlist'
+                      : 'Add to Wishlist'}
+                  </p>
                 </div>
                 <div
                   className="game-page-user-action-item text-center"
                   onClick={() => handleToggleCollection('library')}
-                  title={collectionStatus.library ? 'Click to remove from library' : 'Click to add to library'}
+                  title={
+                    collectionStatus.library
+                      ? 'Click to remove from library'
+                      : 'Click to add to library'
+                  }
                 >
-                  <p><FontAwesomeIcon icon={collectionStatus.library ? faCheck : faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
-                  <p className="pointer-cursor">{collectionStatus.library ? 'Remove from Library' : 'Add to Library'}</p>
+                  <p>
+                    <FontAwesomeIcon
+                      icon={collectionStatus.library ? faCheck : faPlus}
+                      className="nav-icon basic-game-icon pointer-cursor"
+                    />
+                  </p>
+                  <p className="pointer-cursor">
+                    {collectionStatus.library
+                      ? 'Remove from Library'
+                      : 'Add to Library'}
+                  </p>
                 </div>
               </>
             ) : (
               <>
-                <div className="game-page-user-action-item text-center" title="Login to add to Wishlist">
-                  <LoginContainer ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"}>
-                    <p><FontAwesomeIcon icon={faClipboardList} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                <div
+                  className="game-page-user-action-item text-center"
+                  title="Login to add to Wishlist"
+                >
+                  <LoginContainer
+                    ButtonTag={'a'}
+                    buttonClass={
+                      'text-decoration-none text-reset pointer-cursor'
+                    }
+                  >
+                    <p>
+                      <FontAwesomeIcon
+                        icon={faClipboardList}
+                        className="nav-icon basic-game-icon pointer-cursor"
+                      />
+                    </p>
                     <p className="pointer-cursor">Add to Wishlist</p>
                   </LoginContainer>
                 </div>
-                <div className="game-page-user-action-item text-center" title="Login to add to Library">
-                  <LoginContainer ButtonTag={"a"} buttonClass={"text-decoration-none text-reset pointer-cursor"}>
-                    <p><FontAwesomeIcon icon={faPlus} className="nav-icon basic-game-icon pointer-cursor" /></p>
+                <div
+                  className="game-page-user-action-item text-center"
+                  title="Login to add to Library"
+                >
+                  <LoginContainer
+                    ButtonTag={'a'}
+                    buttonClass={
+                      'text-decoration-none text-reset pointer-cursor'
+                    }
+                  >
+                    <p>
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        className="nav-icon basic-game-icon pointer-cursor"
+                      />
+                    </p>
                     <p className="pointer-cursor">Add to Library</p>
                   </LoginContainer>
                 </div>
               </>
             )}
             <div className="game-page-user-action-item text-center">
-              <p><FontAwesomeIcon icon={faShare} className="nav-icon basic-game-icon pointer-cursor" /></p>
+              <p>
+                <FontAwesomeIcon
+                  icon={faShare}
+                  className="nav-icon basic-game-icon pointer-cursor"
+                />
+              </p>
               <p>Share</p>
             </div>
           </div>
@@ -216,34 +343,74 @@ const GamePage = ({ apiPrefix, user }) => {
         <div
           ref={descriptionRef}
           className={`text ${isExpanded ? 'expanded' : 'collapsed'}`}
-          dangerouslySetInnerHTML={{__html: boardGame.description}}
+          dangerouslySetInnerHTML={{ __html: boardGame.description }}
         />
         {isOverflowing && (
-          <button className="btn btn-primary mt-3 mb-3" onClick={toggleReadMore}>
+          <button
+            className="btn btn-primary mt-3 mb-3"
+            onClick={toggleReadMore}
+          >
             {isExpanded ? 'Read less' : 'Read more'}
           </button>
         )}
       </div>
-      { user.is_superuser && (
+      {user.is_superuser && (
         <div className="mt-3">
           <h2>Admin actions:</h2>
           <div className="game-page-user-action d-flex">
-            <button className="btn btn-success btn-sm" onClick={handleAdminRedirect}>
-            <FontAwesomeIcon icon={faEdit} /> Edit
-          </button>
+            <button
+              className="btn btn-success btn-sm"
+              onClick={handleAdminRedirect}
+            >
+              <FontAwesomeIcon icon={faEdit} /> Edit
+            </button>
           </div>
           <h2>Admin only data:</h2>
           <div className="other-info">
-            { boardGame.id ? ( <p><span className="bold-text">ID:</span> {boardGame.id}</p> ) : null }
-            { boardGame.image_url ? ( <p><span className="bold-text">Image Url:</span> {boardGame.image_url}</p> ) : null }
-            { boardGame.rating ? ( <p><span className="bold-text">Full rating:</span> {boardGame.rating}</p> ) : null }
-            { boardGame.created_at ? ( <p><span className="bold-text">Created At:</span> {boardGame.created_at}</p> ) : null }
-            { boardGame.updated_at ? ( <p><span className="bold-text">Updated At:</span> {boardGame.updated_at}</p> ) : null }
+            {boardGame.id ? (
+              <p>
+                <span className="bold-text">ID:</span> {boardGame.id}
+              </p>
+            ) : null}
+            {boardGame.image_url ? (
+              <p>
+                <span className="bold-text">Image Url:</span>{' '}
+                {boardGame.image_url}
+              </p>
+            ) : null}
+            {boardGame.rating ? (
+              <p>
+                <span className="bold-text">Full rating:</span>{' '}
+                {boardGame.rating}
+              </p>
+            ) : null}
+            {boardGame.created_at ? (
+              <p>
+                <span className="bold-text">Created At:</span>{' '}
+                {boardGame.created_at}
+              </p>
+            ) : null}
+            {boardGame.updated_at ? (
+              <p>
+                <span className="bold-text">Updated At:</span>{' '}
+                {boardGame.updated_at}
+              </p>
+            ) : null}
           </div>
         </div>
       )}
     </div>
   );
+};
+
+GamePage.propTypes = {
+  apiPrefix: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    user_id: PropTypes.string.isRequired,
+    wishlist: PropTypes.array,
+    library: PropTypes.array,
+    is_superuser: PropTypes.bool,
+  }).isRequired,
 };
 
 export default GamePage;

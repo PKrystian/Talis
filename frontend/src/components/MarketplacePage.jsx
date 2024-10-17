@@ -6,6 +6,6 @@ const MarketplacePage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default MarketplacePage;

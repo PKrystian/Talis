@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import TableItem from './TableItem';
 import './SearchPage.css';
-import { CATEGORY_LIST, MECHANIC_LIST } from "../messages/search";
+import { CATEGORY_LIST, MECHANIC_LIST } from '../messages/search';
 
 const SearchPage = ({ apiPrefix }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const query = new URLSearchParams(location.search).get('query') || '';
-  const filterType = new URLSearchParams(location.search).get('filterType') || '';
+  const filterType =
+    new URLSearchParams(location.search).get('filterType') || '';
   const filter = new URLSearchParams(location.search).get('filter') || '';
 
   const [searchResults, setSearchResults] = useState([]);
@@ -22,14 +24,14 @@ const SearchPage = ({ apiPrefix }) => {
     minPlayers: '',
     maxPlayers: '',
     age: [],
-    playtime: []
+    playtime: [],
   });
   const [expandedFilter, setExpandedFilter] = useState({
     category: false,
     mechanic: false,
     players: false,
     age: false,
-    playtime: false
+    playtime: false,
   });
 
   const handleInputChange = (e) => {
@@ -50,7 +52,7 @@ const SearchPage = ({ apiPrefix }) => {
   const toggleFilterSection = (section) => {
     setExpandedFilter((prevExpandedFilter) => ({
       ...prevExpandedFilter,
-      [section]: !prevExpandedFilter[section]
+      [section]: !prevExpandedFilter[section],
     }));
   };
 
@@ -58,14 +60,17 @@ const SearchPage = ({ apiPrefix }) => {
     const searchParams = new URLSearchParams();
     searchParams.append('query', query);
 
-    ['category', 'mechanic', 'age', 'playtime'].forEach(filterType => {
-      filters[filterType].forEach(filterValue => {
+    ['category', 'mechanic', 'age', 'playtime'].forEach((filterType) => {
+      filters[filterType].forEach((filterValue) => {
         searchParams.append('filters', `${filterType}|${filterValue}`);
       });
     });
 
     if (filters.minPlayers || filters.maxPlayers) {
-      searchParams.append('filters', `players|${filters.minPlayers}-${filters.maxPlayers}`);
+      searchParams.append(
+        'filters',
+        `players|${filters.minPlayers}-${filters.maxPlayers}`,
+      );
     }
 
     navigate(`?${searchParams.toString()}`);
@@ -77,22 +82,23 @@ const SearchPage = ({ apiPrefix }) => {
     const filters = searchParams.getAll('filters');
 
     setIsLoading(true);
-    axios.get(apiPrefix + 'search/', {
-      params: {
-        query,
-        limit: 48,
-        filters
-      }
-    })
-      .then(response => {
+    axios
+      .get(apiPrefix + 'search/', {
+        params: {
+          query,
+          limit: 48,
+          filters,
+        },
+      })
+      .then((response) => {
         setSearchResults(response.data.results);
         setIsLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         setError(error);
         setIsLoading(false);
       });
-  }, [location.search]);
+  }, [location.search, apiPrefix]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -102,13 +108,18 @@ const SearchPage = ({ apiPrefix }) => {
       minPlayers: '',
       maxPlayers: '',
       age: [],
-      playtime: []
+      playtime: [],
     };
 
-    searchParams.getAll('filters').forEach(filter => {
+    searchParams.getAll('filters').forEach((filter) => {
       const [filterType, filterValue] = filter.split('|');
       if (filterType && filterValue) {
-        if (filterType === 'category' || filterType === 'mechanic' || filterType === 'age' || filterType === 'playtime') {
+        if (
+          filterType === 'category' ||
+          filterType === 'mechanic' ||
+          filterType === 'age' ||
+          filterType === 'playtime'
+        ) {
           newFilters[filterType].push(filterValue);
         } else if (filterType === 'players') {
           const [minPlayers, maxPlayers] = filterValue.split('-');
@@ -124,7 +135,7 @@ const SearchPage = ({ apiPrefix }) => {
   if (isLoading) {
     return (
       <div className="text-center vh-100 align-content-center">
-        <div className='spinner-border'>
+        <div className="spinner-border">
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
@@ -137,18 +148,28 @@ const SearchPage = ({ apiPrefix }) => {
 
   return (
     <div className="container mt-4">
-      {query && <h3 className="text-light">Search Results for "{query}"</h3>}
+      {query && (
+        <h3 className="text-light">Search Results for &quot;{query}&quot;</h3>
+      )}
       <div className="row">
         <div className="col-md-2">
           <h4>Filters</h4>
-          <button onClick={applyFilters} className="btn btn-outline-light my-2">Apply Filters</button>
+          <button onClick={applyFilters} className="btn btn-outline-light my-2">
+            Apply Filters
+          </button>
           <div className="filter-group">
-            <div className="filter-header" onClick={() => toggleFilterSection('category')}>
-              <h5>Category {expandedFilter.category ? <FaChevronUp /> : <FaChevronDown />}</h5>
+            <div
+              className="filter-header"
+              onClick={() => toggleFilterSection('category')}
+            >
+              <h5>
+                Category{' '}
+                {expandedFilter.category ? <FaChevronUp /> : <FaChevronDown />}
+              </h5>
             </div>
             {expandedFilter.category && (
               <div className="filter-options">
-                {CATEGORY_LIST.map(category => (
+                {CATEGORY_LIST.map((category) => (
                   <div key={category} className="form-check">
                     <input
                       type="checkbox"
@@ -159,7 +180,10 @@ const SearchPage = ({ apiPrefix }) => {
                       onChange={handleInputChange}
                       className="form-check-input"
                     />
-                    <label htmlFor={`category-${category}`} className="form-check-label text-light">
+                    <label
+                      htmlFor={`category-${category}`}
+                      className="form-check-label text-light"
+                    >
                       {category}
                     </label>
                   </div>
@@ -168,12 +192,18 @@ const SearchPage = ({ apiPrefix }) => {
             )}
           </div>
           <div className="filter-group">
-            <div className="filter-header" onClick={() => toggleFilterSection('mechanic')}>
-              <h5>Mechanic {expandedFilter.mechanic ? <FaChevronUp /> : <FaChevronDown />}</h5>
+            <div
+              className="filter-header"
+              onClick={() => toggleFilterSection('mechanic')}
+            >
+              <h5>
+                Mechanic{' '}
+                {expandedFilter.mechanic ? <FaChevronUp /> : <FaChevronDown />}
+              </h5>
             </div>
             {expandedFilter.mechanic && (
               <div className="filter-options">
-                {MECHANIC_LIST.map(mechanic => (
+                {MECHANIC_LIST.map((mechanic) => (
                   <div key={mechanic} className="form-check">
                     <input
                       type="checkbox"
@@ -184,7 +214,10 @@ const SearchPage = ({ apiPrefix }) => {
                       onChange={handleInputChange}
                       className="form-check-input"
                     />
-                    <label htmlFor={`mechanic-${mechanic}`} className="form-check-label text-light">
+                    <label
+                      htmlFor={`mechanic-${mechanic}`}
+                      className="form-check-label text-light"
+                    >
                       {mechanic}
                     </label>
                   </div>
@@ -193,8 +226,14 @@ const SearchPage = ({ apiPrefix }) => {
             )}
           </div>
           <div className="filter-group">
-            <div className="filter-header" onClick={() => toggleFilterSection('players')}>
-              <h5>Number of Players {expandedFilter.players ? <FaChevronUp /> : <FaChevronDown />}</h5>
+            <div
+              className="filter-header"
+              onClick={() => toggleFilterSection('players')}
+            >
+              <h5>
+                Number of Players{' '}
+                {expandedFilter.players ? <FaChevronUp /> : <FaChevronDown />}
+              </h5>
             </div>
             {expandedFilter.players && (
               <div className="filter-options">
@@ -222,12 +261,25 @@ const SearchPage = ({ apiPrefix }) => {
             )}
           </div>
           <div className="filter-group">
-            <div className="filter-header" onClick={() => toggleFilterSection('age')}>
-              <h5>Age {expandedFilter.age ? <FaChevronUp /> : <FaChevronDown />}</h5>
+            <div
+              className="filter-header"
+              onClick={() => toggleFilterSection('age')}
+            >
+              <h5>
+                Age {expandedFilter.age ? <FaChevronUp /> : <FaChevronDown />}
+              </h5>
             </div>
             {expandedFilter.age && (
               <div className="filter-options">
-                {['up to 3 years', '3-4 years', '5-7 years', '8-11 years', '12-14 years', '15-17 years', '18+ years'].map(age => (
+                {[
+                  'up to 3 years',
+                  '3-4 years',
+                  '5-7 years',
+                  '8-11 years',
+                  '12-14 years',
+                  '15-17 years',
+                  '18+ years',
+                ].map((age) => (
                   <div key={age} className="form-check">
                     <input
                       type="checkbox"
@@ -238,7 +290,10 @@ const SearchPage = ({ apiPrefix }) => {
                       onChange={handleInputChange}
                       className="form-check-input"
                     />
-                    <label htmlFor={`age-${age}`} className="form-check-label text-light">
+                    <label
+                      htmlFor={`age-${age}`}
+                      className="form-check-label text-light"
+                    >
                       {age}
                     </label>
                   </div>
@@ -247,27 +302,38 @@ const SearchPage = ({ apiPrefix }) => {
             )}
           </div>
           <div className="filter-group">
-            <div className="filter-header" onClick={() => toggleFilterSection('playtime')}>
-              <h5>Playtime {expandedFilter.playtime ? <FaChevronUp /> : <FaChevronDown />}</h5>
+            <div
+              className="filter-header"
+              onClick={() => toggleFilterSection('playtime')}
+            >
+              <h5>
+                Playtime{' '}
+                {expandedFilter.playtime ? <FaChevronUp /> : <FaChevronDown />}
+              </h5>
             </div>
             {expandedFilter.playtime && (
               <div className="filter-options">
-                {['< 15 min', '< 30 min', '< 1h', '< 2h', '2h+'].map(playtime => (
-                  <div key={playtime} className="form-check">
-                    <input
-                      type="checkbox"
-                      id={`playtime-${playtime}`}
-                      name="playtime"
-                      value={playtime}
-                      checked={filters.playtime.includes(playtime)}
-                      onChange={handleInputChange}
-                      className="form-check-input"
-                    />
-                    <label htmlFor={`playtime-${playtime}`} className="form-check-label text-light">
-                      {playtime}
-                    </label>
-                  </div>
-                ))}
+                {['< 15 min', '< 30 min', '< 1h', '< 2h', '2h+'].map(
+                  (playtime) => (
+                    <div key={playtime} className="form-check">
+                      <input
+                        type="checkbox"
+                        id={`playtime-${playtime}`}
+                        name="playtime"
+                        value={playtime}
+                        checked={filters.playtime.includes(playtime)}
+                        onChange={handleInputChange}
+                        className="form-check-input"
+                      />
+                      <label
+                        htmlFor={`playtime-${playtime}`}
+                        className="form-check-label text-light"
+                      >
+                        {playtime}
+                      </label>
+                    </div>
+                  ),
+                )}
               </div>
             )}
           </div>
@@ -275,7 +341,7 @@ const SearchPage = ({ apiPrefix }) => {
         <div className="col-md-10">
           <div className="d-flex flex-wrap">
             {searchResults.length > 0 ? (
-              searchResults.map(boardGame => (
+              searchResults.map((boardGame) => (
                 <TableItem key={boardGame.id} boardGame={boardGame} />
               ))
             ) : (
@@ -286,6 +352,10 @@ const SearchPage = ({ apiPrefix }) => {
       </div>
     </div>
   );
+};
+
+SearchPage.propTypes = {
+  apiPrefix: PropTypes.string.isRequired,
 };
 
 export default SearchPage;
