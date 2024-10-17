@@ -30,16 +30,25 @@ const mockBoardGames = {
 const categoriesNumber = 5;
 const imagesNumber = 10;
 
-describe('landingPage Component', () => {
-  test('Renders landingPage with the correct container', () => {
+describe('LandingPage Component', () => {
+  test('renders LandingPage with the correct containers', () => {
     render(
       <MemoryRouter>
         <LandingPage boardGames={mockBoardGames} />
       </MemoryRouter>,
     );
 
-    const container = screen.getByText('Based on your games');
-    expect(container).toBeInTheDocument();
+    const container1 = screen.getByText('Based on your games');
+    const container2 = screen.getByText('Wishlist');
+    const container3 = screen.getByText('On top recently');
+    const container4 = screen.getByText('Best for a party');
+    const container5 = screen.getByText('Best ice breaker');
+
+    expect(container1).toBeInTheDocument();
+    expect(container2).toBeInTheDocument();
+    expect(container3).toBeInTheDocument();
+    expect(container4).toBeInTheDocument();
+    expect(container5).toBeInTheDocument();
   });
 
   test('renders categories with icons and titles', () => {
