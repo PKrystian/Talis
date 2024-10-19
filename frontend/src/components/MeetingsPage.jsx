@@ -51,6 +51,10 @@ const MeetingsPage = ({ apiPrefix, user }) => {
     setChosenEvent(eventData.find((event) => event.id === id));
   };
 
+  const onCreateEvent = () => {
+    navigate('/create-event');
+  };
+
   if (isLoading) {
     return (
       <div className="text-center vh-100 align-content-center">
@@ -104,6 +108,11 @@ const MeetingsPage = ({ apiPrefix, user }) => {
                 <input type="checkbox" />
                 <span className="slider round"></span>
               </label>
+            </div>
+            <div className="col-sm">
+              <button className="rounded-pill" onClick={() => onCreateEvent()}>
+                Create an event
+              </button>
             </div>
           </div>
           <div className="row border bg-dark">
