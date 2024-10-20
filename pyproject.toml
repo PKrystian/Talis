@@ -26,6 +26,12 @@ pandas = "^2.2.2"
 kaggle = "1.6.14"
 xmltodict = "^0.13.0"
 langdetect = "^1.0.9"
+notebook = "^7.2.2"
+numpy = "^2.1.2"
+matplotlib = "^3.9.2"
+scikit-learn = "^1.5.2"
+seaborn = "^0.13.2"
+pytest-mock = "^3.14.0"
 
 
 [tool.poetry.group.dev.dependencies]

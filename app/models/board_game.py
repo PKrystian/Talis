@@ -16,6 +16,28 @@ def default_expansion() -> dict[str, list]:
 
 
 class BoardGame(models.Model):
+    ID = 'id'
+    NAME = 'name'
+    YEAR_PUBLISHED = 'year_published'
+    MIN_PLAYERS = 'min_players'
+    MAX_PLAYERS = 'max_players'
+    AGE = 'age'
+    MIN_PLAYTIME = 'min_playtime'
+    MAX_PLAYTIME = 'max_playtime'
+    DESCRIPTION = 'description'
+    IMAGE_URL = 'image_url'
+    RATING = 'rating'
+
+    BGG_TO_BOARD_GAME_FEATURE_MAP = {
+        bgg_api_params.YEAR_PUBLISHED: YEAR_PUBLISHED,
+        bgg_api_params.MIN_PLAYERS: MIN_PLAYERS,
+        bgg_api_params.MAX_PLAYERS: MAX_PLAYERS,
+        bgg_api_params.MIN_PLAYTIME: MIN_PLAYTIME,
+        bgg_api_params.MAX_PLAYTIME: MAX_PLAYTIME,
+        bgg_api_params.IMAGE: IMAGE_URL,
+        bgg_api_params.STATISTICS: RATING,
+    }
+
     DoesNotExist = None
     objects = None
     name = models.CharField(max_length=256)
@@ -28,6 +50,7 @@ class BoardGame(models.Model):
     description = models.TextField(default='', null=True)
     image_url = models.CharField(max_length=256, null=True)
     rating = models.FloatField(null=True)
+    cluster = models.PositiveSmallIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -37,15 +60,16 @@ class BoardGame(models.Model):
         super().__init__(*args, **kwargs)
 
         self.setter_mapper = {
-            bgg_api_params.NAME: self.set_name,
-            bgg_api_params.YEAR_PUBLISHED: self.set_year_published,
-            bgg_api_params.MIN_PLAYERS: self.set_min_players,
-            bgg_api_params.MAX_PLAYERS: self.set_max_players,
-            bgg_api_params.AGE: self.set_age,
-            bgg_api_params.MIN_PLAYTIME: self.set_min_playtime,
-            bgg_api_params.MAX_PLAYTIME: self.set_max_playtime,
-            bgg_api_params.DESCRIPTION: self.set_description,
-            bgg_api_params.IMAGE: self.set_image_url,
+            BoardGame.NAME: self.set_name,
+            BoardGame.YEAR_PUBLISHED: self.set_year_published,
+            BoardGame.MIN_PLAYERS: self.set_min_players,
+            BoardGame.MAX_PLAYERS: self.set_max_players,
+            BoardGame.AGE: self.set_age,
+            BoardGame.MIN_PLAYTIME: self.set_min_playtime,
+            BoardGame.MAX_PLAYTIME: self.set_max_playtime,
+            BoardGame.DESCRIPTION: self.set_description,
+            BoardGame.IMAGE_URL: self.set_image_url,
+            BoardGame.RATING: self.set_rating,
         }
 
     def __str__(self):
@@ -80,6 +104,9 @@ class BoardGame(models.Model):
 
     def set_rating(self, rating: float) -> None:
         self.rating = rating
+
+    def set_cluster(self, cluster: int) -> None:
+        self.cluster = cluster
 
     def get_name(self) -> str:
         return self.name
