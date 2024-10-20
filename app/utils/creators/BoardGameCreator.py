@@ -22,11 +22,16 @@ class BoardGameCreator:
     def load_from_dataframe(self, df: pd.DataFrame) -> Self:
         for column in df.keys():
             if pd.isna(df[column]) is not True:
+                col = column
+                if column in BoardGame.BGG_TO_BOARD_GAME_FEATURE_MAP.keys():
+                    col = BoardGame.BGG_TO_BOARD_GAME_FEATURE_MAP[column]
+
                 if column in bgg_api_params.ARRAY_FIELDS:
-                    self.__board_game.setter_mapper[column](JsonNormalizer.normalize_from_string(df[column]))
+                    self.__board_game.setter_mapper[col](JsonNormalizer.normalize_from_string(df[column]))
                     continue
+
                 if column in bgg_api_params.ALL_FIELDS:
-                    self.__board_game.setter_mapper[column](df[column])
+                    self.__board_game.setter_mapper[col](df[column])
 
         return self
 
