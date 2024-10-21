@@ -382,7 +382,6 @@ const GamePage = ({ apiPrefix, user }) => {
             </div>
           </div>
           <div className="game-page-friends-info">
-            {/* Filter friends who have the game in their library */}
             {friendsWithGame.filter(
               (friend) =>
                 friend.status === 'library' && friend.id !== user.user_id,
@@ -410,7 +409,6 @@ const GamePage = ({ apiPrefix, user }) => {
               </>
             )}
 
-            {/* Filter friends who have wishlisted the game */}
             {friendsWithGame.filter(
               (friend) =>
                 friend.status === 'wishlist' && friend.id !== user.user_id,
