@@ -38,5 +38,4 @@ class TestPhotonAPILocationMatcher:
             zip_code
         )
 
-        print(result)
         assert(result == expected)

@@ -62,3 +62,11 @@
 .pointer-cursor {
   cursor: pointer;
 }
+
+.friend-profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover; /* This ensures the image covers the circle without distortion */
+  border: 2px solid #737373; /* Optional: Keeps the border similar to the existing circle */
+}

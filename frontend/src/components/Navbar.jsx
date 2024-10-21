@@ -9,8 +9,9 @@ import {
   FaCalendarAlt,
   FaBullhorn,
   FaSignOutAlt,
+  FaUser,
 } from 'react-icons/fa';
-import { FaLocationDot, FaShop } from 'react-icons/fa6';
+import { FaLocationDot } from 'react-icons/fa6';
 import { HiSquaresPlus } from 'react-icons/hi2';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -233,24 +234,22 @@ const Navbar = ({
           </form>
           <div className="navbar-nav-wrapper">
             <ul className="navbar-nav me-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to="/collection">
-                  <HiSquaresPlus className="me-1" />
-                  My Collection
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/meetings">
-                  <FaLocationDot className="me-1" />
-                  Local Game Meetings
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/marketplace">
-                  <FaShop className="me-1" />
-                  Marketplace
-                </Link>
-              </li>
+              {user.user_id && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/collection">
+                    <HiSquaresPlus className="me-1" />
+                    My Collection
+                  </Link>
+                </li>
+              )}
+              {user.user_id && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/meetings">
+                    <FaLocationDot className="me-1" />
+                    Local Game Meetings
+                  </Link>
+                </li>
+              )}
               {userState ? (
                 <li className="nav-item nav-user-profile mx-1">
                   <button className="nav-link" onClick={onUserProfileClick}>
@@ -267,23 +266,46 @@ const Navbar = ({
                       ref={userDropdownRef}
                       className="user-dropdown row bg-dark"
                     >
-                      <Link className="nav-user-profile-link pb-2" to="/user">
+                      <Link
+                        className="nav-user-profile-link pb-2"
+                        to={`/user/${user.user_id}`}
+                      >
+                        <FaUser className="me-1" />
+                        Profile
+                      </Link>
+                      <Link
+                        className="nav-user-profile-link pb-2"
+                        to={`/friends`}
+                      >
                         <FaUserFriends className="me-1" />
                         Friends
                       </Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user">
+                      <Link
+                        className="nav-user-profile-link pb-2"
+                        to="/meetings"
+                      >
                         <FaMapPin className="me-1" />
                         Scheduled Meetings
                       </Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user">
+                      <Link
+                        className="nav-user-profile-link pb-2"
+                        to="/settings"
+                      >
                         <FaCog className="me-1" />
                         Settings
                       </Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user">
+                      <Link
+                        className="nav-user-profile-link pb-2"
+                        to="/calendar"
+                      >
                         <FaCalendarAlt className="me-1" />
                         Calendar
                       </Link>
-                      <Link className="nav-user-profile-link pb-2" to="/user">
+                      <Link
+                        className="nav-user-profile-link pb-2"
+                        to="https://www.trustpilot.com/review/talis.live"
+                        target="_blank"
+                      >
                         <FaBullhorn className="me-1" />
                         Send Feedback
                       </Link>

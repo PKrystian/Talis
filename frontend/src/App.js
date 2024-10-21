@@ -5,7 +5,7 @@ import MeetingsPage from './components/MeetingsPage';
 import MarketplacePage from './components/MarketplacePage';
 import Navbar from './components/Navbar';
 import GamePage from './components/GamePage';
-import UserPage from './components/user/UserPage';
+import UserProfilePage from './components/user/UserProfilePage';
 import RegistrationPage from './components/user/RegistrationPage';
 import SearchPage from './components/SearchPage';
 import CollectionPage from './components/CollectionPage';
@@ -14,6 +14,7 @@ import PolicyPage from './components/PolicyPage';
 import LicensePage from './components/LicensePage';
 import LoginModal from './components/utils/LoginModal';
 import CreateEventPage from './components/CreateEventPage';
+import FriendListPage from './components/FriendListPage';
 
 const App = () => {
   const apiPrefix =
@@ -67,7 +68,6 @@ const App = () => {
             element={<MeetingsPage apiPrefix={apiPrefix} user={user} />}
           />
           <Route path="/marketplace" element={<MarketplacePage />} />
-          <Route path="/user" element={<UserPage user={user} />} />
           <Route
             path="/register"
             element={
@@ -82,6 +82,14 @@ const App = () => {
           <Route
             path="/game/:id"
             element={<GamePage apiPrefix={apiPrefix} user={user} />}
+          />
+          <Route
+            path="/user/:id"
+            element={<UserProfilePage apiPrefix={apiPrefix} user={user} />}
+          />
+          <Route
+            path="/friends"
+            element={<FriendListPage apiPrefix={apiPrefix} user={user} />}
           />
           <Route
             path="/search"
