@@ -31,7 +31,7 @@ class Event(models.Model):
     description = models.TextField(default='', null=True)
     attendees = models.ManyToManyField(User, related_name='attendees')
     max_players = models.PositiveSmallIntegerField(default=0, null=True)
-    event_start_date = models.DateField(null=False)
+    event_start_date = models.DateTimeField(null=False)
     coordinates = models.JSONField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
