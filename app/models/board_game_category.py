@@ -4,6 +4,8 @@ from app.models.category import Category
 
 
 class BoardGameCategory(models.Model):
+    CATEGORY_EXPANSION = 32
+
     objects = None
     board_game = models.ForeignKey(BoardGame, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

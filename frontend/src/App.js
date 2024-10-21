@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import useFetch from './hooks/useFetch';
 import LandingPage from './components/landingPage/LandingPage';
 import MeetingsPage from './components/MeetingsPage';
 import MarketplacePage from './components/MarketplacePage';
@@ -21,8 +20,6 @@ const App = () => {
     process.env.NODE_ENV === 'development'
       ? 'http://127.0.0.1:8000/api/'
       : '/api/';
-  const apiUrl = apiPrefix + 'board-games/';
-  const { data: boardGames, isLoading, error } = useFetch(apiUrl);
 
   const [userState, setUserState] = useState(false);
   const [user, setUser] = useState({});
@@ -39,20 +36,6 @@ const App = () => {
     setUser({});
     setUserState(false);
   };
-
-  if (isLoading) {
-    return (
-      <div className="text-center vh-100 align-content-center">
-        <div className="spinner-border">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
     <Router>
@@ -76,9 +59,7 @@ const App = () => {
         <Routes apiPrefix={apiPrefix}>
           <Route
             path="/"
-            element={
-              <LandingPage boardGames={boardGames} apiPrefix={apiPrefix} />
-            }
+            element={<LandingPage apiPrefix={apiPrefix} user={user} />}
           />
           <Route path="/collection" element={<CollectionPage user={user} />} />
           <Route
