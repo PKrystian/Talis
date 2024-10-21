@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import PolicyPage from './components/PolicyPage';
 import LicensePage from './components/LicensePage';
 import LoginModal from './components/utils/LoginModal';
+import CreateEventPage from './components/CreateEventPage';
 
 const App = () => {
   const apiPrefix =
@@ -88,6 +89,16 @@ const App = () => {
           />
           <Route path="/policy" element={<PolicyPage />} />
           <Route path="/license" element={<LicensePage />} />
+          <Route
+            path="/create-event"
+            element={
+              <CreateEventPage
+                apiPrefix={apiPrefix}
+                user={user}
+                userState={userState}
+              />
+            }
+          />
         </Routes>
         <Footer />
       </div>
