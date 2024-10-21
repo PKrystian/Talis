@@ -1,4 +1,5 @@
 # Main API parameters for fetching xml fields
+
 OBJECT_ID = '@objectid'
 TYPE = '@type'
 NAME = 'name'
