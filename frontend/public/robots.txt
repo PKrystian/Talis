@@ -1,3 +1,7 @@
 User-agent: *
-Disallow:
-Disallow: /cgi-bin/
+Disallow: /admin/
+Disallow: /backend/
+Disallow: /private/
+Disallow: /static/
+Disallow: /api/
+Allow: /

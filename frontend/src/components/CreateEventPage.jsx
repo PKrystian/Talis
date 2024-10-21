@@ -84,7 +84,6 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
         cancelTokenSource.current.cancel();
       }
       cancelTokenSource.current = axios.CancelToken.source();
-      console.log(query);
       axios
         .get(apiPrefix + 'search/', {
           params: { query, limit: 5 },
@@ -128,7 +127,6 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
     validators.forEach((validator) => {
       validations.push(validator());
     });
-    console.log(tags);
 
     if (validations.every((v) => v === true)) {
       const boardGameIds = boardGames.map((boardGame) => boardGame.id);
@@ -144,7 +142,6 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
         [FormConstants.EVENT_EVENT_START_DATE_FIELD]: startDate,
         [FormConstants.EVENT_HOST_FIELD]: user.user_id,
       };
-      console.log(newEvent);
 
       let url = apiPrefix + 'event/new/';
 
@@ -175,7 +172,6 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
       return;
     }
     setBoardGamesError('');
-    console.log(boardGame);
     const newBoardGame = {
       id: boardGame.id,
       name: boardGame.name,

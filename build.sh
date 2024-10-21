@@ -17,6 +17,10 @@ case $1 in
     pipx inject poetry poetry-plugin-export
     poetry config warnings.export false
   ;;
+  'tests')
+    poetry run pytest
+    cd frontend && npm run test
+    ;;
   *)
     echo -e "Please specify ${startRed}run${endRed}, ${startRed}install${endRed} or ${startRed}install-poetry${endRed}"
   ;;

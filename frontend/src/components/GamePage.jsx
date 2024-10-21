@@ -27,6 +27,33 @@ const GamePage = ({ apiPrefix, user }) => {
     wishlist: user.wishlist || false,
     library: user.library || false,
   });
+  const [friendsWithGame, setFriendsWithGame] = useState([]);
+
+  const fetchFriendsWithGame = useCallback(async () => {
+    if (!user || !user.user_id) return;
+
+    axios
+      .post(
+        `${apiPrefix}friends_with_game/`,
+        {
+          user_id: user.user_id,
+          game_id: id,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then((response) => setFriendsWithGame(response.data))
+      .catch((error) =>
+        console.error('Error fetching friends with game:', error),
+      );
+  }, [user, apiPrefix, id]);
+
+  useEffect(() => {
+    fetchFriendsWithGame();
+  }, [fetchFriendsWithGame]);
 
   const fetchCollectionData = useCallback(async () => {
     const collectionUrl = apiPrefix + 'user-collection/';
@@ -35,6 +62,7 @@ const GamePage = ({ apiPrefix, user }) => {
         wishlist: false,
         library: false,
       });
+      return;
     }
 
     try {
@@ -43,9 +71,17 @@ const GamePage = ({ apiPrefix, user }) => {
         { user_id: user.user_id },
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
       );
+
+      const isInWishlist = response.data.wishlist.some(
+        (wishlist) => wishlist.id === parseInt(id),
+      );
+      const isInLibrary = response.data.library.some(
+        (library) => library.id === parseInt(id),
+      );
+
       setCollectionStatus({
-        wishlist: response.data.wishlist.find((wishlist) => wishlist.id === id),
-        library: response.data.library.find((library) => library.id === id),
+        wishlist: isInWishlist,
+        library: isInLibrary,
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -81,6 +117,32 @@ const GamePage = ({ apiPrefix, user }) => {
   if (!boardGame) {
     return <div>Loading...</div>;
   }
+
+  const handleShare = async () => {
+    const shareUrl = `https://talis.live/game/${id}`;
+    const shareText = `Check out this board game: ${boardGame.name}`;
+
+    const encodedUrl = encodeURIComponent(shareUrl);
+    const encodedText = encodeURIComponent(shareText);
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: boardGame.name,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      const shareWindow = window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`,
+        '_blank',
+      );
+      shareWindow.focus();
+    }
+  };
 
   const handleToggleCollection = (status) => {
     const apiAction = collectionStatus[status]
@@ -314,27 +376,67 @@ const GamePage = ({ apiPrefix, user }) => {
               </>
             )}
             <div className="game-page-user-action-item text-center">
-              <p>
-                <FontAwesomeIcon
-                  icon={faShare}
-                  className="nav-icon basic-game-icon pointer-cursor"
-                />
-              </p>
-              <p>Share</p>
+              <button className="btn btn-info" onClick={handleShare}>
+                <FontAwesomeIcon icon={faShare} /> Share
+              </button>
             </div>
           </div>
           <div className="game-page-friends-info">
-            <p>Friends that already have this game:</p>
-            <div className="game-page-friend-icons d-flex">
-              <div className="circle me-2"></div>
-              <div className="circle me-2"></div>
-            </div>
-            <p>Friends that wishlisted this game:</p>
-            <div className="game-page-friend-icons d-flex">
-              <div className="circle me-2"></div>
-              <div className="circle me-2"></div>
-              <div className="circle me-2"></div>
-            </div>
+            {/* Filter friends who have the game in their library */}
+            {friendsWithGame.filter(
+              (friend) =>
+                friend.status === 'library' && friend.id !== user.user_id,
+            ).length > 0 && (
+              <>
+                <p>Friends that already have this game:</p>
+                <div className="game-page-friend-icons d-flex">
+                  {friendsWithGame
+                    .filter(
+                      (friend) =>
+                        friend.status === 'library' &&
+                        friend.id !== user.user_id,
+                    )
+                    .map((friend) => (
+                      <Link to={`/user/${friend.id}`} key={friend.id}>
+                        <img
+                          src={friend.profile_image_url}
+                          alt={`${friend.first_name} ${friend.last_name}`}
+                          title={`${friend.first_name} ${friend.last_name}`}
+                          className="friend-profile-img"
+                        />
+                      </Link>
+                    ))}
+                </div>
+              </>
+            )}
+
+            {/* Filter friends who have wishlisted the game */}
+            {friendsWithGame.filter(
+              (friend) =>
+                friend.status === 'wishlist' && friend.id !== user.user_id,
+            ).length > 0 && (
+              <>
+                <p>Friends that wishlisted this game:</p>
+                <div className="game-page-friend-icons d-flex">
+                  {friendsWithGame
+                    .filter(
+                      (friend) =>
+                        friend.status === 'wishlist' &&
+                        friend.id !== user.user_id,
+                    )
+                    .map((friend) => (
+                      <Link to={`/user/${friend.id}`} key={friend.id}>
+                        <img
+                          src={friend.profile_image_url}
+                          alt={`${friend.first_name} ${friend.last_name}`}
+                          title={`${friend.first_name} ${friend.last_name}`}
+                          className="friend-profile-img"
+                        />
+                      </Link>
+                    ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
