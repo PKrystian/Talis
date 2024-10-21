@@ -7,7 +7,6 @@ import {
   FaListCheck,
   FaChartLine,
   FaUsers,
-  FaHandsClapping,
 } from 'react-icons/fa6';
 import TableItem from '../TableItem';
 import axios from 'axios';
