@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './LandingPage.css';
 import {
@@ -10,6 +10,7 @@ import {
   FaHandsClapping,
 } from 'react-icons/fa6';
 import TableItem from '../TableItem';
+import axios from 'axios';
 
 const iconMap = {
   'Based on your games': <FaStarOfLife />,
@@ -18,7 +19,45 @@ const iconMap = {
   'Best for a party': <FaUsers />,
 };
 
-const LandingPage = ({ boardGames }) => {
+const LandingPage = ({ apiPrefix, user }) => {
+  const [boardGames, setBoardGames] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    try {
+      axios
+        .post(
+          apiPrefix + 'board-games/',
+          { user_id: user.user_id },
+          {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          },
+        )
+        .then((resp) => {
+          setBoardGames(resp.data);
+          setIsLoading(false);
+        });
+    } catch (error) {
+      setError(error);
+      setIsLoading(false);
+    }
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <div className="text-center vh-100 align-content-center">
+        <div className="spinner-border">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div className="container mt-4">
       {Object.keys(boardGames).map((category) => (
