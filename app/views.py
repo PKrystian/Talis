@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from urllib.parse import parse_qs
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, csrf_protect
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.http import require_POST, require_GET
 
 from .controllers.BoardGameController import BoardGameController
@@ -25,11 +25,11 @@ def set_session(request) -> JsonResponse:
             })
 
 
-@require_GET
+@csrf_exempt
 def board_game_list(request) -> JsonResponse:
     board_game_controller = BoardGameController()
 
-    return board_game_controller.action_board_game_list()
+    return board_game_controller.action_board_game_list(request)
 
 
 @require_GET

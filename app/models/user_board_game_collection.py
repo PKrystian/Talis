@@ -5,9 +5,13 @@ from app.models.board_game import BoardGame
 
 class UserBoardGameCollection(models.Model):
     DoesNotExist = None
+
+    WISHLIST_STATUS = ('wishlist', 'Wishlist')
+    LIBRARY_STATUS = ('library', 'Library')
+
     STATUS_CHOICES = [
-        ('wishlist', 'Wishlist'),
-        ('library', 'Library'),
+        WISHLIST_STATUS,
+        LIBRARY_STATUS,
     ]
 
     objects = None

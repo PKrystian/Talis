@@ -1,45 +1,89 @@
 import random
-from django.db.models import Q
+
+from django.contrib.auth.models import User
+from django.db.models import QuerySet
 from django.http import JsonResponse
 
 from app.controllers.SearchController import SearchController
-from app.models import BoardGame
+from app.models import BoardGame, UserBoardGameCollection, BoardGameCategory
+from app.utils.BoardGameRecommender import BoardGameRecommender
+from app.utils.getters.BoardGameCategoryGetter import BoardGameCategoryGetter
+from app.utils.getters.BoardGameMechanicGetter import BoardGameMechanicGetter
 
 
 class BoardGameController:
     ROUTE: str = 'board-games/'
 
-    def action_board_game_list(self) -> JsonResponse:
-        board_games = BoardGame.objects.order_by('-rating')[:SearchController.MEDIUM_LIMIT]
-        data = []
+    CATEGORY_BASED_ON_YOUR_GAMES = 'Based on your games'
+    CATEGORY_WISHLIST = 'Wishlist'
+    CATEGORY_ON_TOP = 'On top'
+    CATEGORY_BEST_FOR_A_PARTY = 'Best for a party'
 
-        for board_game in board_games:
-            data.append({
-                'id': board_game.id,
-                'name': board_game.name,
-                'image_url': board_game.image_url,
-            })
+    def action_board_game_list(self, request) -> JsonResponse:
+        post_data = request.POST
 
-        categorized_data = self.categorize_games(data)
+        user = None
+
+        if 'user_id' in post_data.keys():
+            user = User.objects.filter(id__exact=post_data['user_id']).get()
+
+        board_game_recommender = BoardGameRecommender(
+            BoardGameCategoryGetter(),
+            BoardGameMechanicGetter(),
+        )
+
+        board_games_based_on_your_games = []
+        board_games_wishlist = []
+
+        board_games_on_top = BoardGame.objects.order_by('-rating')[:SearchController.MEDIUM_LIMIT].values(
+            BoardGame.ID,
+            BoardGame.NAME,
+            BoardGame.IMAGE_URL
+        )
+        board_games_best_for_a_party = BoardGame.objects.filter(max_players__lt=20, image_url__isnull=False).order_by('-max_players', '-rating')[:SearchController.MEDIUM_LIMIT].values(
+            BoardGame.ID,
+            BoardGame.NAME,
+            BoardGame.IMAGE_URL
+        )
+
+        if user:
+            if UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.LIBRARY_STATUS).exists():
+                board_games_based_on_your_games = board_game_recommender.recommend_for_user(user=user)
+            if UserBoardGameCollection.objects.filter(user_id__exact=user.id).exists():
+                board_game_ids = [collection['board_game'] for collection in UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).values('board_game')]
+                board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL)
+
+            categorized_data = {
+                self.CATEGORY_BASED_ON_YOUR_GAMES: self.__parse_board_games(board_games_based_on_your_games),
+                self.CATEGORY_WISHLIST: self.__parse_board_games(board_games_wishlist),
+                self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
+                self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
+            }
+        else:
+            categorized_data = {
+                self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
+                self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
+            }
 
         return JsonResponse(categorized_data, safe=False)
 
-    def categorize_games(self, board_games) -> dict:
-        categories = [
-            'Based on your games',
-            'Wishlist',
-            'On top recently',
-            'Best for a party',
-            'Best ice breaker',
-        ]
+    @staticmethod
+    def __parse_board_games(board_games: QuerySet | list) -> list:
+        parsed_games = []
 
-        categorized_games = {category: self.get_shuffled_games(board_games) for category in categories}
-        return categorized_games
+        if board_games:
+            for board_game in board_games:
+                parsed_games.append({
+                    BoardGame.ID: board_game[BoardGame.ID],
+                    BoardGame.NAME: board_game[BoardGame.NAME],
+                    BoardGame.IMAGE_URL: board_game[BoardGame.IMAGE_URL],
+                })
+
+        return parsed_games
 
     ROUTE_GAME_DETAIL: str = 'board-games/<int:game_id>/'
 
-    @staticmethod
-    def action_board_game_detail(request, game_id) -> JsonResponse:
+    def action_board_game_detail(self, request, game_id) -> JsonResponse:
         try:
             board_game = BoardGame.objects.prefetch_related(
                 'boardgamepublisher_set__publisher',
@@ -50,13 +94,13 @@ class BoardGameController:
             publishers = ', '.join([bp.publisher.name for bp in board_game.boardgamepublisher_set.all()])
             categories = ', '.join([bc.category.name for bc in board_game.boardgamecategory_set.all()])
 
-            is_expansion = board_game.boardgamecategory_set.filter(category_id=32).exists()
+            is_expansion = board_game.boardgamecategory_set.filter(category_id=BoardGameCategory.CATEGORY_EXPANSION).exists()
 
             if is_expansion:
                 main_game = BoardGame.objects.filter(
                     expansions__expansion_board_game=board_game
                 ).exclude(
-                    boardgamecategory__category_id=32
+                    boardgamecategory__category_id=BoardGameCategory.CATEGORY_EXPANSION
                 ).first()
 
                 main_game = {
