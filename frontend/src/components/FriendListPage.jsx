@@ -144,7 +144,6 @@ const FriendListPage = ({ apiPrefix, user }) => {
         ))}
       </div>
 
-      {/* Invite Friend Section */}
       <div className="invite-section">
         <h2>Invite a Friend</h2>
         <input
@@ -157,7 +156,6 @@ const FriendListPage = ({ apiPrefix, user }) => {
         {inviteMessage && <p className="message">{inviteMessage}</p>}
       </div>
 
-      {/* Only show "Pending Friend Requests" if there are any pending invites */}
       {pendingInvites.length > 0 && (
         <>
           <h2>Pending Friend Requests</h2>

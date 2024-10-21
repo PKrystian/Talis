@@ -118,7 +118,6 @@ const UserProfilePage = ({ apiPrefix, user }) => {
           {new Date(userProfile.date_joined).toLocaleDateString()}
         </p>
 
-        {/* Show additional details only if viewing own profile */}
         {user.user_id && user.user_id === parseInt(id) && (
           <>
             <p>
@@ -131,29 +130,24 @@ const UserProfilePage = ({ apiPrefix, user }) => {
           </>
         )}
 
-        {/* Show friend request/remove buttons only if user is logged in and viewing someone else's profile */}
         {user.user_id && user.user_id !== parseInt(id) && (
           <>
-            {/* Show "Send Friend Request" button if the user is not friends and no pending request */}
             {friendStatus !== 'accepted' && friendStatus !== 'pending' && (
               <button onClick={handleSendRequest}>Send Friend Request</button>
             )}
 
-            {/* Show "Cancel Friend Request" button if there's a pending request */}
             {friendStatus === 'pending' && (
               <button onClick={handleCancelRequest}>
                 Cancel Friend Request
               </button>
             )}
 
-            {/* Show "Remove Friend" button if they are already friends */}
             {friendStatus === 'accepted' && (
               <button onClick={handleRemoveFriend}>Remove Friend</button>
             )}
           </>
         )}
 
-        {/* Show admin info if the logged-in user is a superuser */}
         {user && user.is_superuser && (
           <>
             <h1>Admin Info</h1>
