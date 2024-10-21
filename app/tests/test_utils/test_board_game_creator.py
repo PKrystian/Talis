@@ -15,14 +15,14 @@ class TestBoardGameCreator:
     @pytest.fixture
     def board_game_data_dict_fixture(self):
         yield {
-            bgg_api_params.NAME: 'Test Board Game',
-            bgg_api_params.YEAR_PUBLISHED: 2000,
-            bgg_api_params.MIN_PLAYERS: 3,
-            bgg_api_params.MAX_PLAYERS: 12,
-            bgg_api_params.AGE: 12,
-            bgg_api_params.MIN_PLAYTIME: 60,
-            bgg_api_params.MAX_PLAYTIME: 120,
-            bgg_api_params.DESCRIPTION: 'This game really slaps',
+            BoardGame.NAME: 'Test Board Game',
+            BoardGame.YEAR_PUBLISHED: 2000,
+            BoardGame.MIN_PLAYERS: 3,
+            BoardGame.MAX_PLAYERS: 12,
+            BoardGame.AGE: 12,
+            BoardGame.MIN_PLAYTIME: 60,
+            BoardGame.MAX_PLAYTIME: 120,
+            BoardGame.DESCRIPTION: 'This game really slaps',
         }
 
     def test_load_from_dict(self, board_game_data_dict_fixture):
