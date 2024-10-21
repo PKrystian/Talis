@@ -25,7 +25,7 @@ def set_session(request) -> JsonResponse:
             })
 
 
-@require_GET
+@csrf_exempt
 def board_game_list(request) -> JsonResponse:
     board_game_controller = BoardGameController()
 

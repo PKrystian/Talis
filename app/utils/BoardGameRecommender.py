@@ -1,6 +1,7 @@
 import math
 import pickle
 import pandas as pd
+import warnings
 from django.contrib.auth.models import User
 
 from django.db.models import Max
@@ -24,6 +25,8 @@ class BoardGameRecommender:
     __board_game_mechanic_getter: BoardGameMechanicGetter
 
     def __init__(self, board_game_category_getter, board_game_mechanic_getter) -> None:
+        warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
+
         self.recommendation_model = pickle.load(open(self.MODELS_FOLDER + self.MODEL_FILENAME, 'rb'))
 
         self.__board_game_category_getter = board_game_category_getter
