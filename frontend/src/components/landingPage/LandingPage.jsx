@@ -14,9 +14,8 @@ import TableItem from '../TableItem';
 const iconMap = {
   'Based on your games': <FaStarOfLife />,
   Wishlist: <FaListCheck />,
-  'On top recently': <FaChartLine />,
+  'On top': <FaChartLine />,
   'Best for a party': <FaUsers />,
-  'Best ice breaker': <FaHandsClapping />,
 };
 
 const LandingPage = ({ boardGames }) => {

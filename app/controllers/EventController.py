@@ -48,9 +48,9 @@ class EventController:
         )
 
         if Event.BOARD_GAMES in form_data.keys():
-            form_data[Event.BOARD_GAMES] = self.parse_board_games(form_data[Event.BOARD_GAMES])
+            many_to_many_fields[Event.BOARD_GAMES] = self.parse_board_games(many_to_many_fields[Event.BOARD_GAMES])
         if Event.TAGS in form_data.keys():
-            form_data[Event.tags] = self.parse_categories(form_data[Event.TAGS])
+            many_to_many_fields[Event.tags] = self.parse_categories(many_to_many_fields[Event.TAGS])
 
         new_event = (
             event_creator
