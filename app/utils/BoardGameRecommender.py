@@ -133,7 +133,8 @@ class BoardGameRecommender:
         board_game_ids = [board_game_id['board_game'] for board_game_id in BoardGameCategory.objects.filter(
                 category_id__in=game_category_ids,
             ).exclude(
-                board_game_id__in=game_ids_to_exclude
+                board_game_id__in=game_ids_to_exclude,
+                category_id__exact=BoardGameCategory.CATEGORY_EXPANSION,
             ).values('board_game')]
 
         recommendations = BoardGame.objects.filter(
