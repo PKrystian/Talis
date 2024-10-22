@@ -1,5 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
 
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.form-search {
+  margin-top: 5px;
+}
+
+.search-suggestions {
+  z-index: 1001;
+}
+
+body {
+  padding-top: 70px;
+}
+
 .navbar-logo {
   width: 40px;
   height: 40px;

@@ -5,25 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#222831" />
     <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="description" content="Talis is an application designed to help users select and organize board games. Discover new games and manage your collection efficiently." />
+    <meta name="keywords" content="Talis, board games, game organizer, game management, board game selection, Talis app" />
+    <meta name="author" content="Talis Team" />
+    <meta property="og:title" content="Talis - Board Game Helper" />
+    <meta property="og:description" content="Select and organize your board games with Talis, a smart application designed to enhance your board game experience." />
+    <meta property="og:image" content="/static/logo192.png" />
+    <meta property="og:url" content="https://talis.live" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Talis - Board Game Helper" />
+    <meta name="twitter:description" content="Manage and discover board games with Talis. Perfect for game enthusiasts." />
+    <meta name="twitter:image" content="/static/logo192.png" />
     <link rel="icon" href="/static/favicon.ico" />
     <link rel="apple-touch-icon" href="/static/logo192.png" />
     <link rel="manifest" href="/static/manifest.json" />
-    <meta
-      name="description"
-      content="Talis - Application to help select board games and organize them"
-    />
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" />
+    <link rel="preload" href="/static/logo192.png" as="image" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Talis - Board Game Helper",
+        "description": "A web application to help you select and organize board games.",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "Web",
+        "url": "https://talis.live",
+        "author": {
+          "@type": "Organization",
+          "name": "Talis Team"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR"
+        }
+      }
+    </script>
     <title>Talis - Board Game Helper</title>
   </head>
   <body>
     <noscript>
       If you're seeing this message, that means
       <strong>JavaScript has been disabled on your browser</strong>, please
-      <strong>enable JS</strong> to make this app work.
+      <strong>enable JavaScript</strong> to use this app.
     </noscript>
     <div id="root"></div>
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:400,700"
-      rel="stylesheet"
-    />
+    <script type="text/javascript">
+      const loadFonts = () => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css?family=Open+Sans:400,700';
+        document.head.appendChild(link);
+      };
+      window.onload = loadFonts;
+    </script>
   </body>
 </html>

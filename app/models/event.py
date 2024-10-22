@@ -112,7 +112,6 @@ class Event(models.Model):
         }
     
     def serialize_host(self) -> dict:
-        print(self.host)
         return {
             'id': self.host.id,
             'first_name': self.host.first_name,

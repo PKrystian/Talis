@@ -6,9 +6,11 @@ from django.views.decorators.http import require_POST, require_GET
 
 from .controllers.BoardGameController import BoardGameController
 from .controllers.CollectionController import CollectionController
+from .controllers.FriendListController import FriendListController
 from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
+from .controllers.UserProfileController import UserProfileController
 
 
 def index(request) -> None:
@@ -123,5 +125,82 @@ def get_events(request) -> JsonResponse:
 def new_event(request) -> JsonResponse:
     event_controller = EventController()
     response = event_controller.action_new_event(request)
+
+    return response
+
+@require_GET
+def user_profile_detail(request, user_id) -> JsonResponse:
+    user_profile_controller = UserProfileController()
+
+    return user_profile_controller.action_user_profile_detail(request, user_id)
+
+@require_GET
+@csrf_exempt
+def friend_list_detail(request) -> JsonResponse:
+    user_id = request.GET.get('user_id')
+    limit = int(request.GET.get('limit', 10))
+    tags = request.GET.get('tags', None)
+
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_friend_list(request, user_id, limit, tags)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def add_friend(request) -> JsonResponse:
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_add_friend(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def accept_friend(request) -> JsonResponse:
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_accept_friend(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def reject_friend(request) -> JsonResponse:
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_reject_friend(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def remove_friend(request) -> JsonResponse:
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_remove_friend(request)
+
+    return response
+
+@require_GET
+@csrf_exempt
+def pending_invites(request) -> JsonResponse:
+    user_id = request.GET.get('user_id')
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_pending_invites(request, user_id)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def friend_status(request) -> JsonResponse:
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_friend_status(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def get_friends_with_game(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    game_id = request.POST.get('game_id')
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_get_friends_with_game(request, user_id, game_id)
 
     return response
