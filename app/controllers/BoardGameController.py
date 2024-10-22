@@ -1,5 +1,4 @@
 import random
-import logging
 
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
@@ -10,6 +9,7 @@ from app.models import BoardGame, UserBoardGameCollection, BoardGameCategory
 from app.utils.BoardGameRecommender import BoardGameRecommender
 from app.utils.getters.BoardGameCategoryGetter import BoardGameCategoryGetter
 from app.utils.getters.BoardGameMechanicGetter import BoardGameMechanicGetter
+from app.utils.creators.LogErrorCreator import LogErrorCreator
 
 
 class BoardGameController:
@@ -55,24 +55,33 @@ class BoardGameController:
                     board_game_ids = [collection['board_game'] for collection in UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).values('board_game')]
                     board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL)
 
-                    categorized_data = {
-                        self.CATEGORY_BASED_ON_YOUR_GAMES: self.__parse_board_games(board_games_based_on_your_games),
-                        self.CATEGORY_WISHLIST: self.__parse_board_games(board_games_wishlist),
-                        self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
-                        self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
-                    }
-                else:
-                    categorized_data = {
-                        self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
-                        self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
-                    }
+                categorized_data = {
+                    self.CATEGORY_BASED_ON_YOUR_GAMES: self.__parse_board_games(board_games_based_on_your_games),
+                    self.CATEGORY_WISHLIST: self.__parse_board_games(board_games_wishlist),
+                    self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
+                    self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
+                }
+            else:
+                categorized_data = {
+                    self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
+                    self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
+                }
 
-                return JsonResponse(categorized_data, safe=False)
+            return JsonResponse(categorized_data, safe=False)
+
         except User.DoesNotExist:
-            logging.error("User with id %s does not exist", post_data.get('user_id'))
+            LogErrorCreator().create().critical().log(
+                message=f"User with id {post_data.get('user_id')} does not exist",
+                trigger='action_board_game_list',
+                class_reference='BoardGameController'
+            )
             return JsonResponse({'error': 'User not found'}, status=404)
         except Exception as e:
-            logging.error("An error occurred: %s", str(e))
+            LogErrorCreator().create().critical().log(
+                message=str(e),
+                trigger='action_board_game_list',
+                class_reference='BoardGameController'
+            )
             return JsonResponse({'error': 'An internal error occurred'}, status=500)
 
     @staticmethod
