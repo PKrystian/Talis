@@ -9,6 +9,7 @@ from app.models import BoardGame, UserBoardGameCollection, BoardGameCategory
 from app.utils.BoardGameRecommender import BoardGameRecommender
 from app.utils.getters.BoardGameCategoryGetter import BoardGameCategoryGetter
 from app.utils.getters.BoardGameMechanicGetter import BoardGameMechanicGetter
+from app.utils.creators.LogErrorCreator import LogErrorCreator
 
 
 class BoardGameController:
@@ -22,50 +23,66 @@ class BoardGameController:
     def action_board_game_list(self, request) -> JsonResponse:
         post_data = request.POST
 
-        user = None
+        try:
+            user = None
 
-        if 'user_id' in post_data.keys():
-            user = User.objects.filter(id__exact=post_data['user_id']).get()
+            if 'user_id' in post_data.keys():
+                user = User.objects.filter(id__exact=post_data['user_id']).get()
 
-        board_game_recommender = BoardGameRecommender(
-            BoardGameCategoryGetter(),
-            BoardGameMechanicGetter(),
-        )
+            board_game_recommender = BoardGameRecommender(
+                BoardGameCategoryGetter(),
+                BoardGameMechanicGetter(),
+            )
 
-        board_games_based_on_your_games = []
-        board_games_wishlist = []
+            board_games_based_on_your_games = []
+            board_games_wishlist = []
 
-        board_games_on_top = BoardGame.objects.order_by('-rating')[:SearchController.MEDIUM_LIMIT].values(
-            BoardGame.ID,
-            BoardGame.NAME,
-            BoardGame.IMAGE_URL
-        )
-        board_games_best_for_a_party = BoardGame.objects.filter(max_players__lt=20, image_url__isnull=False).order_by('-max_players', '-rating')[:SearchController.MEDIUM_LIMIT].values(
-            BoardGame.ID,
-            BoardGame.NAME,
-            BoardGame.IMAGE_URL
-        )
+            board_games_on_top = BoardGame.objects.order_by('-rating')[:SearchController.MEDIUM_LIMIT].values(
+                BoardGame.ID,
+                BoardGame.NAME,
+                BoardGame.IMAGE_URL
+            )
+            board_games_best_for_a_party = BoardGame.objects.filter(max_players__lt=20, image_url__isnull=False).order_by('-max_players', '-rating')[:SearchController.MEDIUM_LIMIT].values(
+                BoardGame.ID,
+                BoardGame.NAME,
+                BoardGame.IMAGE_URL
+            )
 
-        if user:
-            if UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.LIBRARY_STATUS).exists():
-                board_games_based_on_your_games = board_game_recommender.recommend_for_user(user=user)
-            if UserBoardGameCollection.objects.filter(user_id__exact=user.id).exists():
-                board_game_ids = [collection['board_game'] for collection in UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).values('board_game')]
-                board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL)
+            if user:
+                if UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.LIBRARY_STATUS).exists():
+                    board_games_based_on_your_games = board_game_recommender.recommend_for_user(user=user)
+                if UserBoardGameCollection.objects.filter(user_id__exact=user.id).exists():
+                    board_game_ids = [collection['board_game'] for collection in UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).values('board_game')]
+                    board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL)
 
-            categorized_data = {
-                self.CATEGORY_BASED_ON_YOUR_GAMES: self.__parse_board_games(board_games_based_on_your_games),
-                self.CATEGORY_WISHLIST: self.__parse_board_games(board_games_wishlist),
-                self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
-                self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
-            }
-        else:
-            categorized_data = {
-                self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
-                self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
-            }
+                categorized_data = {
+                    self.CATEGORY_BASED_ON_YOUR_GAMES: self.__parse_board_games(board_games_based_on_your_games),
+                    self.CATEGORY_WISHLIST: self.__parse_board_games(board_games_wishlist),
+                    self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
+                    self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
+                }
+            else:
+                categorized_data = {
+                    self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
+                    self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
+                }
 
-        return JsonResponse(categorized_data, safe=False)
+            return JsonResponse(categorized_data, safe=False)
+
+        except User.DoesNotExist:
+            LogErrorCreator().create().critical().log(
+                message=f"User with id {post_data.get('user_id')} does not exist",
+                trigger='action_board_game_list',
+                class_reference='BoardGameController'
+            )
+            return JsonResponse({'error': 'User not found'}, status=404)
+        except Exception as e:
+            LogErrorCreator().create().critical().log(
+                message=str(e),
+                trigger='action_board_game_list',
+                class_reference='BoardGameController'
+            )
+            return JsonResponse({'error': 'An internal error occurred'}, status=500)
 
     @staticmethod
     def __parse_board_games(board_games: QuerySet | list) -> list:
