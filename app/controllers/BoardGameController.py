@@ -48,26 +48,21 @@ class BoardGameController:
                 BoardGame.IMAGE_URL
             )
 
+            categorized_data = dict()
+
             if user:
                 if UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.LIBRARY_STATUS).exists():
                     board_games_based_on_your_games = board_game_recommender.recommend_for_user(user=user)
+                    categorized_data[self.CATEGORY_BASED_ON_YOUR_GAMES] = self.__parse_board_games(board_games_based_on_your_games)
                 if UserBoardGameCollection.objects.filter(user_id__exact=user.id).exists():
                     board_game_ids = [collection['board_game'] for collection in UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).values('board_game')]
                     board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL)
+                    categorized_data[self.CATEGORY_WISHLIST] = self.__parse_board_games(board_games_wishlist)
 
-                categorized_data = {
-                    self.CATEGORY_BASED_ON_YOUR_GAMES: self.__parse_board_games(board_games_based_on_your_games),
-                    self.CATEGORY_WISHLIST: self.__parse_board_games(board_games_wishlist),
-                    self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
-                    self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
-                }
-            else:
-                categorized_data = {
-                    self.CATEGORY_ON_TOP: self.__parse_board_games(board_games_on_top),
-                    self.CATEGORY_BEST_FOR_A_PARTY: self.__parse_board_games(board_games_best_for_a_party),
-                }
+            categorized_data[self.CATEGORY_ON_TOP] = self.__parse_board_games(board_games_on_top)
+            categorized_data[self.CATEGORY_BEST_FOR_A_PARTY] = self.__parse_board_games(board_games_best_for_a_party)
 
-            return JsonResponse(categorized_data, safe=False)
+            return JsonResponse(categorized_data, safe=False, status=200)
 
         except User.DoesNotExist:
             LogErrorCreator().create().critical().log(
@@ -80,7 +75,7 @@ class BoardGameController:
             LogErrorCreator().create().critical().log(
                 message=str(e),
                 trigger='action_board_game_list',
-                class_reference='BoardGameController'
+                class_reference=str(self.__class__)
             )
             return JsonResponse({'error': 'An internal error occurred'}, status=500)
 
