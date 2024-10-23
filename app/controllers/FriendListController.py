@@ -195,3 +195,26 @@ class FriendListController:
         ]
 
         return JsonResponse(data, safe=False)
+
+    ROUTE_GET_ALL = 'get_friends/'
+
+    @staticmethod
+    def action_get_friends_for_user(request) -> JsonResponse:
+        user_id = request.POST.get('user_id')
+
+        data = []
+
+        if FriendList.objects.filter(user_id__exact=user_id).exists():
+            friends = FriendList.objects.filter(user_id=user_id).order_by('-created_at').all()
+
+            data = [
+                {
+                    'id': friend.friend.id,
+                    'first_name': friend.friend.first_name,
+                    'last_name': friend.friend.last_name,
+                    'profile_image_url': friend.friend.registereduser.profile_image_url
+                }
+                for friend in friends
+            ]
+
+        return JsonResponse(data, safe=False, status=200)
