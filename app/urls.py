@@ -35,4 +35,5 @@ urlpatterns = [
     path(API_PREFIX + FriendListController.ROUTE_INVITES, views.pending_invites, name='pending-invites'),
     path(API_PREFIX + FriendListController.ROUTE_STATUS, views.friend_status, name='friend-status'),
     path(API_PREFIX + FriendListController.ROUTE_WITH_GAME, views.get_friends_with_game, name='friends-with-game'),
+    path(API_PREFIX + FriendListController.ROUTE_GET_ALL, views.get_friends_for_user, name='friends-for-user')
 ]

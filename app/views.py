@@ -204,3 +204,11 @@ def get_friends_with_game(request) -> JsonResponse:
     response = friend_list_controller.action_get_friends_with_game(request, user_id, game_id)
 
     return response
+
+@require_POST
+@csrf_exempt
+def get_friends_for_user(request) -> JsonResponse:
+    friend_list_controller = FriendListController()
+    response = friend_list_controller.action_get_friends_for_user(request)
+
+    return response
