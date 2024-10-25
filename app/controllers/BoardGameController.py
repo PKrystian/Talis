@@ -34,9 +34,6 @@ class BoardGameController:
                 BoardGameMechanicGetter(),
             )
 
-            board_games_based_on_your_games = []
-            board_games_wishlist = []
-
             board_games_on_top = BoardGame.objects.order_by('-rating')[:SearchController.MEDIUM_LIMIT].values(
                 BoardGame.ID,
                 BoardGame.NAME,
@@ -53,8 +50,9 @@ class BoardGameController:
             if user:
                 if UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.LIBRARY_STATUS).exists():
                     board_games_based_on_your_games = board_game_recommender.recommend_for_user(user=user)
-                    categorized_data[self.CATEGORY_BASED_ON_YOUR_GAMES] = self.__parse_board_games(board_games_based_on_your_games)
-                if UserBoardGameCollection.objects.filter(user_id__exact=user.id).exists():
+                    if board_games_based_on_your_games:
+                        categorized_data[self.CATEGORY_BASED_ON_YOUR_GAMES] = self.__parse_board_games(board_games_based_on_your_games)
+                if UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).exists():
                     board_game_ids = [collection['board_game'] for collection in UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).values('board_game')]
                     board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL)
                     categorized_data[self.CATEGORY_WISHLIST] = self.__parse_board_games(board_games_wishlist)
