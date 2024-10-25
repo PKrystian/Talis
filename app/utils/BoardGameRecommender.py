@@ -105,22 +105,19 @@ class BoardGameRecommender:
         for library_game in library_games:
             if recommended_games_list:
                 game_ids_to_exclude.extend([recommended_game[BoardGame.ID] for recommended_game in recommended_games_list])
+
             cluster = self.get_cluster_for_board_game(library_game)
+
             recommended_games_list.extend(self.__get_recommendations_for_game(
-                library_game,
-                cluster,
-                recommendations_per_library_game,
-                game_ids_to_exclude
+                board_game=library_game,
+                cluster=cluster,
+                recommendations_count=recommendations_per_library_game,
+                existing_recommendations=game_ids_to_exclude
             ))
 
         return recommended_games_list[:limit]
     
     def __get_recommendations_for_game(self, board_game: BoardGame, cluster: int, recommendations_count: int, existing_recommendations: list) -> list:
-        game_ids_to_exclude = []
-
-        for existing in existing_recommendations:
-            game_ids_to_exclude.append(existing)
-
         game_category_ids = self.__board_game_category_getter.get_categories_for_board_game(board_game, True)
 
         if BoardGameCategory.CATEGORY_EXPANSION in game_category_ids:
@@ -133,7 +130,8 @@ class BoardGameRecommender:
         board_game_ids = [board_game_id['board_game'] for board_game_id in BoardGameCategory.objects.filter(
                 category_id__in=game_category_ids,
             ).exclude(
-                board_game_id__in=game_ids_to_exclude,
+                board_game_id__in=existing_recommendations,
+            ).exclude(
                 category_id__exact=BoardGameCategory.CATEGORY_EXPANSION,
             ).values('board_game')]
 
