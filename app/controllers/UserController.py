@@ -46,6 +46,10 @@ class UserController:
                 'detail': 'Registered successfully',
                 'username': new_registered_user.user.username,
                 'is_authenticated': True,
+                'user_id': new_registered_user.user.id,
+                'is_superuser': new_registered_user.user.is_superuser,
+                'profile_image_url': new_registered_user.profile_image_url,
+                'cookie_consent': new_registered_user.cookie_consent,
             },
             status=200
         )
