@@ -65,12 +65,18 @@ const CookieConsentModal = ({ apiPrefix, user, setUser }) => {
           </Link>{' '}
           and make a choice.
         </p>
-        <div className="modal-buttons d-flex justify-content-center">
+        <div className="modal-buttons">
           <button
             onClick={() => handleConsentDecision(true)}
             className="btn btn-primary"
           >
             Accept
+          </button>
+          <button
+            onClick={() => handleConsentDecision(false)}
+            className="btn btn-danger"
+          >
+            Decline
           </button>
         </div>
       </div>
