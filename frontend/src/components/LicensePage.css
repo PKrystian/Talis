@@ -1,0 +1,22 @@
+.license-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: var(--background-color-dark-medium);
+  color: var(--text-color-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.license-header {
+  font-size: var(--font-size-xlarge);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.license-paragraph {
+  font-size: var(--font-size-medium);
+  margin: 10px 0;
+  line-height: 1.6;
+  text-align: justify;
+}

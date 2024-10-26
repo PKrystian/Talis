@@ -1,0 +1,25 @@
+.policy-container {
+  background-color: var(--background-color-dark-medium);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 800px;
+  box-shadow: var(--box-shadow);
+  color: var(--text-color-light);
+}
+
+.policy-header {
+  color: var(--text-color-light);
+  margin-bottom: 10px;
+}
+
+.policy-paragraph {
+  color: var(--text-color-light-medium);
+  margin-bottom: 10px;
+}
+
+.policy-list {
+  color: var(--text-color-light-medium);
+  text-align: left;
+  margin-bottom: 20px;
+}

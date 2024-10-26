@@ -8,16 +8,8 @@ class RegisteredUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=False)
     profile_image_url = models.URLField(max_length=255, null=True, blank=True)
+    cookie_consent = models.BooleanField(null=True, default=None)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user = User()
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def save(self, *args, **kwargs):
         self.user.save()
-        super().save(
-            force_insert=False,
-            force_update=False,
-            using=None,
-            update_fields=None
-        )
+        super().save(*args, **kwargs)
