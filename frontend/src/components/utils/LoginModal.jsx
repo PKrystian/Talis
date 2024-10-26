@@ -105,6 +105,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
               user_id: resp.data.user_id,
               is_superuser: resp.data.is_superuser,
               profile_image_url: resp.data.profile_image_url,
+              cookie_consent: resp.data.cookie_consent,
             });
 
             document.getElementById('quitModal').click();
@@ -139,6 +140,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
               user_id: resp.data.user_id,
               is_superuser: resp.data.is_superuser,
               profile_image_url: resp.data.profile_image_url,
+              cookie_consent: resp.data.cookie_consent,
             });
           }
         } catch (error) {

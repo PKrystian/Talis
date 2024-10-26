@@ -26,7 +26,10 @@ class TestRegisteredUserCreator:
     def test_create(self, user_data_fixture):
         new_registered_user = (
             self.registered_user_creator
-            .create()
+            .create(
+                username=user_data_fixture[FormValidator.FORM_FIELD_EMAIL],
+                password=user_data_fixture[FormValidator.FORM_FIELD_PASSWORD]
+            )
             .set_first_name(user_data_fixture[FormValidator.FORM_FIELD_FIRST_NAME])
             .set_last_name(user_data_fixture[FormValidator.FORM_FIELD_LAST_NAME])
             .set_email(user_data_fixture[FormValidator.FORM_FIELD_EMAIL])

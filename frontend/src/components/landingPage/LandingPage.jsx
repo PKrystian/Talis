@@ -41,7 +41,7 @@ const LandingPage = ({ apiPrefix, user }) => {
       setError(error);
       setIsLoading(false);
     }
-  }, [user]);
+  }, [apiPrefix, user]);
 
   if (isLoading) {
     return (

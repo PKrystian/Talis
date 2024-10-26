@@ -15,6 +15,7 @@ import LicensePage from './components/LicensePage';
 import LoginModal from './components/utils/LoginModal';
 import CreateEventPage from './components/CreateEventPage';
 import FriendListPage from './components/FriendListPage';
+import CookieConsentModal from './components/utils/CookieConsentModal';
 
 const App = () => {
   const apiPrefix =
@@ -55,6 +56,13 @@ const App = () => {
             userState={userState}
             setUserState={updateUserState}
             setUserData={updateUser}
+          />
+        )}
+        {userState && user.cookie_consent === null && (
+          <CookieConsentModal
+            apiPrefix={apiPrefix}
+            user={user}
+            setUser={updateUser}
           />
         )}
         <Routes apiPrefix={apiPrefix}>

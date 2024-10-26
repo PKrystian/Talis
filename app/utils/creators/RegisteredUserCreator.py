@@ -1,12 +1,14 @@
 from app.models.registered_user import RegisteredUser
+from django.contrib.auth.models import User
 from typing import Self
 
 
 class RegisteredUserCreator:
     __registered_user: RegisteredUser
 
-    def create(self) -> Self:
-        self.__registered_user = RegisteredUser()
+    def create(self, username: str, password: str) -> Self:
+        user = User.objects.create_user(username=username, password=password)
+        self.__registered_user = RegisteredUser(user=user)
         return self
 
     def set_first_name(self, first_name) -> Self:
