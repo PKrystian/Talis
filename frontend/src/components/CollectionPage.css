@@ -1,0 +1,20 @@
+.nav-tabs .nav-link {
+  background-color: #343a40;
+  color: #fff;
+  border: 1px solid #495057;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #495057;
+  color: #fff;
+}
+
+.tab-content {
+  margin-top: 20px;
+}
+
+.collection-date {
+  color: white;
+  text-align: center;
+  font-size: 0.9rem;
+}

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from app.models import UserBoardGameCollection, BoardGame
+from app.models import UserBoardGameCollection, BoardGame, BoardGameCategory
 
 
 class CollectionController:
@@ -20,30 +20,24 @@ class CollectionController:
         wishlist_games = BoardGame.objects.filter(id__in=wishlist_games_ids)
         library_games = BoardGame.objects.filter(id__in=library_games_ids)
 
-        wishlist_data = self.serialize_board_games(wishlist_games)
-        library_data = self.serialize_board_games(library_games)
+        wishlist_data = self.serialize_board_games(wishlist_games, user_id)
+        library_data = self.serialize_board_games(library_games, user_id)
 
         return JsonResponse({
             'wishlist': wishlist_data,
             'library': library_data
         }, safe=False)
 
-    def serialize_board_games(self, board_games):
+    def serialize_board_games(self, board_games, user_id):
         data = []
         for board_game in board_games:
             data.append({
                 'id': board_game.id,
                 'name': board_game.name,
-                'year_published': board_game.year_published,
-                'publisher': ', '.join([bp.publisher.name for bp in board_game.boardgamepublisher_set.all()]),
-                'category': ', '.join([bc.category.name for bc in board_game.boardgamecategory_set.all()]),
-                'description': board_game.description,
-                'min_players': board_game.min_players,
-                'max_players': board_game.max_players,
-                'age': board_game.age,
-                'min_playtime': board_game.min_playtime,
-                'max_playtime': board_game.max_playtime,
                 'image_url': board_game.image_url,
+                'rating': board_game.rating,
+                'collection_created_at': UserBoardGameCollection.objects.filter(board_game=board_game, user_id=user_id).first().created_at,
+                'is_expansion': board_game.boardgamecategory_set.filter(category_id=BoardGameCategory.CATEGORY_EXPANSION).exists()
             })
         return data
 
