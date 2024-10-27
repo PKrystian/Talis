@@ -43,6 +43,8 @@ const LandingPage = ({ apiPrefix, user }) => {
     }
   }, [user]);
 
+  console.log(boardGames);
+
   if (isLoading) {
     return (
       <div className="text-center vh-100 align-content-center">
