@@ -151,14 +151,22 @@ const RegistrationPage = ({
           },
         })
         .then((resp) => {
-          if (resp.status === 200) {
+          if (resp.status === 200 && resp.data.is_authenticated) {
             setUserState(resp.data.is_authenticated);
-            setUserData({ username: resp.data.username });
+            setUserData({
+              username: resp.data.username,
+              user_id: resp.data.user_id,
+              is_superuser: resp.data.is_superuser,
+              profile_image_url: resp.data.profile_image_url,
+              cookie_consent: resp.data.cookie_consent,
+            });
             navigate('/');
+          } else {
+            console.error('User registration failed ');
           }
         })
         .catch((error) => {
-          console.error(error);
+          console.error('Error during registration:', error);
         });
     }
   }

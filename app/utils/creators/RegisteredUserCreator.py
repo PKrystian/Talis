@@ -1,4 +1,5 @@
 from app.models.registered_user import RegisteredUser
+from django.contrib.auth.models import User
 from typing import Self
 
 
@@ -7,6 +8,7 @@ class RegisteredUserCreator:
 
     def create(self) -> Self:
         self.__registered_user = RegisteredUser()
+        self.__registered_user.user = User()
         return self
 
     def set_first_name(self, first_name) -> Self:

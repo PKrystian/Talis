@@ -87,6 +87,20 @@ def check_auth(request) -> JsonResponse:
     return response
 
 
+def check_cookie_consent(request) -> JsonResponse:
+    user_controller = UserController()
+    response = user_controller.check_cookie_consent(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def change_cookie_consent(request) -> JsonResponse:
+    user_controller = UserController()
+    response = user_controller.change_cookie_consent(request)
+
+    return response
+
 @require_POST
 @csrf_exempt
 def add_to_collection(request) -> JsonResponse:

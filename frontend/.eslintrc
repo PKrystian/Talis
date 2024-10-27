@@ -2,7 +2,7 @@
   "extends": ["react-app", "plugin:react/recommended", "prettier"],
   "plugins": ["react", "prettier"],
   "rules": {
-    "prettier/prettier": ["error", { "endOfLine": "lf" }],
+    "prettier/prettier": ["error", { "endOfLine": "crlf" }],
     "react/react-in-jsx-scope": "off"
   }
 }
