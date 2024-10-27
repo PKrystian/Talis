@@ -6,9 +6,9 @@ from typing import Self
 class RegisteredUserCreator:
     __registered_user: RegisteredUser
 
-    def create(self, username: str, password: str) -> Self:
-        user = User.objects.create_user(username=username, password=password)
-        self.__registered_user = RegisteredUser(user=user)
+    def create(self) -> Self:
+        self.__registered_user = RegisteredUser()
+        self.__registered_user.user = User()
         return self
 
     def set_first_name(self, first_name) -> Self:
