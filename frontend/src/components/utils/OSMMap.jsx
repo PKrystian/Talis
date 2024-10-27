@@ -43,7 +43,7 @@ const OSMMap = ({ coordinates }) => {
         anchor: [0.5, 400],
         anchorXUnits: 'fraction',
         anchorYUnits: 'pixels',
-        src: 'map-marker.png',
+        src: 'static/map-marker.png',
         height: 30,
         width: 30,
       }),

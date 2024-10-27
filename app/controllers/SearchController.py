@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.http import JsonResponse
-from app.models import BoardGame
+from app.models import BoardGame, BoardGameCategory
 
 
 class SearchController:
@@ -69,7 +69,7 @@ class SearchController:
                         if min_playtime:
                             board_games = board_games.filter(min_playtime__gte=min_playtime)
                         elif max_playtime:
-                            board_games = board_games.filter(max_playtime__lte=max_playtime)
+                            board_games = board_games.filter(min_playtime__lte=max_playtime)
                     else:
                         field_path = filter_type_to_field.get(filter_type.lower())
                         if field_path:
@@ -81,19 +81,9 @@ class SearchController:
             data = [{
                 'id': game.id,
                 'name': game.name,
-                'year_published': game.year_published,
-                'publisher': ', '.join([bp.publisher.name for bp in game.boardgamepublisher_set.all()]),
-                'category': ', '.join([bc.category.name for bc in game.boardgamecategory_set.all()]),
-                'description': game.description,
-                'expansions': [{'expansion_id': expansion.expansion_board_game.id,
-                                'expansion_name': expansion.expansion_board_game.name} for expansion in
-                               game.expansions.all()],
-                'min_players': game.min_players,
-                'max_players': game.max_players,
-                'age': game.age,
-                'min_playtime': game.min_playtime,
-                'max_playtime': game.max_playtime,
                 'image_url': game.image_url,
+                'rating': game.rating,
+                'is_expansion': game.boardgamecategory_set.filter(category_id=BoardGameCategory.CATEGORY_EXPANSION).exists()
             } for game in board_games]
 
             return JsonResponse({'results': data}, safe=False)

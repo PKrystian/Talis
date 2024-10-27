@@ -194,7 +194,9 @@ const GamePage = ({ apiPrefix, user }) => {
       <div className="row ml-0 mt-4">
         <div className="col-sm-auto text-center">
           <img
-            src={boardGame.image_url}
+            src={
+              boardGame.image_url ? boardGame.image_url : '/static/logo512.png'
+            }
             className="boardgame-img"
             alt={boardGame.name}
           />
