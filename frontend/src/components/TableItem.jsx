@@ -10,6 +10,7 @@ const TableItem = ({ boardGame }) => {
   const onClick = (boardGame) => {
     navigate(`/game/${boardGame.id}`);
   };
+  console.log(boardGame);
 
   return (
     <div key={boardGame.id} className="card bg-dark text-white m-2">
@@ -32,9 +33,17 @@ const TableItem = ({ boardGame }) => {
           </div>
         )}
 
-        {boardGame.rating !== null && boardGame.rating !== 0 && (
+        {(boardGame.rating || boardGame.rating === 0) && (
           <div className="card-rating" onClick={() => onClick(boardGame)}>
-            <FaStar /> {boardGame.rating.toFixed(1)}
+            {boardGame.rating > 0 ? (
+              <>
+                <FaStar /> {boardGame.rating.toFixed(1)}
+              </>
+            ) : (
+              <>
+                <FaStar /> {'-'}
+              </>
+            )}
           </div>
         )}
       </div>
