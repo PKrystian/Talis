@@ -124,6 +124,7 @@ class BoardGameController:
 
             publishers = ', '.join([bp.publisher.name for bp in board_game.boardgamepublisher_set.all()])
             categories = ', '.join([bc.category.name for bc in board_game.boardgamecategory_set.all()])
+            mechanics = ', '.join([bm.mechanic.name for bm in board_game.boardgamemechanic_set.all()])
 
             is_expansion = board_game.boardgamecategory_set.filter(category_id=BoardGameCategory.CATEGORY_EXPANSION).exists()
 
@@ -161,6 +162,7 @@ class BoardGameController:
 
                 'publisher': publishers,
                 'category': categories,
+                'mechanic': mechanics,
                 'expansions': expansions,
                 'main_game': main_game,
             }

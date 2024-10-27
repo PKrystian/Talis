@@ -241,7 +241,12 @@ const GamePage = ({ apiPrefix, user }) => {
             {boardGame.publisher ? (
               <p>
                 <span className="bold-text">Publisher:</span>{' '}
-                {boardGame.publisher}
+                <Link
+                  to={`/search?query=&filters=publisher%7C${boardGame.publisher}`}
+                  className="expansion-link"
+                >
+                  {boardGame.publisher}
+                </Link>
               </p>
             ) : null}
             {boardGame.year_published ? (
@@ -252,8 +257,14 @@ const GamePage = ({ apiPrefix, user }) => {
             ) : null}
             {boardGame.category ? (
               <p>
-                <span className="bold-text">Category:</span>{' '}
+                <span className="bold-text">Categories:</span>{' '}
                 {boardGame.category}
+              </p>
+            ) : null}
+            {boardGame.mechanic ? (
+              <p>
+                <span className="bold-text">Mechanics:</span>{' '}
+                {boardGame.mechanic}
               </p>
             ) : null}
             {boardGame.main_game ? (
