@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import './UserProfilePage.css';
+import CollectionPage from '../CollectionPage';
 
 const UserProfilePage = ({ apiPrefix, user }) => {
   const { id } = useParams();
@@ -147,7 +148,12 @@ const UserProfilePage = ({ apiPrefix, user }) => {
             )}
 
             {friendStatus === 'accepted' && (
-              <button onClick={handleRemoveFriend}>Remove Friend</button>
+              <>
+                <button onClick={handleRemoveFriend}>Remove Friend</button>
+                <div className="friend-collection">
+                  <CollectionPage user={{ user_id: parseInt(id) }} />
+                </div>
+              </>
             )}
           </>
         )}

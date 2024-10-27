@@ -129,7 +129,7 @@ const CollectionPage = ({ user }) => {
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center">Your Collection</h1>
+      <h1 className="text-center">Collection</h1>
       <ul className="nav nav-tabs">
         <li className="nav-item">
           <button
