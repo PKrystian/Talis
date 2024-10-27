@@ -28,9 +28,10 @@ class SearchController:
         '2h+': (120, None),
     }
 
-    def action_search_board_games(self, query, limit, query_params) -> JsonResponse:
+    def action_search_board_games(self, query, limit, page, query_params) -> JsonResponse:
         try:
             combined_filters = query_params.get('filters[]', [])
+            offset = (page - 1) * limit
 
             board_games = BoardGame.objects.exclude(rating__isnull=True)
 
@@ -57,47 +58,38 @@ class SearchController:
                         'playtime': 'min_playtime',
                     }
                     if filter_type == 'age':
-                        age_min, age_max = self.AGE_RANGES.get(filter_value, (0, None))
-                        if age_min and age_max:
-                            board_games = board_games.filter(age__gte=age_min, age__lte=age_max)
-                        elif age_min:
-                            board_games = board_games.filter(age__gte=age_min)
-                        elif age_max:
-                            board_games = board_games.filter(age__lte=age_max)
+                        age_min, age_max = self.AGE_RANGES[filter_value]
+                        board_games = board_games.filter(age__gte=age_min, age__lte=age_max)
                     elif filter_type == 'playtime':
-                        min_playtime, max_playtime = self.PLAYTIME_RANGES.get(filter_value, (0, None))
-                        if min_playtime:
-                            board_games = board_games.filter(min_playtime__gte=min_playtime)
-                        elif max_playtime:
-                            board_games = board_games.filter(max_playtime__lte=max_playtime)
+                        playtime_min, playtime_max = self.PLAYTIME_RANGES[filter_value]
+                        board_games = board_games.filter(min_playtime__gte=playtime_min, min_playtime__lte=playtime_max)
+                    elif filter_type == 'publisher':
+                        board_games = board_games.filter(
+                            boardgamepublisher__publisher__name__icontains=filter_value
+                        )
+                    elif filter_type == 'year':
+                        board_games = board_games.filter(year_published=filter_value)
                     else:
-                        field_path = filter_type_to_field.get(filter_type.lower())
-                        if field_path:
-                            q_object = Q(**{field_path: filter_value})
-                            board_games = board_games.filter(q_object)
+                        board_games = board_games.filter(**{filter_type_to_field[filter_type]: filter_value})
 
-            board_games = board_games.order_by('-rating')[:limit]
+            board_games = board_games.order_by('-rating')[offset:offset + limit]
 
-            data = [{
-                'id': game.id,
-                'name': game.name,
-                'year_published': game.year_published,
-                'publisher': ', '.join([bp.publisher.name for bp in game.boardgamepublisher_set.all()]),
-                'category': ', '.join([bc.category.name for bc in game.boardgamecategory_set.all()]),
-                'description': game.description,
-                'expansions': [{'expansion_id': expansion.expansion_board_game.id,
-                                'expansion_name': expansion.expansion_board_game.name} for expansion in
-                               game.expansions.all()],
-                'min_players': game.min_players,
-                'max_players': game.max_players,
-                'age': game.age,
-                'min_playtime': game.min_playtime,
-                'max_playtime': game.max_playtime,
-                'image_url': game.image_url,
-            } for game in board_games]
+            results = [
+                {
+                    'id': game.id,
+                    'name': game.name,
+                    'description': game.description,
+                    'min_players': game.min_players,
+                    'max_players': game.max_players,
+                    'min_playtime': game.min_playtime,
+                    'max_playtime': game.max_playtime,
+                    'rating': game.rating,
+                    'image_url': game.image_url,
+                }
+                for game in board_games
+            ]
 
-            return JsonResponse({'results': data}, safe=False)
-        except ValueError:
-            return JsonResponse({'error': 'Invalid query parameters'}, status=400)
+            return JsonResponse({'results': results}, status=200)
+
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)

@@ -47,9 +47,10 @@ def search(request) -> JsonResponse:
 
     query = request.GET.get('query', '')
     limit = int(request.GET.get('limit', search_controller.MEDIUM_LIMIT))
+    page = int(request.GET.get('page', 1))
     query_params = parse_qs(request.META['QUERY_STRING'])
 
-    return search_controller.action_search_board_games(query, limit, query_params)
+    return search_controller.action_search_board_games(query, limit, page, query_params)
 
 
 @require_POST
