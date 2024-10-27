@@ -17,6 +17,8 @@ const SearchPage = ({ apiPrefix }) => {
 
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     category: filterType === 'Category' ? filter.split(',') : [],
@@ -25,6 +27,8 @@ const SearchPage = ({ apiPrefix }) => {
     maxPlayers: '',
     age: [],
     playtime: [],
+    publisher: '',
+    year: '',
   });
   const [expandedFilter, setExpandedFilter] = useState({
     category: false,
@@ -32,12 +36,19 @@ const SearchPage = ({ apiPrefix }) => {
     players: false,
     age: false,
     playtime: false,
+    publisher: false,
+    year: false,
   });
 
   const handleInputChange = (e) => {
     const { name, value, checked } = e.target;
     setFilters((prevFilters) => {
-      if (name === 'minPlayers' || name === 'maxPlayers') {
+      if (
+        name === 'minPlayers' ||
+        name === 'maxPlayers' ||
+        name === 'publisher' ||
+        name === 'year'
+      ) {
         return { ...prevFilters, [name]: value };
       } else {
         const updatedFilters = checked
@@ -73,6 +84,15 @@ const SearchPage = ({ apiPrefix }) => {
       );
     }
 
+    if (filters.publisher) {
+      searchParams.append('filters', `publisher|${filters.publisher}`);
+    }
+
+    if (filters.year) {
+      searchParams.append('filters', `year|${filters.year}`);
+    }
+
+    setCurrentPage(1);
     navigate(`?${searchParams.toString()}`);
   };
 
@@ -87,18 +107,27 @@ const SearchPage = ({ apiPrefix }) => {
         params: {
           query,
           limit: 48,
+          page: currentPage,
           filters,
         },
       })
       .then((response) => {
-        setSearchResults(response.data.results);
+        if (currentPage === 1) {
+          setSearchResults(response.data.results);
+        } else {
+          setSearchResults((prevResults) => [
+            ...prevResults,
+            ...response.data.results,
+          ]);
+        }
+        setHasMore(response.data.results.length === 48);
         setIsLoading(false);
       })
       .catch((error) => {
         setError(error);
         setIsLoading(false);
       });
-  }, [location.search, apiPrefix]);
+  }, [location.search, apiPrefix, currentPage]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -109,6 +138,8 @@ const SearchPage = ({ apiPrefix }) => {
       maxPlayers: '',
       age: [],
       playtime: [],
+      publisher: '',
+      year: '',
     };
 
     searchParams.getAll('filters').forEach((filter) => {
@@ -125,6 +156,10 @@ const SearchPage = ({ apiPrefix }) => {
           const [minPlayers, maxPlayers] = filterValue.split('-');
           newFilters.minPlayers = minPlayers;
           newFilters.maxPlayers = maxPlayers;
+        } else if (filterType === 'publisher') {
+          newFilters.publisher = filterValue;
+        } else if (filterType === 'year') {
+          newFilters.year = filterValue;
         }
       }
     });
@@ -157,6 +192,32 @@ const SearchPage = ({ apiPrefix }) => {
           <button onClick={applyFilters} className="btn btn-outline-light my-2">
             Apply Filters
           </button>
+          <div className="filter-group">
+            <div
+              className="filter-header"
+              onClick={() => toggleFilterSection('publisher')}
+            >
+              <h5>
+                Publisher{' '}
+                {expandedFilter.publisher ? <FaChevronUp /> : <FaChevronDown />}
+              </h5>
+            </div>
+            {expandedFilter.publisher && (
+              <div className="filter-options">
+                <div className="d-flex">
+                  <input
+                    type="text"
+                    id="publisher"
+                    name="publisher"
+                    value={filters.publisher}
+                    onChange={handleInputChange}
+                    placeholder="Enter publisher name"
+                    className="form-control"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
           <div className="filter-group">
             <div
               className="filter-header"
@@ -263,6 +324,32 @@ const SearchPage = ({ apiPrefix }) => {
           <div className="filter-group">
             <div
               className="filter-header"
+              onClick={() => toggleFilterSection('year')}
+            >
+              <h5>
+                Year Published{' '}
+                {expandedFilter.year ? <FaChevronUp /> : <FaChevronDown />}
+              </h5>
+            </div>
+            {expandedFilter.year && (
+              <div className="filter-options">
+                <div className="d-flex">
+                  <input
+                    type="text"
+                    id="year"
+                    name="year"
+                    value={filters.year}
+                    onChange={handleInputChange}
+                    placeholder="20xx"
+                    className="form-control"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="filter-group">
+            <div
+              className="filter-header"
               onClick={() => toggleFilterSection('age')}
             >
               <h5>
@@ -348,6 +435,17 @@ const SearchPage = ({ apiPrefix }) => {
               <div>No results found.</div>
             )}
           </div>
+          {hasMore && (
+            <div className="text-center">
+              <button
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                className="btn btn-primary my-3"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Loading...' : 'Load More'}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -25,6 +25,11 @@
   cursor: pointer;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .card-img-top:hover {
   transform: scale(1.05);
 }
