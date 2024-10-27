@@ -3,7 +3,6 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import './CollectionPage.css';
 import TableItem from './TableItem';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const CollectionPage = ({ user }) => {
   const [collectionData, setCollectionData] = useState(null);
