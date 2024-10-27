@@ -26,9 +26,7 @@ class UserController:
 
         registered_user_creator = RegisteredUserCreator()
 
-        new_registered_user = (registered_user_creator.create(
-            username=form_data[FormValidator.FORM_FIELD_EMAIL],
-            password=form_data[FormValidator.FORM_FIELD_PASSWORD])
+        new_registered_user = (registered_user_creator.create()
             .set_first_name(form_data[FormValidator.FORM_FIELD_FIRST_NAME])
             .set_last_name(form_data[FormValidator.FORM_FIELD_LAST_NAME])
             .set_email(form_data[FormValidator.FORM_FIELD_EMAIL])
