@@ -167,10 +167,10 @@ const CollectionPage = ({ user }) => {
               <option value="">Sort by...</option>
               <option value="oldest">Oldest</option>
               <option value="newest">Newest</option>
-              <option value="rating_asc">Rating Ascending</option>
-              <option value="rating_desc">Rating Descending</option>
-              <option value="name_asc">Name Ascending</option>
-              <option value="name_desc">Name Descending</option>
+              <option value="rating_asc">Rating &#x2191;</option>
+              <option value="rating_desc">Rating &#x2193;</option>
+              <option value="name_asc">Name &#x2191;</option>
+              <option value="name_desc">Name &#x2193;</option>
             </select>
             <div className="row g-2">
               {filteredWishlist && filteredWishlist.length > 0 ? (
@@ -208,10 +208,10 @@ const CollectionPage = ({ user }) => {
               <option value="">Sort by...</option>
               <option value="oldest">Oldest</option>
               <option value="newest">Newest</option>
-              <option value="rating_asc">Rating Ascending</option>
-              <option value="rating_desc">Rating Descending</option>
-              <option value="name_asc">Name Ascending</option>
-              <option value="name_desc">Name Descending</option>
+              <option value="rating_asc">Rating &#x2191;</option>
+              <option value="rating_desc">Rating &#x2193;</option>
+              <option value="name_asc">Name &#x2191;</option>
+              <option value="name_desc">Name &#x2193;</option>
             </select>
             <div className="row g-2">
               {filteredLibrary && filteredLibrary.length > 0 ? (
