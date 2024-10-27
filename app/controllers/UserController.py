@@ -1,3 +1,6 @@
+import json
+from sqlite3 import IntegrityError
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
@@ -41,6 +44,10 @@ class UserController:
                 'detail': 'Registered successfully',
                 'username': new_registered_user.user.username,
                 'is_authenticated': True,
+                'user_id': new_registered_user.user.id,
+                'is_superuser': new_registered_user.user.is_superuser,
+                'profile_image_url': new_registered_user.profile_image_url,
+                'cookie_consent': new_registered_user.cookie_consent,
             },
             status=200
         )
@@ -55,7 +62,8 @@ class UserController:
 
     ROUTE_LOGIN = 'login/'
 
-    def action_login(self, request) -> JsonResponse:
+    @staticmethod
+    def action_login(request) -> JsonResponse:
         form_data = request.POST
         form_validator = FormValidator()
 
@@ -73,8 +81,10 @@ class UserController:
         try:
             registered_user = RegisteredUser.objects.get(user=user)
             profile_image_url = registered_user.profile_image_url
+            cookie_consent = registered_user.cookie_consent
         except RegisteredUser.DoesNotExist:
             profile_image_url = None
+            cookie_consent = None
 
         return JsonResponse(
             data={
@@ -84,13 +94,15 @@ class UserController:
                 'user_id': user.id,
                 'is_superuser': user.is_superuser,
                 'profile_image_url': profile_image_url,
+                'cookie_consent': cookie_consent,
             },
             status=200
         )
 
     ROUTE_LOGOUT = 'logout/'
 
-    def action_logout(self, request) -> JsonResponse:
+    @staticmethod
+    def action_logout(request) -> JsonResponse:
         logout(request)
 
         return JsonResponse(
@@ -102,13 +114,16 @@ class UserController:
 
     ROUTE_CHECK_AUTH = 'check-auth/'
 
-    def check_auth(self, request) -> JsonResponse:
+    @staticmethod
+    def check_auth(request) -> JsonResponse:
         if request.user.is_authenticated:
             try:
                 registered_user = RegisteredUser.objects.get(user=request.user)
                 profile_image_url = registered_user.profile_image_url
+                cookie_consent = registered_user.cookie_consent
             except RegisteredUser.DoesNotExist:
                 profile_image_url = None
+                cookie_consent = None
 
             return JsonResponse(
                 data={
@@ -116,8 +131,66 @@ class UserController:
                     'username': request.user.username,
                     'user_id': request.user.id,
                     'profile_image_url': profile_image_url,
+                    'cookie_consent': cookie_consent,
                 },
                 status=200
             )
         else:
             return JsonResponse({'is_authenticated': False}, status=200)
+
+    ROUTE_CHECK_COOKIE_CONSENT = 'check-cookie-consent/'
+
+    @staticmethod
+    def check_cookie_consent(request) -> JsonResponse:
+        user_id = request.POST.get('user_id')
+        if user_id:
+            try:
+                registered_user = RegisteredUser.objects.get(user_id=user_id)
+                cookie_consent = registered_user.cookie_consent
+            except RegisteredUser.DoesNotExist:
+                cookie_consent = None
+
+            return JsonResponse(
+                data={
+                    'cookie_consent': cookie_consent,
+                },
+                status=200
+            )
+        else:
+            return JsonResponse({'cookie_consent': None}, status=200)
+
+    ROUTE_CHANGE_COOKIE_CONSENT = 'change-cookie-consent/'
+
+    @staticmethod
+    def change_cookie_consent(request) -> JsonResponse:
+        user_decision = request.POST.get('cookie_consent')
+        user_id = request.POST.get('user_id')
+        if user_id:
+            try:
+                if user_decision is None:
+                    return JsonResponse({'error': 'Missing cookie_consent parameter'}, status=400)
+
+                if user_decision.lower() == 'true':
+                    user_decision = True
+                elif user_decision.lower() == 'false':
+                    user_decision = False
+                else:
+                    return JsonResponse({'error': 'Invalid cookie_consent value'}, status=400)
+
+                registered_user = RegisteredUser.objects.get(user_id=user_id)
+                if not registered_user.user.username:
+                    return JsonResponse({'error': 'User has no username'}, status=400)
+
+                registered_user.cookie_consent = user_decision
+                registered_user.save()
+
+            except RegisteredUser.DoesNotExist:
+                return JsonResponse({'error': 'User does not exist'}, status=400)
+            except json.JSONDecodeError:
+                return JsonResponse({'error': 'Invalid JSON'}, status=400)
+            except IntegrityError as e:
+                return JsonResponse({'error': str(e)}, status=400)
+
+            return JsonResponse(data={'cookie_consent': user_decision}, status=200)
+        else:
+            return JsonResponse({'cookie_consent': None}, status=200)
