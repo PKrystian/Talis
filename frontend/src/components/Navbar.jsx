@@ -169,7 +169,11 @@ const Navbar = ({
             className="d-flex mx-auto flex-nowrap form-search mt-2"
             onSubmit={handleSubmit}
           >
+            <label htmlFor="filter-select" className="visually-hidden">
+              Filter
+            </label>
             <select
+              id="filter-select"
               className="form-select flex-shrink-0 w-auto mx-lg-1"
               value={filter}
               onChange={handleFilterChange}
@@ -202,6 +206,7 @@ const Navbar = ({
             <button
               className="btn form-button btn-outline-light flex-shrink-0 mx-lg-1"
               type="submit"
+              aria-label="Search"
             >
               <FaSearch />
             </button>
@@ -213,6 +218,7 @@ const Navbar = ({
                   `/search?query=${query}&filterType=${filterType}&filter=${filter}`,
                 )
               }
+              aria-label="Advanced Search"
             >
               Advanced
             </button>
