@@ -72,12 +72,6 @@ const CookieConsentModal = ({ apiPrefix, user, setUser }) => {
           >
             Accept
           </button>
-          <button
-            onClick={() => handleConsentDecision(false)}
-            className="btn btn-danger"
-          >
-            Decline
-          </button>
         </div>
       </div>
     </div>
