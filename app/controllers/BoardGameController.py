@@ -37,12 +37,14 @@ class BoardGameController:
             board_games_on_top = BoardGame.objects.order_by('-rating')[:SearchController.MEDIUM_LIMIT].values(
                 BoardGame.ID,
                 BoardGame.NAME,
-                BoardGame.IMAGE_URL
+                BoardGame.IMAGE_URL,
+                BoardGame.RATING
             )
             board_games_best_for_a_party = BoardGame.objects.filter(max_players__lt=20, image_url__isnull=False).order_by('-max_players', '-rating')[:SearchController.MEDIUM_LIMIT].values(
                 BoardGame.ID,
                 BoardGame.NAME,
-                BoardGame.IMAGE_URL
+                BoardGame.IMAGE_URL,
+                BoardGame.RATING
             )
 
             categorized_data = dict()
@@ -54,11 +56,13 @@ class BoardGameController:
                         categorized_data[self.CATEGORY_BASED_ON_YOUR_GAMES] = self.__parse_board_games(board_games_based_on_your_games)
                 if UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).exists():
                     board_game_ids = [collection['board_game'] for collection in UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).values('board_game')]
-                    board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL)
+                    board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL, BoardGame.RATING)
                     categorized_data[self.CATEGORY_WISHLIST] = self.__parse_board_games(board_games_wishlist)
 
             categorized_data[self.CATEGORY_ON_TOP] = self.__parse_board_games(board_games_on_top)
             categorized_data[self.CATEGORY_BEST_FOR_A_PARTY] = self.__parse_board_games(board_games_best_for_a_party)
+
+            categorized_data = self.__add_expansion_info(categorized_data)
 
             return JsonResponse(categorized_data, safe=False, status=200)
 
@@ -87,9 +91,26 @@ class BoardGameController:
                     BoardGame.ID: board_game[BoardGame.ID],
                     BoardGame.NAME: board_game[BoardGame.NAME],
                     BoardGame.IMAGE_URL: board_game[BoardGame.IMAGE_URL],
+                    BoardGame.RATING: board_game[BoardGame.RATING],
                 })
 
         return parsed_games
+
+    @staticmethod
+    def __add_expansion_info(categorized_data: dict) -> dict:
+        for category, games in categorized_data.items():
+            for game in games:
+                is_expansion = BoardGameCategory.objects.filter(
+                    board_game_id=game[BoardGame.ID],
+                    category_id=BoardGameCategory.CATEGORY_EXPANSION
+                ).exists()
+
+                if is_expansion:
+                    game['is_expansion'] = True
+                else:
+                    game['is_expansion'] = False
+
+        return categorized_data
 
     ROUTE_GAME_DETAIL: str = 'board-games/<int:game_id>/'
 
@@ -150,9 +171,3 @@ class BoardGameController:
 
         except BoardGame.DoesNotExist:
             return JsonResponse({'error': 'BoardGame not found'}, status=404)
-
-    @staticmethod
-    def get_shuffled_games(board_games) -> list:
-        board_games_list = list(board_games)
-        random.shuffle(board_games_list)
-        return board_games_list
