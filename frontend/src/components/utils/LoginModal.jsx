@@ -108,7 +108,6 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
             });
 
             document.getElementById('quitModal').click();
-            navigate('/');
           }
         })
         .catch((error) => {

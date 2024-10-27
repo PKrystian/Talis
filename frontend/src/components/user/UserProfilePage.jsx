@@ -100,7 +100,11 @@ const UserProfilePage = ({ apiPrefix, user }) => {
     <div className="user-profile-page">
       <div className="profile-header">
         <img
-          src={userProfile.profile_image_url}
+          src={
+            userProfile.profile_image_url
+              ? userProfile.profile_image_url
+              : '/static/default-profile.png'
+          }
           alt={`${userProfile.first_name}'s profile`}
           className="profile-image"
         />

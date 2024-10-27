@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.http import JsonResponse
-from app.models import BoardGame
+from app.models import BoardGame, BoardGameCategory
 
 
 class SearchController:
@@ -74,22 +74,15 @@ class SearchController:
 
             board_games = board_games.order_by('-rating')[offset:offset + limit]
 
-            results = [
-                {
-                    'id': game.id,
-                    'name': game.name,
-                    'description': game.description,
-                    'min_players': game.min_players,
-                    'max_players': game.max_players,
-                    'min_playtime': game.min_playtime,
-                    'max_playtime': game.max_playtime,
-                    'rating': game.rating,
-                    'image_url': game.image_url,
-                }
-                for game in board_games
-            ]
+            data = [{
+                'id': game.id,
+                'name': game.name,
+                'image_url': game.image_url,
+                'rating': game.rating,
+                'is_expansion': game.boardgamecategory_set.filter(category_id=BoardGameCategory.CATEGORY_EXPANSION).exists()
+            } for game in board_games]
 
-            return JsonResponse({'results': results}, status=200)
+            return JsonResponse({'results': data}, status=200)
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
