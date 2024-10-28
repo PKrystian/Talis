@@ -238,7 +238,7 @@ const CollectionPage = ({ user }) => {
 
 CollectionPage.propTypes = {
   user: PropTypes.shape({
-    user_id: PropTypes.number.isRequired,
+    user_id: PropTypes.number,
   }).isRequired,
 };
 

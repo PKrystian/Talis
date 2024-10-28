@@ -11,15 +11,16 @@ const MeetingsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [chosenEvent, setChosenEvent] = useState(null);
+  const [requestedEventIds, setRequestedEventIds] = useState(null);
   const [, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
   const navigate = useNavigate();
 
   const eventsUrl = apiPrefix + 'event/get/';
+  const joinRequestsUrl = apiPrefix + 'invite/get-join-requests/';
 
   const fetchEventData = useCallback(async () => {
     if (!user || !user.user_id) {
-      console.error('User ID is not available');
       navigate('/');
       return;
     }
@@ -36,9 +37,26 @@ const MeetingsPage = ({ apiPrefix, user }) => {
     }
   }, [user, navigate, eventsUrl]);
 
+  const fetchJoinRequests = () => {
+    if (!user || !user.user_id) {
+      navigate('/');
+      return;
+    }
+    axios
+      .post(
+        joinRequestsUrl,
+        { user_id: user.user_id },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      )
+      .then((resp) => {
+        setRequestedEventIds(resp.data);
+      });
+  };
+
   useEffect(() => {
     fetchEventData();
-  }, [user, fetchEventData]);
+    fetchJoinRequests();
+  }, []);
 
   useEffect(() => {
     if (descriptionRef.current) {
@@ -53,6 +71,21 @@ const MeetingsPage = ({ apiPrefix, user }) => {
 
   const onCreateEvent = () => {
     navigate('/create-event');
+  };
+
+  const handleAskToJoin = () => {
+    axios
+      .post(
+        apiPrefix + 'event/ask-to-join/',
+        {
+          user_id: user.user_id,
+          event_id: chosenEvent.id,
+        },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      )
+      .then(() => {
+        fetchJoinRequests();
+      });
   };
 
   if (isLoading) {
@@ -117,32 +150,33 @@ const MeetingsPage = ({ apiPrefix, user }) => {
           </div>
           <div className="row border bg-dark">
             <div className="col-4 border bg-dark px-0 meeting-list">
-              {eventData.map((event) => (
-                <div
-                  key={event.id}
-                  className="row border mx-0"
-                  onClick={() => changeDisplayedEvent(event.id)}
-                >
-                  <div className="col-6 px-0 event-box">
-                    <img
-                      className="event-list-img"
-                      src={
-                        event.board_games.length > 0
-                          ? event.board_games[0].image_url
-                          : null
-                      }
-                      alt=""
-                    ></img>
+              {eventData &&
+                eventData.map((event) => (
+                  <div
+                    key={event.id}
+                    className="row border mx-0"
+                    onClick={() => changeDisplayedEvent(event.id)}
+                  >
+                    <div className="col-6 px-0 event-box">
+                      <img
+                        className="event-list-img"
+                        src={
+                          event.board_games.length > 0
+                            ? event.board_games[0].image_url
+                            : null
+                        }
+                        alt=""
+                      ></img>
+                    </div>
+                    <div className="col-6">
+                      <p>{event.title}</p>
+                      <p>{event.city}</p>
+                      <p>
+                        {event.attendees.length}/{event.max_players}
+                      </p>
+                    </div>
                   </div>
-                  <div className="col-6">
-                    <p>{event.title}</p>
-                    <p>{event.city}</p>
-                    <p>
-                      {event.attendees.length}/{event.max_players}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
             {chosenEvent !== null ? (
               <div className="col-8 bg-dark text-left event-details-box">
@@ -197,6 +231,22 @@ const MeetingsPage = ({ apiPrefix, user }) => {
                       return null;
                     })}
                   </div>
+                  {user && user.user_id !== chosenEvent.host.id && (
+                    <div className="col-12 mt-3">
+                      <button
+                        className={
+                          requestedEventIds.includes(chosenEvent.id)
+                            ? 'btn btn-secondary disabled'
+                            : 'btn btn-primary'
+                        }
+                        onClick={handleAskToJoin}
+                      >
+                        {requestedEventIds.includes(chosenEvent.id)
+                          ? 'Already sent request'
+                          : 'Ask to join'}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : null}

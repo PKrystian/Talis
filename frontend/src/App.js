@@ -43,19 +43,23 @@ const App = () => {
     setUserState(false);
   };
 
+  const fetchInvites = () => {
+    axios
+      .post(
+        apiPrefix + 'invite/get/',
+        { user_id: user.user_id },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      )
+      .then((resp) => {
+        setInvites(resp.data);
+      });
+  };
+
   useEffect(() => {
     if (userState) {
-      axios
-        .post(
-          apiPrefix + 'invite/get/',
-          { user_id: user.user_id },
-          { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
-        )
-        .then((resp) => {
-          setInvites(resp.data);
-        });
+      fetchInvites();
     }
-  }, [apiPrefix, user, userState]);
+  }, [userState]);
 
   return (
     <Router>
@@ -77,7 +81,14 @@ const App = () => {
             setUserData={updateUser}
           />
         )}
-        {userState && invites && <NotificationModal invites={invites} />}
+        {userState && invites && (
+          <NotificationModal
+            apiPrefix={apiPrefix}
+            user={user}
+            invites={invites}
+            fetchInvites={fetchInvites}
+          />
+        )}
         {userState && user.cookie_consent === null && (
           <CookieConsentModal
             apiPrefix={apiPrefix}
