@@ -55,7 +55,7 @@ const App = () => {
           setInvites(resp.data);
         });
     }
-  }, [userState]);
+  }, [apiPrefix, user, userState]);
 
   return (
     <Router>
