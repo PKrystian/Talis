@@ -130,6 +130,7 @@ class UserController:
                     'is_authenticated': True,
                     'username': request.user.username,
                     'user_id': request.user.id,
+                    'is_superuser': request.user.is_superuser,
                     'profile_image_url': profile_image_url,
                     'cookie_consent': cookie_consent,
                 },
