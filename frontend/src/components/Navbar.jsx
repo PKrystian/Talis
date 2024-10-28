@@ -10,6 +10,7 @@ import {
   FaBullhorn,
   FaSignOutAlt,
   FaUser,
+  FaBell,
 } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
 import { HiSquaresPlus } from 'react-icons/hi2';
@@ -27,6 +28,7 @@ const Navbar = ({
   userState,
   setUserState,
   resetUser,
+  inviteCount,
 }) => {
   const navigate = useNavigate();
 
@@ -256,6 +258,26 @@ const Navbar = ({
                   </Link>
                 </li>
               )}
+              {userState && (
+                <li className="nav-item">
+                  <button
+                    className="nav-link"
+                    data-bs-toggle="modal"
+                    data-bs-target="#notifications"
+                  >
+                    <div
+                      className={
+                        inviteCount > 0
+                          ? 'notification-pending'
+                          : 'notification-none'
+                      }
+                    >
+                      {inviteCount}
+                    </div>
+                    <FaBell />
+                  </button>
+                </li>
+              )}
               {userState ? (
                 <li className="nav-item nav-user-profile mx-1">
                   <button className="nav-link" onClick={onUserProfileClick}>
@@ -356,6 +378,7 @@ Navbar.propTypes = {
   userState: PropsTypes.bool.isRequired,
   setUserState: PropsTypes.func.isRequired,
   resetUser: PropsTypes.func.isRequired,
+  inviteCount: PropsTypes.number,
 }.isRequired;
 
 export default Navbar;

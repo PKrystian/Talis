@@ -1,0 +1,6 @@
+.backplate-invite {
+    background: var(--background-color-dark-light);
+    border-radius: 30px;
+    border-color: white;
+    text-align: center;
+  }

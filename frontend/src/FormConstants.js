@@ -22,6 +22,7 @@ const FormConstants = {
   EVENT_MAX_PLAYERS_FIELD: 'max_players',
   EVENT_EVENT_START_DATE_FIELD: 'event_start_date',
   EVENT_COORDINATES_FIELD: 'coordinates',
+  INVITE_INVITED_FRIENDS: 'invited_friends',
 };
 
 export default FormConstants;

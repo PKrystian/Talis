@@ -6,6 +6,7 @@ from pandas.core.methods.to_dict import to_dict
 
 from app.models import BoardGame, Category
 from app.models.event import Event
+from app.models.invite import Invite
 from app.utils.creators.EventCreator import EventCreator
 from app.utils.photon_api.PhotonAPILocationMatcher import PhotonAPILocationMatcher
 
@@ -15,7 +16,8 @@ class EventController:
 
     ROUTE_GET: str = BASE_ROUTE + 'get/'
 
-    def action_get_events(self) -> JsonResponse:
+    @staticmethod
+    def action_get_events() -> JsonResponse:
         events = Event.objects.all().order_by(Event.EVENT_START_DATE)[:20]
         return JsonResponse(
             [event.serialize() for event in events],
@@ -32,15 +34,18 @@ class EventController:
         request_form_data = request.POST
         form_data = dict()
         many_to_many_fields = dict()
+        invited_friend_ids = []
 
         for key in request_form_data.keys():
             if key == Event.BOARD_GAMES or key == Event.TAGS:
                 if request_form_data[key]:
                     many_to_many_fields[key] = json.loads(request_form_data[key])
+            elif key == Invite.INVITED_FRIENDS:
+                invited_friend_ids = json.loads(request_form_data[key])
             else:
                 form_data[key] = request_form_data[key]
 
-        form_data[Event.HOST] = self.parse_host(int(form_data[Event.HOST]))
+        form_data[Event.HOST] = self.__parse_host(int(form_data[Event.HOST]))
         form_data[Event.COORDINATES] = photon_api_location_matcher.get_lat_long_for_address(
             form_data[Event.CITY],
             form_data[Event.STREET],
@@ -48,9 +53,9 @@ class EventController:
         )
 
         if Event.BOARD_GAMES in many_to_many_fields.keys():
-            many_to_many_fields[Event.BOARD_GAMES] = self.parse_board_games(many_to_many_fields[Event.BOARD_GAMES])
+            many_to_many_fields[Event.BOARD_GAMES] = self.__parse_board_games(many_to_many_fields[Event.BOARD_GAMES])
         if Event.TAGS in many_to_many_fields.keys():
-            many_to_many_fields[Event.TAGS] = self.parse_categories(many_to_many_fields[Event.TAGS])
+            many_to_many_fields[Event.TAGS] = self.__parse_categories(many_to_many_fields[Event.TAGS])
 
         new_event = (
             event_creator
@@ -68,6 +73,9 @@ class EventController:
 
         new_event.save()
 
+        if invited_friend_ids:
+            self.__generate_friend_invites(invited_friend_ids, new_event)
+
         return JsonResponse(
             data={
                 'detail': 'Event created successfully!',
@@ -75,11 +83,24 @@ class EventController:
             status=200
         )
 
-    def parse_host(self, user_id: int) -> list:
+    @staticmethod
+    def __parse_host(user_id: int) -> list:
         return User.objects.filter(id__exact=user_id).get()
 
-    def parse_board_games(self, board_game_ids: list) -> list:
+    @staticmethod
+    def __parse_board_games(board_game_ids: list) -> list:
         return BoardGame.objects.filter(id__in=board_game_ids).all()
 
-    def parse_categories(self, category_names: list) -> list:
+    @staticmethod
+    def __parse_categories(category_names: list) -> list:
         return Category.objects.filter(name__in=category_names).all()
+
+    @staticmethod
+    def __generate_friend_invites(invited_friend_ids: list, event: Event) -> None:
+        for invited_friend_id in invited_friend_ids:
+            Invite.objects.create(
+                user=event.host,
+                invited_user_id=invited_friend_id,
+                event=event,
+                type=Invite.INVITE_TYPE_EVENT,
+            )

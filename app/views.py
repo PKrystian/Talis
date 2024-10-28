@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST, require_GET
 from .controllers.BoardGameController import BoardGameController
 from .controllers.CollectionController import CollectionController
 from .controllers.FriendListController import FriendListController
+from .controllers.InviteController import InviteController
 from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
@@ -225,5 +226,13 @@ def get_friends_with_game(request) -> JsonResponse:
 def get_friends_for_user(request) -> JsonResponse:
     friend_list_controller = FriendListController()
     response = friend_list_controller.action_get_friends_for_user(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def get_invites_for_user(request) -> JsonResponse:
+    invite_controller = InviteController()
+    response = invite_controller.action_get_invites(request)
 
     return response
