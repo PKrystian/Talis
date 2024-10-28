@@ -10,3 +10,4 @@ from models.board_game_expansion import BoardGameExpansion
 from models.registered_user import RegisteredUser
 from models.log_error import LogError
 from models.event import Event
+from models.invite import Invite
