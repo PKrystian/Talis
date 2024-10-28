@@ -77,9 +77,7 @@ const App = () => {
             setUserData={updateUser}
           />
         )}
-        {userState && invites.length > 0 && (
-          <NotificationModal invites={invites} />
-        )}
+        {userState && invites && <NotificationModal invites={invites} />}
         {userState && user.cookie_consent === null && (
           <CookieConsentModal
             apiPrefix={apiPrefix}

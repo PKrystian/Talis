@@ -25,7 +25,7 @@ const NotificationModal = ({ invites }) => {
             ></button>
           </div>
           <div className="modal-body d-flex flex-column">
-            {!invites
+            {invites.length == 0
               ? 'You have no invites'
               : invites.map((invite) => (
                   <div key={invite.id}>
