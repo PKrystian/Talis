@@ -8,4 +8,3 @@ admin.site.register(BoardGame)
 admin.site.register(LogError)
 admin.site.register(RegisteredUser)
 admin.site.register(Event)
-

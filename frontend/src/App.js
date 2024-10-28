@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/landingPage/LandingPage';
 import MeetingsPage from './components/MeetingsPage';
@@ -16,6 +16,8 @@ import LoginModal from './components/utils/LoginModal';
 import CreateEventPage from './components/CreateEventPage';
 import FriendListPage from './components/FriendListPage';
 import CookieConsentModal from './components/utils/CookieConsentModal';
+import NotificationModal from './components/utils/NotificationModal';
+import axios from 'axios';
 
 const App = () => {
   const apiPrefix =
@@ -25,6 +27,8 @@ const App = () => {
 
   const [userState, setUserState] = useState(false);
   const [user, setUser] = useState({});
+
+  const [invites, setInvites] = useState([]);
 
   const updateUserState = (userStateData) => {
     setUserState(userStateData);
@@ -39,6 +43,20 @@ const App = () => {
     setUserState(false);
   };
 
+  useEffect(() => {
+    if (userState) {
+      axios
+        .post(
+          apiPrefix + 'invite/get/',
+          { user_id: user.user_id },
+          { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+        )
+        .then((resp) => {
+          setInvites(resp.data);
+        });
+    }
+  }, [user]);
+
   return (
     <Router>
       <div className="page-content">
@@ -49,6 +67,7 @@ const App = () => {
           user={user}
           setUserData={updateUser}
           resetUser={resetUser}
+          inviteCount={invites.length}
         />
         {!userState && (
           <LoginModal
@@ -57,6 +76,9 @@ const App = () => {
             setUserState={updateUserState}
             setUserData={updateUser}
           />
+        )}
+        {userState && invites.length > 0 && (
+          <NotificationModal invites={invites} />
         )}
         {userState && user.cookie_consent === null && (
           <CookieConsentModal

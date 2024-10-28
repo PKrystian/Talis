@@ -171,3 +171,15 @@ body {
   width: 40px;
   height: 40px;
 }
+
+.notification-pending {
+  font-size: 12px;
+  background: tomato;
+  border-radius: 20%;
+}
+
+.notification-none {
+  font-size: 12px;
+  background: rgb(80, 79, 79);
+  border-radius: 20%;
+}

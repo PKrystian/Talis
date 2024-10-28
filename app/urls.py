@@ -2,6 +2,7 @@ from . import views
 from django.urls import path
 from django.contrib.sitemaps.views import sitemap
 
+from .controllers.InviteController import InviteController
 from .utils import SitemapsHelper
 from .utils.sitemaps import BoardGameSitemap, MainSitemap
 
@@ -46,6 +47,7 @@ urlpatterns = [
     path(API_PREFIX + FriendListController.ROUTE_STATUS, views.friend_status, name='friend-status'),
     path(API_PREFIX + FriendListController.ROUTE_WITH_GAME, views.get_friends_with_game, name='friends-with-game'),
     path(API_PREFIX + FriendListController.ROUTE_GET_ALL, views.get_friends_for_user, name='friends-for-user'),
+    path(API_PREFIX + InviteController.ROUTE_GET, views.get_invites_for_user, name='get-invites'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('sitemap-boardgames-<int:offset>.xml', SitemapsHelper.board_game_sitemap_view, name='board-game-sitemap'),
 ]
