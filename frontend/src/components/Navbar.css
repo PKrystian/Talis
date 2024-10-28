@@ -33,8 +33,8 @@ body {
 
 .wip-badge {
   font-size: var(--font-size-badge);
-  color: var(--text-color-light);
-  background-color: var(--highlight-color);
+  color: #ffffff;
+  background-color: #ff5733;
   padding: 2px 6px;
   border-radius: var(--border-radius-small);
   margin-top: -10px;
