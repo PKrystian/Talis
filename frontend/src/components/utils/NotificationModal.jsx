@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import './NotificationModal.css';
 import InviteItem from '../user/InviteItem';
 
-const NotificationModal = ({ invites }) => {
+const NotificationModal = ({ apiPrefix, user, invites, fetchInvites }) => {
   return (
     <div
       className="modal fade"
@@ -29,7 +29,12 @@ const NotificationModal = ({ invites }) => {
               ? 'You have no invites'
               : invites.map((invite) => (
                   <div key={invite.id}>
-                    <InviteItem invite={invite} />
+                    <InviteItem
+                      apiPrefix={apiPrefix}
+                      user={user}
+                      invite={invite}
+                      fetchInvites={fetchInvites}
+                    />
                     <hr></hr>
                   </div>
                 ))}

@@ -236,3 +236,27 @@ def get_invites_for_user(request) -> JsonResponse:
     response = invite_controller.action_get_invites(request)
 
     return response
+
+@require_POST
+@csrf_exempt
+def ask_to_join_event(request) -> JsonResponse:
+    event_controller = EventController()
+    response = event_controller.action_ask_to_join_event(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def get_join_requests(request) -> JsonResponse:
+    invite_controller = InviteController()
+    response = invite_controller.action_get_join_requests(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def accept_or_reject_invite(request) -> JsonResponse:
+    invite_controller = InviteController()
+    response = invite_controller.action_accept_or_reject_invite(request)
+
+    return response
