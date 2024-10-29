@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import './CreateEventPage.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -21,16 +21,22 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
   const [description, setDescription] = useState('');
   const [maxPlayers, setMaxPlayers] = useState('');
   const [startDate, setStartDate] = useState('');
+  const [friends, setFriends] = useState([]);
   const [query, setQuery] = useState('');
   const [tagsQuery, setTagsQuery] = useState('');
+  const [friendsQuery, setFriendsQuery] = useState('');
   const [isBoardGameInputFocused, setIsBoardGameInputFocused] = useState(false);
   const [isTagsInputFocused, setIsTagsInputFocused] = useState(false);
+  const [isFriendsInputFocused, setIsFriendsInputFocused] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [tagsSuggestions, setTagsSuggestions] = useState([]);
+  const [friendsSuggestions, setFriendsSuggestions] = useState([]);
   const [uniqueTagsList, setUniqueTagsList] = useState([]);
+  const [userFriendsList, setUserFriendsList] = useState([]);
 
   const [boardGamesError, setBoardGamesError] = useState('');
   const [tagsError, setTagsError] = useState('');
+  const [friendsError, setFriendsError] = useState('');
 
   const cancelTokenSource = useRef(null);
   const createEventFormRef = useRef(null);
@@ -43,6 +49,33 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
     'btn-outline-secondary',
   );
 
+  const fetchCollectionData = useCallback(async () => {
+    if (!user || !user.user_id) {
+      console.error('User ID is not available');
+      return;
+    }
+    axios
+      .post(
+        `${apiPrefix}get_friends/`,
+        {
+          user_id: user.user_id,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then((response) => setUserFriendsList(response.data))
+      .catch((error) => console.error('Error fetching friends:', error));
+  }, [user, apiPrefix]);
+
+  useEffect(() => {
+    if (user && user.user_id) {
+      fetchCollectionData();
+    }
+  }, [user, fetchCollectionData]);
+
   const setterMap = {
     [FormConstants.EVENT_TITLE_FIELD]: setTitle,
     [FormConstants.EVENT_CITY_FIELD]: setCity,
@@ -53,6 +86,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
     [FormConstants.EVENT_DESCRIPTION_FIELD]: setDescription,
     [FormConstants.EVENT_MAX_PLAYERS_FIELD]: setMaxPlayers,
     [FormConstants.EVENT_EVENT_START_DATE_FIELD]: setStartDate,
+    [FormConstants.INVITE_INVITED_FRIENDS]: setFriends,
   };
 
   const validators = [validateForm];
@@ -66,7 +100,8 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
       boardGames &&
       description &&
       maxPlayers &&
-      startDate
+      startDate &&
+      friends.length <= maxPlayers
     ) {
       setIsFormValid(true);
       setSubmitButtonStyle('btn-secondary');
@@ -120,6 +155,25 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
     setterMap[key](value);
   }
 
+  useEffect(() => {
+    if (friendsQuery.length === 0) {
+      setFriendsSuggestions(userFriendsList);
+    } else {
+      const searchTerms = friendsQuery.toLowerCase().split(' ');
+      const filteredFriends = userFriendsList.filter((friend) => {
+        const firstNameMatch = friend.first_name
+          .toLowerCase()
+          .includes(searchTerms[0]);
+        const lastNameMatch = searchTerms[1]
+          ? friend.last_name.toLowerCase().includes(searchTerms[1])
+          : friend.last_name.toLowerCase().includes(searchTerms[0]);
+
+        return firstNameMatch || lastNameMatch;
+      });
+      setFriendsSuggestions(filteredFriends);
+    }
+  }, [friendsQuery, isFriendsInputFocused, apiPrefix]);
+
   function handleSubmit() {
     setSubmitClickedOnce(true);
     let validations = [];
@@ -130,6 +184,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
 
     if (validations.every((v) => v === true)) {
       const boardGameIds = boardGames.map((boardGame) => boardGame.id);
+      const friendIds = friends.map((friend) => friend.id);
       let newEvent = {
         [FormConstants.EVENT_TITLE_FIELD]: eventName,
         [FormConstants.EVENT_CITY_FIELD]: city,
@@ -141,6 +196,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
         [FormConstants.EVENT_MAX_PLAYERS_FIELD]: maxPlayers,
         [FormConstants.EVENT_EVENT_START_DATE_FIELD]: startDate,
         [FormConstants.EVENT_HOST_FIELD]: user.user_id,
+        [FormConstants.INVITE_INVITED_FRIENDS]: JSON.stringify(friendIds),
       };
 
       let url = apiPrefix + 'event/new/';
@@ -202,6 +258,16 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
     setIsTagsInputFocused(false);
   }
 
+  function updateFriends(friend) {
+    if (friends.find((f) => f.id === friend.id)) {
+      setFriendsError('This friend is already on your list');
+      return;
+    }
+    setFriendsError('');
+    setFriends((prevFriends) => [...prevFriends, friend]);
+    setIsFriendsInputFocused(false);
+  }
+
   function removeBoardGame(id) {
     setBoardGames((prevBoardGames) =>
       prevBoardGames.filter((boardGame) => boardGame.id !== id),
@@ -210,6 +276,12 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
 
   function removeTag(tag) {
     setTags((prevTags) => prevTags.filter((t) => t !== tag));
+  }
+
+  function removeFriends(id) {
+    setFriends((prevFriends) =>
+      prevFriends.filter((friend) => friend.id !== id),
+    );
   }
 
   useEffect(() => {
@@ -229,6 +301,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
       setSuggestions([]);
       setIsBoardGameInputFocused(false);
       setIsTagsInputFocused(false);
+      setIsFriendsInputFocused(false);
     }
   };
 
@@ -405,7 +478,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <input
                 className="form-control flex-grow-1 mx-lg-1"
                 type="search"
-                placeholder="boardgames"
+                placeholder="tags"
                 value={tagsQuery}
                 onChange={(e) => setTagsQuery(e.target.value)}
                 onFocus={() => setIsTagsInputFocused(true)}
@@ -439,6 +512,55 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
                       onClick={() => removeTag(tag)}
                     ></button>
                     {tag}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="form-group mt-2 fade-in-2s">
+              <label
+                htmlFor={FormConstants.INVITE_INVITED_FRIENDS}
+                className="form-label"
+              >
+                Friends
+              </label>
+              <input
+                className="form-control flex-grow-1 mx-lg-1"
+                type="search"
+                placeholder="tags"
+                value={friendsQuery}
+                onChange={(e) => setFriendsQuery(e.target.value)}
+                onFocus={() => setIsFriendsInputFocused(true)}
+              />
+            </div>
+            {friendsError && <p className="mb-0">{friendsError}</p>}
+            {friendsSuggestions.length > 0 && isFriendsInputFocused && (
+              <div className="search-suggestions bg-dark position-absolute">
+                <ul className="list-group">
+                  {friendsSuggestions.map((friend) => (
+                    <li
+                      key={friend.id}
+                      className="list-group-item list-group-item-action list-group-item-dark"
+                      onClick={() => updateFriends(friend)}
+                    >
+                      {friend.first_name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {friends.length > 0 && (
+              <div className="create-event-boardgames-list d-flex flex-wrap">
+                {friends.map((friend) => (
+                  <div
+                    className="d-inline-flex col-auto bg-black px-2 m-1"
+                    key={friend.id}
+                  >
+                    <button
+                      className="btn-close btn-close-white"
+                      onClick={() => removeFriends(friend.id)}
+                    ></button>
+                    {friend.first_name} {friend.last_name}
                   </div>
                 ))}
               </div>

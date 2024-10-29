@@ -78,6 +78,7 @@ class SearchController:
                 'id': game.id,
                 'name': game.name,
                 'image_url': game.image_url,
+                'category': ', '.join([bc.category.name for bc in game.boardgamecategory_set.all()]),
                 'rating': game.rating,
                 'is_expansion': game.boardgamecategory_set.filter(category_id=BoardGameCategory.CATEGORY_EXPANSION).exists()
             } for game in board_games]
