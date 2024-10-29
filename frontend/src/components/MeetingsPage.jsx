@@ -6,20 +6,22 @@ import axios from 'axios';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OSMMap from './utils/OSMMap';
+import { FaCheck } from 'react-icons/fa6';
 
 const MeetingsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [chosenEvent, setChosenEvent] = useState(null);
+  const [requestedEvents, setRequestedEvents] = useState(null);
   const [, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
   const navigate = useNavigate();
 
   const eventsUrl = apiPrefix + 'event/get/';
+  const joinRequestsUrl = apiPrefix + 'invite/get-join-requests/';
 
   const fetchEventData = useCallback(async () => {
     if (!user || !user.user_id) {
-      console.error('User ID is not available');
       navigate('/');
       return;
     }
@@ -36,9 +38,26 @@ const MeetingsPage = ({ apiPrefix, user }) => {
     }
   }, [user, navigate, eventsUrl]);
 
+  const fetchJoinRequests = () => {
+    if (!user || !user.user_id) {
+      navigate('/');
+      return;
+    }
+    axios
+      .post(
+        joinRequestsUrl,
+        { user_id: user.user_id },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      )
+      .then((resp) => {
+        setRequestedEvents(resp.data);
+      });
+  };
+
   useEffect(() => {
     fetchEventData();
-  }, [user, fetchEventData]);
+    fetchJoinRequests();
+  }, []);
 
   useEffect(() => {
     if (descriptionRef.current) {
@@ -53,6 +72,54 @@ const MeetingsPage = ({ apiPrefix, user }) => {
 
   const onCreateEvent = () => {
     navigate('/create-event');
+  };
+
+  const handleAskToJoin = () => {
+    axios
+      .post(
+        apiPrefix + 'event/ask-to-join/',
+        {
+          user_id: user.user_id,
+          event_id: chosenEvent.id,
+        },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      )
+      .then(() => {
+        fetchJoinRequests();
+      });
+  };
+
+  const generateJoinButton = () => {
+    const currentEventStatus = requestedEvents.find(
+      (requestedEvent) => requestedEvent.event_id === chosenEvent.id,
+    );
+
+    if (
+      !currentEventStatus ||
+      (currentEventStatus && currentEventStatus.invite_status === 'rejected')
+    ) {
+      return (
+        <button className="btn btn-primary" onClick={handleAskToJoin}>
+          Ask to join
+        </button>
+      );
+    }
+
+    if (currentEventStatus.invite_status === 'pending') {
+      return (
+        <button className="btn btn-secondary disabled">
+          Already sent request
+        </button>
+      );
+    }
+
+    if (currentEventStatus.invite_status === 'accepted') {
+      return (
+        <button className="btn btn-success disabled">
+          Signed up for event <FaCheck className="ms-2" />
+        </button>
+      );
+    }
   };
 
   if (isLoading) {
@@ -117,32 +184,33 @@ const MeetingsPage = ({ apiPrefix, user }) => {
           </div>
           <div className="row border bg-dark">
             <div className="col-4 border bg-dark px-0 meeting-list">
-              {eventData.map((event) => (
-                <div
-                  key={event.id}
-                  className="row border mx-0"
-                  onClick={() => changeDisplayedEvent(event.id)}
-                >
-                  <div className="col-6 px-0 event-box">
-                    <img
-                      className="event-list-img"
-                      src={
-                        event.board_games.length > 0
-                          ? event.board_games[0].image_url
-                          : null
-                      }
-                      alt=""
-                    ></img>
+              {eventData &&
+                eventData.map((event) => (
+                  <div
+                    key={event.id}
+                    className="row border mx-0"
+                    onClick={() => changeDisplayedEvent(event.id)}
+                  >
+                    <div className="col-6 px-0 event-box">
+                      <img
+                        className="event-list-img"
+                        src={
+                          event.board_games.length > 0
+                            ? event.board_games[0].image_url
+                            : null
+                        }
+                        alt=""
+                      ></img>
+                    </div>
+                    <div className="col-6">
+                      <p>{event.title}</p>
+                      <p>{event.city}</p>
+                      <p>
+                        {event.attendees.length}/{event.max_players}
+                      </p>
+                    </div>
                   </div>
-                  <div className="col-6">
-                    <p>{event.title}</p>
-                    <p>{event.city}</p>
-                    <p>
-                      {event.attendees.length}/{event.max_players}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
             {chosenEvent !== null ? (
               <div className="col-8 bg-dark text-left event-details-box">
@@ -197,6 +265,9 @@ const MeetingsPage = ({ apiPrefix, user }) => {
                       return null;
                     })}
                   </div>
+                  {user && user.user_id !== chosenEvent.host.id && (
+                    <div className="col-12 mt-3">{generateJoinButton()}</div>
+                  )}
                 </div>
               </div>
             ) : null}
