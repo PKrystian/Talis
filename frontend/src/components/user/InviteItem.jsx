@@ -33,7 +33,7 @@ const InviteItem = ({ apiPrefix, user, invite, fetchInvites }) => {
     <div className="d-flex flex-row">
       <div className="flex-fill">
         <h4>{getInviteText()}</h4>
-        <p>{invite.friend.profile_image_url}</p>
+        <img src={invite.friend.profile_image_url} alt="" />
         <p>
           {invite.friend.first_name} {invite.friend.last_name}
         </p>
