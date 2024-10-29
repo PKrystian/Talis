@@ -19,8 +19,14 @@ class EventController:
     @staticmethod
     def action_get_events() -> JsonResponse:
         events = Event.objects.all().order_by(Event.EVENT_START_DATE)[:20]
+        data = []
+
+        for event in events:
+            if event.attendees.count() < event.max_players:
+                data.append(event.serialize())
+
         return JsonResponse(
-            [event.serialize() for event in events],
+            data=data,
             status=200,
             safe=False
             )
@@ -103,4 +109,33 @@ class EventController:
                 invited_user_id=invited_friend_id,
                 event=event,
                 type=Invite.INVITE_TYPE_EVENT,
+                status=Invite.INVITE_STATUS_PENDING,
             )
+
+    ROUTE_JOIN = BASE_ROUTE + 'ask-to-join/'
+
+    @staticmethod
+    def action_ask_to_join_event(request) -> JsonResponse:
+        user_id = request.POST.get('user_id')
+        event_id = request.POST.get('event_id')
+
+        event = Event.objects.get(id=event_id)
+
+        if event.attendees.count() == event.max_players:
+            return JsonResponse(
+               data={'detail': 'Event already full'},
+               status=200
+            )
+
+        Invite.objects.create(
+            user_id=user_id,
+            invited_user = event.host,
+            event=event,
+            type=Invite.INVITE_TYPE_EVENT_JOIN_REQUEST,
+            status=Invite.INVITE_STATUS_PENDING,
+        )
+
+        return JsonResponse(
+            data={'detail': 'Succesfully asked to join event'},
+            status=200
+        )
