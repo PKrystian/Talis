@@ -6,12 +6,13 @@ import axios from 'axios';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OSMMap from './utils/OSMMap';
+import { FaCheck } from 'react-icons/fa6';
 
 const MeetingsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [chosenEvent, setChosenEvent] = useState(null);
-  const [requestedEventIds, setRequestedEventIds] = useState(null);
+  const [requestedEvents, setRequestedEvents] = useState(null);
   const [, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const MeetingsPage = ({ apiPrefix, user }) => {
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
       )
       .then((resp) => {
-        setRequestedEventIds(resp.data);
+        setRequestedEvents(resp.data);
       });
   };
 
@@ -86,6 +87,39 @@ const MeetingsPage = ({ apiPrefix, user }) => {
       .then(() => {
         fetchJoinRequests();
       });
+  };
+
+  const generateJoinButton = () => {
+    const currentEventStatus = requestedEvents.find(
+      (requestedEvent) => requestedEvent.event_id === chosenEvent.id,
+    );
+
+    if (
+      !currentEventStatus ||
+      (currentEventStatus && currentEventStatus.invite_status === 'rejected')
+    ) {
+      return (
+        <button className="btn btn-primary" onClick={handleAskToJoin}>
+          Ask to join
+        </button>
+      );
+    }
+
+    if (currentEventStatus.invite_status === 'pending') {
+      return (
+        <button className="btn btn-secondary disabled">
+          Already sent request
+        </button>
+      );
+    }
+
+    if (currentEventStatus.invite_status === 'accepted') {
+      return (
+        <button className="btn btn-success disabled">
+          Signed up for event <FaCheck className="ms-2" />
+        </button>
+      );
+    }
   };
 
   if (isLoading) {
@@ -232,20 +266,7 @@ const MeetingsPage = ({ apiPrefix, user }) => {
                     })}
                   </div>
                   {user && user.user_id !== chosenEvent.host.id && (
-                    <div className="col-12 mt-3">
-                      <button
-                        className={
-                          requestedEventIds.includes(chosenEvent.id)
-                            ? 'btn btn-secondary disabled'
-                            : 'btn btn-primary'
-                        }
-                        onClick={handleAskToJoin}
-                      >
-                        {requestedEventIds.includes(chosenEvent.id)
-                          ? 'Already sent request'
-                          : 'Ask to join'}
-                      </button>
-                    </div>
+                    <div className="col-12 mt-3">{generateJoinButton()}</div>
                   )}
                 </div>
               </div>

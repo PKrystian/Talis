@@ -54,14 +54,18 @@ class InviteController:
         if Invite.objects.filter(
             user_id__exact=user_id,
             type__exact=Invite.INVITE_TYPE_EVENT_JOIN_REQUEST,
-            status=Invite.INVITE_STATUS_PENDING,
         ).exists():
             event_join_requests = Invite.objects.filter(
                 user_id__exact=user_id,
                 type__exact=Invite.INVITE_TYPE_EVENT_JOIN_REQUEST
             ).all()
 
-            data = [event_join_request.event.id for event_join_request in event_join_requests]
+            data = [
+                {
+                    'event_id': event_join_request.event.id,
+                    'invite_status': event_join_request.status,
+                } for event_join_request in event_join_requests
+            ]
 
         return JsonResponse(
             data=data,
