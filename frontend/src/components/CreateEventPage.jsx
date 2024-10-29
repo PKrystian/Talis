@@ -478,7 +478,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <input
                 className="form-control flex-grow-1 mx-lg-1"
                 type="search"
-                placeholder="boardgames"
+                placeholder="tags"
                 value={tagsQuery}
                 onChange={(e) => setTagsQuery(e.target.value)}
                 onFocus={() => setIsTagsInputFocused(true)}
@@ -527,7 +527,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <input
                 className="form-control flex-grow-1 mx-lg-1"
                 type="search"
-                placeholder="boardgames"
+                placeholder="tags"
                 value={friendsQuery}
                 onChange={(e) => setFriendsQuery(e.target.value)}
                 onFocus={() => setIsFriendsInputFocused(true)}
