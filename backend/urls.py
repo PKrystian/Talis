@@ -11,7 +11,7 @@ urlpatterns = [
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     re_path(r'^collection/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^marketplace/', TemplateView.as_view(template_name='index.html')),
-    re_path(r'^meetings/', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^events/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^policy/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^user/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^friends/', TemplateView.as_view(template_name='index.html')),
@@ -21,4 +21,5 @@ urlpatterns = [
     re_path(r'^advanced-search/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^license/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^create-event/', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^user-events/', TemplateView.as_view(template_name='index.html')),
 ]

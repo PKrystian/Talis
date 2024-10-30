@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/landingPage/LandingPage';
-import MeetingsPage from './components/MeetingsPage';
+import EventsPage from './components/EventsPage';
+import UserEventsPage from './components/UserEventsPage';
 import MarketplacePage from './components/MarketplacePage';
 import Navbar from './components/Navbar';
 import GamePage from './components/GamePage';
@@ -103,8 +104,12 @@ const App = () => {
           />
           <Route path="/collection" element={<CollectionPage user={user} />} />
           <Route
-            path="/meetings"
-            element={<MeetingsPage apiPrefix={apiPrefix} user={user} />}
+            path="/events"
+            element={<EventsPage apiPrefix={apiPrefix} user={user} />}
+          />
+          <Route
+            path="/user-events"
+            element={<UserEventsPage apiPrefix={apiPrefix} user={user} />}
           />
           <Route path="/marketplace" element={<MarketplacePage />} />
           <Route
