@@ -185,13 +185,31 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
     if (validations.every((v) => v === true)) {
       const boardGameIds = boardGames.map((boardGame) => boardGame.id);
       const friendIds = friends.map((friend) => friend.id);
+      var topTags = [];
+      if (tags.length === 0) {
+        const allCategories = boardGames
+          .flatMap((game) => game.category.split(', '))
+          .map((category) => category.trim());
+
+        const categoryCounts = allCategories.reduce((acc, category) => {
+          acc[category] = (acc[category] || 0) + 1;
+          return acc;
+        }, {});
+
+        topTags = Object.entries(categoryCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 2)
+          .map(([category]) => category);
+      } else {
+        topTags = tags;
+      }
       let newEvent = {
         [FormConstants.EVENT_TITLE_FIELD]: eventName,
         [FormConstants.EVENT_CITY_FIELD]: city,
         [FormConstants.EVENT_STREET_FIELD]: street,
         [FormConstants.EVENT_ZIP_CODE_FIELD]: zipCode,
         [FormConstants.EVENT_BOARD_GAMES_FIELD]: JSON.stringify(boardGameIds),
-        [FormConstants.EVENT_TAGS_FIELD]: JSON.stringify(tags),
+        [FormConstants.EVENT_TAGS_FIELD]: JSON.stringify(topTags),
         [FormConstants.EVENT_DESCRIPTION_FIELD]: description,
         [FormConstants.EVENT_MAX_PLAYERS_FIELD]: maxPlayers,
         [FormConstants.EVENT_EVENT_START_DATE_FIELD]: startDate,
