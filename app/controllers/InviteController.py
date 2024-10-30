@@ -84,10 +84,10 @@ class InviteController:
 
         if choice == Invite.INVITE_STATUS_ACCEPTED:
             invite.status = Invite.INVITE_STATUS_ACCEPTED
-            invite.event.set_attendees([invite.user])
+            invite.event.set_attendees([invite.invited_user])
         if choice == Invite.INVITE_STATUS_REJECTED:
             invite.status = Invite.INVITE_STATUS_REJECTED
-
+    
         invite.save()
 
         return JsonResponse(
