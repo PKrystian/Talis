@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.http import JsonResponse
 from pandas.core.methods.to_dict import to_dict
 
@@ -139,3 +140,24 @@ class EventController:
             data={'detail': 'Succesfully asked to join event'},
             status=200
         )
+
+    ROUTE_USER_RELIANT_EVENTS = BASE_ROUTE + 'user-events/'
+
+    @staticmethod
+    def action_get_user_reliant_events(request) -> JsonResponse:
+        user_id = request.POST.get('user_id')
+        user = User.objects.filter(id=user_id).get()
+
+        events = Event.objects.filter(Q(host_id=user_id) | Q(attendees__exact=user)).order_by(Event.EVENT_START_DATE)
+
+        data = []
+
+        for event in events:
+            if event.attendees.count() < event.max_players:
+                data.append(event.serialize())
+
+        return JsonResponse(
+            data=data,
+            status=200,
+            safe=False
+            )
