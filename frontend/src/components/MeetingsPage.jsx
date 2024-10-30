@@ -95,6 +95,16 @@ const MeetingsPage = ({ apiPrefix, user }) => {
     );
 
     if (
+      chosenEvent.attendees.find((attendee) => attendee.id === user.user_id)
+    ) {
+      return (
+        <button className="btn btn-success disabled">
+          Signed up for event <FaCheck className="ms-2" />
+        </button>
+      );
+    }
+
+    if (
       !currentEventStatus ||
       (currentEventStatus && currentEventStatus.invite_status === 'rejected')
     ) {
@@ -109,14 +119,6 @@ const MeetingsPage = ({ apiPrefix, user }) => {
       return (
         <button className="btn btn-secondary disabled">
           Already sent request
-        </button>
-      );
-    }
-
-    if (currentEventStatus.invite_status === 'accepted') {
-      return (
-        <button className="btn btn-success disabled">
-          Signed up for event <FaCheck className="ms-2" />
         </button>
       );
     }
