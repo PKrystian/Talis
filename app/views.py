@@ -138,6 +138,15 @@ def get_events(request) -> JsonResponse:
 
 @require_POST
 @csrf_exempt
+def get_user_reliant_events(request):
+    event_controller = EventController()
+    response = event_controller.action_get_user_reliant_events(request)
+
+    return response
+
+
+@require_POST
+@csrf_exempt
 def new_event(request) -> JsonResponse:
     event_controller = EventController()
     response = event_controller.action_new_event(request)
