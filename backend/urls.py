@@ -22,4 +22,5 @@ urlpatterns = [
     re_path(r'^license/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^create-event/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^user-events/', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^forgot-password/', TemplateView.as_view(template_name='index.html')),
 ]
