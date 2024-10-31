@@ -20,7 +20,7 @@ class OneTimeToken(models.Model):
 
     def save(self, *args, **kwargs):
         self.token = self.__generate_unique_token()
-        self.expiry_date = timezone.now() + timezone.timedelta(minutes=5)
+        self.expiry_date = timezone.now() + timezone.timedelta(minutes=15)
         super().save(*args, **kwargs)
 
     @staticmethod
