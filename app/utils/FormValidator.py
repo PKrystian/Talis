@@ -27,24 +27,24 @@ class FormValidator:
 
     def validate_registration(self, form_data: QueryDict) -> bool:
         if all([field in form_data.keys() for field in self.REGISTER_FORM_REQUIRED_FIELDS]):
-            if (self.__validate_email(form_data[self.FORM_FIELD_EMAIL])
-                    and self.__validate_password(form_data[self.FORM_FIELD_PASSWORD])):
+            if (self.validate_email(form_data[self.FORM_FIELD_EMAIL])
+                    and self.validate_password(form_data[self.FORM_FIELD_PASSWORD])):
                 return True
         return False
 
     def validate_login(self, form_data: QueryDict) -> bool:
         if all([field in form_data.keys() for field in self.LOGIN_FORM_REQUIRED_FIELDS]):
-            if (self.__validate_email(form_data[self.FORM_FIELD_EMAIL])
-                    and self.__validate_password(form_data[self.FORM_FIELD_PASSWORD])):
+            if (self.validate_email(form_data[self.FORM_FIELD_EMAIL])
+                    and self.validate_password(form_data[self.FORM_FIELD_PASSWORD])):
                 return True
         return False
 
-    def __validate_email(self, email: str) -> bool:
+    def validate_email(self, email: str) -> bool:
         if re.fullmatch(self.__email_pattern, email):
             return True
         return False
 
-    def __validate_password(self, password: str) -> bool:
+    def validate_password(self, password: str) -> bool:
         if re.fullmatch(self.__password_pattern, password):
             return True
         return False

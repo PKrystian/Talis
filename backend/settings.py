@@ -1,8 +1,11 @@
 import os
 import sys
 from pathlib import Path
-from django.core.management.utils import get_random_secret_key
+
 import dj_database_url
+from django.conf.global_settings import EMAIL_BACKEND, EMAIL_HOST, EMAIL_PORT, EMAIL_USE_SSL, EMAIL_HOST_USER, \
+    EMAIL_HOST_PASSWORD
+from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
@@ -133,3 +136,10 @@ CSRF_TRUSTED_ORIGINS = [
 CSRF_COOKIE_DOMAIN = [
     'http://localhost:3000',
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = os.getenv("GMAIL_PORT", "")
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = os.getenv("GMAIL_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("GMAIL_PASSWORD", "")

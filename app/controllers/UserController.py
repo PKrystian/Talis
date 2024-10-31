@@ -2,9 +2,12 @@ import json
 from sqlite3 import IntegrityError
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
+from django.utils import timezone
 
+from app.models.one_time_token import OneTimeToken
 from app.models.registered_user import RegisteredUser
 from app.utils.FormValidator import FormValidator
 from django.contrib.auth.models import User
@@ -195,3 +198,124 @@ class UserController:
             return JsonResponse(data={'cookie_consent': user_decision}, status=200)
         else:
             return JsonResponse({'cookie_consent': None}, status=200)
+
+    ROUTE_CHECK_EMAIL = 'check-email/'
+
+    @staticmethod
+    def action_check_email(email) -> JsonResponse:
+        form_validator = FormValidator()
+
+        if not form_validator.validate_email(email):
+            return JsonResponse(
+                data={
+                    'detail': 'Email has wrong format',
+                    'validate': False,
+                },
+                status=200,
+            )
+
+        if not User.objects.filter(email=email).exists():
+            return JsonResponse(
+                data={
+                    'detail': 'Email does not exist',
+                    'validate': False,
+                },
+                status=200,
+            )
+
+        if OneTimeToken.objects.filter(
+            email=email,
+            expiry_date__gt=timezone.now(),
+        ).exists():
+            return JsonResponse(
+                data={
+                    'detail': 'One Time Token is pending',
+                    'validate': False,
+                },
+                status=200,
+            )
+
+        new_token = OneTimeToken.objects.create(
+            email=email
+        )
+
+        # Password set to None uses the Email from environmental variables
+        send_mail(
+            subject='Talis Password Reset',
+            message=f'To reset your password just follow the link below:\n'
+                    f'{OneTimeToken.FORGOT_PASSWORD_URL}{new_token.token}',
+            from_email=None,
+            recipient_list=[email]
+        )
+
+        return JsonResponse(
+            data={
+                'detail': 'Password reset request sent',
+                'validate': True,
+            },
+            status=200,
+        )
+
+    ROUTE_CHECK_ACCESS_PASSWORD_CHANGE = 'check-access/<str:token>/'
+
+    def action_check_access_password_change(self, token) -> JsonResponse:
+        if not OneTimeToken.objects.filter(token=token).exists():
+            return JsonResponse(
+                data={'detail': "You don't have access to this resource"},
+                status=401,
+            )
+
+        one_time_token = OneTimeToken.objects.filter(token=token).get()
+
+        if one_time_token.expiry_date < timezone.now():
+            self.__invalidate_tokens()
+
+            return JsonResponse(
+                data={'detail': 'Token has expired'},
+                status=401,
+            )
+
+        return JsonResponse(
+            data={'detail': 'Access granted'},
+            status=200,
+        )
+
+    @staticmethod
+    def __invalidate_tokens() -> None:
+        one_time_tokens = OneTimeToken.objects.all()
+
+        for one_time_token in one_time_tokens:
+            if one_time_token.expiry_date < timezone.now() + timezone.timedelta(minutes=10):
+                one_time_token.delete()
+
+    ROUTE_CHANGE_PASSWORD = 'change-password/'
+
+    def action_change_password(self, token, new_password):
+        form_validator = FormValidator()
+
+        if not form_validator.validate_password(new_password):
+            return JsonResponse(
+                data={
+                    'detail': "Password doesn't follow rules",
+                    'validate': False,
+                },
+                status=200,
+            )
+
+        token = OneTimeToken.objects.filter(token=token).get()
+        user = User.objects.filter(email=token.email).get()
+
+        user.set_password(new_password)
+        user.save()
+
+        token.delete()
+
+        self.__invalidate_tokens()
+
+        return JsonResponse(
+            data={
+                'detail': 'Password changed successfully',
+                'validate': True,
+            },
+            status=200,
+        )

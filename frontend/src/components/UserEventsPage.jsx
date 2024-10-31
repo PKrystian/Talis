@@ -34,9 +34,7 @@ const UserEventsPage = ({ apiPrefix, user }) => {
         },
       );
       setEventData(response.data);
-      console.log(response.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
     } finally {
       setIsLoading(false);
     }
