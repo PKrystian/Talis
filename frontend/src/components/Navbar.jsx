@@ -252,7 +252,7 @@ const Navbar = ({
               )}
               {user.user_id && (
                 <li className="nav-item">
-                  <Link className="nav-link" to="/meetings">
+                  <Link className="nav-link" to="/events">
                     <FaLocationDot className="me-1" />
                     Local Game Meetings
                   </Link>
@@ -310,7 +310,7 @@ const Navbar = ({
                       </Link>
                       <Link
                         className="nav-user-profile-link pb-2"
-                        to="/meetings"
+                        to="/user-events"
                       >
                         <FaMapPin className="me-1" />
                         Scheduled Meetings
