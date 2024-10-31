@@ -5,7 +5,7 @@ const LoginButton = ({ buttonClass, buttonText, ButtonTag }) => {
     <ButtonTag
       className={buttonClass}
       data-bs-toggle="modal"
-      data-bs-target="#staticBackdrop"
+      data-bs-target="#loginModal"
     >
       {buttonText}
     </ButtonTag>

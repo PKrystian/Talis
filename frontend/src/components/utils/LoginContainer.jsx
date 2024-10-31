@@ -5,7 +5,7 @@ const LoginContainer = ({ buttonClass, ButtonTag, children }) => {
     <ButtonTag
       className={buttonClass}
       data-bs-toggle="modal"
-      data-bs-target="#staticBackdrop"
+      data-bs-target="#loginModal"
     >
       {children}
     </ButtonTag>

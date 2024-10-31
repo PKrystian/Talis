@@ -4,6 +4,7 @@ import FormConstants from '../../FormConstants';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginModal.css';
+import FormPasswordInput from './inputFields/FormPasswordInput';
 
 const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
   const navigate = useNavigate();
@@ -156,17 +157,17 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
     <div
       onKeyDown={submitOnEnter}
       className="modal fade"
-      id="staticBackdrop"
+      id="loginModal"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabIndex="-1"
-      aria-labelledby="staticBackdropLabel"
+      aria-labelledby="loginModalLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content backplate">
           <div className="modal-header">
-            <h1 className="modal-title fs-4" id="staticBackdropLabel">
+            <h1 className="modal-title fs-4" id="loginModalLabel">
               Login
             </h1>
             <button
@@ -202,26 +203,27 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                 {emailError && <p className="mb-0">{emailError}</p>}
               </div>
 
-              <div className="form-group mt-3">
-                <label
-                  htmlFor={FormConstants.LOGIN_PASSWORD_FIELD}
-                  className="form-label"
+              <FormPasswordInput
+                id={FormConstants.LOGIN_PASSWORD_FIELD}
+                value={password}
+                label={'Password'}
+                inputError={passwordError}
+                inputErrorStyle={passwordErrorStyle}
+                onChangeCallback={handleFormOnChange}
+              />
+
+              <div className="form-group mt-3 d-flex justify-content-end">
+                <div
+                  className="forgot-password"
+                  data-bs-toggle="modal"
+                  data-bs-target="#forgotPassword"
                 >
-                  Password
-                </label>
-                <input
-                  id={FormConstants.LOGIN_PASSWORD_FIELD}
-                  className={`form-control${passwordErrorStyle}`}
-                  type="password"
-                  value={password}
-                  onChange={handleFormOnChange}
-                  required
-                />
-                {passwordError && <p className="mb-0">{passwordError}</p>}
+                  Forgot my password
+                </div>
               </div>
             </form>
           </div>
-          <div className="modal-footer">
+          <div className="modal-footer d-flex justify-content-between">
             <button
               type="button"
               className="btn btn-secondary"
