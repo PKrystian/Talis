@@ -38,10 +38,11 @@ input[type='email']:focus {
   color: var(--text-color-light);
 }
 
-button.forgot-password {
+div.forgot-password {
   color: var(--text-color-link);
 }
 
-button.forgot-password:hover {
+div.forgot-password:hover {
   color: var(--text-color-light);
+  cursor: pointer;
 }
