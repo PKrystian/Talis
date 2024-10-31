@@ -285,7 +285,7 @@ class UserController:
         one_time_tokens = OneTimeToken.objects.all()
 
         for one_time_token in one_time_tokens:
-            if one_time_token.expiry_date < timezone.now() + timezone.timedelta(minutes=10):
+            if one_time_token.expiry_date < timezone.now() + timezone.timedelta(minutes=20):
                 one_time_token.delete()
 
     ROUTE_CHANGE_PASSWORD = 'change-password/'
