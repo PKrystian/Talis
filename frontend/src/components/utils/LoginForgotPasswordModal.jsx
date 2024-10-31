@@ -113,7 +113,10 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
               noValidate
             >
               <div className="form-group mt-2">
-                <label htmlFor={'forgotPasswordEmail'} className="form-label">
+                <label
+                  htmlFor={'forgotPasswordEmail'}
+                  className="form-label"
+                >
                   Email
                 </label>
                 <input

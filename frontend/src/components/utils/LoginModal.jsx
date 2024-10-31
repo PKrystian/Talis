@@ -212,14 +212,14 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                 onChangeCallback={handleFormOnChange}
               />
 
-              <div className="form-group mt-2 text-end">
-                <button
-                  className="forgot-password bg-transparent border-0"
+              <div className="form-group mt-3 text-end">
+                <div
+                  className="forgot-password"
                   data-bs-toggle="modal"
                   data-bs-target="#forgotPassword"
                 >
                   Forgot my password
-                </button>
+                </div>
               </div>
             </form>
           </div>
