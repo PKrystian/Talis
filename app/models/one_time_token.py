@@ -1,3 +1,5 @@
+import os
+
 from django.utils import timezone
 import secrets
 
@@ -5,6 +7,11 @@ from django.db import models
 
 
 class OneTimeToken(models.Model):
+    BASE_TOKEN_URL = 'http://localhost:3000/' if os.getenv("DEVELOPMENT_MODE", "True") == "True" else 'https://talis.live/'
+    FRONTEND_URL = 'forgot-password/'
+
+    FORGOT_PASSWORD_URL = BASE_TOKEN_URL + FRONTEND_URL
+
     objects = None
     email = models.CharField(max_length=128, null=False)
     token = models.CharField(max_length=128, null=False)

@@ -212,7 +212,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                 onChangeCallback={handleFormOnChange}
               />
 
-              <div className="form-group mt-3 text-end">
+              <div className="form-group mt-3 d-flex justify-content-end">
                 <div
                   className="forgot-password"
                   data-bs-toggle="modal"
