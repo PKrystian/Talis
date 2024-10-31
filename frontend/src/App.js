@@ -19,6 +19,8 @@ import FriendListPage from './components/FriendListPage';
 import CookieConsentModal from './components/utils/CookieConsentModal';
 import NotificationModal from './components/utils/NotificationModal';
 import axios from 'axios';
+import LoginForgotPasswordModal from './components/utils/LoginForgotPasswordModal';
+import ForgotPasswordPage from './components/user/ForgotPasswordPage';
 
 const App = () => {
   const apiPrefix =
@@ -82,6 +84,12 @@ const App = () => {
             setUserData={updateUser}
           />
         )}
+        {!userState && (
+          <LoginForgotPasswordModal
+            apiPrefix={apiPrefix}
+            userState={userState}
+          />
+        )}
         {userState && invites && (
           <NotificationModal
             apiPrefix={apiPrefix}
@@ -121,6 +129,12 @@ const App = () => {
                 setUserData={updateUser}
                 setUserState={updateUserState}
               />
+            }
+          />
+          <Route
+            path="/forgot-password/:token"
+            element={
+              <ForgotPasswordPage apiPrefix={apiPrefix} userState={userState} />
             }
           />
           <Route
