@@ -96,7 +96,6 @@ const ForgotPasswordPage = ({ apiPrefix, userState }) => {
         })
         .then((resp) => {
           if (resp.data.validate === true) {
-            console.log('Password changed successfully');
             navigate('/');
           }
         });
