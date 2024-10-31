@@ -2,6 +2,7 @@ import json
 from sqlite3 import IntegrityError
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
@@ -222,11 +223,30 @@ class UserController:
                 status=200,
             )
 
+        if OneTimeToken.objects.filter(
+            email=email,
+            expiry_date__gt=timezone.now(),
+        ).exists():
+            return JsonResponse(
+                data={
+                    'detail': 'One Time Token is pending',
+                    'validate': False,
+                },
+                status=200,
+            )
+
         new_token = OneTimeToken.objects.create(
             email=email
         )
 
-        # Send email with generated link
+        # Password set to None uses the Email from environmental variables
+        send_mail(
+            subject='Talis Password Reset',
+            message=f'To reset your password just follow the link below:\n'
+                    f'{OneTimeToken.FORGOT_PASSWORD_URL}{new_token.token}',
+            from_email=None,
+            recipient_list=[email]
+        )
 
         return JsonResponse(
             data={

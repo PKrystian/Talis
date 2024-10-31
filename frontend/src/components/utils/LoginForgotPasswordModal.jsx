@@ -113,10 +113,7 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
               noValidate
             >
               <div className="form-group mt-2">
-                <label
-                  htmlFor={'forgotPasswordEmail'}
-                  className="form-label"
-                >
+                <label htmlFor={'forgotPasswordEmail'} className="form-label">
                   Email
                 </label>
                 <input
@@ -137,9 +134,9 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
               data-bs-toggle="modal"
               data-bs-target="#loginModal"
             >
-              <div className="d-flex align-items-center">
+              <div className="forgot-password d-flex align-items-center">
                 <FaArrowLeft className="me-2" />
-                <div>Back to login</div>
+                <div>Back to Login</div>
               </div>
             </button>
             <button
