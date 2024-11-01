@@ -23,6 +23,6 @@ case $1 in
     cd frontend && npm run test
     ;;
   *)
-    echo -e "Please specify ${startRed}run${endRed}, ${startRed}install${endRed} or ${startRed}install-poetry${endRed}"
+    echo -e "Please specify ${startRed}run${endRed}, ${startRed}install${endRed}, ${startRed}install-poetry${endRed} or ${startRed}tests${endRed}"
   ;;
 esac
