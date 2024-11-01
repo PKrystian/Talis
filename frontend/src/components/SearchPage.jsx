@@ -39,11 +39,14 @@ const SearchPage = ({ apiPrefix }) => {
     publisher: false,
     year: false,
   });
+  const [sort, setSort] = useState('rating_desc');
 
   const handleInputChange = (e) => {
-    const { name, value, checked } = e.target;
+    const { name, value, checked, type } = e.target;
     setFilters((prevFilters) => {
-      if (
+      if (type === 'checkbox') {
+        return { ...prevFilters, [name]: checked };
+      } else if (
         name === 'minPlayers' ||
         name === 'maxPlayers' ||
         name === 'publisher' ||
@@ -69,28 +72,39 @@ const SearchPage = ({ apiPrefix }) => {
 
   const applyFilters = () => {
     const searchParams = new URLSearchParams();
-    searchParams.append('query', query);
+    searchParams.append('query', encodeURIComponent(query));
 
     ['category', 'mechanic', 'age', 'playtime'].forEach((filterType) => {
       filters[filterType].forEach((filterValue) => {
-        searchParams.append('filters', `${filterType}|${filterValue}`);
+        searchParams.append(
+          'filters',
+          `${filterType}|${encodeURIComponent(filterValue)}`,
+        );
       });
     });
 
     if (filters.minPlayers || filters.maxPlayers) {
       searchParams.append(
         'filters',
-        `players|${filters.minPlayers}-${filters.maxPlayers}`,
+        `players|${encodeURIComponent(filters.minPlayers)}-${encodeURIComponent(filters.maxPlayers)}`,
       );
     }
 
     if (filters.publisher) {
-      searchParams.append('filters', `publisher|${filters.publisher}`);
+      searchParams.append(
+        'filters',
+        `publisher|${encodeURIComponent(filters.publisher)}`,
+      );
     }
 
     if (filters.year) {
-      searchParams.append('filters', `year|${filters.year}`);
+      searchParams.append(
+        'filters',
+        `year|${encodeURIComponent(filters.year)}`,
+      );
     }
+
+    searchParams.append('sort', sort);
 
     setCurrentPage(1);
     navigate(`?${searchParams.toString()}`);
@@ -100,6 +114,7 @@ const SearchPage = ({ apiPrefix }) => {
     const searchParams = new URLSearchParams(location.search);
     const query = searchParams.get('query') || '';
     const filters = searchParams.getAll('filters');
+    const sort = searchParams.get('sort') || 'rating_desc';
 
     setIsLoading(true);
     axios
@@ -109,6 +124,7 @@ const SearchPage = ({ apiPrefix }) => {
           limit: 48,
           page: currentPage,
           filters,
+          sort,
         },
       })
       .then((response) => {
@@ -165,6 +181,7 @@ const SearchPage = ({ apiPrefix }) => {
     });
 
     setFilters(newFilters);
+    setSort(searchParams.get('sort') || 'rating_desc');
   }, [location.search]);
 
   if (isLoading) {
@@ -423,6 +440,25 @@ const SearchPage = ({ apiPrefix }) => {
                 )}
               </div>
             )}
+          </div>
+          <div className="filter-group">
+            <div className="filter-header">
+              <h5>Sort By</h5>
+            </div>
+            <div className="filter-options">
+              <select
+                className="form-select"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+              >
+                <option value="rating_desc">Rating &#x2193;</option>
+                <option value="rating_asc">Rating &#x2191;</option>
+                <option value="name_asc">Name &#x2191;</option>
+                <option value="name_desc">Name &#x2193;</option>
+                <option value="year_desc">Year &#x2193;</option>
+                <option value="year_asc">Year &#x2191;</option>
+              </select>
+            </div>
           </div>
         </div>
         <div className="col-md-10">

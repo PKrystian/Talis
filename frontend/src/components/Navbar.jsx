@@ -76,7 +76,7 @@ const Navbar = ({
       cancelTokenSource.current.cancel();
     }
     navigate(
-      `/search?query=${query}&filterType=${filterType}&filter=${filter}`,
+      `/search?query=${encodeURIComponent(query)}&filterType=${encodeURIComponent(filterType)}&filter=${encodeURIComponent(filter)}`,
     );
   };
 
@@ -211,18 +211,6 @@ const Navbar = ({
               aria-label="Search"
             >
               <FaSearch />
-            </button>
-            <button
-              className="btn form-button btn-outline-light flex-shrink-0 mx-lg-1"
-              type="button"
-              onClick={() =>
-                navigate(
-                  `/search?query=${query}&filterType=${filterType}&filter=${filter}`,
-                )
-              }
-              aria-label="Advanced Search"
-            >
-              Advanced
             </button>
             {suggestions.length > 0 && isInputFocused && (
               <div className="search-suggestions bg-dark position-absolute w-50 top-100">
