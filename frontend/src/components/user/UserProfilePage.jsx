@@ -106,6 +106,10 @@ const UserProfilePage = ({ apiPrefix, user }) => {
               ? userProfile.profile_image_url
               : '/static/default-profile.png'
           }
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/static/default-profile.png';
+          }}
           alt={`${userProfile.first_name}'s profile`}
           className="profile-image"
         />
