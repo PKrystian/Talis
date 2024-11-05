@@ -556,7 +556,7 @@ const GamePage = ({ apiPrefix, user }) => {
 GamePage.propTypes = {
   apiPrefix: PropTypes.string.isRequired,
   user: PropTypes.shape({
-    user_id: PropTypes.string,
+    user_id: PropTypes.number,
     wishlist: PropTypes.array,
     library: PropTypes.array,
     is_superuser: PropTypes.bool,
