@@ -6,7 +6,6 @@ import {
   FaUserFriends,
   FaMapPin,
   FaCog,
-  FaCalendarAlt,
   FaBullhorn,
   FaSignOutAlt,
   FaUser,
@@ -76,7 +75,7 @@ const Navbar = ({
       cancelTokenSource.current.cancel();
     }
     navigate(
-      `/search?query=${encodeURIComponent(query)}&filterType=${encodeURIComponent(filterType)}&filter=${encodeURIComponent(filter)}`,
+      `/search?query=${encodeURIComponent(query)}&filterType=${encodeURIComponent(filterType)}&filter=${encodeURIComponent(filter)}&sort=rating_desc`,
     );
   };
 
@@ -171,33 +170,8 @@ const Navbar = ({
             className="d-flex mx-auto flex-nowrap form-search mt-2"
             onSubmit={handleSubmit}
           >
-            <label htmlFor="filter-select" className="visually-hidden">
-              Filter
-            </label>
-            <select
-              id="filter-select"
-              className="form-select flex-shrink-0 w-auto mx-lg-1"
-              value={filter}
-              onChange={handleFilterChange}
-            >
-              <option value="">All</option>
-              <optgroup label="Category:">
-                {categoryOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </optgroup>
-              <optgroup label="Mechanic:">
-                {mechanicOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </optgroup>
-            </select>
             <input
-              className="form-control flex-grow-1 mx-lg-1"
+              className="form-control flex-grow-1"
               type="search"
               placeholder="Search Talis"
               aria-label="Search"
@@ -206,7 +180,7 @@ const Navbar = ({
               onFocus={() => setIsInputFocused(true)}
             />
             <button
-              className="btn form-button btn-outline-light flex-shrink-0 mx-lg-1"
+              className="btn form-button btn-outline-light flex-shrink-0"
               type="submit"
               aria-label="Search"
             >
@@ -273,6 +247,10 @@ const Navbar = ({
                       src={
                         user.profile_image_url || '/static/default-profile.png'
                       }
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/static/default-profile.png';
+                      }}
                       alt="User Profile"
                       className="rounded-circle me-1 small-avatar"
                     />
@@ -309,13 +287,6 @@ const Navbar = ({
                       >
                         <FaCog className="me-1" />
                         Settings
-                      </Link>
-                      <Link
-                        className="nav-user-profile-link pb-2"
-                        to="/calendar"
-                      >
-                        <FaCalendarAlt className="me-1" />
-                        Calendar
                       </Link>
                       <Link
                         className="nav-user-profile-link pb-2"

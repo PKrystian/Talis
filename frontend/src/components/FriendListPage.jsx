@@ -135,6 +135,10 @@ const FriendListPage = ({ apiPrefix, user }) => {
               <img
                 src={friend.profile_image_url}
                 alt={`${friend.first_name}'s avatar`}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/static/default-profile.png';
+                }}
               />
               <p>
                 {friend.first_name} {friend.last_name}
@@ -166,6 +170,10 @@ const FriendListPage = ({ apiPrefix, user }) => {
                   <img
                     src={invite.profile_image_url}
                     alt={`${invite.first_name}'s avatar`}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/static/default-profile.png';
+                    }}
                   />
                   <p>
                     {invite.first_name} {invite.last_name}

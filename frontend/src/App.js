@@ -21,6 +21,7 @@ import NotificationModal from './components/utils/NotificationModal';
 import axios from 'axios';
 import LoginForgotPasswordModal from './components/utils/LoginForgotPasswordModal';
 import ForgotPasswordPage from './components/user/ForgotPasswordPage';
+import SettingsPage from './components/SettingsPage';
 
 const App = () => {
   const apiPrefix =
@@ -164,6 +165,10 @@ const App = () => {
                 userState={userState}
               />
             }
+          />
+          <Route
+            path="/settings"
+            element={<SettingsPage apiPrefix={apiPrefix} user={user} />}
           />
         </Routes>
         <Footer />
