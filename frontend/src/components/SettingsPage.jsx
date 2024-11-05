@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import FormConstants from '../FormConstants';
@@ -15,6 +16,8 @@ const SettingsPage = ({ apiPrefix, user }) => {
   const [emailError, setEmailError] = useState('');
   const [emailErrorStyle, setEmailErrorStyle] = useState('');
   const [isFormValid, setIsFormValid] = useState(true);
+
+  const navigate = useNavigate();
 
   const fetchUserData = () => {
     if (user && user.user_id) {
@@ -80,6 +83,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
       )
       .then(() => {
         fetchUserData();
+        navigate(`/user/${user.user_id}`);
       })
       .catch((error) => {
         console.error('Error updating user:', error);
@@ -90,21 +94,22 @@ const SettingsPage = ({ apiPrefix, user }) => {
     <div className="settings-page container">
       <h2 className="text-center mb-4">Settings</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            className={`form-control ${emailErrorStyle}`}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={validateEmail}
-            required
-          />
-          {emailError && <div className="invalid-feedback">{emailError}</div>}
-        </div>
+        {/*commenting out email field as we might use it in the future*/}
+        {/*<div className="mb-3">*/}
+        {/*  <label htmlFor="email" className="form-label">*/}
+        {/*    Email*/}
+        {/*  </label>*/}
+        {/*  <input*/}
+        {/*    type="email"*/}
+        {/*    id="email"*/}
+        {/*    className={`form-control ${emailErrorStyle}`}*/}
+        {/*    value={email}*/}
+        {/*    onChange={(e) => setEmail(e.target.value)}*/}
+        {/*    onBlur={validateEmail}*/}
+        {/*    required*/}
+        {/*  />*/}
+        {/*  {emailError && <div className="invalid-feedback">{emailError}</div>}*/}
+        {/*</div>*/}
 
         <div className="mb-3">
           <label htmlFor="avatar" className="form-label">
@@ -117,6 +122,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
               className="form-control"
               value={avatar}
               onChange={(e) => setAvatar(e.target.value)}
+              placeholder="https://example.com/image.jpg"
             />
             {avatar && (
               <img
@@ -185,12 +191,12 @@ const SettingsPage = ({ apiPrefix, user }) => {
 SettingsPage.propTypes = {
   apiPrefix: PropTypes.string.isRequired,
   user: PropTypes.shape({
-    user_id: PropTypes.number.isRequired,
-    email: PropTypes.string.isRequired,
+    user_id: PropTypes.number,
+    email: PropTypes.string,
     profile_image_url: PropTypes.string,
-    first_name: PropTypes.string.isRequired,
-    last_name: PropTypes.string.isRequired,
-    birth_date: PropTypes.string.isRequired,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    birth_date: PropTypes.string,
   }).isRequired,
 };
 

@@ -79,20 +79,6 @@ const Navbar = ({
     );
   };
 
-  const handleFilterChange = (e) => {
-    const selectedValue = e.target.value;
-    let selectedFilterType = '';
-
-    if (categoryOptions.includes(selectedValue)) {
-      selectedFilterType = 'Category';
-    } else if (mechanicOptions.includes(selectedValue)) {
-      selectedFilterType = 'Mechanic';
-    }
-
-    setFilter(selectedValue);
-    setFilterType(selectedFilterType);
-  };
-
   const handleClickOutsideSuggestions = (e) => {
     if (searchFormRef.current && !searchFormRef.current.contains(e.target)) {
       setSuggestions([]);
