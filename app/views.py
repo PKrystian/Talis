@@ -8,6 +8,7 @@ from .controllers.BoardGameController import BoardGameController
 from .controllers.CollectionController import CollectionController
 from .controllers.FriendListController import FriendListController
 from .controllers.InviteController import InviteController
+from .controllers.SettingsController import SettingsController
 from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
@@ -318,5 +319,13 @@ def get_join_requests(request) -> JsonResponse:
 def accept_or_reject_invite(request) -> JsonResponse:
     invite_controller = InviteController()
     response = invite_controller.action_accept_or_reject_invite(request)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def update_user(request) -> JsonResponse:
+    settings_controller = SettingsController()
+    response = settings_controller.action_update_user(request)
 
     return response

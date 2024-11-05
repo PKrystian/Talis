@@ -199,6 +199,10 @@ const GamePage = ({ apiPrefix, user }) => {
             }
             className="boardgame-img"
             alt={boardGame.name}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = '/static/favicon.ico';
+            }}
           />
         </div>
         <div className="col flex-grow">
@@ -252,19 +256,44 @@ const GamePage = ({ apiPrefix, user }) => {
             {boardGame.year_published ? (
               <p>
                 <span className="bold-text">Year:</span>{' '}
-                {boardGame.year_published}
+                <Link
+                  to={`/search?query=&filters=year%7C${boardGame.year_published}`}
+                  className="expansion-link"
+                >
+                  {boardGame.year_published}
+                </Link>
               </p>
             ) : null}
             {boardGame.category ? (
               <p>
                 <span className="bold-text">Categories:</span>{' '}
-                {boardGame.category}
+                {boardGame.category.split(', ').map((category, index) => (
+                  <React.Fragment key={category}>
+                    <Link
+                      to={`/search?query=&filters=category%7C${category}`}
+                      className="expansion-link"
+                    >
+                      {category}
+                    </Link>
+                    {index < boardGame.category.split(', ').length - 1 && ', '}
+                  </React.Fragment>
+                ))}
               </p>
             ) : null}
             {boardGame.mechanic ? (
               <p>
                 <span className="bold-text">Mechanics:</span>{' '}
-                {boardGame.mechanic}
+                {boardGame.mechanic.split(', ').map((mechanic, index) => (
+                  <React.Fragment key={mechanic}>
+                    <Link
+                      to={`/search?query=&filters=mechanic%7C${mechanic}`}
+                      className="expansion-link"
+                    >
+                      {mechanic}
+                    </Link>
+                    {index < boardGame.mechanic.split(', ').length - 1 && ', '}
+                  </React.Fragment>
+                ))}
               </p>
             ) : null}
             {boardGame.main_game ? (
@@ -413,6 +442,10 @@ const GamePage = ({ apiPrefix, user }) => {
                         <img
                           src={friend.profile_image_url}
                           alt={`${friend.first_name} ${friend.last_name}`}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/static/default-profile.png';
+                          }}
                           title={`${friend.first_name} ${friend.last_name}`}
                           className="friend-profile-img"
                         />
@@ -440,6 +473,10 @@ const GamePage = ({ apiPrefix, user }) => {
                         <img
                           src={friend.profile_image_url}
                           alt={`${friend.first_name} ${friend.last_name}`}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/static/default-profile.png';
+                          }}
                           title={`${friend.first_name} ${friend.last_name}`}
                           className="friend-profile-img"
                         />
@@ -519,7 +556,7 @@ const GamePage = ({ apiPrefix, user }) => {
 GamePage.propTypes = {
   apiPrefix: PropTypes.string.isRequired,
   user: PropTypes.shape({
-    user_id: PropTypes.string,
+    user_id: PropTypes.number,
     wishlist: PropTypes.array,
     library: PropTypes.array,
     is_superuser: PropTypes.bool,

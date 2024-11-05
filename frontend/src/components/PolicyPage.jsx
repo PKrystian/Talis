@@ -8,37 +8,40 @@ const PolicyPage = () => {
           Policy Rules
         </h2>
         <p className="policy-paragraph">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum. Sed ut
-          perspiciatis unde omnis iste natus error sit voluptatem accusantium
-          doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-          inventore veritatis et quasi architecto beatae vitae dicta sunt
-          explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-          enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-          ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum. Sed ut
-          perspiciatis unde omnis iste natus error sit voluptatem accusantium
-          doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-          inventore veritatis et quasi architecto beatae vitae dicta sunt
-          explicabo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-          enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-          ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum. Sed ut
-          perspiciatis unde omnis iste natus error sit voluptatem accusantium
-          doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-          inventore veritatis et quasi architecto beatae vitae dicta sunt
-          explicabo.
+          We are committed to protecting your privacy. This policy outlines the
+          types of personal information we collect, how we use it, and the steps
+          we take to ensure it is protected.
+        </p>
+        <p className="policy-paragraph">
+          <strong>Information Collection:</strong> We collect information you
+          provide directly to us, such as when you create an account, update
+          your profile, or use our services. This may include your name, email
+          address, and other contact information.
+        </p>
+        <p className="policy-paragraph">
+          <strong>Use of Information:</strong> We use the information we collect
+          to provide, maintain, and improve our services, to communicate with
+          you, and to personalize your experience.
+        </p>
+        <p className="policy-paragraph">
+          <strong>Information Sharing:</strong> We do not share your personal
+          information with third parties except as necessary to provide our
+          services, comply with the law, or protect our rights.
+        </p>
+        <p className="policy-paragraph">
+          <strong>Data Security:</strong> We implement a variety of security
+          measures to maintain the safety of your personal information. However,
+          no method of transmission over the Internet or electronic storage is
+          100% secure.
+        </p>
+        <p className="policy-paragraph">
+          <strong>Changes to This Policy:</strong> We may update this policy
+          from time to time. We will notify you of any changes by posting the
+          new policy on our website.
+        </p>
+        <p className="policy-paragraph">
+          <strong>Contact Us:</strong> If you have any questions about this
+          policy, please contact us at talis.noreply@gmail.com.
         </p>
       </div>
       <div className="policy-container">

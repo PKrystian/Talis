@@ -31,8 +31,8 @@ const Footer = () => {
 
   return (
     <footer className="footer bg-dark text-light mt-auto">
-      <div className="container">
-        <div className="row">
+      <div className="container d-flex align-items-center">
+        <div className="row justify-content-center w-100">
           <div className="col-md-4 text-center text-md-left">
             <Link className="navbar-brand" to="/">
               <div className="align-items-center">

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
@@ -324,13 +324,14 @@ const RegistrationPage = ({
                 </label>
               </div>
               <div className="info-icon-container">
-                <FontAwesomeIcon
-                  icon={faInfoCircle}
-                  className="info-icon"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="Our terms and conditions - Do not steal our games please"
-                />
+                <Link class to="/policy" target="_blank">
+                  <FontAwesomeIcon
+                    icon={faInfoCircle}
+                    className="info-icon"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                  />
+                </Link>
               </div>
             </div>
 
