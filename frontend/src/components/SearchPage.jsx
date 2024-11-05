@@ -7,6 +7,28 @@ import TableItem from './TableItem';
 import './SearchPage.css';
 import { CATEGORY_LIST, MECHANIC_LIST } from '../messages/search';
 
+const EXCLUDED_LIST = [
+  'no_expansions',
+  'no_rating',
+  'no_image',
+  'no_age',
+  'no_playtime',
+  'no_categories',
+  'no_mechanics',
+  'no_year',
+];
+
+const EXCLUDED_DISPLAY_NAMES = {
+  no_expansions: 'No Expansions',
+  no_rating: 'No Rating',
+  no_image: 'No Image',
+  no_age: 'No Age',
+  no_playtime: 'No Playtime',
+  no_categories: 'No Categories',
+  no_mechanics: 'No Mechanics',
+  no_year: 'No Year',
+};
+
 const SearchPage = ({ apiPrefix }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,6 +51,7 @@ const SearchPage = ({ apiPrefix }) => {
     playtime: [],
     publisher: '',
     year: '',
+    excluded: [],
   });
   const [expandedFilter, setExpandedFilter] = useState({
     category: false,
@@ -38,50 +61,54 @@ const SearchPage = ({ apiPrefix }) => {
     playtime: false,
     publisher: false,
     year: false,
+    excluded: false,
   });
   const [sort, setSort] = useState('rating_desc');
+  const [inputValues, setInputValues] = useState({
+    minPlayers: '',
+    maxPlayers: '',
+    publisher: '',
+    year: '',
+  });
 
   const handleInputChange = (e) => {
     const { name, value, checked, type } = e.target;
-    setFilters((prevFilters) => {
-      if (type === 'checkbox') {
-        return { ...prevFilters, [name]: checked };
-      } else if (
-        name === 'minPlayers' ||
-        name === 'maxPlayers' ||
-        name === 'publisher' ||
-        name === 'year'
-      ) {
-        return { ...prevFilters, [name]: value };
-      } else {
+    if (type === 'checkbox') {
+      setFilters((prevFilters) => {
+        const currentFilter = Array.isArray(prevFilters[name])
+          ? prevFilters[name]
+          : [];
+
         const updatedFilters = checked
-          ? [...prevFilters[name], value]
-          : prevFilters[name].filter((item) => item !== value);
+          ? [...currentFilter, value]
+          : currentFilter.filter((item) => item !== value);
 
         return { ...prevFilters, [name]: updatedFilters };
-      }
-    });
+      });
+    } else {
+      setInputValues((prevValues) => ({ ...prevValues, [name]: value }));
+    }
   };
 
-  const toggleFilterSection = (section) => {
-    setExpandedFilter((prevExpandedFilter) => ({
-      ...prevExpandedFilter,
-      [section]: !prevExpandedFilter[section],
+  const applyInputFilters = () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...inputValues,
     }));
-  };
 
-  const applyFilters = () => {
     const searchParams = new URLSearchParams();
     searchParams.append('query', encodeURIComponent(query));
 
-    ['category', 'mechanic', 'age', 'playtime'].forEach((filterType) => {
-      filters[filterType].forEach((filterValue) => {
-        searchParams.append(
-          'filters',
-          `${filterType}|${encodeURIComponent(filterValue)}`,
-        );
-      });
-    });
+    ['category', 'mechanic', 'age', 'playtime', 'excluded'].forEach(
+      (filterType) => {
+        filters[filterType].forEach((filterValue) => {
+          searchParams.append(
+            'filters',
+            `${filterType}|${encodeURIComponent(filterValue)}`,
+          );
+        });
+      },
+    );
 
     if (filters.minPlayers || filters.maxPlayers) {
       searchParams.append(
@@ -110,6 +137,13 @@ const SearchPage = ({ apiPrefix }) => {
     navigate(`?${searchParams.toString()}`);
   };
 
+  const toggleFilterSection = (section) => {
+    setExpandedFilter((prevExpandedFilter) => ({
+      ...prevExpandedFilter,
+      [section]: !prevExpandedFilter[section],
+    }));
+  };
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const query = searchParams.get('query') || '';
@@ -121,7 +155,7 @@ const SearchPage = ({ apiPrefix }) => {
       .get(apiPrefix + 'search/', {
         params: {
           query,
-          limit: 48,
+          limit: 50,
           page: currentPage,
           filters,
           sort,
@@ -136,7 +170,7 @@ const SearchPage = ({ apiPrefix }) => {
             ...response.data.results,
           ]);
         }
-        setHasMore(response.data.results.length === 48);
+        setHasMore(response.data.results.length === 50);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -156,26 +190,28 @@ const SearchPage = ({ apiPrefix }) => {
       playtime: [],
       publisher: '',
       year: '',
+      excluded: [],
     };
-
     searchParams.getAll('filters').forEach((filter) => {
       const [filterType, filterValue] = filter.split('|');
       if (filterType && filterValue) {
+        const decodedFilterValue = decodeURIComponent(filterValue);
         if (
           filterType === 'category' ||
           filterType === 'mechanic' ||
           filterType === 'age' ||
-          filterType === 'playtime'
+          filterType === 'playtime' ||
+          filterType === 'excluded'
         ) {
-          newFilters[filterType].push(filterValue);
+          newFilters[filterType].push(decodedFilterValue);
         } else if (filterType === 'players') {
-          const [minPlayers, maxPlayers] = filterValue.split('-');
+          const [minPlayers, maxPlayers] = decodedFilterValue.split('-');
           newFilters.minPlayers = minPlayers;
           newFilters.maxPlayers = maxPlayers;
         } else if (filterType === 'publisher') {
-          newFilters.publisher = filterValue;
+          newFilters.publisher = decodedFilterValue;
         } else if (filterType === 'year') {
-          newFilters.year = filterValue;
+          newFilters.year = decodedFilterValue;
         }
       }
     });
@@ -206,7 +242,10 @@ const SearchPage = ({ apiPrefix }) => {
       <div className="row">
         <div className="col-md-2">
           <h4>Filters</h4>
-          <button onClick={applyFilters} className="btn btn-outline-light my-2">
+          <button
+            onClick={applyInputFilters}
+            className="btn btn-outline-light my-2"
+          >
             Apply Filters
           </button>
           <div className="filter-group">
@@ -226,7 +265,7 @@ const SearchPage = ({ apiPrefix }) => {
                     type="text"
                     id="publisher"
                     name="publisher"
-                    value={filters.publisher}
+                    value={inputValues.publisher}
                     onChange={handleInputChange}
                     placeholder="Enter publisher name"
                     className="form-control"
@@ -251,17 +290,14 @@ const SearchPage = ({ apiPrefix }) => {
                   <div key={category} className="form-check">
                     <input
                       type="checkbox"
-                      id={`category-${category}`}
+                      id={category}
                       name="category"
                       value={category}
                       checked={filters.category.includes(category)}
                       onChange={handleInputChange}
                       className="form-check-input"
                     />
-                    <label
-                      htmlFor={`category-${category}`}
-                      className="form-check-label text-light"
-                    >
+                    <label htmlFor={category} className="form-check-label">
                       {category}
                     </label>
                   </div>
@@ -285,17 +321,14 @@ const SearchPage = ({ apiPrefix }) => {
                   <div key={mechanic} className="form-check">
                     <input
                       type="checkbox"
-                      id={`mechanic-${mechanic}`}
+                      id={mechanic}
                       name="mechanic"
                       value={mechanic}
                       checked={filters.mechanic.includes(mechanic)}
                       onChange={handleInputChange}
                       className="form-check-input"
                     />
-                    <label
-                      htmlFor={`mechanic-${mechanic}`}
-                      className="form-check-label text-light"
-                    >
+                    <label htmlFor={mechanic} className="form-check-label">
                       {mechanic}
                     </label>
                   </div>
@@ -320,7 +353,7 @@ const SearchPage = ({ apiPrefix }) => {
                     type="number"
                     id="minPlayers"
                     name="minPlayers"
-                    value={filters.minPlayers}
+                    value={inputValues.minPlayers}
                     onChange={handleInputChange}
                     placeholder="Min"
                     className="form-control me-2"
@@ -329,7 +362,7 @@ const SearchPage = ({ apiPrefix }) => {
                     type="number"
                     id="maxPlayers"
                     name="maxPlayers"
-                    value={filters.maxPlayers}
+                    value={inputValues.maxPlayers}
                     onChange={handleInputChange}
                     placeholder="Max"
                     className="form-control"
@@ -355,7 +388,7 @@ const SearchPage = ({ apiPrefix }) => {
                     type="text"
                     id="year"
                     name="year"
-                    value={filters.year}
+                    value={inputValues.year}
                     onChange={handleInputChange}
                     placeholder="20xx"
                     className="form-control"
@@ -387,17 +420,14 @@ const SearchPage = ({ apiPrefix }) => {
                   <div key={age} className="form-check">
                     <input
                       type="checkbox"
-                      id={`age-${age}`}
+                      id={age}
                       name="age"
                       value={age}
                       checked={filters.age.includes(age)}
                       onChange={handleInputChange}
                       className="form-check-input"
                     />
-                    <label
-                      htmlFor={`age-${age}`}
-                      className="form-check-label text-light"
-                    >
+                    <label htmlFor={age} className="form-check-label">
                       {age}
                     </label>
                   </div>
@@ -422,22 +452,50 @@ const SearchPage = ({ apiPrefix }) => {
                     <div key={playtime} className="form-check">
                       <input
                         type="checkbox"
-                        id={`playtime-${playtime}`}
+                        id={playtime}
                         name="playtime"
                         value={playtime}
                         checked={filters.playtime.includes(playtime)}
                         onChange={handleInputChange}
                         className="form-check-input"
                       />
-                      <label
-                        htmlFor={`playtime-${playtime}`}
-                        className="form-check-label text-light"
-                      >
+                      <label htmlFor={playtime} className="form-check-label">
                         {playtime}
                       </label>
                     </div>
                   ),
                 )}
+              </div>
+            )}
+          </div>
+          <div className="filter-group">
+            <div
+              className="filter-header"
+              onClick={() => toggleFilterSection('excluded')}
+            >
+              <h5>
+                Excluded{' '}
+                {expandedFilter.excluded ? <FaChevronUp /> : <FaChevronDown />}
+              </h5>
+            </div>
+            {expandedFilter.excluded && (
+              <div className="filter-options">
+                {EXCLUDED_LIST.map((excluded) => (
+                  <div key={excluded} className="form-check">
+                    <input
+                      type="checkbox"
+                      id={excluded}
+                      name="excluded"
+                      value={excluded}
+                      checked={filters.excluded.includes(excluded)}
+                      onChange={handleInputChange}
+                      className="form-check-input"
+                    />
+                    <label htmlFor={excluded} className="form-check-label">
+                      {EXCLUDED_DISPLAY_NAMES[excluded]}
+                    </label>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -455,8 +513,8 @@ const SearchPage = ({ apiPrefix }) => {
                 <option value="rating_asc">Rating &#x2191;</option>
                 <option value="name_asc">Name &#x2191;</option>
                 <option value="name_desc">Name &#x2193;</option>
-                <option value="year_desc">Year &#x2193;</option>
-                <option value="year_asc">Year &#x2191;</option>
+                <option value="year_desc">Year Published &#x2193;</option>
+                <option value="year_asc">Year Published &#x2191;</option>
               </select>
             </div>
           </div>

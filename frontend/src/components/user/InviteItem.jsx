@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import './InviteItem.css';
 
 const InviteItem = ({ apiPrefix, user, invite, fetchInvites }) => {
   const getInviteText = () => {
@@ -33,7 +35,18 @@ const InviteItem = ({ apiPrefix, user, invite, fetchInvites }) => {
     <div className="d-flex flex-row">
       <div className="flex-fill">
         <h4>{getInviteText()}</h4>
-        <img src={invite.friend.profile_image_url} alt="" />
+        <div className="friend-tile">
+          <Link to={`/user/${invite.friend.id}`}>
+            <img
+              src={invite.friend.profile_image_url}
+              alt={`${invite.friend.first_name}'s avatar`}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/static/default-profile.png';
+              }}
+            />
+          </Link>
+        </div>
         <p>
           {invite.friend.first_name} {invite.friend.last_name}
         </p>

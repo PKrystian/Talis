@@ -202,6 +202,10 @@ const EventsPage = ({ apiPrefix, user }) => {
                             : null
                         }
                         alt=""
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/static/favicon.ico';
+                        }}
                       ></img>
                     </div>
                     <div className="col-6">
@@ -248,6 +252,10 @@ const EventsPage = ({ apiPrefix, user }) => {
                                 className="img-fluid"
                                 src={boardGame.image_url}
                                 alt=""
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = '/static/favicon.ico';
+                                }}
                               />
                             </div>
                             {chosenEvent.board_games[index + 1] && (
@@ -258,6 +266,10 @@ const EventsPage = ({ apiPrefix, user }) => {
                                     chosenEvent.board_games[index + 1].image_url
                                   }
                                   alt=""
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/static/favicon.ico';
+                                  }}
                                 />
                               </div>
                             )}
