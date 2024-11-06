@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import OSMMap from '../utils/OSMMap';
 
-const EventItem = ({ chosenEvent, joinButton }) => {
+const EventItem = ({ chosenEvent, joinButton = null }) => {
   return (
-    <div className="col-8 bg-dark text-left event-details-box">
+    <div className="col-8 bg-dark text-left event-details-box p-3">
       <h1 className="text-start">{chosenEvent.title}</h1>
       <div className="description">
         <p>{chosenEvent.description}</p>
