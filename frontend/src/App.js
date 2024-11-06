@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/landingPage/LandingPage';
-import EventsPage from './components/EventsPage';
-import UserEventsPage from './components/UserEventsPage';
-import MarketplacePage from './components/MarketplacePage';
+import EventsPage from './components/events/EventsPage';
+import UserEventsPage from './components/events/UserEventsPage';
 import Navbar from './components/Navbar';
 import GamePage from './components/GamePage';
 import UserProfilePage from './components/user/UserProfilePage';
@@ -14,7 +13,7 @@ import Footer from './components/Footer';
 import PolicyPage from './components/PolicyPage';
 import LicensePage from './components/LicensePage';
 import LoginModal from './components/utils/LoginModal';
-import CreateEventPage from './components/CreateEventPage';
+import CreateEventPage from './components/events/CreateEventPage';
 import FriendListPage from './components/FriendListPage';
 import CookieConsentModal from './components/utils/CookieConsentModal';
 import NotificationModal from './components/utils/NotificationModal';
@@ -120,7 +119,6 @@ const App = () => {
             path="/user-events"
             element={<UserEventsPage apiPrefix={apiPrefix} user={user} />}
           />
-          <Route path="/marketplace" element={<MarketplacePage />} />
           <Route
             path="/register"
             element={

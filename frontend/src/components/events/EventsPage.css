@@ -7,6 +7,7 @@
 .date-input {
   background-color: var(--background-color-dark-light);
   color: white;
+  width: 85%;
 }
 
 .meeting-list {

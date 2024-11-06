@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import './RegistrationPage.css';
 import LoginButton from '../utils/LoginButton';
 import FormConstants from '../../FormConstants';
+import FormPasswordInput from '../utils/inputFields/FormPasswordInput';
 
 const RegistrationPage = ({
   apiPrefix,
@@ -266,44 +267,27 @@ const RegistrationPage = ({
               {emailError && <p className="mb-0">{emailError}</p>}
             </div>
 
-            <div className="form-group mt-2 fade-in-2s">
-              <label
-                htmlFor={FormConstants.REGISTRATION_PASSWORD_FIELD}
-                className="form-label"
-              >
-                Password
-              </label>
-              <input
-                id={FormConstants.REGISTRATION_PASSWORD_FIELD}
-                className={`form-control${passwordErrorStyle}`}
-                type="password"
-                value={password}
-                onChange={handleFormOnChange}
-                placeholder="your password"
-                required
-              />
-              {passwordError && <p className="mb-0">{passwordError}</p>}
-            </div>
+            <FormPasswordInput
+              id={FormConstants.REGISTRATION_PASSWORD_FIELD}
+              value={password}
+              label="Password"
+              placeholder="your password"
+              inputError={passwordError}
+              inputErrorStyle={passwordErrorStyle}
+              onChangeCallback={handleFormOnChange}
+              divStyling={'mt-2 fade-in-2s'}
+            />
 
-            <div className="form-group mt-2 fade-in-2s">
-              <label
-                htmlFor={FormConstants.REGISTRATION_REPEAT_PASSWORD_FIELD}
-                className="form-label"
-              >
-                Repeat Password
-              </label>
-              <input
-                id={FormConstants.REGISTRATION_REPEAT_PASSWORD_FIELD}
-                className={`form-control${repeatPasswordErrorStyle}`}
-                value={repeatPassword}
-                onChange={handleFormOnChange}
-                type="password"
-                required
-              />
-              {repeatPasswordError && (
-                <p className="mb-0">{repeatPasswordError}</p>
-              )}
-            </div>
+            <FormPasswordInput
+              id={FormConstants.REGISTRATION_REPEAT_PASSWORD_FIELD}
+              value={repeatPassword}
+              label="Repeat Password"
+              placeholder="your password"
+              inputError={repeatPasswordError}
+              inputErrorStyle={repeatPasswordErrorStyle}
+              onChangeCallback={handleFormOnChange}
+              divStyling={'mt-2 fade-in-2s'}
+            />
 
             <div className="form-group form-check mt-3 d-flex justify-content-between">
               <div>
