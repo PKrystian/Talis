@@ -21,6 +21,7 @@ import axios from 'axios';
 import LoginForgotPasswordModal from './components/utils/LoginForgotPasswordModal';
 import ForgotPasswordPage from './components/user/ForgotPasswordPage';
 import SettingsPage from './components/SettingsPage';
+import EventSinglePage from './components/events/EventSinglePage';
 
 const App = () => {
   const apiPrefix =
@@ -118,6 +119,10 @@ const App = () => {
           <Route
             path="/user-events"
             element={<UserEventsPage apiPrefix={apiPrefix} user={user} />}
+          />
+          <Route
+            path="/events/:event_id"
+            element={<EventSinglePage apiPrefix={apiPrefix} user={user} />}
           />
           <Route
             path="/register"

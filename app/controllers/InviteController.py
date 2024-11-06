@@ -1,3 +1,5 @@
+from types import NoneType
+
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 
@@ -20,8 +22,15 @@ class InviteController:
                 status=Invite.INVITE_STATUS_PENDING,
             ).order_by('-created_at').all()
 
-            data = [
-                {
+            data = []
+
+            for invite in invites:
+                board_game_image_url = ''
+
+                if invite.event.board_games.exists():
+                    board_game_image_url = invite.event.board_games.first().image_url
+
+                data.append({
                     'id': invite.id,
                     'type': invite.type,
                     'status': invite.status,
@@ -33,10 +42,10 @@ class InviteController:
                     },
                     'event': {
                         'id': invite.event.id,
-                        'title': invite.event.title
+                        'title': invite.event.title,
+                        'image_url': board_game_image_url,
                     }
-                } for invite in invites
-            ]
+                })
 
         return JsonResponse(
             data=data,
