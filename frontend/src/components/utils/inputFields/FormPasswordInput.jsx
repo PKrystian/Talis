@@ -6,9 +6,11 @@ const FormPasswordInput = ({
   id,
   value,
   label,
+  placeholder = '',
   inputError,
   inputErrorStyle,
   onChangeCallback,
+  divStyling,
 }) => {
   const typeText = 'text';
   const typePassword = 'password';
@@ -32,7 +34,7 @@ const FormPasswordInput = ({
   };
 
   return (
-    <div className="form-group mt-3">
+    <div className={`form-group ${divStyling}`}>
       <label htmlFor={id} className="form-label">
         {label}
       </label>
@@ -43,6 +45,7 @@ const FormPasswordInput = ({
           type={currentVisibility}
           value={value}
           onChange={onChangeCallback}
+          placeholder={placeholder}
           required
         />
         <div
@@ -61,10 +64,12 @@ const FormPasswordInput = ({
 FormPasswordInput.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   label: PropTypes.string.isRequired,
   inputError: PropTypes.string,
   inputErrorStyle: PropTypes.string,
   onChangeCallback: PropTypes.func,
+  divStyling: PropTypes.string,
 };
 
 export default FormPasswordInput;

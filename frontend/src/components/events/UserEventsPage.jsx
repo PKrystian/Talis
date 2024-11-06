@@ -5,20 +5,17 @@ import './EventsPage.css';
 import axios from 'axios';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import OSMMap from './utils/OSMMap';
-import { FaCheck } from 'react-icons/fa6';
+import OSMMap from '../utils/OSMMap';
 
-const EventsPage = ({ apiPrefix, user }) => {
+const UserEventsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [chosenEvent, setChosenEvent] = useState(null);
-  const [requestedEvents, setRequestedEvents] = useState(null);
   const [, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
   const navigate = useNavigate();
 
-  const eventsUrl = apiPrefix + 'event/get/';
-  const joinRequestsUrl = apiPrefix + 'invite/get-join-requests/';
+  const eventsUrl = apiPrefix + 'event/user-events/';
 
   const fetchEventData = useCallback(async () => {
     if (!user || !user.user_id) {
@@ -27,36 +24,24 @@ const EventsPage = ({ apiPrefix, user }) => {
     }
     setIsLoading(true);
     try {
-      const response = await axios.get(eventsUrl, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      });
+      const response = await axios.post(
+        eventsUrl,
+        {
+          user_id: user.user_id,
+        },
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        },
+      );
       setEventData(response.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
     } finally {
       setIsLoading(false);
     }
   }, [user, navigate, eventsUrl]);
 
-  const fetchJoinRequests = () => {
-    if (!user || !user.user_id) {
-      navigate('/');
-      return;
-    }
-    axios
-      .post(
-        joinRequestsUrl,
-        { user_id: user.user_id },
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
-      )
-      .then((resp) => {
-        setRequestedEvents(resp.data);
-      });
-  };
-
   useEffect(() => {
     fetchEventData();
-    fetchJoinRequests();
   }, []);
 
   useEffect(() => {
@@ -68,60 +53,6 @@ const EventsPage = ({ apiPrefix, user }) => {
 
   const changeDisplayedEvent = (id) => {
     setChosenEvent(eventData.find((event) => event.id === id));
-  };
-
-  const onCreateEvent = () => {
-    navigate('/create-event');
-  };
-
-  const handleAskToJoin = () => {
-    axios
-      .post(
-        apiPrefix + 'event/ask-to-join/',
-        {
-          user_id: user.user_id,
-          event_id: chosenEvent.id,
-        },
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
-      )
-      .then(() => {
-        fetchJoinRequests();
-      });
-  };
-
-  const generateJoinButton = () => {
-    const currentEventStatus = requestedEvents.find(
-      (requestedEvent) => requestedEvent.event_id === chosenEvent.id,
-    );
-
-    if (
-      chosenEvent.attendees.find((attendee) => attendee.id === user.user_id)
-    ) {
-      return (
-        <button className="btn btn-success disabled">
-          Signed up for event <FaCheck className="ms-2" />
-        </button>
-      );
-    }
-
-    if (
-      !currentEventStatus ||
-      (currentEventStatus && currentEventStatus.invite_status === 'rejected')
-    ) {
-      return (
-        <button className="btn btn-primary" onClick={handleAskToJoin}>
-          Ask to join
-        </button>
-      );
-    }
-
-    if (currentEventStatus.invite_status === 'pending') {
-      return (
-        <button className="btn btn-secondary disabled">
-          Already sent request
-        </button>
-      );
-    }
   };
 
   if (isLoading) {
@@ -138,59 +69,13 @@ const EventsPage = ({ apiPrefix, user }) => {
     <div>
       <div className="container text-center navbar-expand-lg">
         <div className="container-fluid">
-          <button
-            className="navbar-toggler navbar-dark mb-2"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#meetingsFilter"
-            aria-controls="meetingsFilter"
-            aria-expanded="false"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div
-            className="row border bg-black mt-3 mb-3 collapse navbar-collapse"
-            id="meetingsFilter"
-          >
-            <div className="col-sm row-sm py-2">
-              <div>Distance</div>
-              <span>
-                <input className="number-input" type="number"></input>km from
-                you
-              </span>
-            </div>
-            <div className="col-sm py-2">
-              <div>Date</div>
-              <input className="date-input" type="date"></input>
-            </div>
-            <div className="col-sm py-2">
-              <div>No. of players</div>
-              <span>
-                <input className="number-input" type="number"></input> to{' '}
-                <input className="number-input" type="number"></input>
-              </span>
-            </div>
-            <div className="col-sm">Game categories</div>
-            <div className="col-sm">
-              Show only events created by your friends
-              <label className="switch">
-                <input type="checkbox" />
-                <span className="slider round"></span>
-              </label>
-            </div>
-            <div className="col-sm">
-              <button className="rounded-pill" onClick={() => onCreateEvent()}>
-                Create an event
-              </button>
-            </div>
-          </div>
           <div className="row border bg-dark">
             <div className="col-4 border bg-dark px-0 meeting-list">
               {eventData &&
                 eventData.map((event) => (
                   <div
                     key={event.id}
-                    className="row border mx-0"
+                    className={`row border mx-0 ${user.user_id === event.host.id ? 'bg-success' : 'bg-warning bg-opacity-75'}`}
                     onClick={() => changeDisplayedEvent(event.id)}
                   >
                     <div className="col-6 px-0 event-box">
@@ -279,9 +164,6 @@ const EventsPage = ({ apiPrefix, user }) => {
                       return null;
                     })}
                   </div>
-                  {user && user.user_id !== chosenEvent.host.id && (
-                    <div className="col-12 mt-3">{generateJoinButton()}</div>
-                  )}
                 </div>
               </div>
             ) : null}
@@ -292,9 +174,9 @@ const EventsPage = ({ apiPrefix, user }) => {
   );
 };
 
-EventsPage.propTypes = {
+UserEventsPage.propTypes = {
   apiPrefix: PropTypes.string.isRequired,
   user: PropTypes.object,
 }.isRequired;
 
-export default EventsPage;
+export default UserEventsPage;

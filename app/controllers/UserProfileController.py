@@ -7,7 +7,7 @@ class UserProfileController:
     ROUTE_DETAIL: str = 'user/<int:user_id>/'
 
     @staticmethod
-    def action_user_profile_detail(request, user_id) -> JsonResponse:
+    def action_user_profile_detail(user_id) -> JsonResponse:
         try:
             registered_user = RegisteredUser.objects.get(user_id=user_id)
             user = User.objects.get(id=user_id)
