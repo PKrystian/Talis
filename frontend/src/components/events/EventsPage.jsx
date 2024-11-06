@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa6';
 import EventItem from './EventItem';
 import FilterConstants from '../../FilterConstants';
+import TagsModal from './EventTagsModal';
 
 const EventsPage = ({ apiPrefix, user }) => {
   const navigate = useNavigate();
@@ -22,14 +23,17 @@ const EventsPage = ({ apiPrefix, user }) => {
   const [startingFrom, setStartingFrom] = useState('');
   const [playerNumberMin, setPlayerNumberMin] = useState(0);
   const [playerNumberMax, setPlayerNumberMax] = useState(0);
-  const [gameTags, setGameTags] = useState(null);
+  const [gameTags, setGameTags] = useState([]);
   const [onlyCreatedByFriends, setOnlyCreatedByFriends] = useState(false);
+
+  const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
 
   const filterSetterMap = {
     [FilterConstants.EVENT_FILTER_STARTING_FROM]: setStartingFrom,
     [FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MIN]: setPlayerNumberMin,
     [FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MAX]: setPlayerNumberMax,
     [FilterConstants.EVENT_FILTER_CREATED_BY_FRIENDS]: setOnlyCreatedByFriends,
+    [FilterConstants.EVENT_FILTER_CATEGORIES]: setGameTags,
   };
 
   const eventsUrl = apiPrefix + 'event/get/';
@@ -82,6 +86,7 @@ const EventsPage = ({ apiPrefix, user }) => {
   }, []);
 
   const changeDisplayedEvent = (id) => {
+    console.log(eventData);
     setChosenEvent(eventData.find((event) => event.id === id));
   };
 
@@ -151,6 +156,7 @@ const EventsPage = ({ apiPrefix, user }) => {
   };
 
   const onApplyFilters = () => {
+    console.log(gameTags);
     axios
       .get(`${apiPrefix}event/get-filtered/`, {
         params: {
@@ -158,6 +164,7 @@ const EventsPage = ({ apiPrefix, user }) => {
           [FilterConstants.EVENT_FILTER_STARTING_FROM]: startingFrom,
           [FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MIN]: playerNumberMin,
           [FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MAX]: playerNumberMax,
+          [FilterConstants.EVENT_FILTER_CATEGORIES]: gameTags,
           [FilterConstants.EVENT_FILTER_CREATED_BY_FRIENDS]:
             onlyCreatedByFriends ? onlyCreatedByFriends : '',
         },
@@ -171,6 +178,10 @@ const EventsPage = ({ apiPrefix, user }) => {
         }
       })
       .catch((error) => console.error('Error filtering events:', error));
+  };
+
+  const toggleTagsModal = () => {
+    setIsTagsModalOpen((prev) => !prev);
   };
 
   if (isLoading) {
@@ -235,7 +246,19 @@ const EventsPage = ({ apiPrefix, user }) => {
                 />{' '}
               </span>
             </div>
-            <div className="col-sm">Game categories</div>
+            <button
+              className="col-sm btn btn-secondary"
+              onClick={toggleTagsModal}
+            >
+              Choose Categories
+            </button>
+            {isTagsModalOpen && (
+              <TagsModal
+                toggleTagsModal={toggleTagsModal}
+                setGameTags={setGameTags}
+                gameTags={gameTags}
+              />
+            )}
             <div className="col-sm">
               Show only events created by your friends
               <label className="switch mx-2">

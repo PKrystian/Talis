@@ -11,7 +11,7 @@ const EventItem = ({ chosenEvent, joinButton }) => {
       <p className="text-start d-flex">
         {chosenEvent.tags.map((tag) => {
           return (
-            <div key={tag} className="mx-1">
+            <div key={tag} className="px-2 m-1 bg-black">
               {tag}
             </div>
           );
