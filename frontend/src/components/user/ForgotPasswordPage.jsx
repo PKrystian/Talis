@@ -127,6 +127,7 @@ const ForgotPasswordPage = ({ apiPrefix, userState }) => {
               inputError={passwordError}
               inputErrorStyle={passwordErrorStyle}
               onChangeCallback={handleFormOnChange}
+              divStyling={'mt-2'}
             />
 
             <FormPasswordInput
@@ -136,6 +137,7 @@ const ForgotPasswordPage = ({ apiPrefix, userState }) => {
               inputError={repeatPasswordError}
               inputErrorStyle={repeatPasswordErrorStyle}
               onChangeCallback={handleFormOnChange}
+              divStyling={'mt-2'}
             />
             <button
               type="submit"

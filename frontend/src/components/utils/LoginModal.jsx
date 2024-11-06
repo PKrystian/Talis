@@ -210,6 +210,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                 inputError={passwordError}
                 inputErrorStyle={passwordErrorStyle}
                 onChangeCallback={handleFormOnChange}
+                divStyling={'mt-2'}
               />
 
               <div className="form-group mt-3 d-flex justify-content-end">

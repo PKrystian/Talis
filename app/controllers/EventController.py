@@ -8,6 +8,7 @@ from pandas.core.methods.to_dict import to_dict
 from app.models import BoardGame, Category
 from app.models.event import Event
 from app.models.invite import Invite
+from app.utils.EventFilterQuery import EventFilter
 from app.utils.creators.EventCreator import EventCreator
 from app.utils.photon_api.PhotonAPILocationMatcher import PhotonAPILocationMatcher
 
@@ -19,7 +20,7 @@ class EventController:
 
     @staticmethod
     def action_get_events() -> JsonResponse:
-        events = Event.objects.all().order_by(Event.EVENT_START_DATE)[:20]
+        events = Event.objects.all().order_by(Event.EVENT_START_DATE).all()
         data = []
 
         for event in events:
@@ -161,3 +162,23 @@ class EventController:
             status=200,
             safe=False
             )
+
+    ROUTE_GET_FILTERED = BASE_ROUTE + 'get-filtered/'
+
+    @staticmethod
+    def action_get_filtered_events(user_id: int, filters: dict) -> JsonResponse:
+        event_filter = EventFilter(user_id)
+
+        events = event_filter.create_event_query_with_filters(filters).order_by('event_start_date').all()
+
+        data = []
+
+        for event in events:
+            if event.attendees.count() < event.max_players:
+                data.append(event.serialize())
+
+        return JsonResponse(
+            data=data,
+            status=200,
+            safe=False
+        )
