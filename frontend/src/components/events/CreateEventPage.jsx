@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import './CreateEventPage.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import FormConstants from '../FormConstants';
+import FormConstants from '../../FormConstants';
 
 const CreateEventPage = ({ apiPrefix, user, userState }) => {
   const navigate = useNavigate();
@@ -545,7 +545,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <input
                 className="form-control flex-grow-1 mx-lg-1"
                 type="search"
-                placeholder="tags"
+                placeholder="friends"
                 value={friendsQuery}
                 onChange={(e) => setFriendsQuery(e.target.value)}
                 onFocus={() => setIsFriendsInputFocused(true)}

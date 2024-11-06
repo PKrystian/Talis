@@ -166,7 +166,7 @@ const Navbar = ({
               onFocus={() => setIsInputFocused(true)}
             />
             <button
-              className="btn form-button btn-outline-light flex-shrink-0"
+              className="btn form-button btn-outline-light flex-shrink-0 mx-1"
               type="submit"
               aria-label="Search"
             >
@@ -194,7 +194,7 @@ const Navbar = ({
                 <li className="nav-item">
                   <Link className="nav-link" to="/collection">
                     <HiSquaresPlus className="me-1" />
-                    My Collection
+                    My Library
                   </Link>
                 </li>
               )}

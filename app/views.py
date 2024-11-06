@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.http import require_POST, require_GET
 
 from .controllers.BoardGameController import BoardGameController
+from .controllers.CategoryController import CategoryController
 from .controllers.CollectionController import CollectionController
 from .controllers.FriendListController import FriendListController
 from .controllers.InviteController import InviteController
@@ -13,6 +14,7 @@ from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
 from .controllers.UserProfileController import UserProfileController
+from .utils.EventFilterQuery import EventFilter
 
 
 def index(request) -> None:
@@ -191,12 +193,30 @@ def new_event(request) -> JsonResponse:
 
     return response
 
+@require_GET
+def get_filtered_events(request) -> JsonResponse:
+    user_id = request.GET.get('user_id')
+
+    filters = dict()
+
+    filters[EventFilter.EVENT_FILTER_STARTING_FROM] = request.GET.get(EventFilter.EVENT_FILTER_STARTING_FROM)
+    filters[EventFilter.EVENT_FILTER_PLAYER_NUMBER_MIN] = request.GET.get(EventFilter.EVENT_FILTER_PLAYER_NUMBER_MIN)
+    filters[EventFilter.EVENT_FILTER_PLAYER_NUMBER_MAX] = request.GET.get(EventFilter.EVENT_FILTER_PLAYER_NUMBER_MAX)
+    filters[EventFilter.EVENT_FILTER_CREATED_BY_FRIENDS] = request.GET.get(EventFilter.EVENT_FILTER_CREATED_BY_FRIENDS)
+    # filters[EventFilter.EVENT_FILTER_CATEGORIES] = request.GET.get(EventFilter.EVENT_FILTER_CATEGORIES)
+
+    event_controller = EventController()
+    response = event_controller.action_get_filtered_events(user_id, filters)
+
+    return response
+
 
 @require_GET
 def user_profile_detail(request, user_id) -> JsonResponse:
     user_profile_controller = UserProfileController()
+    response = user_profile_controller.action_user_profile_detail(user_id)
 
-    return user_profile_controller.action_user_profile_detail(request, user_id)
+    return response
 
 
 @require_GET
@@ -327,5 +347,12 @@ def accept_or_reject_invite(request) -> JsonResponse:
 def update_user(request) -> JsonResponse:
     settings_controller = SettingsController()
     response = settings_controller.action_update_user(request)
+
+    return response
+
+@require_GET
+def get_all_game_categories(request) -> JsonResponse:
+    category_controller = CategoryController()
+    response = category_controller.action_get_all_game_categories()
 
     return response
