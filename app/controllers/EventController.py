@@ -142,7 +142,7 @@ class EventController:
                 user=event.host,
                 invited_user_id=invited_friend_id,
                 event=event,
-                type=Invite.INVITE_TYPE_EVENT,
+                type=Invite.INVITE_TYPE_EVENT_INVITED_FRIEND,
                 status=Invite.INVITE_STATUS_PENDING,
             )
 
@@ -163,7 +163,7 @@ class EventController:
 
         Invite.objects.create(
             user_id=user_id,
-            invited_user = event.host,
+            invited_user=event.host,
             event=event,
             type=Invite.INVITE_TYPE_EVENT_JOIN_REQUEST,
             status=Invite.INVITE_STATUS_PENDING,
