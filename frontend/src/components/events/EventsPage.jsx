@@ -7,7 +7,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa6';
 import EventItem from './EventItem';
-import FilterConstants from '../../FilterConstants';
+import FilterConstants from '../../constValues/FilterConstants';
 
 const EventsPage = ({ apiPrefix, user }) => {
   const navigate = useNavigate();
