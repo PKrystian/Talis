@@ -1,22 +1,10 @@
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import './InviteItem.css';
+import EventRequestTile from './invite/EventRequestTile';
+import FriendRequestTile from './invite/FriendRequestTile';
+import InviteConstants from '../../constValues/InviteConstants';
 
 const InviteItem = ({ apiPrefix, user, invite, fetchInvites }) => {
-  console.log(invite);
-
-  const getInviteText = () => {
-    switch (invite.type) {
-      case 'event':
-        return 'You have been invited to an event';
-      case 'event_join_request':
-        return 'Event join request';
-      default:
-        return '';
-    }
-  };
-
   const handleInviteAction = (choice) => {
     axios
       .post(
@@ -33,61 +21,35 @@ const InviteItem = ({ apiPrefix, user, invite, fetchInvites }) => {
       });
   };
 
-  const onClickUserImage = () => {
-    document.getElementById('closeNotifications').click();
+  const resolveInviteType = () => {
+    switch (invite.type) {
+      case InviteConstants.INVITE_TYPE_NEW_FRIEND_REQUEST:
+        return (
+          <FriendRequestTile
+            invite={invite}
+            handleInviteAction={handleInviteAction}
+          />
+        );
+      case InviteConstants.INVITE_TYPE_EVENT_JOIN_REQUEST:
+        return (
+          <EventRequestTile
+            invite={invite}
+            handleInviteAction={handleInviteAction}
+          />
+        );
+      case InviteConstants.INVITE_TYPE_EVENT:
+        return (
+          <EventRequestTile
+            invite={invite}
+            handleInviteAction={handleInviteAction}
+          />
+        );
+      default:
+        return '';
+    }
   };
 
-  const onClickEventImage = () => {
-    document.getElementById('closeNotifications').click();
-  };
-
-  return (
-    <div className="d-flex flex-row">
-      <div className="flex-fill">
-        <h4>{getInviteText()}</h4>
-        <div className="event-image">
-          <Link to={`/events/${invite.event.id}`}>
-            <img
-              src={invite.event.image_url}
-              alt={`${invite.event.title} front game`}
-              onClick={onClickEventImage}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = '/static/default-profile.png';
-              }}
-            />
-          </Link>
-        </div>
-      </div>
-      <div className="align-self-center">
-        <div className="friend-tile">
-          <Link to={`/user/${invite.friend.id}`}>
-            <img
-              src={invite.friend.profile_image_url}
-              alt={`${invite.friend.first_name}'s avatar`}
-              onClick={onClickUserImage}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = '/static/default-profile.png';
-              }}
-            />
-          </Link>
-        </div>
-        <button
-          className="btn btn-secondary my-1"
-          onClick={() => handleInviteAction('rejected')}
-        >
-          Reject
-        </button>
-        <button
-          className="btn btn-primary my-1"
-          onClick={() => handleInviteAction('accepted')}
-        >
-          Accept
-        </button>
-      </div>
-    </div>
-  );
+  return <div className="d-flex flex-row">{resolveInviteType()}</div>;
 };
 
 InviteItem.propTypes = {

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import './ForgotPasswordPage.css';
-import FormConstants from '../../FormConstants';
+import FormConstants from '../../constValues/FormConstants';
 import FormPasswordInput from '../utils/inputFields/FormPasswordInput';
 
 const ForgotPasswordPage = ({ apiPrefix, userState }) => {

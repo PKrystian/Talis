@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import FormConstants from '../../FormConstants';
+import FormConstants from '../../constValues/FormConstants';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginForgotPasswordModal.css';
