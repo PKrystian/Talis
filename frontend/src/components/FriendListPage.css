@@ -9,10 +9,12 @@
 }
 
 .friend-tile, .invite-tile {
-  border: 1px solid #ccc;
+  transition: 0.3s;
+  box-shadow: rgba(255, 255, 255, 0.6) 0px 3px 8px;
   padding: 10px;
   width: 150px;
   text-align: center;
+  border-radius: 5px;
 }
 
 .friend-tile img {
