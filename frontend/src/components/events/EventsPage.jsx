@@ -36,6 +36,15 @@ const EventsPage = ({ apiPrefix, user }) => {
     [FilterConstants.EVENT_FILTER_CATEGORIES]: setGameTags,
   };
 
+  const dateFormat = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  };
+
   const eventsUrl = apiPrefix + 'event/get/';
   const joinRequestsUrl = apiPrefix + 'invite/get-join-requests/';
 
@@ -86,6 +95,7 @@ const EventsPage = ({ apiPrefix, user }) => {
   }, []);
 
   const changeDisplayedEvent = (id) => {
+    console.log(eventData);
     setChosenEvent(eventData.find((event) => event.id === id));
   };
 
@@ -313,11 +323,17 @@ const EventsPage = ({ apiPrefix, user }) => {
                         ></img>
                       </div>
                       <div className="col-6">
-                        <p>{event.title}</p>
-                        <p>{event.city}</p>
-                        <p>
+                        <div className="py-1">{event.title}</div>
+                        <div className="py-1">{event.city}</div>
+                        <div className="py-1">
+                          {new Date(event.event_start_date).toLocaleString(
+                            'en-US',
+                            dateFormat,
+                          )}
+                        </div>
+                        <div className="py-1">
                           {event.attendees.length}/{event.max_players}
-                        </p>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -326,6 +342,7 @@ const EventsPage = ({ apiPrefix, user }) => {
                 <EventItem
                   chosenEvent={chosenEvent}
                   joinButton={generateJoinButton()}
+                  user={user}
                 />
               ) : null}
             </div>

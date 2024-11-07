@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CATEGORY_LIST, MECHANIC_LIST } from '../../messages/search';
+import { CATEGORY_LIST } from '../../messages/search';
 
 const EventTagsModal = ({ toggleTagsModal, gameTags, setGameTags }) => {
+  const sortedCategories = CATEGORY_LIST.slice().sort();
+
   const handleCheckboxChange = (category) => {
     setGameTags((prevTags) => {
       if (prevTags.includes(category)) {
-        // If category is already in the array, remove it
         return prevTags.filter((tag) => tag !== category);
       } else {
-        // Otherwise, add the category
         return [...prevTags, category];
       }
     });
@@ -20,7 +20,7 @@ const EventTagsModal = ({ toggleTagsModal, gameTags, setGameTags }) => {
       <div className="modal-content bg-dark">
         <h2>Categories:</h2>
         <div className="d-flex flex-wrap">
-          {CATEGORY_LIST.map((category) => (
+          {sortedCategories.map((category) => (
             <div
               key={category}
               className="col-3 d-flex align-items-center form-check col-auto"
