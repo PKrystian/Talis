@@ -19,7 +19,6 @@ const EventSinglePage = ({ apiPrefix, user }) => {
     axios
       .get(`${apiPrefix}event/get-one/${event_id}`)
       .then((response) => {
-        console.log(response.data);
         if (response.data.detail) {
           navigate('/');
         }

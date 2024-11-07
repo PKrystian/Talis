@@ -96,7 +96,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
 
     axios
       .post(
-        `${apiPrefix}add_friend/`,
+        `${apiPrefix}add-friend/`,
         {
           user_id: user.user_id,
           friend_id: friendId,
