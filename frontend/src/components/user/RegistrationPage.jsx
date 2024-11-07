@@ -6,7 +6,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import './RegistrationPage.css';
 import LoginButton from '../utils/LoginButton';
-import FormConstants from '../../FormConstants';
+import FormConstants from '../../constValues/FormConstants';
 import FormPasswordInput from '../utils/inputFields/FormPasswordInput';
 
 const RegistrationPage = ({
