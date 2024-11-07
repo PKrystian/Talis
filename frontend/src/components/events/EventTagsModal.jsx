@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CATEGORY_LIST, MECHANIC_LIST } from '../../messages/search';
 
-const TagsModal = ({ toggleTagsModal, gameTags, setGameTags }) => {
+const EventTagsModal = ({ toggleTagsModal, gameTags, setGameTags }) => {
   const handleCheckboxChange = (category) => {
     setGameTags((prevTags) => {
       if (prevTags.includes(category)) {
@@ -51,10 +51,10 @@ const TagsModal = ({ toggleTagsModal, gameTags, setGameTags }) => {
   );
 };
 
-TagsModal.propTypes = {
+EventTagsModal.propTypes = {
   toggleTagsModal: PropTypes.func.isRequired,
   gameTags: PropTypes.array.isRequired,
   setGameTags: PropTypes.func.isRequired,
 };
 
-export default TagsModal;
+export default EventTagsModal;
