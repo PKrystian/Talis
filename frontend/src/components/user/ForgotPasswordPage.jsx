@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import './ForgotPasswordPage.css';
 import FormConstants from '../../FormConstants';
 import FormPasswordInput from '../utils/inputFields/FormPasswordInput';
+import TopScreenAlert from '../utils/TopScreenAlert';
 
 const ForgotPasswordPage = ({ apiPrefix, userState }) => {
   const navigate = useNavigate();

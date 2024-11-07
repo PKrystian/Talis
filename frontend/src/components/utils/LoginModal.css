@@ -29,6 +29,10 @@ input[type='email']:focus {
   border-color: var(--text-color-error);
 }
 
+.form-group .warning-input {
+  border-color: var(--text-color-warning)
+}
+
 .form-group p {
   font-size: var(--font-size-small);
   color: var(--text-color-error);

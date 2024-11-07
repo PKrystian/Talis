@@ -61,15 +61,15 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
         })
         .then((resp) => {
           if (resp.status === 200) {
-            alert(resp.data.detail);
-
             if (resp.data.validate) {
               document.getElementById('quitForgotPassword').click();
             }
           }
         })
         .catch((error) => {
-          console.error(error);
+          console.error(error.message);
+          setEmailError('Email doesnt exist');
+          setEmailErrorStyle(' wrong-input');
         });
     }
   }
