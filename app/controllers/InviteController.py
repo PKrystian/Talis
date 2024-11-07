@@ -76,7 +76,10 @@ class InviteController:
 
         if choice == Invite.INVITE_STATUS_ACCEPTED:
             invite.status = Invite.INVITE_STATUS_ACCEPTED
-            invite.event.set_attendees([invite.invited_user])
+            if invite.type == Invite.INVITE_TYPE_EVENT_INVITED_FRIEND:
+                invite.event.set_attendees([invite.invited_user])
+            elif Invite.INVITE_TYPE_EVENT_JOIN_REQUEST:
+                invite.event.set_attendees([invite.user])
         if choice == Invite.INVITE_STATUS_REJECTED:
             invite.status = Invite.INVITE_STATUS_REJECTED
         if choice == Invite.INVITE_STATUS_DISMISSED:
