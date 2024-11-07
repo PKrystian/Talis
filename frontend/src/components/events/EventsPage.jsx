@@ -95,7 +95,6 @@ const EventsPage = ({ apiPrefix, user }) => {
   }, []);
 
   const changeDisplayedEvent = (id) => {
-    console.log(eventData);
     setChosenEvent(eventData.find((event) => event.id === id));
   };
 
