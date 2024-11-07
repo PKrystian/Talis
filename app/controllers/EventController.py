@@ -134,7 +134,7 @@ class EventController:
     @staticmethod
     def __parse_categories(category_names: list) -> list:
         return Category.objects.filter(name__in=category_names).all()
-
+    
     @staticmethod
     def __generate_friend_invites(invited_friend_ids: list, event: Event) -> None:
         for invited_friend_id in invited_friend_ids:
