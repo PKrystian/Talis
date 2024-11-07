@@ -22,10 +22,10 @@ class UserController:
         form_validator = FormValidator()
 
         if not form_validator.validate_registration(form_data):
-            return JsonResponse(data={'error': 'Failed to register'}, status=400)
+            return JsonResponse(data={'error': 'Failed to register'}, status=401)
 
         if self.__check_for_existing_user(form_data[FormValidator.FORM_FIELD_EMAIL]):
-            return JsonResponse(data={'error': 'User with this email already exists'}, status=400)
+            return JsonResponse(data={'error': 'User with this email already exists'}, status=401)
 
         registered_user_creator = RegisteredUserCreator()
 
@@ -71,13 +71,25 @@ class UserController:
         form_validator = FormValidator()
 
         if not form_validator.validate_login(form_data):
-            return JsonResponse(data={'error': 'Failed to login'}, status=400)
+            return JsonResponse(
+                data={
+                    'error': 'Failed to login',
+                    'reason': 'login_error',
+                },
+                status=401
+            )
 
         user = authenticate(username=form_data[FormValidator.FORM_FIELD_EMAIL],
                             password=form_data[FormValidator.FORM_FIELD_PASSWORD])
 
         if not user:
-            return JsonResponse(data={'error': 'User does not exist'}, status=400)
+            return JsonResponse(
+                data={
+                    'error': 'Failed to login',
+                    'reason': 'login_error',
+                },
+                status=401,
+            )
 
         login(request, user)
 
@@ -209,18 +221,20 @@ class UserController:
             return JsonResponse(
                 data={
                     'detail': 'Email has wrong format',
+                    'reason': 'email_error',
                     'validate': False,
                 },
-                status=200,
+                status=401,
             )
 
         if not User.objects.filter(email=email).exists():
             return JsonResponse(
                 data={
                     'detail': 'Email does not exist',
+                    'reason': 'existing_email_error',
                     'validate': False,
                 },
-                status=200,
+                status=401,
             )
 
         if OneTimeToken.objects.filter(
@@ -232,7 +246,7 @@ class UserController:
                     'detail': 'One Time Token is pending',
                     'validate': False,
                 },
-                status=200,
+                status=401,
             )
 
         new_token = OneTimeToken.objects.create(
