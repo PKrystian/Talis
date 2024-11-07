@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa6';
 import EventItem from './EventItem';
 import FilterConstants from '../../FilterConstants';
-import TagsModal from './EventTagsModal';
+import EventTagsModal from './EventTagsModal';
 
 const EventsPage = ({ apiPrefix, user }) => {
   const navigate = useNavigate();
@@ -86,7 +86,6 @@ const EventsPage = ({ apiPrefix, user }) => {
   }, []);
 
   const changeDisplayedEvent = (id) => {
-    console.log(eventData);
     setChosenEvent(eventData.find((event) => event.id === id));
   };
 
@@ -156,7 +155,6 @@ const EventsPage = ({ apiPrefix, user }) => {
   };
 
   const onApplyFilters = () => {
-    console.log(gameTags);
     axios
       .get(`${apiPrefix}event/get-filtered/`, {
         params: {
@@ -164,7 +162,7 @@ const EventsPage = ({ apiPrefix, user }) => {
           [FilterConstants.EVENT_FILTER_STARTING_FROM]: startingFrom,
           [FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MIN]: playerNumberMin,
           [FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MAX]: playerNumberMax,
-          [FilterConstants.EVENT_FILTER_CATEGORIES]: gameTags,
+          [FilterConstants.EVENT_FILTER_CATEGORIES]: JSON.stringify(gameTags),
           [FilterConstants.EVENT_FILTER_CREATED_BY_FRIENDS]:
             onlyCreatedByFriends ? onlyCreatedByFriends : '',
         },
@@ -253,7 +251,7 @@ const EventsPage = ({ apiPrefix, user }) => {
               Choose Categories
             </button>
             {isTagsModalOpen && (
-              <TagsModal
+              <EventTagsModal
                 toggleTagsModal={toggleTagsModal}
                 setGameTags={setGameTags}
                 gameTags={gameTags}
