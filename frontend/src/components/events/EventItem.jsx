@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import OSMMap from '../utils/OSMMap';
+import { Link } from 'react-router-dom';
 
-const EventItem = ({ chosenEvent, joinButton }) => {
+const EventItem = ({ chosenEvent, joinButton, user }) => {
   return (
     <div className="col-8 bg-dark text-left event-details-box">
       <h1 className="text-start">{chosenEvent.title}</h1>
@@ -22,10 +23,41 @@ const EventItem = ({ chosenEvent, joinButton }) => {
           <p className="text-start display-5">
             {chosenEvent.attendees.length}/{chosenEvent.max_players} Crew
           </p>
-          <div className="row">
-            <div className="circle me-2"></div>
-            <div className="circle me-2"></div>
-            <div className="circle me-2"></div>
+          <div className="d-flex">
+            {chosenEvent.attendees
+              .filter((attendee) => attendee.id !== user.user_id)
+              .map((attendee) => (
+                <Link to={`/user/${attendee.id}`} key={attendee.id}>
+                  <img
+                    src={attendee.profile_image_url}
+                    alt={`${attendee.first_name} ${attendee.last_name}`}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/static/default-profile.png';
+                    }}
+                    title={`${attendee.first_name} ${attendee.last_name}`}
+                    className="friend-profile-img"
+                  />
+                </Link>
+              ))}
+          </div>
+          <div className="text-start display-5">
+            Hosted by:
+            <Link to={`/user/${chosenEvent.host.id}`}>
+              <img
+                src={chosenEvent.host.profile_image_url}
+                alt={`${chosenEvent.host.first_name} ${chosenEvent.host.last_name}`}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/static/default-profile.png';
+                }}
+                title={`${chosenEvent.host.first_name} ${chosenEvent.host.last_name}`}
+                className="friend-profile-img"
+              />
+            </Link>
+          </div>
+          <div className="event-address py-2">
+            {chosenEvent.city} {chosenEvent.street} {chosenEvent.zip_code}
           </div>
           {chosenEvent.coordinates && (
             <div className="bg-black mt-2 event-map">
