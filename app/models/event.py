@@ -116,6 +116,7 @@ class Event(models.Model):
             'id': self.host.id,
             'first_name': self.host.first_name,
             'last_name': self.host.last_name,
+            'profile_image_url': self.host.registereduser.profile_image_url
         }
     
     def serialize_board_games(self) -> list:
@@ -141,6 +142,9 @@ class Event(models.Model):
                 {
                     'id': attendee.id,
                     'email': attendee.email,
+                    'first_name': attendee.first_name,
+                    'last_name': attendee.last_name,
+                    'profile_image_url': attendee.registereduser.profile_image_url,
                 }
                 for attendee in attendees
             ]
