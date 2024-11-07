@@ -7,13 +7,13 @@ from app.models.event import Event
 class Invite(models.Model):
     INVITED_FRIENDS = 'invited_friends'
 
-    INVITE_TYPE_EVENT = 'event'
+    INVITE_TYPE_EVENT_INVITED_FRIEND = 'event_friend_invite'
     INVITE_TYPE_EVENT_JOIN_REQUEST = 'event_join_request'
 
     INVITE_TYPE_NEW_FRIEND_REQUEST = 'new_friend_request'
 
     INVITE_EVENT_RELATION = [
-        INVITE_TYPE_EVENT,
+        INVITE_TYPE_EVENT_INVITED_FRIEND,
         INVITE_TYPE_EVENT_JOIN_REQUEST,
     ]
 
