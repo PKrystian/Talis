@@ -96,6 +96,9 @@ const Navbar = ({
   };
 
   const logout = () => {
+    localStorage.removeItem('authToken');
+    sessionStorage.removeItem('authToken');
+
     axios
       .post(apiPrefix + 'logout/', {
         withCredentials: true,

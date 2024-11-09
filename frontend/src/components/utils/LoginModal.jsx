@@ -27,6 +27,8 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
 
   const [submitClickedOnce, setSubmitClickedOnce] = useState(false);
 
+  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+
   const authCheckedRef = useRef(false);
 
   const validateEmail = useCallback(() => {
@@ -79,6 +81,10 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
     }
   }
 
+  function handleCheckboxChange() {
+    setKeepLoggedIn((prevState) => !prevState);
+  }
+
   function setFormWarning() {
     setWarningStyle('text-warning');
     setEmailError('Email could be incorrect');
@@ -121,6 +127,9 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
               cookie_consent: resp.data.cookie_consent,
             });
 
+            const storage = keepLoggedIn ? localStorage : sessionStorage;
+            storage.setItem('authToken', resp.data.auth_token);
+
             document.getElementById('quitModal').click();
           }
         })
@@ -142,22 +151,30 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
   useEffect(() => {
     if (!authCheckedRef.current) {
       const fetchAuthStatus = async () => {
-        try {
-          const resp = await axios.get(`${apiPrefix}check-auth/`, {
-            withCredentials: true,
-          });
-          if (resp.status === 200) {
-            setUserState(resp.data.is_authenticated);
-            setUserData({
-              username: resp.data.username,
-              user_id: resp.data.user_id,
-              is_superuser: resp.data.is_superuser,
-              profile_image_url: resp.data.profile_image_url,
-              cookie_consent: resp.data.cookie_consent,
+        const storedToken =
+          localStorage.getItem('authToken') ||
+          sessionStorage.getItem('authToken');
+        if (storedToken) {
+          try {
+            const resp = await axios.get(`${apiPrefix}check-auth/`, {
+              headers: {
+                Authorization: `Bearer ${storedToken}`,
+              },
+              withCredentials: true,
             });
+            if (resp.status === 200) {
+              setUserState(resp.data.is_authenticated);
+              setUserData({
+                username: resp.data.username,
+                user_id: resp.data.user_id,
+                is_superuser: resp.data.is_superuser,
+                profile_image_url: resp.data.profile_image_url,
+                cookie_consent: resp.data.cookie_consent,
+              });
+            }
+          } catch (error) {
+            console.error('Error fetching user authentication status', error);
           }
-        } catch (error) {
-          console.error('Error fetching user authentication status', error);
         }
       };
 
@@ -228,7 +245,22 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                 divStyling={'mt-2'}
               />
 
-              <div className="form-group mt-3 d-flex justify-content-end">
+              <div className="form-group mt-3 d-flex justify-content-between align-items-center">
+                <div className="custom-checkbox-container d-flex align-items-center">
+                  <input
+                    type="checkbox"
+                    id="keepLoggedIn"
+                    checked={keepLoggedIn}
+                    onChange={handleCheckboxChange}
+                    className="custom-checkbox-input"
+                  />
+                  <label
+                    htmlFor="keepLoggedIn"
+                    className="custom-checkbox-label"
+                  >
+                    Keep me logged in
+                  </label>
+                </div>
                 <div
                   className="forgot-password"
                   data-bs-toggle="modal"
