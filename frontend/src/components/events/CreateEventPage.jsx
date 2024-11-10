@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import './CreateEventPage.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import FormConstants from '../../FormConstants';
+import FormConstants from '../../constValues/FormConstants';
 
 const CreateEventPage = ({ apiPrefix, user, userState }) => {
   const navigate = useNavigate();

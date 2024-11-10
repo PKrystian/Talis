@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import FormConstants from '../../FormConstants';
+import FormConstants from '../../constValues/FormConstants';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginForgotPasswordModal.css';
@@ -61,15 +61,15 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
         })
         .then((resp) => {
           if (resp.status === 200) {
-            alert(resp.data.detail);
-
             if (resp.data.validate) {
               document.getElementById('quitForgotPassword').click();
             }
           }
         })
         .catch((error) => {
-          console.error(error);
+          console.error(error.message);
+          setEmailError('Email doesnt exist');
+          setEmailErrorStyle(' wrong-input');
         });
     }
   }

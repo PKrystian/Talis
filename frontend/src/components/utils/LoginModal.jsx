@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import FormConstants from '../../FormConstants';
+import FormConstants from '../../constValues/FormConstants';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginModal.css';
@@ -16,11 +16,15 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
   }, [userState, navigate]);
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [emailErrorStyle, setEmailErrorStyle] = useState('');
+
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [passwordErrorStyle, setPasswordErrorStyle] = useState('');
+
+  const [warningStyle, setWarningStyle] = useState('');
+
   const [submitClickedOnce, setSubmitClickedOnce] = useState(false);
 
   const authCheckedRef = useRef(false);
@@ -75,6 +79,14 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
     }
   }
 
+  function setFormWarning() {
+    setWarningStyle('text-warning');
+    setEmailError('Email could be incorrect');
+    setEmailErrorStyle(' warning-input');
+    setPasswordError('Password could be incorrect');
+    setPasswordErrorStyle(' warning-input');
+  }
+
   function handleSubmit() {
     setSubmitClickedOnce(true);
     let validations = [];
@@ -114,6 +126,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
         })
         .catch((error) => {
           console.error(error);
+          setFormWarning();
         });
     }
   }
@@ -181,7 +194,6 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
           <div className="modal-body">
             <form
               id="login-form"
-              className="mb-4"
               onSubmit={(e) => e.preventDefault()}
               noValidate
             >
@@ -200,7 +212,9 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                   onChange={handleFormOnChange}
                   required
                 />
-                {emailError && <p className="mb-0">{emailError}</p>}
+                {emailError && (
+                  <p className={`mb-0 ${warningStyle}`}>{emailError}</p>
+                )}
               </div>
 
               <FormPasswordInput
@@ -209,6 +223,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                 label={'Password'}
                 inputError={passwordError}
                 inputErrorStyle={passwordErrorStyle}
+                warningStyle={warningStyle}
                 onChangeCallback={handleFormOnChange}
                 divStyling={'mt-2'}
               />

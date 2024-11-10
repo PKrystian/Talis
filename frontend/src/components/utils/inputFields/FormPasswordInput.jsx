@@ -9,6 +9,7 @@ const FormPasswordInput = ({
   placeholder = '',
   inputError,
   inputErrorStyle,
+  warningStyle = '',
   onChangeCallback,
   divStyling,
 }) => {
@@ -56,7 +57,7 @@ const FormPasswordInput = ({
           {currentIcon}
         </div>
       </div>
-      {inputError && <p className="mb-0">{inputError}</p>}
+      {inputError && <p className={`mb-0 ${warningStyle}`}>{inputError}</p>}
     </div>
   );
 };
@@ -68,6 +69,7 @@ FormPasswordInput.propTypes = {
   label: PropTypes.string.isRequired,
   inputError: PropTypes.string,
   inputErrorStyle: PropTypes.string,
+  warningStyle: PropTypes.string,
   onChangeCallback: PropTypes.func,
   divStyling: PropTypes.string,
 };

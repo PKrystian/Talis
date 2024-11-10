@@ -1,7 +1,10 @@
+from types import NoneType
+
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 
 from app.models.invite import Invite
+from app.utils.InviteDataGetter import InviteDataGetter
 
 
 class InviteController:
@@ -15,28 +18,17 @@ class InviteController:
         data = []
 
         if Invite.objects.filter(invited_user=user_id).exists():
+            invite_data_getter = InviteDataGetter()
+
             invites = Invite.objects.filter(
                 invited_user=user_id,
                 status=Invite.INVITE_STATUS_PENDING,
             ).order_by('-created_at').all()
 
-            data = [
-                {
-                    'id': invite.id,
-                    'type': invite.type,
-                    'status': invite.status,
-                    'friend': {
-                        'id': invite.user.id,
-                        'first_name': invite.user.first_name,
-                        'last_name': invite.user.last_name,
-                        'profile_image_url': invite.user.registereduser.profile_image_url
-                    },
-                    'event': {
-                        'id': invite.event.id,
-                        'title': invite.event.title
-                    }
-                } for invite in invites
-            ]
+            data = []
+
+            for invite in invites:
+                data.append(invite_data_getter.get_data_for_invite(invite))
 
         return JsonResponse(
             data=data,
@@ -84,10 +76,15 @@ class InviteController:
 
         if choice == Invite.INVITE_STATUS_ACCEPTED:
             invite.status = Invite.INVITE_STATUS_ACCEPTED
-            invite.event.set_attendees([invite.invited_user])
+            if invite.type == Invite.INVITE_TYPE_EVENT_INVITED_FRIEND:
+                invite.event.set_attendees([invite.invited_user])
+            elif Invite.INVITE_TYPE_EVENT_JOIN_REQUEST:
+                invite.event.set_attendees([invite.user])
         if choice == Invite.INVITE_STATUS_REJECTED:
             invite.status = Invite.INVITE_STATUS_REJECTED
-    
+        if choice == Invite.INVITE_STATUS_DISMISSED:
+            invite.status = Invite.INVITE_STATUS_DISMISSED
+
         invite.save()
 
         return JsonResponse(

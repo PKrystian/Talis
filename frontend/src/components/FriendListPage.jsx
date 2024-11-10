@@ -96,7 +96,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
 
     axios
       .post(
-        `${apiPrefix}add_friend/`,
+        `${apiPrefix}add-friend/`,
         {
           user_id: user.user_id,
           friend_id: friendId,
@@ -130,7 +130,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
       <h1>Your Friends</h1>
       <div className="friend-tiles">
         {friends.map((friend) => (
-          <div className="friend-tile" key={friend.id}>
+          <div className="friend-tile pop" key={friend.id}>
             <Link to={`/user/${friend.id}`}>
               <img
                 src={friend.profile_image_url}
@@ -140,24 +140,31 @@ const FriendListPage = ({ apiPrefix, user }) => {
                   e.target.src = '/static/default-profile.png';
                 }}
               />
-              <p>
+              <div className="my-2">
                 {friend.first_name} {friend.last_name}
-              </p>
+              </div>
             </Link>
           </div>
         ))}
       </div>
 
-      <div className="invite-section">
+      <div className="invite-section my-3">
         <h2>Invite a Friend</h2>
-        <input
-          type="text"
-          value={friendId}
-          onChange={(e) => setFriendId(e.target.value)}
-          placeholder="Enter friend ID"
-        />
-        <button onClick={handleInvite}>Send Invite</button>
-        {inviteMessage && <p className="message">{inviteMessage}</p>}
+        <div className="d-flex">
+          <input
+            className="form-control w-25 me-2"
+            type="text"
+            value={friendId}
+            onChange={(e) => setFriendId(e.target.value)}
+            placeholder="Enter friend ID"
+          />
+          <button className="btn btn-light" onClick={handleInvite}>
+            Send Invite
+          </button>
+        </div>
+        {inviteMessage && (
+          <div className="fs-6 ms-1 text-success">{inviteMessage}</div>
+        )}
       </div>
 
       {pendingInvites.length > 0 && (

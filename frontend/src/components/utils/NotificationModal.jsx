@@ -18,6 +18,7 @@ const NotificationModal = ({ apiPrefix, user, invites, fetchInvites }) => {
               Invites
             </h1>
             <button
+              id="closeNotifications"
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"

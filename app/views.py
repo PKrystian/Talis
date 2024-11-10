@@ -214,6 +214,14 @@ def get_filtered_events(request) -> JsonResponse:
 
 
 @require_GET
+def get_one_event(request, event_id) -> JsonResponse:
+    event_controller = EventController()
+    response = event_controller.action_get_one_event(event_id)
+
+    return response
+
+
+@require_GET
 def user_profile_detail(request, user_id) -> JsonResponse:
     user_profile_controller = UserProfileController()
     response = user_profile_controller.action_user_profile_detail(user_id)
