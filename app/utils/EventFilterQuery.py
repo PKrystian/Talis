@@ -20,7 +20,7 @@ class EventFilter:
         EVENT_FILTER_PLAYER_NUMBER_MIN: lambda query, player_min_limit: query.filter(max_players__gte=player_min_limit),
         EVENT_FILTER_PLAYER_NUMBER_MAX: lambda query, player_max_limit: query.filter(max_players__lte=player_max_limit),
         EVENT_FILTER_CREATED_BY_FRIENDS: lambda query, friend_ids: query.filter(host_id__in=friend_ids),
-        # EVENT_FILTER_CATEGORIES: lambda query, starting_from: query.filter(event_start_date__gt=starting_from),
+        EVENT_FILTER_CATEGORIES: lambda query, tags: query.filter(tags__name__in=tags),
     }
 
     def __init__(self, user_id):
@@ -38,7 +38,7 @@ class EventFilter:
                         continue
                 self.__query = self.__get_event_filter_for_query(filter_name, filter_value)
 
-        return self.__query
+        return self.__query.distinct()
 
     def __get_event_filter_for_query(self, filter_name, filter_value):
         return self.__filter_map[filter_name](self.__query, filter_value)
