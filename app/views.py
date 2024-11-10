@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from urllib.parse import parse_qs
@@ -203,7 +205,7 @@ def get_filtered_events(request) -> JsonResponse:
     filters[EventFilter.EVENT_FILTER_PLAYER_NUMBER_MIN] = request.GET.get(EventFilter.EVENT_FILTER_PLAYER_NUMBER_MIN)
     filters[EventFilter.EVENT_FILTER_PLAYER_NUMBER_MAX] = request.GET.get(EventFilter.EVENT_FILTER_PLAYER_NUMBER_MAX)
     filters[EventFilter.EVENT_FILTER_CREATED_BY_FRIENDS] = request.GET.get(EventFilter.EVENT_FILTER_CREATED_BY_FRIENDS)
-    # filters[EventFilter.EVENT_FILTER_CATEGORIES] = request.GET.get(EventFilter.EVENT_FILTER_CATEGORIES)
+    filters[EventFilter.EVENT_FILTER_CATEGORIES] = json.loads(request.GET.get(EventFilter.EVENT_FILTER_CATEGORIES))
 
     event_controller = EventController()
     response = event_controller.action_get_filtered_events(user_id, filters)
