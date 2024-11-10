@@ -40,7 +40,7 @@ const UserProfilePage = ({ apiPrefix, user }) => {
   const handleSendRequest = () => {
     axios
       .post(
-        `${apiPrefix}add_friend/`,
+        `${apiPrefix}add-friend/`,
         {
           user_id: user.user_id,
           friend_id: id,

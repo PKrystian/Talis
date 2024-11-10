@@ -2,6 +2,8 @@ from app.models import UserBoardGameCollection
 from app.models.friend_list import FriendList
 from django.http import JsonResponse
 
+from app.models.invite import Invite
+
 
 class FriendListController:
     ROUTE_DETAIL: str = 'friends/'
@@ -23,7 +25,7 @@ class FriendListController:
 
         return JsonResponse(data, safe=False)
 
-    ROUTE_ADD: str = 'add_friend/'
+    ROUTE_ADD: str = 'add-friend/'
 
     @staticmethod
     def action_add_friend(request) -> JsonResponse:
@@ -45,13 +47,13 @@ class FriendListController:
             return JsonResponse({'error': 'Friend already exists.'}, status=400)
 
         FriendList.objects.create(user_id=user_id, friend_id=friend_id, status=FriendList.STATUS_PENDING)
+        Invite.objects.create(user_id=user_id, invited_user_id=friend_id, type=Invite.INVITE_TYPE_NEW_FRIEND_REQUEST, status=Invite.INVITE_STATUS_PENDING)
 
         return JsonResponse({'success': True})
 
     ROUTE_ACCEPT: str = 'accept_friend/'
 
-    @staticmethod
-    def action_accept_friend(request) -> JsonResponse:
+    def action_accept_friend(self, request) -> JsonResponse:
         user_id = request.POST.get('user_id')
         friend_id = request.POST.get('friend_id')
 
@@ -65,12 +67,13 @@ class FriendListController:
         friend_list.status = FriendList.STATUS_ACCEPTED
         friend_list.save()
 
+        self.dismiss_invites(user_id, friend_id)
+
         return JsonResponse({'success': True})
 
     ROUTE_REJECT: str = 'reject_friend/'
 
-    @staticmethod
-    def action_reject_friend(request) -> JsonResponse:
+    def action_reject_friend(self, request) -> JsonResponse:
         user_id = request.POST.get('user_id')
         friend_id = request.POST.get('friend_id')
 
@@ -83,6 +86,8 @@ class FriendListController:
 
         friend_list.status = FriendList.STATUS_REJECTED
         friend_list.save()
+
+        self.dismiss_invites(user_id, friend_id)
 
         return JsonResponse({'success': True})
 
@@ -192,3 +197,10 @@ class FriendListController:
             ]
 
         return JsonResponse(data, safe=False, status=200)
+
+    @staticmethod
+    def dismiss_invites(user_id: int, friend_id: int) -> None:
+        if Invite.objects.filter(user_id=friend_id, invited_user_id=user_id, type=Invite.INVITE_TYPE_NEW_FRIEND_REQUEST, status=Invite.INVITE_STATUS_PENDING).exists():
+            invite = Invite.objects.filter(user_id=friend_id, invited_user_id=user_id, type=Invite.INVITE_TYPE_NEW_FRIEND_REQUEST, status=Invite.INVITE_STATUS_PENDING).get()
+            invite.status = Invite.INVITE_STATUS_ACCEPTED
+            invite.save()

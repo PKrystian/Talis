@@ -1,0 +1,15 @@
+.event-details-box {
+  min-height: 700px;
+  max-height: 700px;
+}
+
+.description .text.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.description .text.expanded {
+  display: block;
+}

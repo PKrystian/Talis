@@ -1,9 +1,10 @@
 import json
+from functools import wraps
 
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
-from pandas.core.methods.to_dict import to_dict
+from django.utils import timezone
 
 from app.models import BoardGame, Category
 from app.models.event import Event
@@ -16,10 +17,21 @@ from app.utils.photon_api.PhotonAPILocationMatcher import PhotonAPILocationMatch
 class EventController:
     BASE_ROUTE: str = 'event/'
 
+    @staticmethod
+    def __invalidate_events():
+        one_day_forward = timezone.now() + timezone.timedelta(days=1)
+
+        old_events = Event.objects.filter(event_start_date__lt=one_day_forward).all()
+
+        if old_events:
+            for old_event in old_events:
+                old_event.delete()
+
     ROUTE_GET: str = BASE_ROUTE + 'get/'
 
-    @staticmethod
-    def action_get_events() -> JsonResponse:
+    def action_get_events(self) -> JsonResponse:
+        self.__invalidate_events()
+
         events = Event.objects.all().order_by(Event.EVENT_START_DATE).all()
         data = []
 
@@ -32,7 +44,27 @@ class EventController:
             status=200,
             safe=False
             )
-    
+
+    ROUTE_GET_ONE = BASE_ROUTE + 'get-one/<int:event_id>'
+
+    def action_get_one_event(self, event_id: int) -> JsonResponse:
+        self.__invalidate_events()
+
+        if not Event.objects.filter(id__exact=event_id).exists():
+            return JsonResponse(
+                data={'detail': "This game doesn't exists anymore"},
+                status=200,
+            )
+
+        event = Event.objects.filter(id__exact=event_id).get()
+
+        data = event.serialize()
+
+        return JsonResponse(
+            data=data,
+            status=200,
+        )
+
     ROUTE_NEW: str = BASE_ROUTE + 'new/'
 
     def action_new_event(self, request) -> JsonResponse:
@@ -102,7 +134,7 @@ class EventController:
     @staticmethod
     def __parse_categories(category_names: list) -> list:
         return Category.objects.filter(name__in=category_names).all()
-
+    
     @staticmethod
     def __generate_friend_invites(invited_friend_ids: list, event: Event) -> None:
         for invited_friend_id in invited_friend_ids:
@@ -110,7 +142,7 @@ class EventController:
                 user=event.host,
                 invited_user_id=invited_friend_id,
                 event=event,
-                type=Invite.INVITE_TYPE_EVENT,
+                type=Invite.INVITE_TYPE_EVENT_INVITED_FRIEND,
                 status=Invite.INVITE_STATUS_PENDING,
             )
 
@@ -131,7 +163,7 @@ class EventController:
 
         Invite.objects.create(
             user_id=user_id,
-            invited_user = event.host,
+            invited_user=event.host,
             event=event,
             type=Invite.INVITE_TYPE_EVENT_JOIN_REQUEST,
             status=Invite.INVITE_STATUS_PENDING,

@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import OSMMap from '../utils/OSMMap';
 import { Link } from 'react-router-dom';
 
-const EventItem = ({ chosenEvent, joinButton, user }) => {
+const EventItem = ({ chosenEvent, joinButton = null, user }) => {
   return (
-    <div className="col-8 bg-dark text-left event-details-box">
+    <div className="col-8 bg-dark text-left event-details-box p-3">
       <h1 className="text-start">{chosenEvent.title}</h1>
       <div className="description">
         <p>{chosenEvent.description}</p>

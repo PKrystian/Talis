@@ -1,0 +1,19 @@
+.friend-image {
+  transition: 0.3s;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.friend-image:hover {
+  transform: scale(1.1);
+}
+
+.event-image {
+  transition: 0.3s;
+  width: 200px;
+}
+
+.event-image:hover, .friend-tile:hover {
+  transform: scale(1.1);
+}
