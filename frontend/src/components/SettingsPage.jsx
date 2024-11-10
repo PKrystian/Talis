@@ -128,6 +128,10 @@ const SettingsPage = ({ apiPrefix, user }) => {
               <img
                 src={avatar}
                 alt="Avatar Preview"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/static/default-profile.png';
+                }}
                 className="avatar-preview ms-3"
               />
             )}
