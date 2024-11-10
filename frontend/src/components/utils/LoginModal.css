@@ -50,3 +50,22 @@ div.forgot-password:hover {
   color: var(--text-color-light);
   cursor: pointer;
 }
+
+.custom-checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.custom-checkbox-input {
+  accent-color: var(--text-color-light);
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.custom-checkbox-label {
+  color: var(--text-color-light);
+  font-size: var(--font-size-small);
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
