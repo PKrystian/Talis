@@ -15,7 +15,7 @@ const NotificationModal = ({ apiPrefix, user, invites, fetchInvites }) => {
         <div className="modal-content backplate-invite">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="notificationsLabel">
-              Invites
+              Notifications
             </h1>
             <button
               id="closeNotifications"
@@ -27,7 +27,7 @@ const NotificationModal = ({ apiPrefix, user, invites, fetchInvites }) => {
           </div>
           <div className="modal-body d-flex flex-column">
             {invites.length === 0
-              ? 'You have no invites'
+              ? 'You have no notifications'
               : invites.map((invite) => (
                   <div key={invite.id}>
                     <InviteItem

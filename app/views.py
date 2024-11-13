@@ -366,3 +366,7 @@ def get_all_game_categories(request) -> JsonResponse:
     response = category_controller.action_get_all_game_categories()
 
     return response
+
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
