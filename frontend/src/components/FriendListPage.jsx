@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './FriendListPage.css';
+import MetaComponent from './meta/MetaComponent';
 
 const FriendListPage = ({ apiPrefix, user }) => {
   const [friends, setFriends] = useState([]);
@@ -127,6 +128,11 @@ const FriendListPage = ({ apiPrefix, user }) => {
 
   return (
     <div className="friend-list-page">
+      <MetaComponent
+        title="Your Friends"
+        description="Manage and connect with friends"
+      />
+
       <h1>Your Friends</h1>
       <div className="friend-tiles">
         {friends.map((friend) => (

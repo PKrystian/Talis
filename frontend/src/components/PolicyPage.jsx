@@ -1,9 +1,11 @@
+import MetaComponent from './meta/MetaComponent';
 import './PolicyPage.css';
 
 const PolicyPage = () => {
   return (
     <div>
       <div className="policy-container">
+        <MetaComponent title="Talis Policy" description="Talis Policy page" />
         <h2 id="policy-content" className="policy-header">
           Policy Rules
         </h2>

@@ -4,6 +4,7 @@ import './CreateEventPage.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import FormConstants from '../../constValues/FormConstants';
+import MetaComponent from '../meta/MetaComponent';
 
 const CreateEventPage = ({ apiPrefix, user, userState }) => {
   const navigate = useNavigate();
@@ -332,6 +333,10 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
 
   return (
     <div className="container d-flex justify-content-center mt-4">
+      <MetaComponent
+        title="Create new event"
+        description="Create new local game event"
+      />
       <div className="backplate fade-in-1s">
         <div className="mt-4 mb-4 mx-5">
           <h2>Create Event</h2>

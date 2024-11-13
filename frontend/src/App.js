@@ -22,6 +22,7 @@ import LoginForgotPasswordModal from './components/utils/LoginForgotPasswordModa
 import ForgotPasswordPage from './components/user/ForgotPasswordPage';
 import SettingsPage from './components/SettingsPage';
 import EventSinglePage from './components/events/EventSinglePage';
+import MetaComponent from './components/meta/MetaComponent';
 
 const App = () => {
   const apiPrefix =
@@ -67,6 +68,10 @@ const App = () => {
 
   return (
     <Router>
+      <MetaComponent
+        title="Talis - Board Game Helper"
+        description="Board Game Helper"
+      />
       <div className="page-content">
         <Navbar
           apiPrefix={apiPrefix}

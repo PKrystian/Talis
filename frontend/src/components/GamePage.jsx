@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
 import LoginContainer from './utils/LoginContainer';
+import MetaComponent from './meta/MetaComponent';
 
 const GamePage = ({ apiPrefix, user }) => {
   const { id } = useParams();
@@ -210,6 +211,10 @@ const GamePage = ({ apiPrefix, user }) => {
 
   return (
     <div className="container">
+      <MetaComponent
+        title={boardGame.name}
+        description={`Board Game - ${boardGame.name}`}
+      />
       <div className="row ml-0 mt-4">
         <div className="col-sm-auto text-center">
           <img
