@@ -58,7 +58,6 @@ const UserEventsPage = ({ apiPrefix, user }) => {
     if (user.user_id !== chosenEvent.host.id) {
       return;
     }
-    console.log('works');
     axios.post(
       `${apiPrefix}put-endpoint-here`,
       {
