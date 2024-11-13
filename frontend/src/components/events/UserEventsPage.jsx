@@ -58,17 +58,23 @@ const UserEventsPage = ({ apiPrefix, user }) => {
     if (user.user_id !== chosenEvent.host.id) {
       return;
     }
-    axios.post(
-      `${apiPrefix}put-endpoint-here`,
-      {
-        event_id: chosenEvent.event_id,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+    axios
+      .post(
+        `${apiPrefix}event/remove-event/`,
+        {
+          event_id: chosenEvent.id,
         },
-      },
-    );
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then((response) => {
+        setIsDeleteEventModalOpen(false);
+        setChosenEvent(null);
+        fetchEventData();
+      });
   };
 
   const changeDisplayedEvent = (id) => {

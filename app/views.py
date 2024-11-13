@@ -220,6 +220,17 @@ def get_one_event(request, event_id) -> JsonResponse:
 
     return response
 
+@require_POST
+@csrf_exempt
+def remove_event(request) -> JsonResponse:
+    event_id = request.POST.get('event_id')
+
+    event_controller = EventController()
+
+    response = event_controller.action_remove_event(event_id)
+
+    return response
+
 
 @require_GET
 def user_profile_detail(request, user_id) -> JsonResponse:
