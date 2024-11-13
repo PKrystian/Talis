@@ -6,6 +6,7 @@ import axios from 'axios';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OSMMap from '../utils/OSMMap';
+import MetaComponent from '../meta/MetaComponent';
 
 const UserEventsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
@@ -67,6 +68,10 @@ const UserEventsPage = ({ apiPrefix, user }) => {
 
   return (
     <div>
+      <MetaComponent
+        title="Your Scheduled Meetings"
+        description="User scheduled meetings page"
+      />
       <div className="container text-center navbar-expand-lg">
         <div className="container-fluid">
           <div className="row border bg-dark">

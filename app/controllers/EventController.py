@@ -1,5 +1,4 @@
 import json
-from functools import wraps
 
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -67,23 +66,22 @@ class EventController:
 
     ROUTE_NEW: str = BASE_ROUTE + 'new/'
 
-    def action_new_event(self, request) -> JsonResponse:
+    def action_new_event(self, event_form_data) -> JsonResponse:
         event_creator = EventCreator()
         photon_api_location_matcher = PhotonAPILocationMatcher()
 
-        request_form_data = request.POST
         form_data = dict()
         many_to_many_fields = dict()
         invited_friend_ids = []
 
-        for key in request_form_data.keys():
+        for key in event_form_data.keys():
             if key == Event.BOARD_GAMES or key == Event.TAGS:
-                if request_form_data[key]:
-                    many_to_many_fields[key] = json.loads(request_form_data[key])
+                if event_form_data[key]:
+                    many_to_many_fields[key] = json.loads(event_form_data[key])
             elif key == Invite.INVITED_FRIENDS:
-                invited_friend_ids = json.loads(request_form_data[key])
+                invited_friend_ids = json.loads(event_form_data[key])
             else:
-                form_data[key] = request_form_data[key]
+                form_data[key] = event_form_data[key]
 
         form_data[Event.HOST] = self.__parse_host(int(form_data[Event.HOST]))
         form_data[Event.COORDINATES] = photon_api_location_matcher.get_lat_long_for_address(
@@ -149,10 +147,7 @@ class EventController:
     ROUTE_JOIN = BASE_ROUTE + 'ask-to-join/'
 
     @staticmethod
-    def action_ask_to_join_event(request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-        event_id = request.POST.get('event_id')
-
+    def action_ask_to_join_event(user_id: int, event_id: int) -> JsonResponse:
         event = Event.objects.get(id=event_id)
 
         if event.attendees.count() == event.max_players:
@@ -177,8 +172,7 @@ class EventController:
     ROUTE_USER_RELIANT_EVENTS = BASE_ROUTE + 'user-events/'
 
     @staticmethod
-    def action_get_user_reliant_events(request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
+    def action_get_user_reliant_events(user_id: int) -> JsonResponse:
         user = User.objects.filter(id=user_id).get()
 
         events = Event.objects.filter(Q(host_id=user_id) | Q(attendees__exact=user)).order_by(Event.EVENT_START_DATE)

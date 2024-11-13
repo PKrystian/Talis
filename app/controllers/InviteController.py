@@ -13,8 +13,7 @@ class InviteController:
     ROUTE_GET = BASE_ROUTE + 'get/'
 
     @staticmethod
-    def action_get_invites(request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
+    def action_get_invites(user_id: int) -> JsonResponse:
         data = []
 
         if Invite.objects.filter(invited_user=user_id).exists():
@@ -39,8 +38,7 @@ class InviteController:
     ROUTE_GET_JOIN_REQUESTS = BASE_ROUTE + 'get-join-requests/'
 
     @staticmethod
-    def action_get_join_requests(request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
+    def action_get_join_requests(user_id: int) -> JsonResponse:
         data = []
 
         if Invite.objects.filter(
@@ -68,10 +66,7 @@ class InviteController:
     ROUTE_ACCEPT_REJECT_INVITE = BASE_ROUTE + 'invite-accept-reject/'
 
     @staticmethod
-    def action_accept_or_reject_invite(request) -> JsonResponse:
-        invite_id = request.POST.get('invite_id')
-        choice = request.POST.get('choice')
-
+    def action_accept_or_reject_invite(invite_id: int, choice: str) -> JsonResponse:
         invite = Invite.objects.get(id=invite_id)
 
         if choice == Invite.INVITE_STATUS_ACCEPTED:
