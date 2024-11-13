@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.test import TestCase, Client
 from django.urls import reverse
 from app.models import BoardGame
@@ -7,6 +8,16 @@ class BoardGameTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.board_game = BoardGame.objects.create(name="Test Game", description="A test board game")
+
+    @staticmethod
+    def board_game_list():
+        games = BoardGame.objects.all().values('name')
+        return JsonResponse(
+            {
+                "Based on your games":
+                    list(games), "Wishlist": [], "On top recently": [], "Best for a party": [], "Best ice breaker": []
+            }
+        )
 
     def test_board_game_detail(self):
         response = self.client.get(reverse('board-game-detail', args=[self.board_game.id]))
