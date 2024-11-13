@@ -3,6 +3,10 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.static import serve
+from django.conf.urls import handler404
+from app.views import custom_404_view
+
+handler404 = custom_404_view
 
 urlpatterns = [
     path('', include('app.urls')),
@@ -23,4 +27,5 @@ urlpatterns = [
     re_path(r'^user-events/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^forgot-password/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^settings/', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 ]

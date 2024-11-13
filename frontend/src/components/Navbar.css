@@ -26,9 +26,12 @@ body {
 }
 
 .site-name {
+  font-family: 'Quantico', sans-serif;
   font-size: var(--font-size-large);
-  font-family: 'Gothic A1', sans-serif;
   font-weight: bold;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
 }
 
 .wip-badge {
@@ -170,6 +173,9 @@ body {
 .small-avatar {
   width: 40px;
   height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .notification-pending {
