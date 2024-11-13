@@ -37,12 +37,11 @@ const Footer = () => {
             <Link className="navbar-brand" to="/">
               <div className="align-items-center">
                 <img
-                  src="/static/favicon.ico"
+                  src="/static/logo512.png"
                   alt="Logo"
                   className="navbar-logo me-2"
                 />
                 <span className="site-name">Talis</span>
-                <span className="wip-badge ms-2">WIP</span>
               </div>
             </Link>
             <p className="mt-2">Board Game Helper</p>

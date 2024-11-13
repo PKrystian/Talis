@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#222831" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="description" content="404 Page Not Found - Talis. The page you are looking for does not exist." />
+    <meta name="keywords" content="404, page not found, Talis, board games" />
+    <meta name="author" content="Talis Team" />
+    <meta property="og:title" content="404 - Page Not Found" />
+    <meta property="og:description" content="The page you are looking for does not exist on Talis." />
+    <meta property="og:image" content="/static/logo512.png" />
+    <meta property="og:url" content="https://talis.live/404" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="/static/logo512.png" />
+    <meta name="twitter:title" content="404 - Page Not Found" />
+    <meta name="twitter:description" content="The page you are looking for does not exist on Talis." />
+    <meta name="twitter:image" content="/static/logo512.png" />
+    <link rel="icon" href="/static/favicon.ico" />
+    <link rel="apple-touch-icon" href="/static/logo512.png" />
+    <link rel="manifest" href="/static/manifest.json" />
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" />
+    <meta name="robots" content="noindex" />
+    <title>404 - Page Not Found</title>
+    <style>
+      body {
+        background-color: #2d2d2d;
+        color: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        text-align: center;
+        background-color: #1e1e1e;
+        padding: 2rem;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 1.2em;
+        margin-bottom: 1rem;
+      }
+
+      .error-details {
+        margin-bottom: 1rem;
+        font-size: 12px;
+        color: #b0b0b0;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #7b5bd2;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 3px;
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      .back-link:hover {
+        background-color: #575757;
+      }
+
+      a {
+        color: #7b5bd2;
+        text-decoration: none;
+      }
+    </style>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "404 - Page Not Found",
+        "description": "The page you are looking for does not exist on Talis.",
+        "url": "https://talis.live/404"
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      If you're seeing this message, that means
+      <strong>JavaScript has been disabled on your browser</strong>, please
+      <strong>enable JavaScript</strong> to use this app.
+    </noscript>
+    <div class="container">
+      <h1>404 - Page Not Found</h1>
+      <p>Sorry, the page you are looking for does not exist.</p>
+      <div class="error-details">
+        <p><strong>Request Method:</strong> {{ request.method }}</p>
+        <p><strong>Request URL:</strong> {{ request.build_absolute_uri }}</p>
+      </div>
+      <a href="https://talis.live" class="back-link">Go to Main Page</a>
+      <p>If you need further assistance, please contact us at <a href="mailto:talis.noreply@gmail.com">talis.noreply@gmail.com</a>.</p>
+    </div>
+    <script type="text/javascript">
+      const loadFonts = () => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css?family=Open+Sans:400,700';
+        document.head.appendChild(link);
+      };
+      window.onload = loadFonts;
+    </script>
+  </body>
+</html>

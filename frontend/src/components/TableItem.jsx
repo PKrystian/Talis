@@ -24,7 +24,7 @@ const TableItem = ({ boardGame }) => {
                 alt={boardGame.name}
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = '/static/favicon.ico';
+                  e.target.src = '/static/logo512.png';
                 }}
                 loading="lazy"
                 width="200"
