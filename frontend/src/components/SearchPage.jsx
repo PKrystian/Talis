@@ -137,6 +137,28 @@ const SearchPage = ({ apiPrefix }) => {
     navigate(`?${searchParams.toString()}`);
   };
 
+  const resetFilters = () => {
+    setFilters({
+      category: [],
+      mechanic: [],
+      minPlayers: '',
+      maxPlayers: '',
+      age: [],
+      playtime: [],
+      publisher: '',
+      year: '',
+      excluded: [],
+    });
+    setInputValues({
+      minPlayers: '',
+      maxPlayers: '',
+      publisher: '',
+      year: '',
+    });
+    setSort('rating_desc');
+    navigate(`?query=${encodeURIComponent(query)}`);
+  };
+
   const toggleFilterSection = (section) => {
     setExpandedFilter((prevExpandedFilter) => ({
       ...prevExpandedFilter,
@@ -247,6 +269,9 @@ const SearchPage = ({ apiPrefix }) => {
             className="btn btn-outline-light my-2"
           >
             Apply Filters
+          </button>
+          <button onClick={resetFilters} className="btn btn-outline-light my-2">
+            Reset Filters
           </button>
           <div className="filter-group">
             <div

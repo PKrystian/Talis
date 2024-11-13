@@ -13,6 +13,7 @@ import {
   faShare,
   faCheck,
   faEdit,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
 import LoginContainer from './utils/LoginContainer';
@@ -28,6 +29,24 @@ const GamePage = ({ apiPrefix, user }) => {
     library: user.library || false,
   });
   const [friendsWithGame, setFriendsWithGame] = useState([]);
+  const [hoverStatus, setHoverStatus] = useState({
+    wishlist: false,
+    library: false,
+  });
+
+  const handleMouseEnter = (status) => {
+    setHoverStatus((prevState) => ({
+      ...prevState,
+      [status]: true,
+    }));
+  };
+
+  const handleMouseLeave = (status) => {
+    setHoverStatus((prevState) => ({
+      ...prevState,
+      [status]: false,
+    }));
+  };
 
   const fetchFriendsWithGame = useCallback(async () => {
     if (!user || !user.user_id) return;
@@ -201,7 +220,7 @@ const GamePage = ({ apiPrefix, user }) => {
             alt={boardGame.name}
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = '/static/favicon.ico';
+              e.target.src = '/static/logo512.png';
             }}
           />
         </div>
@@ -333,44 +352,66 @@ const GamePage = ({ apiPrefix, user }) => {
                 <div
                   className="game-page-user-action-item text-center"
                   onClick={() => handleToggleCollection('wishlist')}
+                  onMouseEnter={() => handleMouseEnter('wishlist')}
+                  onMouseLeave={() => handleMouseLeave('wishlist')}
                   title={
                     collectionStatus.wishlist
-                      ? 'Click to remove from wishlist'
+                      ? hoverStatus.wishlist
+                        ? 'Click to remove from wishlist'
+                        : 'Game is in wishlist'
                       : 'Click to add to wishlist'
                   }
                 >
                   <p>
                     <FontAwesomeIcon
                       icon={
-                        collectionStatus.wishlist ? faCheck : faClipboardList
+                        collectionStatus.wishlist
+                          ? hoverStatus.wishlist
+                            ? faTimes
+                            : faCheck
+                          : faClipboardList
                       }
                       className="nav-icon basic-game-icon pointer-cursor"
                     />
                   </p>
                   <p className="pointer-cursor">
                     {collectionStatus.wishlist
-                      ? 'Remove from Wishlist'
+                      ? hoverStatus.wishlist
+                        ? 'Remove from Wishlist'
+                        : 'Game is in Wishlist'
                       : 'Add to Wishlist'}
                   </p>
                 </div>
                 <div
                   className="game-page-user-action-item text-center"
                   onClick={() => handleToggleCollection('library')}
+                  onMouseEnter={() => handleMouseEnter('library')}
+                  onMouseLeave={() => handleMouseLeave('library')}
                   title={
                     collectionStatus.library
-                      ? 'Click to remove from library'
+                      ? hoverStatus.library
+                        ? 'Click to remove from library'
+                        : 'Game is in library'
                       : 'Click to add to library'
                   }
                 >
                   <p>
                     <FontAwesomeIcon
-                      icon={collectionStatus.library ? faCheck : faPlus}
+                      icon={
+                        collectionStatus.library
+                          ? hoverStatus.library
+                            ? faTimes
+                            : faCheck
+                          : faPlus
+                      }
                       className="nav-icon basic-game-icon pointer-cursor"
                     />
                   </p>
                   <p className="pointer-cursor">
                     {collectionStatus.library
-                      ? 'Remove from Library'
+                      ? hoverStatus.library
+                        ? 'Remove from Library'
+                        : 'Game is in Library'
                       : 'Add to Library'}
                   </p>
                 </div>

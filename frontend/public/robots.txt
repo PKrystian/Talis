@@ -4,4 +4,14 @@ Disallow: /backend/
 Disallow: /private/
 Disallow: /static/
 Disallow: /api/
-Allow: /
+Disallow: /collection/
+Disallow: /events/
+Disallow: /user/
+Disallow: /friends/
+Disallow: /register/
+Disallow: /search/
+Disallow: /advanced-search/
+Disallow: /create-event/
+Disallow: /user-events/
+Disallow: /forgot-password/
+Disallow: /settings/
