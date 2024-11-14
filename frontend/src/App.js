@@ -22,6 +22,8 @@ import LoginForgotPasswordModal from './components/utils/LoginForgotPasswordModa
 import ForgotPasswordPage from './components/user/ForgotPasswordPage';
 import SettingsPage from './components/SettingsPage';
 import EventSinglePage from './components/events/EventSinglePage';
+import AccountVerificationModal from './components/user/AccountVerificationModal';
+import VerifyAccount from './components/user/VerifyAccount';
 
 const App = () => {
   const apiPrefix =
@@ -68,15 +70,18 @@ const App = () => {
   return (
     <Router>
       <div className="page-content">
-        <Navbar
-          apiPrefix={apiPrefix}
-          userState={userState}
-          setUserState={updateUserState}
-          user={user}
-          setUserData={updateUser}
-          resetUser={resetUser}
-          inviteCount={invites.length}
-        />
+        {userState && !user.is_active && <AccountVerificationModal />}
+        {!userState || user.is_active ? (
+          <Navbar
+            apiPrefix={apiPrefix}
+            userState={userState}
+            user={user}
+            resetUser={resetUser}
+            inviteCount={invites.length}
+          />
+        ) : (
+          ''
+        )}
         {!userState && (
           <LoginModal
             apiPrefix={apiPrefix}
@@ -99,7 +104,7 @@ const App = () => {
             fetchInvites={fetchInvites}
           />
         )}
-        {userState && user.cookie_consent === null && (
+        {userState && user.cookie_consent === null && user.is_active && (
           <CookieConsentModal
             apiPrefix={apiPrefix}
             user={user}
@@ -134,6 +139,10 @@ const App = () => {
                 setUserState={updateUserState}
               />
             }
+          />
+          <Route
+            path="/verify/:token"
+            element={<VerifyAccount apiPrefix={apiPrefix} user={user} />}
           />
           <Route
             path="/forgot-password/:token"

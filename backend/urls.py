@@ -28,4 +28,5 @@ urlpatterns = [
     re_path(r'^forgot-password/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^settings/', TemplateView.as_view(template_name='index.html')),
     re_path(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
+    re_path(r'^verify/', TemplateView.as_view(template_name='index.html')),
 ]
