@@ -209,8 +209,19 @@ const GamePage = ({ apiPrefix, user }) => {
     setIsExpanded(!isExpanded);
   };
 
-  const getCleanBoardGameDescription = () => {
-    return boardGame.description.replaceAll('<br/><br/>', ' ');
+  const getMetaDescription = () => {
+    const publisherText = boardGame.publisher
+      ? ` by ${boardGame.publisher}`
+      : '';
+
+    const yearPublishedText = boardGame.yearPublishedText
+      ? ` in ${boardGame.year_published}`
+      : '';
+
+    const publishedText =
+      publisherText || yearPublishedText ? ' published' : '';
+
+    return `Board Game - ${boardGame.name}${publishedText}${publisherText}${yearPublishedText}. Uncover more details about the game like game expansions on Talis.`;
   };
 
   return (
@@ -218,7 +229,7 @@ const GamePage = ({ apiPrefix, user }) => {
       {boardGame && (
         <MetaComponent
           title={boardGame.name}
-          description={`${boardGame.name} - ${getCleanBoardGameDescription()}`}
+          description={getMetaDescription()}
           canonical={`game/${boardGame.id}`}
         />
       )}
