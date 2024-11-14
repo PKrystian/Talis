@@ -46,6 +46,7 @@ urlpatterns = [
     path(API_PREFIX + EventController.ROUTE_JOIN, views.ask_to_join_event, name='ask-to-join-event'),
     path(API_PREFIX + EventController.ROUTE_USER_RELIANT_EVENTS, views.get_user_reliant_events, name='user-reliant-events'),
     path(API_PREFIX + EventController.ROUTE_GET_FILTERED, views.get_filtered_events, name='get-filtered-events'),
+    path(API_PREFIX + EventController.ROUTE_REMOVE_EVENT, views.remove_event, name='remove-event'),
     path(API_PREFIX + UserProfileController.ROUTE_DETAIL, views.user_profile_detail, name='user-profile-detail'),
     path(API_PREFIX + FriendListController.ROUTE_DETAIL, views.friend_list_detail, name='friend-list-detail'),
     path(API_PREFIX + FriendListController.ROUTE_ADD, views.add_friend, name='add-friend'),
