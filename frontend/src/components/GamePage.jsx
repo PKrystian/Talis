@@ -221,7 +221,7 @@ const GamePage = ({ apiPrefix, user }) => {
     const publishedText =
       publisherText || yearPublishedText ? ' published' : '';
 
-    return `Board Game - ${boardGame.name}${publishedText}${publisherText}${yearPublishedText}. Uncover more details about the game like game expansions on Talis.`;
+    return `Board Game - ${boardGame.name}${publishedText}${publisherText}${yearPublishedText}. Uncover more details about the game like precise description on Talis.`;
   };
 
   return (
