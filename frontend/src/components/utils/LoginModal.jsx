@@ -125,6 +125,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
               is_superuser: resp.data.is_superuser,
               profile_image_url: resp.data.profile_image_url,
               cookie_consent: resp.data.cookie_consent,
+              is_active: resp.data.is_active,
             });
 
             const storage = keepLoggedIn ? localStorage : sessionStorage;
@@ -170,6 +171,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                 is_superuser: resp.data.is_superuser,
                 profile_image_url: resp.data.profile_image_url,
                 cookie_consent: resp.data.cookie_consent,
+                is_active: resp.data.is_active,
               });
             }
           } catch (error) {

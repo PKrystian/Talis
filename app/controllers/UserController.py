@@ -42,6 +42,20 @@ class UserController:
 
         login(request, new_registered_user.user)
 
+        new_token = OneTimeToken.objects.create(
+            email=new_registered_user.user.email,
+            expiry_date=timezone.now() + timezone.timedelta(days=365)
+        )
+
+        # Password set to None uses the Email from environmental variables
+        send_mail(
+            subject='Talis Verify Account',
+            message=f'To verify your account just follow the link below:\n'
+                    f'{OneTimeToken.VERIFY_ACCOUNT_URL}{new_token.token}',
+            from_email=None,
+            recipient_list=[new_registered_user.user.email]
+        )
+
         return JsonResponse(
             data={
                 'detail': 'Registered successfully',
@@ -51,6 +65,7 @@ class UserController:
                 'is_superuser': new_registered_user.user.is_superuser,
                 'profile_image_url': new_registered_user.profile_image_url,
                 'cookie_consent': new_registered_user.cookie_consent,
+                'is_active': new_registered_user.user.is_active,
             },
             status=200
         )
@@ -110,6 +125,7 @@ class UserController:
                 'is_superuser': user.is_superuser,
                 'profile_image_url': profile_image_url,
                 'cookie_consent': cookie_consent,
+                'is_active': user.is_active,
             },
             status=200
         )
@@ -148,6 +164,7 @@ class UserController:
                     'is_superuser': request.user.is_superuser,
                     'profile_image_url': profile_image_url,
                     'cookie_consent': cookie_consent,
+                    'is_active': request.user.is_active,
                 },
                 status=200
             )
@@ -273,6 +290,25 @@ class UserController:
     ROUTE_CHECK_ACCESS_PASSWORD_CHANGE = 'check-access/<str:token>/'
 
     def action_check_access_password_change(self, token) -> JsonResponse:
+        response = self.__check_token_validity(token)
+
+        if type(response) is JsonResponse:
+            return response
+
+        return JsonResponse(
+            data={'detail': 'Access granted'},
+            status=200,
+        )
+
+    @staticmethod
+    def __invalidate_tokens() -> None:
+        one_time_tokens = OneTimeToken.objects.all()
+
+        for one_time_token in one_time_tokens:
+            if one_time_token.expiry_date < (timezone.now() + timezone.timedelta(minutes=20)):
+                one_time_token.delete()
+
+    def __check_token_validity(self, token) -> OneTimeToken | JsonResponse:
         if not OneTimeToken.objects.filter(token=token).exists():
             return JsonResponse(
                 data={'detail': "You don't have access to this resource"},
@@ -289,18 +325,7 @@ class UserController:
                 status=401,
             )
 
-        return JsonResponse(
-            data={'detail': 'Access granted'},
-            status=200,
-        )
-
-    @staticmethod
-    def __invalidate_tokens() -> None:
-        one_time_tokens = OneTimeToken.objects.all()
-
-        for one_time_token in one_time_tokens:
-            if one_time_token.expiry_date < timezone.now() + timezone.timedelta(minutes=20):
-                one_time_token.delete()
+        return one_time_token
 
     ROUTE_CHANGE_PASSWORD = 'change-password/'
 
@@ -330,6 +355,27 @@ class UserController:
             data={
                 'detail': 'Password changed successfully',
                 'validate': True,
+            },
+            status=200,
+        )
+
+    ROUTE_VERIFY_ACCOUNT = 'verify/<str:token>/'
+
+    def action_verify_account(self, token: str):
+        response = self.__check_token_validity(token)
+
+        if type(response) is JsonResponse:
+            return response
+
+        user = User.objects.filter(email=response.email).get()
+        user.is_active = True
+        user.save()
+
+        response.delete()
+
+        return JsonResponse(
+            data={
+                'detail': 'Account verified successfully',
             },
             status=200,
         )
