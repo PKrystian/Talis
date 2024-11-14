@@ -20,15 +20,7 @@ import './Navbar.css';
 import { TOP_CATEGORY_LIST, TOP_MECHANIC_LIST } from '../messages/suggestions';
 import LoginButton from './utils/LoginButton';
 
-const Navbar = ({
-  apiPrefix,
-  user,
-  setUserData,
-  userState,
-  setUserState,
-  resetUser,
-  inviteCount,
-}) => {
+const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState('');
