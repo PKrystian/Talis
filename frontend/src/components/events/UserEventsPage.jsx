@@ -70,7 +70,8 @@ const UserEventsPage = ({ apiPrefix, user }) => {
     <div>
       <MetaComponent
         title="Your Scheduled Meetings"
-        description="User scheduled meetings page"
+        description="View and manage events that you are a part of or that you created"
+        canonical="user-events"
       />
       <div className="container text-center navbar-expand-lg">
         <div className="container-fluid">

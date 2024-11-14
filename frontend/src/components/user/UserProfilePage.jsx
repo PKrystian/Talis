@@ -102,7 +102,13 @@ const UserProfilePage = ({ apiPrefix, user }) => {
 
   return (
     <div className="user-profile-page">
-      <MetaComponent title="Your Profile" description="User profile page" />
+      {user && (
+        <MetaComponent
+          title="Your Profile"
+          description="Check information about your profile"
+          canonical={`user/${user.user_id}`}
+        />
+      )}
       <div className="profile-header">
         <img
           src={

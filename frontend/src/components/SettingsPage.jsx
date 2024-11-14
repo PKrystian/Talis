@@ -93,7 +93,11 @@ const SettingsPage = ({ apiPrefix, user }) => {
 
   return (
     <div className="settings-page container">
-      <MetaComponent title="User Settings" description="User settings page" />
+      <MetaComponent
+        title="User Settings"
+        description="Manage your account details"
+        canonical="settings"
+      />
       <h2 className="text-center mb-4">Settings</h2>
       <form onSubmit={handleSubmit}>
         {/*commenting out email field as we might use it in the future*/}
