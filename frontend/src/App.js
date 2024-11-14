@@ -24,6 +24,7 @@ import SettingsPage from './components/SettingsPage';
 import EventSinglePage from './components/events/EventSinglePage';
 import AccountVerificationModal from './components/user/AccountVerificationModal';
 import VerifyAccount from './components/user/VerifyAccount';
+import MetaComponent from './components/meta/MetaComponent';
 
 const App = () => {
   const apiPrefix =
@@ -69,6 +70,10 @@ const App = () => {
 
   return (
     <Router>
+      <MetaComponent
+        title="Talis - Board Game Helper"
+        description="Talis is an application designed to help users search for a selection of board games and organize them within their own library. Discover new games and share them with your friends."
+      />
       <div className="page-content">
         {userState && !user.is_active && <AccountVerificationModal />}
         {!userState || user.is_active ? (

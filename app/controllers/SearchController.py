@@ -30,7 +30,7 @@ class SearchController:
         '2h+': (120, 0),
     }
 
-    def action_search_board_games(self, query, limit, page, query_params) -> JsonResponse:
+    def action_search_board_games(self, query: str, limit: int, page: int, query_params: dict) -> JsonResponse:
         try:
             combined_filters = query_params.get('filters[]', [])
             sort_by = query_params.get('sort', ['rating_desc'])[0]

@@ -1,5 +1,3 @@
-import random
-
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django.http import JsonResponse
@@ -20,14 +18,12 @@ class BoardGameController:
     CATEGORY_ON_TOP = 'On top'
     CATEGORY_BEST_FOR_A_PARTY = 'Best for a party'
 
-    def action_board_game_list(self, request) -> JsonResponse:
-        post_data = request.POST
-
+    def action_board_game_list(self, user_id: int | None) -> JsonResponse:
         try:
             user = None
 
-            if 'user_id' in post_data.keys():
-                user = User.objects.filter(id__exact=post_data['user_id']).get()
+            if user_id:
+                user = User.objects.filter(id__exact=user_id).get()
 
             board_game_recommender = BoardGameRecommender(
                 BoardGameCategoryGetter(),
@@ -68,7 +64,7 @@ class BoardGameController:
 
         except User.DoesNotExist:
             LogErrorCreator().create().critical().log(
-                message=f"User with id {post_data.get('user_id')} does not exist",
+                message=f"User with id {user_id} does not exist",
                 trigger='action_board_game_list',
                 class_reference='BoardGameController'
             )
@@ -114,7 +110,8 @@ class BoardGameController:
 
     ROUTE_GAME_DETAIL: str = 'board-games/<int:game_id>/'
 
-    def action_board_game_detail(self, request, game_id) -> JsonResponse:
+    @staticmethod
+    def action_board_game_detail(game_id) -> JsonResponse:
         try:
             board_game = BoardGame.objects.prefetch_related(
                 'boardgamepublisher_set__publisher',

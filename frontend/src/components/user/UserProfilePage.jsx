@@ -4,6 +4,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import './UserProfilePage.css';
 import CollectionPage from '../CollectionPage';
+import MetaComponent from '../meta/MetaComponent';
 
 const UserProfilePage = ({ apiPrefix, user }) => {
   const { id } = useParams();
@@ -97,8 +98,17 @@ const UserProfilePage = ({ apiPrefix, user }) => {
     return <div className="loading">Loading...</div>;
   }
 
+  console.log(user);
+
   return (
     <div className="user-profile-page">
+      {user && (
+        <MetaComponent
+          title="Your Profile"
+          description="Check information about your profile"
+          canonical={`user/${user.user_id}`}
+        />
+      )}
       <div className="profile-header">
         <img
           src={

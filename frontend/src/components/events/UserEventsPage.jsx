@@ -6,6 +6,7 @@ import axios from 'axios';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OSMMap from '../utils/OSMMap';
+import MetaComponent from '../meta/MetaComponent';
 import DeleteEventModal from './DeleteEventModal.jsx';
 
 const UserEventsPage = ({ apiPrefix, user }) => {
@@ -97,6 +98,11 @@ const UserEventsPage = ({ apiPrefix, user }) => {
 
   return (
     <div>
+      <MetaComponent
+        title="Your Scheduled Meetings"
+        description="View and manage events that you are a part of or that you created"
+        canonical="user-events"
+      />
       <div className="container text-center navbar-expand-lg">
         <div className="container-fluid">
           <div className="row border bg-dark">

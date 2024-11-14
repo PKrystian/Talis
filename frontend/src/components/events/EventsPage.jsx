@@ -9,6 +9,7 @@ import { FaCheck } from 'react-icons/fa6';
 import EventItem from './EventItem';
 import FilterConstants from '../../constValues/FilterConstants';
 import EventTagsModal from './EventTagsModal';
+import MetaComponent from '../meta/MetaComponent';
 
 const EventsPage = ({ apiPrefix, user }) => {
   const navigate = useNavigate();
@@ -203,6 +204,11 @@ const EventsPage = ({ apiPrefix, user }) => {
 
   return (
     <div>
+      <MetaComponent
+        title="Local Game Meetings"
+        description="Join an existing social event or create your own and invite your friends"
+        canonical="events"
+      />
       <div className="container text-center navbar-expand-lg">
         <div className="container-fluid">
           <button
