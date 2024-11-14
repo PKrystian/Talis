@@ -5,18 +5,18 @@ import PropTypes from 'prop-types';
 import './ForgotPasswordPage.css';
 import FormConstants from '../../constValues/FormConstants';
 import FormPasswordInput from '../utils/inputFields/FormPasswordInput';
-import TopScreenAlert from '../utils/TopScreenAlert';
 
 const ForgotPasswordPage = ({ apiPrefix, userState }) => {
   const navigate = useNavigate();
-  const { token } = useParams();
 
   if (userState) {
     navigate('/');
   }
 
+  const { token } = useParams();
+
   useEffect(() => {
-    axios.get(apiPrefix + `check-access/${token}/`).catch((error) => {
+    axios.get(`${apiPrefix}check-access/${token}/`).catch((error) => {
       navigate('/');
       console.error('Error getting access:', error);
     });

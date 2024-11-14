@@ -9,6 +9,7 @@ class RegisteredUserCreator:
     def create(self) -> Self:
         self.__registered_user = RegisteredUser()
         self.__registered_user.user = User()
+        self.__registered_user.user.is_active = False
         return self
 
     def set_first_name(self, first_name) -> Self:

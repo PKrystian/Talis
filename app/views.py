@@ -147,6 +147,16 @@ def change_password(request) -> JsonResponse:
     return response
 
 
+@require_GET
+@csrf_exempt
+def verify_account(request, token) -> JsonResponse:
+    user_controller = UserController()
+
+    response = user_controller.action_verify_account(token)
+
+    return response
+
+
 @require_POST
 @csrf_exempt
 def add_to_collection(request) -> JsonResponse:

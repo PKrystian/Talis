@@ -22,6 +22,8 @@ import LoginForgotPasswordModal from './components/utils/LoginForgotPasswordModa
 import ForgotPasswordPage from './components/user/ForgotPasswordPage';
 import SettingsPage from './components/SettingsPage';
 import EventSinglePage from './components/events/EventSinglePage';
+import AccountVerificationModal from './components/user/AccountVerificationModal';
+import VerifyAccount from './components/user/VerifyAccount';
 import MetaComponent from './components/meta/MetaComponent';
 
 const App = () => {
@@ -73,15 +75,18 @@ const App = () => {
         description="Talis is an application designed to help users search for a selection of board games and organize them within their own library. Discover new games and share them with your friends."
       />
       <div className="page-content">
-        <Navbar
-          apiPrefix={apiPrefix}
-          userState={userState}
-          setUserState={updateUserState}
-          user={user}
-          setUserData={updateUser}
-          resetUser={resetUser}
-          inviteCount={invites.length}
-        />
+        {userState && !user.is_active && <AccountVerificationModal />}
+        {!userState || user.is_active ? (
+          <Navbar
+            apiPrefix={apiPrefix}
+            userState={userState}
+            user={user}
+            resetUser={resetUser}
+            inviteCount={invites.length}
+          />
+        ) : (
+          ''
+        )}
         {!userState && (
           <LoginModal
             apiPrefix={apiPrefix}
@@ -104,7 +109,7 @@ const App = () => {
             fetchInvites={fetchInvites}
           />
         )}
-        {userState && user.cookie_consent === null && (
+        {userState && user.cookie_consent === null && user.is_active && (
           <CookieConsentModal
             apiPrefix={apiPrefix}
             user={user}
@@ -139,6 +144,10 @@ const App = () => {
                 setUserState={updateUserState}
               />
             }
+          />
+          <Route
+            path="/verify/:token"
+            element={<VerifyAccount apiPrefix={apiPrefix} user={user} />}
           />
           <Route
             path="/forgot-password/:token"
