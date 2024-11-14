@@ -208,3 +208,21 @@ class EventController:
             status=200,
             safe=False
         )
+
+    ROUTE_REMOVE_EVENT = BASE_ROUTE + 'remove-event/'
+
+    @staticmethod
+    def action_remove_event(event_id):
+        if Event.objects.filter(id__exact=event_id).exists():
+            event = Event.objects.filter(id__exact=event_id).get()
+            event.delete()
+
+            return JsonResponse(
+                data={'detail': 'Event removed successfully'},
+                status=200,
+            )
+
+        return JsonResponse(
+            data={'detail': 'Error occurred while trying to remove event'},
+            status=400,
+        )
