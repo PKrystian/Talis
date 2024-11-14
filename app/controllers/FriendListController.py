@@ -9,7 +9,7 @@ class FriendListController:
     ROUTE_DETAIL: str = 'friends/'
 
     @staticmethod
-    def action_friend_list(request, user_id, limit, tags) -> JsonResponse:
+    def action_friend_list(user_id: int, limit: int, tags: list | None) -> JsonResponse:
         friend_list = FriendList.objects.filter(user_id=user_id, status=tags).order_by('-created_at')[:limit]
 
         data = []
@@ -28,10 +28,7 @@ class FriendListController:
     ROUTE_ADD: str = 'add-friend/'
 
     @staticmethod
-    def action_add_friend(request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-        friend_id = request.POST.get('friend_id')
-
+    def action_add_friend(user_id: int, friend_id: int) -> JsonResponse:
         if not user_id or not friend_id:
             return JsonResponse({'error': 'User ID and friend ID are required.'}, status=400)
         if user_id == friend_id:
@@ -53,10 +50,7 @@ class FriendListController:
 
     ROUTE_ACCEPT: str = 'accept_friend/'
 
-    def action_accept_friend(self, request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-        friend_id = request.POST.get('friend_id')
-
+    def action_accept_friend(self, user_id: int, friend_id: int) -> JsonResponse:
         if not user_id or not friend_id:
             return JsonResponse({'error': 'User ID and friend ID are required.'}, status=400)
 
@@ -73,10 +67,7 @@ class FriendListController:
 
     ROUTE_REJECT: str = 'reject_friend/'
 
-    def action_reject_friend(self, request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-        friend_id = request.POST.get('friend_id')
-
+    def action_reject_friend(self, user_id: int, friend_id: int) -> JsonResponse:
         if not user_id or not friend_id:
             return JsonResponse({'error': 'User ID and friend ID are required.'}, status=400)
 
@@ -94,10 +85,7 @@ class FriendListController:
     ROUTE_REMOVE: str = 'remove_friend/'
 
     @staticmethod
-    def action_remove_friend(request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-        friend_id = request.POST.get('friend_id')
-
+    def action_remove_friend(user_id: int, friend_id: int) -> JsonResponse:
         if not user_id or not friend_id:
             return JsonResponse({'error': 'User ID and friend ID are required.'}, status=400)
 
@@ -115,7 +103,7 @@ class FriendListController:
     ROUTE_INVITES: str = 'friend_invites/'
 
     @staticmethod
-    def action_pending_invites(request, user_id) -> JsonResponse:
+    def action_pending_invites(user_id) -> JsonResponse:
         pending_invites = FriendList.objects.filter(friend_id=user_id, status=FriendList.STATUS_PENDING)
         data = []
 
@@ -133,10 +121,7 @@ class FriendListController:
     ROUTE_STATUS: str = 'friend_status/'
 
     @staticmethod
-    def action_friend_status(request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-        friend_id = request.POST.get('friend_id')
-
+    def action_friend_status(user_id: int, friend_id: int) -> JsonResponse:
         if not user_id or not friend_id:
             return JsonResponse({'error': 'User ID and friend ID are required.'}, status=400)
 
@@ -150,7 +135,7 @@ class FriendListController:
     ROUTE_WITH_GAME: str = 'friends_with_game/'
 
     @staticmethod
-    def action_get_friends_with_game(request, user_id, game_id):
+    def action_get_friends_with_game(user_id, game_id):
         friend_list_ids = FriendList.objects.filter(
             user_id__exact=user_id,
             status__exact=FriendList.STATUS_ACCEPTED
@@ -178,9 +163,7 @@ class FriendListController:
     ROUTE_GET_ALL = 'get_friends/'
 
     @staticmethod
-    def action_get_friends_for_user(request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-
+    def action_get_friends_for_user(user_id: int) -> JsonResponse:
         data = []
 
         if FriendList.objects.filter(user_id__exact=user_id).exists():

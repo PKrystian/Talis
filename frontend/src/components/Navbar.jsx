@@ -188,7 +188,7 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/collection">
                     <HiSquaresPlus className="me-1" />
-                    My Library
+                    My Collection
                   </Link>
                 </li>
               )}

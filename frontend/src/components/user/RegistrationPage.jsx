@@ -8,6 +8,7 @@ import './RegistrationPage.css';
 import LoginButton from '../utils/LoginButton';
 import FormConstants from '../../constValues/FormConstants';
 import FormPasswordInput from '../utils/inputFields/FormPasswordInput';
+import MetaComponent from '../meta/MetaComponent';
 
 const RegistrationPage = ({
   apiPrefix,
@@ -184,6 +185,11 @@ const RegistrationPage = ({
 
   return (
     <div className="container d-flex justify-content-center mt-4">
+      <MetaComponent
+        title="Register"
+        description="Register on Talis now to gain access to your own library of games, wishlisting as well as joining and creating social events"
+        canonical="register"
+      />
       <div className="backplate fade-in-1s">
         <div className="mt-4 mb-4 mx-5">
           <h2>Sign up</h2>

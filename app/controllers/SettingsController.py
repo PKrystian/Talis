@@ -7,11 +7,8 @@ class SettingsController:
     ROUTE_DETAIL: str = 'update_user/'
 
     @staticmethod
-    def action_update_user(request) -> JsonResponse:
+    def action_update_user(user_id: int, updated_user_data: dict) -> JsonResponse:
         try:
-            user_id = request.POST.get('user_id')
-            updated_user_data = request.POST.dict()
-
             registered_user = RegisteredUser.objects.get(user_id=user_id)
             user = registered_user.user
 

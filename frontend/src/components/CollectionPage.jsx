@@ -3,6 +3,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import './CollectionPage.css';
 import TableItem from './TableItem';
+import MetaComponent from './meta/MetaComponent';
 
 const CollectionPage = ({ user }) => {
   const [collectionData, setCollectionData] = useState(null);
@@ -129,6 +130,11 @@ const CollectionPage = ({ user }) => {
 
   return (
     <div className="container mt-4">
+      <MetaComponent
+        title="My Collection"
+        description="Display your wishlisted and library saved games"
+        canonical="collection"
+      />
       <h1 className="text-center">Collection</h1>
       <ul className="nav nav-tabs">
         <li className="nav-item">
