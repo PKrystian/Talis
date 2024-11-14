@@ -70,7 +70,7 @@ const App = () => {
     <Router>
       <MetaComponent
         title="Talis - Board Game Helper"
-        description="Board Game Helper"
+        description="Talis is an application designed to help users search for a selection of board games and organize them within their own library. Discover new games and share them with your friends."
       />
       <div className="page-content">
         <Navbar

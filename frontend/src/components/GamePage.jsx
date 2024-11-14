@@ -209,12 +209,19 @@ const GamePage = ({ apiPrefix, user }) => {
     setIsExpanded(!isExpanded);
   };
 
+  const getCleanBoardGameDescription = () => {
+    return boardGame.description.replaceAll('<br/><br/>', ' ');
+  };
+
   return (
     <div className="container">
-      <MetaComponent
-        title={boardGame.name}
-        description={`Board Game - ${boardGame.name}`}
-      />
+      {boardGame && (
+        <MetaComponent
+          title={boardGame.name}
+          description={`${boardGame.name} - ${getCleanBoardGameDescription()}`}
+          canonical={`game/${boardGame.id}`}
+        />
+      )}
       <div className="row ml-0 mt-4">
         <div className="col-sm-auto text-center">
           <img

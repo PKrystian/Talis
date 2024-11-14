@@ -206,7 +206,8 @@ const EventsPage = ({ apiPrefix, user }) => {
     <div>
       <MetaComponent
         title="Local Game Meetings"
-        description="Check out board game events around your area"
+        description="Join an existing social event or create your own and invite your friends"
+        canonical="events"
       />
       <div className="container text-center navbar-expand-lg">
         <div className="container-fluid">

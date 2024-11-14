@@ -4,7 +4,11 @@ import MetaComponent from './meta/MetaComponent';
 const LicensePage = () => {
   return (
     <div className="license-container">
-      <MetaComponent title="Talis License" description="Talis License page" />
+      <MetaComponent
+        title="Talis License"
+        description="View the license under which our website operates"
+        canonical="license"
+      />
       <h1 className="license-header">MIT License</h1>
       <p className="license-paragraph">Copyright (c) 2024 Krystian Pińczak</p>
       <p className="license-paragraph">
