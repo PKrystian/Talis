@@ -2,7 +2,6 @@ import pytest
 
 from app.models import BoardGame
 from app.utils.creators.BoardGameCreator import BoardGameCreator
-from app.utils.bgg_api import bgg_api_params
 
 
 @pytest.fixture
@@ -49,3 +48,50 @@ def actual_board_game_fixture():
         .load_from_dict(board_game_dict)
         .get_board_game()
     )
+
+@pytest.fixture
+def custom_board_game_list():
+    board_game_dict_list = [
+        {
+            BoardGame.NAME: 'Game One',
+            BoardGame.YEAR_PUBLISHED: 2000,
+            BoardGame.MIN_PLAYERS: 4,
+            BoardGame.MAX_PLAYERS: 12,
+            BoardGame.AGE: 12,
+            BoardGame.MIN_PLAYTIME: 30,
+            BoardGame.MAX_PLAYTIME: 120,
+            BoardGame.DESCRIPTION: 'This game is about playing games',
+            BoardGame.RATING: 6.78,
+        }, {
+            BoardGame.NAME: 'Game Two',
+            BoardGame.YEAR_PUBLISHED: 1990,
+            BoardGame.MIN_PLAYERS: 3,
+            BoardGame.MAX_PLAYERS: 7,
+            BoardGame.AGE: 12,
+            BoardGame.MIN_PLAYTIME: 40,
+            BoardGame.MAX_PLAYTIME: 80,
+            BoardGame.DESCRIPTION: 'This game is about playing games too',
+            BoardGame.RATING: 7.98,
+        }, {
+            BoardGame.NAME: 'Game Three',
+            BoardGame.YEAR_PUBLISHED: 2005,
+            BoardGame.MIN_PLAYERS: 6,
+            BoardGame.MAX_PLAYERS: 10,
+            BoardGame.AGE: 15,
+            BoardGame.MIN_PLAYTIME: 40,
+            BoardGame.MAX_PLAYTIME: 160,
+            BoardGame.DESCRIPTION: 'This game is about playing games aswell',
+            BoardGame.RATING: 9.05,
+        }
+    ]
+
+    board_game_creator = BoardGameCreator()
+    board_game_list = []
+
+    for board_game_dict in board_game_dict_list:
+        board_game_list.append(board_game_creator
+                               .create()
+                               .load_from_dict(board_game_dict)
+                               .get_board_game())
+
+    return board_game_list

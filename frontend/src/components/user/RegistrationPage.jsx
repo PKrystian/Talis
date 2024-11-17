@@ -8,6 +8,7 @@ import './RegistrationPage.css';
 import LoginButton from '../utils/LoginButton';
 import FormConstants from '../../constValues/FormConstants';
 import FormPasswordInput from '../utils/inputFields/FormPasswordInput';
+import MetaComponent from '../meta/MetaComponent';
 
 const RegistrationPage = ({
   apiPrefix,
@@ -160,6 +161,7 @@ const RegistrationPage = ({
               is_superuser: resp.data.is_superuser,
               profile_image_url: resp.data.profile_image_url,
               cookie_consent: resp.data.cookie_consent,
+              is_active: resp.data.is_active,
             });
             navigate('/');
           } else {
@@ -183,6 +185,11 @@ const RegistrationPage = ({
 
   return (
     <div className="register-container d-flex justify-content-between pt-4">
+      <MetaComponent
+        title="Register"
+        description="Register on Talis now to gain access to your own library of games, wishlisting as well as joining and creating social events"
+        canonical="register"
+      />
       <div className="col-md-4 col-12 ps-md-5 fade-in-1s">
         <div className="mt-4 mb-4 mx-5">
           <h2>Sign up</h2>
