@@ -19,13 +19,3 @@
 .form-check-label {
   color: var(--text-color-light);
 }
-
-.form-check-input:checked {
-  background-color: var(--background-color-dark-light);
-  border-color: var(--background-color-dark-light);
-}
-
-.form-check-input {
-  background-color: var(--hover-background-color);
-  border-color: var(--hover-background-color);
-}
