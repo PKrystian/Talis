@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
 import { HiSquaresPlus } from 'react-icons/hi2';
+import { MdAddHome } from 'react-icons/md';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -263,6 +264,13 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                       >
                         <FaCog className="me-1" />
                         Settings
+                      </Link>
+                      <Link
+                        className="nav-user-profile-link pb-2"
+                        to="/game-add"
+                      >
+                        <MdAddHome className="me-1" />
+                        Add Game
                       </Link>
                       <Link
                         className="nav-user-profile-link pb-2"
