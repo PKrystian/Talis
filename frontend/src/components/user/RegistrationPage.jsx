@@ -356,7 +356,7 @@ const RegistrationPage = ({
         <img
           className="img-fluid"
           alt="noimg"
-          src="/static/assets/undraw_moonlight.svg"
+          src="/assets/undraw_moonlight.svg"
         ></img>
       </div>
     </div>
