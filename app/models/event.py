@@ -3,6 +3,7 @@ from django.db import models
 from app.models.registered_user import User
 from app.models.board_game import BoardGame
 from app.models.category import Category
+from better_profanity import profanity
 
 
 class Event(models.Model):
@@ -57,6 +58,8 @@ class Event(models.Model):
         return self.title
 
     def set_title(self, title: str) -> None:
+        if profanity.contains_profanity(title):
+            title = profanity.censor(title)
         self.title = title
 
     def set_host(self, host: str) -> None:
@@ -78,6 +81,8 @@ class Event(models.Model):
         self.tags.add(*tags)
 
     def set_description(self, description: str) -> None:
+        if profanity.contains_profanity(description):
+            description = profanity.censor(description)
         self.description = description
 
     def set_attendees(self, attendees: List) -> None:

@@ -17,7 +17,6 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './Navbar.css';
-import { TOP_CATEGORY_LIST, TOP_MECHANIC_LIST } from '../messages/suggestions';
 import LoginButton from './utils/LoginButton';
 
 const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
@@ -32,9 +31,6 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
   const searchFormRef = useRef(null);
   const userDropdownRef = useRef(null);
   const cancelTokenSource = useRef(null);
-
-  const categoryOptions = TOP_CATEGORY_LIST;
-  const mechanicOptions = TOP_MECHANIC_LIST;
 
   useEffect(() => {
     if (query.length >= 3 && isInputFocused) {

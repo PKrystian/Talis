@@ -32,6 +32,7 @@ matplotlib = "^3.9.2"
 scikit-learn = "^1.5.2"
 seaborn = "^0.13.2"
 pytest-mock = "^3.14.0"
+better-profanity = "^0.7.0"
 
 
 [tool.poetry.group.dev.dependencies]
