@@ -6,6 +6,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import TableItem from './TableItem';
 import './SearchPage.css';
 import { CATEGORY_LIST, MECHANIC_LIST } from '../messages/search';
+import MetaComponent from './meta/MetaComponent';
 
 const EXCLUDED_LIST = [
   'no_expansions',
@@ -258,6 +259,11 @@ const SearchPage = ({ apiPrefix }) => {
 
   return (
     <div className="container mt-4">
+      <MetaComponent
+        title="Search Page"
+        description="Search for your favourite board games here"
+        canonical="search"
+      />
       {query && (
         <h3 className="text-light">Search Results for &quot;{query}&quot;</h3>
       )}
