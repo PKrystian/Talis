@@ -12,6 +12,7 @@ from .controllers.CollectionController import CollectionController
 from .controllers.FriendListController import FriendListController
 from .controllers.InviteController import InviteController
 from .controllers.SettingsController import SettingsController
+from .controllers.GameAddController import GameAddController
 from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
@@ -445,6 +446,17 @@ def update_user(request) -> JsonResponse:
     settings_controller = SettingsController()
 
     response = settings_controller.action_update_user(user_id, updated_user_data)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def game_add(request) -> JsonResponse:
+    game_add_data = request.POST.dict()
+
+    game_add_controller = GameAddController()
+
+    response = game_add_controller.action_add_game(game_add_data)
 
     return response
 

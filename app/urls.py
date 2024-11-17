@@ -2,6 +2,7 @@ from . import views
 from django.urls import path
 
 from .controllers.CategoryController import CategoryController
+from .controllers.GameAddController import GameAddController
 from .controllers.InviteController import InviteController
 from .controllers.SettingsController import SettingsController
 from .utils import SitemapsHelper
@@ -61,6 +62,7 @@ urlpatterns = [
     path(API_PREFIX + InviteController.ROUTE_GET_JOIN_REQUESTS, views.get_join_requests, name='get-join-requests'),
     path(API_PREFIX + InviteController.ROUTE_ACCEPT_REJECT_INVITE, views.accept_or_reject_invite, name='accept_reject_invite'),
     path(API_PREFIX + SettingsController.ROUTE_DETAIL, views.update_user, name='update-user'),
+    path(API_PREFIX + GameAddController.ROUTE, views.game_add, name='game-add'),
     path(API_PREFIX + CategoryController.ROUTE_GET_ALL, views.get_all_game_categories, name='get-all-game-categories'),
     path('sitemap.xml', sitemap_index, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('sitemap-boardgames-<int:offset>.xml', SitemapsHelper.board_game_sitemap_view, name='board-game-sitemap'),

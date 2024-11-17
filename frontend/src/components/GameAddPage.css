@@ -41,7 +41,7 @@
 .avatar-preview {
   width: 200px;
   height: 200px;
-  border-radius: 50%;
+  border-radius: 10px;
   border: 2px solid var(--border-color-dark);
   object-fit: cover;
   transition: var(--transition);
@@ -63,4 +63,69 @@
 .custom-btn-primary:hover:not(:disabled) {
   background-color: var(--hover-background-color);
   border-color: var(--hover-background-color);
+}
+
+/* GameAddPage.css */
+.select__control {
+  background-color: var(--background-color-dark-light);
+  color: var(--text-color-dark);
+  border: 1px solid var(--border-color-light);
+}
+
+.select__menu {
+  background-color: var(--background-color-dark-light);
+}
+
+.select__menu-list {
+  background-color: var(--background-color-dark-light);
+}
+
+.select__menu-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.select__menu-list::-webkit-scrollbar-track {
+  background: var(--background-color-dark-light);
+}
+
+.select__menu-list::-webkit-scrollbar-thumb {
+  background: var(--text-color-light);
+}
+
+.select__menu-list::-webkit-scrollbar-thumb:hover {
+  background: var(--hover-background-color);
+}
+
+.select__option {
+  background-color: var(--background-color-dark-light);
+  color: var(--text-color-light);
+}
+
+.select__option--is-focused {
+  background-color: var(--hover-background-color);
+}
+
+.select__multi-value {
+  background-color: var(--background-color-dark-medium);
+}
+
+.select__multi-value__label {
+  color: var(--text-color-light);
+}
+
+.select__multi-value__remove {
+  color: var(--text-color-light);
+}
+
+.select__multi-value__remove:hover {
+  background-color: var(--hover-background-color);
+  color: var(--text-color-dark);
+}
+
+.select__placeholder {
+  color: var(--text-color-light-medium);
+}
+
+.select__single-value {
+  color: var(--text-color-light);
 }

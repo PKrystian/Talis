@@ -21,6 +21,7 @@ import axios from 'axios';
 import LoginForgotPasswordModal from './components/utils/LoginForgotPasswordModal';
 import ForgotPasswordPage from './components/user/ForgotPasswordPage';
 import SettingsPage from './components/SettingsPage';
+import GameAddPage from './components/GameAddPage';
 import EventSinglePage from './components/events/EventSinglePage';
 import AccountVerificationModal from './components/user/AccountVerificationModal';
 import VerifyAccount from './components/user/VerifyAccount';
@@ -185,6 +186,10 @@ const App = () => {
           <Route
             path="/settings"
             element={<SettingsPage apiPrefix={apiPrefix} user={user} />}
+          />
+          <Route
+            path="/game-add"
+            element={<GameAddPage apiPrefix={apiPrefix} user={user} />}
           />
         </Routes>
         <Footer />
