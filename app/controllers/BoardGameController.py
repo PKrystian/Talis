@@ -150,7 +150,6 @@ class BoardGameController:
                 'expansion_name': expansion.expansion_board_game.name
             } for expansion in board_game.expansions.all()]
 
-            print(board_game.accepted_by_admin)
             data = {
                 'id': board_game.id,
                 'name': board_game.name,
