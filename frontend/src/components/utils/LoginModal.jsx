@@ -225,13 +225,13 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
               <div className="form-group mt-2">
                 <label
                   htmlFor={FormConstants.LOGIN_EMAIL_FIELD}
-                  className="form-label"
+                  className="login-form-label"
                 >
                   Email
                 </label>
                 <input
                   id={FormConstants.LOGIN_EMAIL_FIELD}
-                  className={`form-control${emailErrorStyle}`}
+                  className={`login-form-control${emailErrorStyle}`}
                   type="email"
                   value={email}
                   onChange={handleFormOnChange}
@@ -260,7 +260,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                     id="keepLoggedIn"
                     checked={keepLoggedIn}
                     onChange={handleCheckboxChange}
-                    className="custom-checkbox-input"
+                    className="form-check-input"
                   />
                   <label
                     htmlFor="keepLoggedIn"
