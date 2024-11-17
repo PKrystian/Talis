@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginModal.css';
 import FormPasswordInput from './inputFields/FormPasswordInput';
+import { toast } from 'react-toastify';
 
 const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
   const navigate = useNavigate();
@@ -137,6 +138,11 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
         .catch((error) => {
           console.error(error);
           setFormWarning();
+          toast.warn('Wrong credentials or user not verified', {
+            position: 'top-center',
+            theme: 'dark',
+            bodyClassName: () => 'd-flex p-2 text-center',
+          });
         });
     }
   }
@@ -175,7 +181,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
               });
             }
           } catch (error) {
-            console.error('Error fetching user authentication status', error);
+            console.error('Error fetching user authentication', error);
           }
         }
       };

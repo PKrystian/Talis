@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const VerifyAccount = ({ apiPrefix, user }) => {
+const VerifyAccount = ({ apiPrefix, user, setUserState, setUserData }) => {
   const navigate = useNavigate();
 
   if (!user || (user && user.is_active)) {
@@ -13,9 +13,34 @@ const VerifyAccount = ({ apiPrefix, user }) => {
   const { token } = useParams();
 
   useEffect(() => {
-    axios.get(`${apiPrefix}verify/${token}/`).catch((error) => {
-      console.error('Error getting access:', error);
-    });
+    axios
+      .get(`${apiPrefix}verify/${token}/`, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
+      .catch((error) => {
+        console.error('Error getting access:', error);
+      })
+      .then((resp) => {
+        if (resp.status === 200) {
+          setUserState(resp.data.is_authenticated);
+          setUserData({
+            username: resp.data.username,
+            user_id: resp.data.user_id,
+            is_superuser: resp.data.is_superuser,
+            profile_image_url: resp.data.profile_image_url,
+            cookie_consent: resp.data.cookie_consent,
+            is_active: resp.data.is_active,
+          });
+
+          console.log(resp.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     navigate('/');
   }, []);
 };

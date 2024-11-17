@@ -80,8 +80,7 @@ class UserController:
 
     ROUTE_LOGIN = 'login/'
 
-    @staticmethod
-    def action_login(request) -> JsonResponse:
+    def action_login(self, request) -> JsonResponse:
         form_data = request.POST
         form_validator = FormValidator()
 
@@ -94,27 +93,16 @@ class UserController:
                 status=401
             )
 
-        user = authenticate(username=form_data[FormValidator.FORM_FIELD_EMAIL],
-                            password=form_data[FormValidator.FORM_FIELD_PASSWORD])
+        user = authenticate(
+            username=form_data[FormValidator.FORM_FIELD_EMAIL],
+            password=form_data[FormValidator.FORM_FIELD_PASSWORD],
+        )
 
-        if not user:
-            return JsonResponse(
-                data={
-                    'error': 'Failed to login',
-                    'reason': 'login_error',
-                },
-                status=401,
-            )
+        return self.__login_user_and_send_response(request, user)
 
+    @staticmethod
+    def __login_user_and_send_response(request, user):
         login(request, user)
-
-        try:
-            registered_user = RegisteredUser.objects.get(user=user)
-            profile_image_url = registered_user.profile_image_url
-            cookie_consent = registered_user.cookie_consent
-        except RegisteredUser.DoesNotExist:
-            profile_image_url = None
-            cookie_consent = None
 
         return JsonResponse(
             data={
@@ -123,8 +111,8 @@ class UserController:
                 'is_authenticated': True,
                 'user_id': user.id,
                 'is_superuser': user.is_superuser,
-                'profile_image_url': profile_image_url,
-                'cookie_consent': cookie_consent,
+                'profile_image_url': user.registereduser.profile_image_url,
+                'cookie_consent': user.registereduser.cookie_consent,
                 'is_active': user.is_active,
             },
             status=200
@@ -361,7 +349,7 @@ class UserController:
 
     ROUTE_VERIFY_ACCOUNT = 'verify/<str:token>/'
 
-    def action_verify_account(self, token: str):
+    def action_verify_account(self, request, token: str):
         response = self.__check_token_validity(token)
 
         if type(response) is JsonResponse:
@@ -373,9 +361,4 @@ class UserController:
 
         response.delete()
 
-        return JsonResponse(
-            data={
-                'detail': 'Account verified successfully',
-            },
-            status=200,
-        )
+        return self.__login_user_and_send_response(request, user)
