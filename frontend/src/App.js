@@ -37,14 +37,6 @@ const App = () => {
 
   const [invites, setInvites] = useState([]);
 
-  const updateUserState = (userStateData) => {
-    setUserState(userStateData);
-  };
-
-  const updateUser = (userData) => {
-    setUser(userData);
-  };
-
   const resetUser = () => {
     setUser({});
     setUserState(false);
@@ -91,8 +83,8 @@ const App = () => {
           <LoginModal
             apiPrefix={apiPrefix}
             userState={userState}
-            setUserState={updateUserState}
-            setUserData={updateUser}
+            setUserState={setUserState}
+            setUserData={setUser}
           />
         )}
         {!userState && (
@@ -113,7 +105,7 @@ const App = () => {
           <CookieConsentModal
             apiPrefix={apiPrefix}
             user={user}
-            setUser={updateUser}
+            setUser={setUser}
           />
         )}
         <Routes apiPrefix={apiPrefix}>
@@ -140,14 +132,21 @@ const App = () => {
               <RegistrationPage
                 apiPrefix={apiPrefix}
                 userState={userState}
-                setUserData={updateUser}
-                setUserState={updateUserState}
+                setUserData={setUser}
+                setUserState={setUserState}
               />
             }
           />
           <Route
             path="/verify/:token"
-            element={<VerifyAccount apiPrefix={apiPrefix} user={user} />}
+            element={
+              <VerifyAccount
+                apiPrefix={apiPrefix}
+                user={user}
+                setUserState={setUserState}
+                setUserData={setUser}
+              />
+            }
           />
           <Route
             path="/forgot-password/:token"

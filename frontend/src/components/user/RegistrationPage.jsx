@@ -9,6 +9,7 @@ import LoginButton from '../utils/LoginButton';
 import FormConstants from '../../constValues/FormConstants';
 import FormPasswordInput from '../utils/inputFields/FormPasswordInput';
 import MetaComponent from '../meta/MetaComponent';
+import { toast } from 'react-toastify';
 
 const RegistrationPage = ({
   apiPrefix,
@@ -170,6 +171,11 @@ const RegistrationPage = ({
         })
         .catch((error) => {
           console.error('Error during registration:', error);
+          toast.warn('User with this email already exists', {
+            position: 'top-center',
+            theme: 'dark',
+            bodyClassName: () => 'd-flex p-2 text-center',
+          });
         });
     }
   }
