@@ -6,9 +6,7 @@ from app.models import UserBoardGameCollection, BoardGame, BoardGameCategory
 class CollectionController:
     ROUTE: str = 'user-collection/'
 
-    def action_user_collection(self, request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-
+    def action_user_collection(self, user_id: int) -> JsonResponse:
         wishlist_games_ids = UserBoardGameCollection.objects.filter(
             user_id=user_id, status='wishlist'
         ).values_list('board_game_id', flat=True)
@@ -28,7 +26,8 @@ class CollectionController:
             'library': library_data
         }, safe=False)
 
-    def serialize_board_games(self, board_games, user_id):
+    @staticmethod
+    def serialize_board_games(board_games: list, user_id: int):
         data = []
         for board_game in board_games:
             data.append({
@@ -43,11 +42,8 @@ class CollectionController:
 
     ROUTE_ADD = 'add_to_collection/'
 
-    def action_add_to_collection(self, request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-        board_game_id = request.POST.get('board_game_id')
-        status = request.POST.get('status')
-
+    @staticmethod
+    def action_add_to_collection(user_id: int, board_game_id: int, status: str) -> JsonResponse:
         if not user_id or not board_game_id or not status:
             return JsonResponse({'error': 'User ID, board game ID, and status are required.'}, status=400)
 
@@ -68,11 +64,8 @@ class CollectionController:
 
     ROUTE_REMOVE = 'remove_from_collection/'
 
-    def action_remove_from_collection(self, request) -> JsonResponse:
-        user_id = request.POST.get('user_id')
-        board_game_id = request.POST.get('board_game_id')
-        status = request.POST.get('status')
-
+    @staticmethod
+    def action_remove_from_collection(user_id: int, board_game_id: int, status: str) -> JsonResponse:
         if not user_id or not board_game_id or not status:
             return JsonResponse({'error': 'User ID, board game ID, and status are required.'}, status=400)
 

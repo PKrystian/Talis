@@ -4,6 +4,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import FormConstants from '../constValues/FormConstants';
 import './SettingsPage.css';
+import MetaComponent from './meta/MetaComponent';
 
 const SettingsPage = ({ apiPrefix, user }) => {
   const [email, setEmail] = useState('');
@@ -92,6 +93,11 @@ const SettingsPage = ({ apiPrefix, user }) => {
 
   return (
     <div className="settings-page container">
+      <MetaComponent
+        title="User Settings"
+        description="Manage your account details"
+        canonical="settings"
+      />
       <h2 className="text-center mb-4">Settings</h2>
       <form onSubmit={handleSubmit}>
         {/*commenting out email field as we might use it in the future*/}

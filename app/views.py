@@ -33,18 +33,21 @@ def set_session(request) -> JsonResponse:
             })
 
 
+@require_POST
 @csrf_exempt
 def board_game_list(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+
     board_game_controller = BoardGameController()
 
-    return board_game_controller.action_board_game_list(request)
+    return board_game_controller.action_board_game_list(user_id)
 
 
 @require_GET
 def board_game_details(request, game_id) -> JsonResponse:
     board_game_controller = BoardGameController()
 
-    return board_game_controller.action_board_game_detail(request, game_id)
+    return board_game_controller.action_board_game_detail(game_id)
 
 
 @require_GET
@@ -144,11 +147,26 @@ def change_password(request) -> JsonResponse:
     return response
 
 
+@require_GET
+@csrf_exempt
+def verify_account(request, token) -> JsonResponse:
+    user_controller = UserController()
+
+    response = user_controller.action_verify_account(token)
+
+    return response
+
+
 @require_POST
 @csrf_exempt
 def add_to_collection(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    board_game_id = request.POST.get('board_game_id')
+    status = request.POST.get('status')
+
     collection_controller = CollectionController()
-    response = collection_controller.action_add_to_collection(request)
+
+    response = collection_controller.action_add_to_collection(user_id, board_game_id, status)
 
     return response
 
@@ -156,8 +174,13 @@ def add_to_collection(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def remove_from_collection(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    board_game_id = request.POST.get('board_game_id')
+    status = request.POST.get('status')
+
     collection_controller = CollectionController()
-    response = collection_controller.action_remove_from_collection(request)
+
+    response = collection_controller.action_remove_from_collection(user_id, board_game_id, status)
 
     return response
 
@@ -165,8 +188,11 @@ def remove_from_collection(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def user_collection(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+
     collection_controller = CollectionController()
-    response = collection_controller.action_user_collection(request)
+
+    response = collection_controller.action_user_collection(user_id)
 
     return response
 
@@ -181,8 +207,11 @@ def get_events(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def get_user_reliant_events(request):
+    user_id = request.POST.get('user_id')
+
     event_controller = EventController()
-    response = event_controller.action_get_user_reliant_events(request)
+
+    response = event_controller.action_get_user_reliant_events(user_id)
 
     return response
 
@@ -190,8 +219,11 @@ def get_user_reliant_events(request):
 @require_POST
 @csrf_exempt
 def new_event(request) -> JsonResponse:
+    event_form_data = request.POST
+
     event_controller = EventController()
-    response = event_controller.action_new_event(request)
+
+    response = event_controller.action_new_event(event_form_data)
 
     return response
 
@@ -220,6 +252,17 @@ def get_one_event(request, event_id) -> JsonResponse:
 
     return response
 
+@require_POST
+@csrf_exempt
+def remove_event(request) -> JsonResponse:
+    event_id = request.POST.get('event_id')
+
+    event_controller = EventController()
+
+    response = event_controller.action_remove_event(event_id)
+
+    return response
+
 
 @require_GET
 def user_profile_detail(request, user_id) -> JsonResponse:
@@ -237,7 +280,7 @@ def friend_list_detail(request) -> JsonResponse:
     tags = request.GET.get('tags', None)
 
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_friend_list(request, user_id, limit, tags)
+    response = friend_list_controller.action_friend_list(user_id, limit, tags)
 
     return response
 
@@ -245,8 +288,12 @@ def friend_list_detail(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def add_friend(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    friend_id = request.POST.get('friend_id')
+
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_add_friend(request)
+
+    response = friend_list_controller.action_add_friend(user_id, friend_id)
 
     return response
 
@@ -254,8 +301,12 @@ def add_friend(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def accept_friend(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    friend_id = request.POST.get('friend_id')
+
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_accept_friend(request)
+
+    response = friend_list_controller.action_accept_friend(user_id, friend_id)
 
     return response
 
@@ -263,8 +314,12 @@ def accept_friend(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def reject_friend(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    friend_id = request.POST.get('friend_id')
+
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_reject_friend(request)
+
+    response = friend_list_controller.action_reject_friend(user_id, friend_id)
 
     return response
 
@@ -272,8 +327,12 @@ def reject_friend(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def remove_friend(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    friend_id = request.POST.get('friend_id')
+
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_remove_friend(request)
+
+    response = friend_list_controller.action_remove_friend(user_id, friend_id)
 
     return response
 
@@ -282,8 +341,10 @@ def remove_friend(request) -> JsonResponse:
 @csrf_exempt
 def pending_invites(request) -> JsonResponse:
     user_id = request.GET.get('user_id')
+
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_pending_invites(request, user_id)
+
+    response = friend_list_controller.action_pending_invites(user_id)
 
     return response
 
@@ -291,8 +352,12 @@ def pending_invites(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def friend_status(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    friend_id = request.POST.get('friend_id')
+
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_friend_status(request)
+
+    response = friend_list_controller.action_friend_status(user_id, friend_id)
 
     return response
 
@@ -302,8 +367,10 @@ def friend_status(request) -> JsonResponse:
 def get_friends_with_game(request) -> JsonResponse:
     user_id = request.POST.get('user_id')
     game_id = request.POST.get('game_id')
+
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_get_friends_with_game(request, user_id, game_id)
+
+    response = friend_list_controller.action_get_friends_with_game(user_id, game_id)
 
     return response
 
@@ -311,8 +378,11 @@ def get_friends_with_game(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def get_friends_for_user(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+
     friend_list_controller = FriendListController()
-    response = friend_list_controller.action_get_friends_for_user(request)
+
+    response = friend_list_controller.action_get_friends_for_user(user_id)
 
     return response
 
@@ -320,8 +390,11 @@ def get_friends_for_user(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def get_invites_for_user(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+
     invite_controller = InviteController()
-    response = invite_controller.action_get_invites(request)
+
+    response = invite_controller.action_get_invites(user_id)
 
     return response
 
@@ -329,8 +402,12 @@ def get_invites_for_user(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def ask_to_join_event(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    event_id = request.POST.get('event_id')
+
     event_controller = EventController()
-    response = event_controller.action_ask_to_join_event(request)
+
+    response = event_controller.action_ask_to_join_event(user_id, event_id)
 
     return response
 
@@ -338,8 +415,11 @@ def ask_to_join_event(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def get_join_requests(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+
     invite_controller = InviteController()
-    response = invite_controller.action_get_join_requests(request)
+
+    response = invite_controller.action_get_join_requests(user_id)
 
     return response
 
@@ -347,16 +427,24 @@ def get_join_requests(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def accept_or_reject_invite(request) -> JsonResponse:
+    invite_id = request.POST.get('invite_id')
+    choice = request.POST.get('choice')
+
     invite_controller = InviteController()
-    response = invite_controller.action_accept_or_reject_invite(request)
+
+    response = invite_controller.action_accept_or_reject_invite(invite_id, choice)
 
     return response
 
 @require_POST
 @csrf_exempt
 def update_user(request) -> JsonResponse:
+    user_id = request.POST.get('user_id')
+    updated_user_data = request.POST.dict()
+
     settings_controller = SettingsController()
-    response = settings_controller.action_update_user(request)
+
+    response = settings_controller.action_update_user(user_id, updated_user_data)
 
     return response
 

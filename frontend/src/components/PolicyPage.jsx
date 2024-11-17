@@ -1,9 +1,15 @@
+import MetaComponent from './meta/MetaComponent';
 import './PolicyPage.css';
 
 const PolicyPage = () => {
   return (
     <div>
       <div className="policy-container">
+        <MetaComponent
+          title="Talis Policy"
+          description="View our website policy"
+          canonical="policy"
+        />
         <h2 id="policy-content" className="policy-header">
           Policy Rules
         </h2>

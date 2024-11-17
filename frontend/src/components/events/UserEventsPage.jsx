@@ -6,6 +6,8 @@ import axios from 'axios';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OSMMap from '../utils/OSMMap';
+import MetaComponent from '../meta/MetaComponent';
+import DeleteEventModal from './DeleteEventModal.jsx';
 
 const UserEventsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
@@ -14,6 +16,8 @@ const UserEventsPage = ({ apiPrefix, user }) => {
   const [, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
   const navigate = useNavigate();
+
+  const [isDeleteEventModalOpen, setIsDeleteEventModalOpen] = useState(false);
 
   const eventsUrl = apiPrefix + 'event/user-events/';
 
@@ -51,8 +55,35 @@ const UserEventsPage = ({ apiPrefix, user }) => {
     }
   }, []);
 
+  const handleDeleteEvent = () => {
+    if (user.user_id !== chosenEvent.host.id) {
+      return;
+    }
+    axios
+      .post(
+        `${apiPrefix}event/remove-event/`,
+        {
+          event_id: chosenEvent.id,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then((response) => {
+        setIsDeleteEventModalOpen(false);
+        setChosenEvent(null);
+        fetchEventData();
+      });
+  };
+
   const changeDisplayedEvent = (id) => {
     setChosenEvent(eventData.find((event) => event.id === id));
+  };
+
+  const toggleDeleteEventModal = () => {
+    setIsDeleteEventModalOpen((prev) => !prev);
   };
 
   if (isLoading) {
@@ -67,6 +98,11 @@ const UserEventsPage = ({ apiPrefix, user }) => {
 
   return (
     <div>
+      <MetaComponent
+        title="Your Scheduled Meetings"
+        description="View and manage events that you are a part of or that you created"
+        canonical="user-events"
+      />
       <div className="container text-center navbar-expand-lg">
         <div className="container-fluid">
           <div className="row border bg-dark">
@@ -105,7 +141,24 @@ const UserEventsPage = ({ apiPrefix, user }) => {
             </div>
             {chosenEvent !== null ? (
               <div className="col-8 bg-dark text-left event-details-box">
-                <h1 className="text-start">{chosenEvent.title}</h1>
+                <div className="d-flex justify-content-between">
+                  <h1>{chosenEvent.title}</h1>
+                  {user.user_id === chosenEvent.host.id && (
+                    <button
+                      className="btn btn-danger my-2"
+                      onClick={toggleDeleteEventModal}
+                    >
+                      Delete Event
+                    </button>
+                  )}
+                  {isDeleteEventModalOpen && (
+                    <DeleteEventModal
+                      toggleDeleteEventModal={toggleDeleteEventModal}
+                      handleDeleteEvent={handleDeleteEvent}
+                      event_id={chosenEvent.event_id}
+                    />
+                  )}
+                </div>
                 <div className="description">
                   <p>{chosenEvent.description}</p>
                 </div>

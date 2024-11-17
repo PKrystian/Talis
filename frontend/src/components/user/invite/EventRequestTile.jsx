@@ -62,13 +62,13 @@ const EventRequestTile = ({ invite, handleInviteAction }) => {
           className="btn btn-secondary mx-2"
           onClick={() => handleInviteAction('rejected')}
         >
-          Reject Player
+          Cancel
         </button>
         <button
           className="btn btn-primary mx-2"
           onClick={() => handleInviteAction('accepted')}
         >
-          Accept Player
+          Accept
         </button>
       </div>
     </div>
