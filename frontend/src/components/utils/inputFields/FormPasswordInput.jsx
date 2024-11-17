@@ -36,13 +36,13 @@ const FormPasswordInput = ({
 
   return (
     <div className={`form-group ${divStyling}`}>
-      <label htmlFor={id} className="form-label">
+      <label htmlFor={id} className="registration-form-label">
         {label}
       </label>
       <div className="position-relative">
         <input
           id={id}
-          className={`form-control${inputErrorStyle}`}
+          className={`registration-form-control${inputErrorStyle}`}
           type={currentVisibility}
           value={value}
           onChange={onChangeCallback}
