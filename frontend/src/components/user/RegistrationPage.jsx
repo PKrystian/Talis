@@ -190,32 +190,31 @@ const RegistrationPage = ({
   });
 
   return (
-    <div className="container d-flex justify-content-center mt-4">
+    <div className="register-container px-0 px-md-5 registration-custom-padding-md-lg d-flex pt-4">
       <MetaComponent
         title="Register"
         description="Register on Talis now to gain access to your own library of games, wishlisting as well as joining and creating social events"
         canonical="register"
       />
-      <div className="backplate fade-in-1s">
-        <div className="mt-4 mb-4 mx-5">
+      <div className="col-md-6 col-12 ps-md-5 fade-in-1s d-flex justify-content-center justify-content-md-end">
+        <div className="register-form-container mt-4">
           <h2>Sign up</h2>
-          <hr></hr>
           <form
             id="register-form"
             onSubmit={(e) => e.preventDefault()}
             noValidate
           >
-            <div className="form-group row mt-2">
+            <div className="row mt-4">
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.REGISTRATION_FIRST_NAME_FIELD}
-                  className="form-label"
+                  className="registration-form-label"
                 >
                   First Name
                 </label>
                 <input
                   id={FormConstants.REGISTRATION_FIRST_NAME_FIELD}
-                  className="form-control"
+                  className="registration-form-control"
                   type="text"
                   value={firstName}
                   onChange={handleFormOnChange}
@@ -227,16 +226,16 @@ const RegistrationPage = ({
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.REGISTRATION_LAST_NAME_FIELD}
-                  className="form-label"
+                  className="registration-form-label"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="optional field"
                 >
-                  Last Name *
+                  Last Name (optional)
                 </label>
                 <input
                   id={FormConstants.REGISTRATION_LAST_NAME_FIELD}
-                  className="form-control"
+                  className="registration-form-control"
                   type="text"
                   value={lastName}
                   onChange={handleFormOnChange}
@@ -245,16 +244,16 @@ const RegistrationPage = ({
               </div>
             </div>
 
-            <div className="form-group mt-2 fade-in-2s">
+            <div className="mt-2 fade-in-2s">
               <label
                 htmlFor={FormConstants.REGISTRATION_BIRTH_DATE_FIELD}
-                className="form-label"
+                className="registration-form-label"
               >
                 Date of birth
               </label>
               <input
                 id={FormConstants.REGISTRATION_BIRTH_DATE_FIELD}
-                className="form-control"
+                className="registration-form-control"
                 type="date"
                 onChange={handleFormOnChange}
                 required
@@ -264,13 +263,13 @@ const RegistrationPage = ({
             <div className="form-group mt-2 fade-in-2s">
               <label
                 htmlFor={FormConstants.REGISTRATION_EMAIL_FIELD}
-                className="form-label"
+                className="registration-form-label"
               >
                 Email
               </label>
               <input
                 id={FormConstants.REGISTRATION_EMAIL_FIELD}
-                className={`form-control${emailErrorStyle}`}
+                className={`registration-form-control${emailErrorStyle}`}
                 type="email"
                 value={email}
                 onChange={handleFormOnChange}
@@ -334,7 +333,7 @@ const RegistrationPage = ({
 
             <button
               type="submit"
-              className={`btn ${submitButtonStyle} form-control mt-2`}
+              className={`btn ${submitButtonStyle} registration-custom-button registration-form-control mt-2`}
               onClick={handleSubmit}
               disabled={!isFormValid}
             >
@@ -342,16 +341,26 @@ const RegistrationPage = ({
             </button>
           </form>
           <div className="text-center mt-3">
-            <p className="login-tooltip">
-              Already have an account?
-              <LoginButton
-                ButtonTag={'a'}
-                buttonClass={'mx-2 text-decoration-none'}
-                buttonText={'Login'}
-              />
-            </p>
+            <LoginButton
+              ButtonTag={'a'}
+              buttonClass={
+                'btn registration-login-button registration-form-control'
+              }
+              buttonText={
+                <>
+                  Already have an account? <strong>Login</strong>
+                </>
+              }
+            />
           </div>
         </div>
+      </div>
+      <div className="registration-image col-md-6 d-none d-md-block align-content-center justify-content-center ps-3">
+        <img
+          className="img-fluid"
+          alt="noimg"
+          src="/static/assets/undraw_moonlight.svg"
+        ></img>
       </div>
     </div>
   );
