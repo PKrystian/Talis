@@ -32,6 +32,7 @@ body {
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
+  letter-spacing: 1px;
 }
 
 .wip-badge {
