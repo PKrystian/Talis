@@ -193,7 +193,6 @@ const RegistrationPage = ({
       <div className="col-md-6 col-12 ps-md-5 fade-in-1s d-flex justify-content-center justify-content-md-end">
         <div className="register-form-container mt-4">
           <h2>Sign up</h2>
-          <h6>Register to create an account</h6>
           <form
             id="register-form"
             onSubmit={(e) => e.preventDefault()}
@@ -226,7 +225,7 @@ const RegistrationPage = ({
                   data-bs-placement="top"
                   title="optional field"
                 >
-                  Last Name *
+                  Last Name (optional)
                 </label>
                 <input
                   id={FormConstants.REGISTRATION_LAST_NAME_FIELD}
@@ -353,6 +352,7 @@ const RegistrationPage = ({
       <div className="registration-image col-md-6 d-none d-md-block align-content-center justify-content-center ps-3">
         <img
           className="img-fluid"
+          alt="noimg"
           src="/static/assets/undraw_moonlight.svg"
         ></img>
       </div>
