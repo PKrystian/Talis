@@ -1,5 +1,5 @@
 .backplate {
-  background: var(--background-color-dark-light);
+  background: #0b0914;
   border-radius: 30px;
   border-color: white;
 }
@@ -9,7 +9,24 @@
   font-size: var(--font-size-small);
 }
 
+.login-form-control {
+  background-color: #0b0914;
+  color: var(--text-color-light);
+  width: 100%;
+  min-height: 35px;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border: 1px solid gray;
+  border-radius: 10px;
+}
 
+.login-form-label {
+  color: #b3a7f0;
+  font-size: var(--font-size-small);
+  margin-bottom: 0.5rem;
+}
 
 .form-group input::placeholder {
   color: var(--text-color-light);
