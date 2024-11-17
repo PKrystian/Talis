@@ -190,13 +190,13 @@ const RegistrationPage = ({
   });
 
   return (
-    <div className="register-container px-0 px-md-5 registration-custom-padding-md-lg d-flex pt-4">
+    <div className="register-container px-0 px-md-5 d-flex pt-4">
       <MetaComponent
         title="Register"
         description="Register on Talis now to gain access to your own library of games, wishlisting as well as joining and creating social events"
         canonical="register"
       />
-      <div className="col-md-6 col-12 ps-md-5 fade-in-1s d-flex justify-content-center justify-content-md-end">
+      <div className="col-md-6 col-12 ps-md-5 fade-in-1s d-flex justify-content-center justify-content-md-end me-5">
         <div className="register-form-container mt-4">
           <h2>Sign up</h2>
           <form
@@ -227,11 +227,8 @@ const RegistrationPage = ({
                 <label
                   htmlFor={FormConstants.REGISTRATION_LAST_NAME_FIELD}
                   className="registration-form-label"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  title="optional field"
                 >
-                  Last Name (optional)
+                  Last Name ( optional )
                 </label>
                 <input
                   id={FormConstants.REGISTRATION_LAST_NAME_FIELD}
@@ -305,7 +302,7 @@ const RegistrationPage = ({
               <div>
                 <input
                   id={FormConstants.REGISTRATION_TERMS_AND_CONDITIONS_CHECKBOX}
-                  className="form-check-input"
+                  className="form-check-input me-3"
                   onChange={handleFormOnChange}
                   type="checkbox"
                   required
@@ -359,7 +356,7 @@ const RegistrationPage = ({
         <img
           className="img-fluid"
           alt="noimg"
-          src="/static/assets/undraw_moonlight.svg"
+          src="/assets/undraw_moonlight.svg"
         ></img>
       </div>
     </div>

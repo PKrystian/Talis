@@ -6,11 +6,11 @@ const MetaComponent = ({ title, description, canonical = '' }) => {
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link rel="canonical" href={`http://talis.live/${canonical}`} />
+      <link rel="canonical" href={`https://talis.live/${canonical}`} />
 
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:url" content={`http://talis.live/${canonical}`} />
+      <meta property="og:url" content={`https://talis.live/${canonical}`} />
 
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
