@@ -184,14 +184,14 @@ const RegistrationPage = ({
   });
 
   return (
-    <div className="register-container d-flex justify-content-between pt-4">
+    <div className="register-container px-0 px-md-5 registration-custom-padding-md-lg d-flex pt-4">
       <MetaComponent
         title="Register"
         description="Register on Talis now to gain access to your own library of games, wishlisting as well as joining and creating social events"
         canonical="register"
       />
-      <div className="col-md-4 col-12 ps-md-5 fade-in-1s">
-        <div className="mt-4 mb-4 mx-5">
+      <div className="col-md-6 col-12 ps-md-5 fade-in-1s d-flex justify-content-center justify-content-md-end">
+        <div className="register-form-container mt-4">
           <h2>Sign up</h2>
           <h6>Register to create an account</h6>
           <form
@@ -203,7 +203,7 @@ const RegistrationPage = ({
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.REGISTRATION_FIRST_NAME_FIELD}
-                  className="form-label registration-form-label"
+                  className="registration-form-label"
                 >
                   First Name
                 </label>
@@ -221,7 +221,7 @@ const RegistrationPage = ({
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.REGISTRATION_LAST_NAME_FIELD}
-                  className="form-label registration-form-label"
+                  className="registration-form-label"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="optional field"
@@ -242,7 +242,7 @@ const RegistrationPage = ({
             <div className="mt-2 fade-in-2s">
               <label
                 htmlFor={FormConstants.REGISTRATION_BIRTH_DATE_FIELD}
-                className="form-label registration-form-label"
+                className="registration-form-label"
               >
                 Date of birth
               </label>
@@ -258,7 +258,7 @@ const RegistrationPage = ({
             <div className="form-group mt-2 fade-in-2s">
               <label
                 htmlFor={FormConstants.REGISTRATION_EMAIL_FIELD}
-                className="form-label registration-form-label"
+                className="registration-form-label"
               >
                 Email
               </label>
@@ -350,7 +350,7 @@ const RegistrationPage = ({
           </div>
         </div>
       </div>
-      <div className="col-md-8 d-none d-md-block justify-content-center p-5">
+      <div className="registration-image col-md-6 d-none d-md-block align-content-center justify-content-center ps-3">
         <img
           className="img-fluid"
           src="/static/assets/undraw_moonlight.svg"

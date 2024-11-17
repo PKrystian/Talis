@@ -3,6 +3,10 @@
   height: 100%;
 }
 
+.register-form-container {
+  max-width: 400px;
+}
+
 .form-label {
   color: var(--text-color-light);
   font-size: var(--font-size-small);
@@ -47,6 +51,8 @@
 
 .registration-form-label {
   color: #b3a7f0;
+  font-size: var(--font-size-small);
+  margin-bottom: 0.5rem;
 }
 
 .registration-custom-button {
@@ -59,6 +65,14 @@
   background-color: #0b0914;
   color: #b3a7f0;
   --bs-btn-hover-bg: #5b41ec;
+}
+
+.registration-custom-padding-md-lg {
+  padding-left: 400px;
+}
+
+.registration-image {
+  max-width: 600px;
 }
 
 .form-group p {

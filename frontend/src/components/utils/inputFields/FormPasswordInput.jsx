@@ -36,7 +36,7 @@ const FormPasswordInput = ({
 
   return (
     <div className={`form-group ${divStyling}`}>
-      <label htmlFor={id} className="form-label registration-form-label">
+      <label htmlFor={id} className="registration-form-label">
         {label}
       </label>
       <div className="position-relative">
