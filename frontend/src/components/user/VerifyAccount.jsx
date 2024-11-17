@@ -2,6 +2,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const VerifyAccount = ({ apiPrefix, user, setUserState, setUserData }) => {
   const navigate = useNavigate();
@@ -35,7 +36,10 @@ const VerifyAccount = ({ apiPrefix, user, setUserState, setUserData }) => {
             is_active: resp.data.is_active,
           });
 
-          console.log(resp.data);
+          toast.success('User account Verified', {
+            position: 'top-center',
+            theme: 'dark',
+          });
         }
       })
       .catch((error) => {
