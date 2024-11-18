@@ -76,10 +76,7 @@ const TableItem = ({ boardGame }) => {
           )}
 
           {!boardGame.accepted_by_admin && (
-            <div
-              className="not-accepted-icon"
-              title="This game has not been accepted yet"
-            >
+            <div className="not-accepted-icon" title="Game not yet verified">
               <FaExclamationCircle />
             </div>
           )}
