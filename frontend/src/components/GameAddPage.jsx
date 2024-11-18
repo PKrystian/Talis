@@ -297,7 +297,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
               id="imageUrl"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="Enter game image ulr, e.g. https://example.com/image.jpg"
+              placeholder="https://example.com/image.jpg"
             />
             <img
               src={imageUrl || '/static/logo512.png'}
