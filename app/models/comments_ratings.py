@@ -19,5 +19,5 @@ class CommentsRatings(models.Model):
             raise ValidationError('Either comment or rating must be provided.')
 
     def save(self, *args, **kwargs):
-        self.full_clean()
+        self.clean()
         super().save(*args, **kwargs)

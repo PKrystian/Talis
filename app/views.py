@@ -474,54 +474,57 @@ def custom_404_view(request, exception):
 @require_POST
 @csrf_exempt
 def add_comment(request) -> JsonResponse:
+    user_id = int(request.POST.get('user_id'))
+    board_game_id = int(request.POST.get('board_game_id'))
     comment_data = request.POST.dict()
 
     comments_controller = CommentsRatingsController()
 
-    response = comments_controller.action_add_comment(comment_data)
+    response = comments_controller.action_add_comment(user_id, board_game_id, comment_data)
 
     return response
 
 @require_POST
 @csrf_exempt
 def get_comments(request) -> JsonResponse:
-    comment_data = request.POST.dict()
+    board_game_id = int(request.POST.get('board_game_id'))
 
     comments_controller = CommentsRatingsController()
 
-    response = comments_controller.action_get_comments(comment_data)
+    response = comments_controller.action_get_comments(board_game_id)
 
     return response
 
 @require_POST
 @csrf_exempt
 def update_comment(request) -> JsonResponse:
+    comment_id = int(request.POST.get('comment_id'))
     comment_data = request.POST.dict()
 
     comments_controller = CommentsRatingsController()
 
-    response = comments_controller.action_update_comment(comment_data)
+    response = comments_controller.action_update_comment(comment_id, comment_data)
 
     return response
 
 @require_POST
 @csrf_exempt
 def delete_comment(request) -> JsonResponse:
-    comment_data = request.POST.dict()
+    comment_id = int(request.POST.get('comment_id'))
 
     comments_controller = CommentsRatingsController()
 
-    response = comments_controller.action_delete_comment(comment_data)
+    response = comments_controller.action_delete_comment(comment_id)
 
     return response
 
 @require_POST
 @csrf_exempt
 def get_user_ratings_calculated(request) -> JsonResponse:
-    comment_data = request.POST.dict()
+    board_game_id = int(request.POST.get('board_game_id'))
 
     comments_controller = CommentsRatingsController()
 
-    response = comments_controller.action_get_user_ratings_calculated(comment_data)
+    response = comments_controller.action_get_user_ratings_calculated(board_game_id)
 
     return response

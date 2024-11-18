@@ -11,10 +11,8 @@ class CommentsRatingsController:
     ROUTE_ADD = 'add_comment/'
 
     @staticmethod
-    def action_add_comment(comment_data: dict) -> JsonResponse:
+    def action_add_comment(user_id: int, board_game_id: int, comment_data: dict) -> JsonResponse:
         try:
-            user_id = comment_data.get('user_id')
-            board_game_id = comment_data.get('board_game_id')
             user = User.objects.get(id=user_id)
             board_game = BoardGame.objects.get(id=board_game_id)
 
@@ -61,9 +59,9 @@ class CommentsRatingsController:
     ROUTE_GET = 'get_comments/'
 
     @staticmethod
-    def action_get_comments(comment_data: dict) -> JsonResponse:
+    def action_get_comments(board_game_id: int) -> JsonResponse:
         try:
-            comments = CommentsRatings.objects.filter(board_game_id=comment_data.get('board_game_id'))
+            comments = CommentsRatings.objects.filter(board_game_id=board_game_id)
             comments_list = []
             for comment in comments:
                 comments_list.append({
@@ -88,9 +86,8 @@ class CommentsRatingsController:
     ROUTE_UPDATE = 'update_comment/'
 
     @staticmethod
-    def action_update_comment(comment_data: dict) -> JsonResponse:
+    def action_update_comment(comment_id: int, comment_data: dict) -> JsonResponse:
         try:
-            comment_id = comment_data.get('comment_id')
             comment = CommentsRatings.objects.get(id=comment_id)
             comment.comment = comment_data.get('comment')
             comment.rating = comment_data.get('rating')
@@ -107,16 +104,15 @@ class CommentsRatingsController:
             LogErrorCreator().create().critical().log(
                 message=str(e),
                 trigger='action_update_comment',
-                class_reference='CommentsRRatingsController'
+                class_reference='CommentsRatingsController'
             )
             return JsonResponse({'error': 'Internal server error'}, status=500)
 
     ROUTE_DELETE = 'delete_comment/'
 
     @staticmethod
-    def action_delete_comment(comment_data: dict) -> JsonResponse:
+    def action_delete_comment(comment_id: int) -> JsonResponse:
         try:
-            comment_id = comment_data.get('comment_id')
             comment = CommentsRatings.objects.get(id=comment_id)
             comment.delete()
             return JsonResponse({'comment_id': comment_id}, status=200)
@@ -131,16 +127,15 @@ class CommentsRatingsController:
             LogErrorCreator().create().critical().log(
                 message=str(e),
                 trigger='action_delete_comment',
-                class_reference='CommentsRRatingsController'
+                class_reference='CommentsRatingsController'
             )
             return JsonResponse({'error': 'Internal server error'}, status=500)
 
     ROUTE_GET_USER_RATINGS = 'get_user_ratings/'
 
     @staticmethod
-    def action_get_user_ratings_calculated(comment_data: dict) -> JsonResponse:
+    def action_get_user_ratings_calculated(board_game_id: int) -> JsonResponse:
         try:
-            board_game_id = comment_data.get('board_game_id')
             comments = CommentsRatings.objects.filter(board_game_id=board_game_id).exclude(rating__isnull=True)
 
             if not comments.exists():

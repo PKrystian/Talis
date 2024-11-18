@@ -301,6 +301,7 @@ const GamePage = ({ apiPrefix, user }) => {
       )
       .then(() => {
         fetchComments();
+        fetchAverageRating();
         setNewComment('');
         setNewRating('');
       })
@@ -338,13 +339,14 @@ const GamePage = ({ apiPrefix, user }) => {
   };
 
   const handleEditComment = (commentId) => {
-    setIsEditing(true);
-    setEditCommentId(commentId);
     const commentToEdit = comments.find(
       (comment) => comment.comment_id === commentId,
     );
-    setNewComment(commentToEdit.comment);
-    setNewRating(commentToEdit.rating);
+    setIsEditing(true);
+    setEditCommentId(commentId);
+
+    setNewComment(commentToEdit.comment || '');
+    setNewRating(commentToEdit.rating ? commentToEdit.rating.toString() : '');
   };
 
   const handleDeleteComment = (commentId) => {
@@ -358,7 +360,10 @@ const GamePage = ({ apiPrefix, user }) => {
           },
         },
       )
-      .then(() => fetchComments())
+      .then(() => {
+        fetchComments();
+        fetchAverageRating();
+      })
       .catch((error) => console.error('Error deleting comment:', error));
   };
 
