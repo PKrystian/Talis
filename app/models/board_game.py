@@ -75,7 +75,7 @@ class BoardGame(models.Model):
             BoardGame.DESCRIPTION: self.set_description,
             BoardGame.IMAGE_URL: self.set_image_url,
             BoardGame.RATING: self.set_rating,
-            BoardGame.ADDED_BY: self.added_by,
+            BoardGame.ADDED_BY: self.set_added_by,
             BoardGame.ACCEPTED_BY_ADMIN: self.set_accepted_by_admin,
         }
 
