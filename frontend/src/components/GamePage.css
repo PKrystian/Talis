@@ -70,3 +70,7 @@
   object-fit: cover;
   border: 2px solid #737373;
 }
+
+.not-accepted {
+  border: 2px solid red;
+}

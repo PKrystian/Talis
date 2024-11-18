@@ -448,6 +448,17 @@ def update_user(request) -> JsonResponse:
 
     return response
 
+@require_POST
+@csrf_exempt
+def game_add(request) -> JsonResponse:
+    game_add_data = request.POST.dict()
+
+    game_add_controller = BoardGameController()
+
+    response = game_add_controller.action_add_game(game_add_data)
+
+    return response
+
 @require_GET
 def get_all_game_categories(request) -> JsonResponse:
     category_controller = CategoryController()

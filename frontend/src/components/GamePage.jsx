@@ -239,13 +239,16 @@ const GamePage = ({ apiPrefix, user }) => {
             src={
               boardGame.image_url ? boardGame.image_url : '/static/logo512.png'
             }
-            className="boardgame-img"
+            className={`boardgame-img ${!boardGame.accepted_by_admin ? 'not-accepted' : ''}`}
             alt={boardGame.name}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = '/static/logo512.png';
             }}
           />
+          {!boardGame.accepted_by_admin && (
+            <p className="text-danger">Game not yet verified</p>
+          )}
         </div>
         <div className="col flex-grow">
           <div className="d-flex justify-content-between">
@@ -284,6 +287,17 @@ const GamePage = ({ apiPrefix, user }) => {
             </div>
           </div>
           <div className="other-info">
+            {boardGame.added_by ? (
+              <p>
+                <span className="bold-text">Added by user:</span>{' '}
+                <Link
+                  to={`/user/${boardGame.added_by}`}
+                  className="expansion-link"
+                >
+                  {boardGame.added_by}
+                </Link>
+              </p>
+            ) : null}
             {boardGame.publisher ? (
               <p>
                 <span className="bold-text">Publisher:</span>{' '}
@@ -581,6 +595,10 @@ const GamePage = ({ apiPrefix, user }) => {
           </div>
           <h2>Admin only data:</h2>
           <div className="other-info">
+            <p>
+              <span className="bold-text">Accepted by admin:</span>{' '}
+              {boardGame.accepted_by_admin ? 'true' : 'false'}
+            </p>
             {boardGame.id ? (
               <p>
                 <span className="bold-text">ID:</span> {boardGame.id}

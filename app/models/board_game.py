@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 from app.utils.bgg_api import bgg_api_params
 
@@ -27,6 +28,8 @@ class BoardGame(models.Model):
     DESCRIPTION = 'description'
     IMAGE_URL = 'image_url'
     RATING = 'rating'
+    ADDED_BY = 'added_by'
+    ACCEPTED_BY_ADMIN = 'accepted_by_admin'
 
     BGG_TO_BOARD_GAME_FEATURE_MAP = {
         bgg_api_params.YEAR_PUBLISHED: YEAR_PUBLISHED,
@@ -50,6 +53,8 @@ class BoardGame(models.Model):
     description = models.TextField(default='', null=True)
     image_url = models.CharField(max_length=256, null=True)
     rating = models.FloatField(null=True)
+    added_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    accepted_by_admin = models.BooleanField(default=True)
     cluster = models.PositiveSmallIntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -70,6 +75,8 @@ class BoardGame(models.Model):
             BoardGame.DESCRIPTION: self.set_description,
             BoardGame.IMAGE_URL: self.set_image_url,
             BoardGame.RATING: self.set_rating,
+            BoardGame.ADDED_BY: self.set_added_by,
+            BoardGame.ACCEPTED_BY_ADMIN: self.set_accepted_by_admin,
         }
 
     def __str__(self):
@@ -107,6 +114,12 @@ class BoardGame(models.Model):
 
     def set_cluster(self, cluster: int) -> None:
         self.cluster = cluster
+
+    def set_accepted_by_admin(self, accepted_by_admin: bool) -> None:
+        self.accepted_by_admin = accepted_by_admin
+
+    def set_added_by(self, added_by: User) -> None:
+        self.added_by = added_by
 
     def get_name(self) -> str:
         return self.name

@@ -1,14 +1,22 @@
 import PropTypes from 'prop-types';
 import './TableItem.css';
 import React from 'react';
-import { FaStar, FaPuzzlePiece } from 'react-icons/fa';
+import {
+  FaStar,
+  FaPuzzlePiece,
+  FaUser,
+  FaExclamationCircle,
+} from 'react-icons/fa';
 
 const TableItem = ({ boardGame }) => {
   const imageUrl = boardGame.image_url || '/static/logo512.png';
+  const cardClass = boardGame.accepted_by_admin
+    ? 'card bg-dark text-white m-2'
+    : 'card bg-dark text-white m-2 border-danger';
 
   return (
     <div className="table-item-container">
-      <div key={boardGame.id} className="card bg-dark text-white m-2">
+      <div key={boardGame.id} className={cardClass}>
         <div className="card-img-wrapper">
           <a href={`/game/${boardGame.id}`} target="_self">
             <picture>
@@ -56,6 +64,21 @@ const TableItem = ({ boardGame }) => {
                 )}
               </div>
             </a>
+          )}
+
+          {boardGame.added_by && (
+            <div
+              className="added-by-icon"
+              title="This game has been added by user"
+            >
+              <FaUser />
+            </div>
+          )}
+
+          {!boardGame.accepted_by_admin && (
+            <div className="not-accepted-icon" title="Game not yet verified">
+              <FaExclamationCircle />
+            </div>
           )}
         </div>
       </div>

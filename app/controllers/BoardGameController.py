@@ -3,10 +3,14 @@ from django.db.models import QuerySet
 from django.http import JsonResponse
 
 from app.controllers.SearchController import SearchController
-from app.models import BoardGame, UserBoardGameCollection, BoardGameCategory
 from app.utils.BoardGameRecommender import BoardGameRecommender
 from app.utils.getters.BoardGameCategoryGetter import BoardGameCategoryGetter
 from app.utils.getters.BoardGameMechanicGetter import BoardGameMechanicGetter
+from app.models import Mechanic, Publisher, BoardGameMechanic, BoardGamePublisher, UserBoardGameCollection
+from app.models.board_game import BoardGame
+from app.models.category import Category
+from app.models.board_game_category import BoardGameCategory
+from app.models.registered_user import RegisteredUser
 from app.utils.creators.LogErrorCreator import LogErrorCreator
 
 
@@ -34,13 +38,17 @@ class BoardGameController:
                 BoardGame.ID,
                 BoardGame.NAME,
                 BoardGame.IMAGE_URL,
-                BoardGame.RATING
+                BoardGame.RATING,
+                BoardGame.ADDED_BY,
+                BoardGame.ACCEPTED_BY_ADMIN,
             )
             board_games_best_for_a_party = BoardGame.objects.filter(max_players__lt=20, image_url__isnull=False).order_by('-max_players', '-rating')[:SearchController.MEDIUM_LIMIT].values(
                 BoardGame.ID,
                 BoardGame.NAME,
                 BoardGame.IMAGE_URL,
-                BoardGame.RATING
+                BoardGame.RATING,
+                BoardGame.ADDED_BY,
+                BoardGame.ACCEPTED_BY_ADMIN,
             )
 
             categorized_data = dict()
@@ -52,7 +60,7 @@ class BoardGameController:
                         categorized_data[self.CATEGORY_BASED_ON_YOUR_GAMES] = self.__parse_board_games(board_games_based_on_your_games)
                 if UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).exists():
                     board_game_ids = [collection['board_game'] for collection in UserBoardGameCollection.objects.filter(user_id__exact=user.id, status__in=UserBoardGameCollection.WISHLIST_STATUS).values('board_game')]
-                    board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL, BoardGame.RATING)
+                    board_games_wishlist = BoardGame.objects.filter(id__in=board_game_ids).values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL, BoardGame.RATING, BoardGame.ADDED_BY, BoardGame.ACCEPTED_BY_ADMIN)
                     categorized_data[self.CATEGORY_WISHLIST] = self.__parse_board_games(board_games_wishlist)
 
             categorized_data[self.CATEGORY_ON_TOP] = self.__parse_board_games(board_games_on_top)
@@ -88,6 +96,8 @@ class BoardGameController:
                     BoardGame.NAME: board_game[BoardGame.NAME],
                     BoardGame.IMAGE_URL: board_game[BoardGame.IMAGE_URL],
                     BoardGame.RATING: board_game[BoardGame.RATING],
+                    BoardGame.ADDED_BY: board_game[BoardGame.ADDED_BY],
+                    BoardGame.ACCEPTED_BY_ADMIN: board_game[BoardGame.ACCEPTED_BY_ADMIN],
                 })
 
         return parsed_games
@@ -156,6 +166,8 @@ class BoardGameController:
                 'min_playtime': board_game.min_playtime,
                 'max_playtime': board_game.max_playtime,
                 'rating': board_game.rating,
+                'added_by': board_game.added_by.id if board_game.added_by else None,
+                'accepted_by_admin': board_game.accepted_by_admin,
 
                 'publisher': publishers,
                 'category': categories,
@@ -168,3 +180,59 @@ class BoardGameController:
 
         except BoardGame.DoesNotExist:
             return JsonResponse({'error': 'BoardGame not found'}, status=404)
+
+    ROUTE_ADD = 'game-add/'
+
+    @staticmethod
+    def action_add_game(game_data: dict) -> JsonResponse:
+        try:
+            user_id = game_data.get('user_id')
+            registered_user = RegisteredUser.objects.get(user_id=user_id)
+            user = registered_user.user
+
+            board_game = BoardGame.objects.create(
+                name=game_data.get('game_data[name]'),
+                year_published=game_data.get('game_data[year_published]', 0) or 0,
+                min_players=game_data.get('game_data[min_players]', 0) or 0,
+                max_players=game_data.get('game_data[max_players]', 0) or 0,
+                age=game_data.get('game_data[age]', 0) or 0,
+                min_playtime=game_data.get('game_data[min_playtime]', 0) or 0,
+                max_playtime=game_data.get('game_data[max_playtime]', 0) or 0,
+                description=game_data.get('game_data[description]'),
+                image_url=game_data.get('game_data[image_url]'),
+                rating=0,
+                cluster=5,
+                added_by=user,
+                accepted_by_admin=False
+            )
+
+            categories = game_data.get('game_data[categories]', '').split(', ')
+            for category_name in categories:
+                category, created = Category.objects.get_or_create(name=category_name)
+                BoardGameCategory.objects.create(board_game=board_game, category=category)
+
+            mechanics = game_data.get('game_data[mechanics]', '').split(', ')
+            for mechanic_name in mechanics:
+                mechanic, created = Mechanic.objects.get_or_create(name=mechanic_name)
+                BoardGameMechanic.objects.create(board_game=board_game, mechanic=mechanic)
+
+            publisher = game_data.get('game_data[publisher]')
+            publisher_category, created = Publisher.objects.get_or_create(name=publisher)
+            BoardGamePublisher.objects.create(board_game=board_game, publisher=publisher_category)
+
+        except RegisteredUser.DoesNotExist:
+            LogErrorCreator().create().critical().log(
+                message=f"User with id {user_id} does not exist",
+                trigger='action_add_game',
+                class_reference='BoardGameController'
+            )
+            return JsonResponse({'error': 'User not found'}, status=404)
+        except Exception as e:
+            LogErrorCreator().create().critical().log(
+                message=str(e),
+                trigger='action_add_game',
+                class_reference='BoardGameController'
+            )
+            return JsonResponse({'error': 'An internal error occurred'}, status=500)
+
+        return JsonResponse({'game_id': board_game.id}, status=200)

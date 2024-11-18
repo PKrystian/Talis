@@ -122,6 +122,8 @@ class SearchController:
                 'image_url': game.image_url,
                 'category': ', '.join([bc.category.name for bc in game.boardgamecategory_set.all()]),
                 'rating': game.rating,
+                'added_by': game.added_by.id if game.added_by else None,
+                'accepted_by_admin': game.accepted_by_admin,
                 'is_expansion': game.boardgamecategory_set.filter(
                     category_id=BoardGameCategory.CATEGORY_EXPANSION).exists()
             } for game in board_games]
