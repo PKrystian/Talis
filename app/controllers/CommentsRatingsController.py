@@ -88,9 +88,6 @@ class CommentsRatingsController:
     @staticmethod
     def action_update_comment(comment_id: int, comment_str: str|None, rating_fl: float|None) -> JsonResponse:
         try:
-            print(comment_id)
-            print(comment_str)
-            print(rating_fl)
             comment = CommentsRatings.objects.get(id=comment_id)
             comment.comment = comment_str
             comment.rating = rating_fl
