@@ -476,11 +476,12 @@ def custom_404_view(request, exception):
 def add_comment(request) -> JsonResponse:
     user_id = int(request.POST.get('user_id'))
     board_game_id = int(request.POST.get('board_game_id'))
-    comment_data = request.POST.dict()
+    comment_str = request.POST.get('comment')
+    rating_fl = request.POST.get('rating')
 
     comments_controller = CommentsRatingsController()
 
-    response = comments_controller.action_add_comment(user_id, board_game_id, comment_data)
+    response = comments_controller.action_add_comment(user_id, board_game_id, comment_str, rating_fl)
 
     return response
 
@@ -499,11 +500,12 @@ def get_comments(request) -> JsonResponse:
 @csrf_exempt
 def update_comment(request) -> JsonResponse:
     comment_id = int(request.POST.get('comment_id'))
-    comment_data = request.POST.dict()
+    comment_str = request.POST.get('comment')
+    rating_fl = request.POST.get('rating')
 
     comments_controller = CommentsRatingsController()
 
-    response = comments_controller.action_update_comment(comment_id, comment_data)
+    response = comments_controller.action_update_comment(comment_id, comment_str, rating_fl)
 
     return response
 
