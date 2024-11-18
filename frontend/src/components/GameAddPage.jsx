@@ -81,7 +81,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
     };
     axios
       .post(
-        `${apiPrefix}game_add/`,
+        `${apiPrefix}game-add/`,
         {
           user_id: user.user_id,
           game_data: gameData,
@@ -180,7 +180,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
       <h2 className="text-center mb-4">Add Game</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="name" className="form-label">
+          <label htmlFor="name" className="game-add-form-label">
             Name (required)
           </label>
           <input
@@ -195,7 +195,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           <div className="invalid-feedback">{nameError}</div>
         </div>
         <div className="mb-3">
-          <label htmlFor="yearPublished" className="form-label">
+          <label htmlFor="yearPublished" className="game-add-form-label">
             Year Published
           </label>
           <input
@@ -208,7 +208,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="minPlayers" className="form-label">
+          <label htmlFor="minPlayers" className="game-add-form-label">
             Minimum Players
           </label>
           <input
@@ -221,7 +221,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="maxPlayers" className="form-label">
+          <label htmlFor="maxPlayers" className="game-add-form-label">
             Maximum Players
           </label>
           <input
@@ -234,7 +234,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="minPlaytime" className="form-label">
+          <label htmlFor="minPlaytime" className="game-add-form-label">
             Minimum Playtime
           </label>
           <input
@@ -247,7 +247,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="maxPlaytime" className="form-label">
+          <label htmlFor="maxPlaytime" className="game-add-form-label">
             Maximum Playtime
           </label>
           <input
@@ -260,7 +260,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="age" className="form-label">
+          <label htmlFor="age" className="game-add-form-label">
             Age
           </label>
           <input
@@ -273,7 +273,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="description" className="form-label">
+          <label htmlFor="description" className="game-add-form-label">
             Description (required)
           </label>
           <textarea
@@ -287,7 +287,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           <div className="invalid-feedback">{descriptionError}</div>
         </div>
         <div className="mb-3">
-          <label htmlFor="imageUrl" className="form-label">
+          <label htmlFor="imageUrl" className="game-add-form-label">
             Image URL
           </label>
           <div className="d-flex align-items-center">
@@ -297,7 +297,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
               id="imageUrl"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="Enter game image ulr, e.g. https://example.com/image.jpg"
+              placeholder="https://example.com/image.jpg"
             />
             <img
               src={imageUrl || '/static/logo512.png'}
@@ -313,7 +313,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           </div>
         </div>
         <div className="mb-3">
-          <label htmlFor="publisher" className="form-label">
+          <label htmlFor="publisher" className="game-add-form-label">
             Publisher
           </label>
           <input
@@ -326,7 +326,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="categories" className="form-label">
+          <label htmlFor="categories" className="game-add-form-label">
             Categories
           </label>
           <Select
@@ -341,7 +341,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="mechanics" className="form-label">
+          <label htmlFor="mechanics" className="game-add-form-label">
             Mechanics
           </label>
           <Select
@@ -356,7 +356,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="expansions" className="form-label">
+          <label htmlFor="expansions" className="game-add-form-label">
             Expansions (IDs separated by commas)
           </label>
           <input

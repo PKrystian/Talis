@@ -385,7 +385,7 @@ const GamePage = ({ apiPrefix, user }) => {
             }}
           />
           {!boardGame.accepted_by_admin && (
-            <p className="text-danger">This game has not been accepted yet</p>
+            <p className="text-danger">Game not yet verified</p>
           )}
         </div>
         <div className="col flex-grow">
