@@ -201,7 +201,7 @@ class BoardGameController:
                 description=game_data.get('game_data[description]'),
                 image_url=game_data.get('game_data[image_url]'),
                 rating=0,
-                cluster=4,
+                cluster=5,
                 added_by=user,
                 accepted_by_admin=False
             )
