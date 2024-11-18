@@ -8,7 +8,7 @@ from better_profanity import profanity
 
 
 class CommentsRatingsController:
-    ROUTE_ADD = 'add_comment/'
+    ROUTE_ADD = 'add-comment/'
 
     @staticmethod
     def action_add_comment(user_id: int, board_game_id: int, comment_str: str|None, rating_fl: float|None) -> JsonResponse:
@@ -56,7 +56,7 @@ class CommentsRatingsController:
             )
             return JsonResponse({'error': 'Internal server error'}, status=500)
 
-    ROUTE_GET = 'get_comments/'
+    ROUTE_GET = 'get-comments/'
 
     @staticmethod
     def action_get_comments(board_game_id: int) -> JsonResponse:
@@ -83,14 +83,27 @@ class CommentsRatingsController:
             )
             return JsonResponse({'error': 'Internal server error'}, status=500)
 
-    ROUTE_UPDATE = 'update_comment/'
+    ROUTE_UPDATE = 'update-comment/'
 
     @staticmethod
     def action_update_comment(comment_id: int, comment_str: str|None, rating_fl: float|None) -> JsonResponse:
         try:
             comment = CommentsRatings.objects.get(id=comment_id)
             comment.comment = comment_str
-            comment.rating = rating_fl
+
+            if rating_fl is not None:
+                try:
+                    new_rating = float(rating_fl)
+                    if comment.rating != new_rating:
+                        existing_comments = CommentsRatings.objects.filter(user=comment.user,board_game=comment.board_game)
+                        if existing_comments.exists():
+                            existing_comments.update(rating=None)
+                        comment.rating = new_rating
+                except ValueError:
+                    comment.rating = None
+            else:
+                comment.rating = None
+
             comment.save()
             return JsonResponse({'comment_id': comment.id}, status=200)
         except CommentsRatings.DoesNotExist:
@@ -108,7 +121,7 @@ class CommentsRatingsController:
             )
             return JsonResponse({'error': 'Internal server error'}, status=500)
 
-    ROUTE_DELETE = 'delete_comment/'
+    ROUTE_DELETE = 'delete-comment/'
 
     @staticmethod
     def action_delete_comment(comment_id: int) -> JsonResponse:
@@ -131,7 +144,7 @@ class CommentsRatingsController:
             )
             return JsonResponse({'error': 'Internal server error'}, status=500)
 
-    ROUTE_GET_USER_RATINGS = 'get_user_ratings/'
+    ROUTE_GET_USER_RATINGS = 'get-user-ratings/'
 
     @staticmethod
     def action_get_user_ratings_calculated(board_game_id: int) -> JsonResponse:

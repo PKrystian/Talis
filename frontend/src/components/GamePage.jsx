@@ -147,7 +147,7 @@ const GamePage = ({ apiPrefix, user }) => {
   const fetchComments = () => {
     axios
       .post(
-        `${apiPrefix}get_comments/`,
+        `${apiPrefix}get-comments/`,
         { board_game_id: boardGame.id },
         {
           headers: {
@@ -170,7 +170,7 @@ const GamePage = ({ apiPrefix, user }) => {
 
     try {
       const response = await axios.post(
-        `${apiPrefix}get_user_ratings/`,
+        `${apiPrefix}get-user-ratings/`,
         { board_game_id: boardGame.id },
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
       );
@@ -286,7 +286,7 @@ const GamePage = ({ apiPrefix, user }) => {
 
     axios
       .post(
-        `${apiPrefix}add_comment/`,
+        `${apiPrefix}add-comment/`,
         {
           user_id: user.user_id,
           board_game_id: boardGame.id,
@@ -316,7 +316,7 @@ const GamePage = ({ apiPrefix, user }) => {
 
     axios
       .post(
-        `${apiPrefix}update_comment/`,
+        `${apiPrefix}update-comment/`,
         {
           comment_id: editCommentId,
           comment: newComment,
@@ -352,7 +352,7 @@ const GamePage = ({ apiPrefix, user }) => {
   const handleDeleteComment = (commentId) => {
     axios
       .post(
-        `${apiPrefix}delete_comment/`,
+        `${apiPrefix}delete-comment/`,
         { comment_id: commentId },
         {
           headers: {
@@ -362,6 +362,7 @@ const GamePage = ({ apiPrefix, user }) => {
       )
       .then(() => {
         fetchComments();
+        setIsEditing(false);
         fetchAverageRating();
       })
       .catch((error) => console.error('Error deleting comment:', error));
