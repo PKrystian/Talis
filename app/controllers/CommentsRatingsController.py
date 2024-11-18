@@ -11,12 +11,12 @@ class CommentsRatingsController:
     ROUTE_ADD = 'add_comment/'
 
     @staticmethod
-    def action_add_comment(user_id: int, board_game_id: int, comment_data: dict) -> JsonResponse:
+    def action_add_comment(user_id: int, board_game_id: int, comment_str: str|None, rating_fl: float|None) -> JsonResponse:
         try:
             user = User.objects.get(id=user_id)
             board_game = BoardGame.objects.get(id=board_game_id)
 
-            new_rating = comment_data.get('rating')
+            new_rating = rating_fl
             existing_comments = CommentsRatings.objects.filter(user=user, board_game=board_game)
 
             if new_rating is not None:
@@ -26,7 +26,7 @@ class CommentsRatingsController:
             comment = CommentsRatings(
                 user=user,
                 board_game=board_game,
-                comment=comment_data.get('comment'),
+                comment=comment_str,
                 rating=new_rating
             )
             comment.save()
@@ -86,11 +86,14 @@ class CommentsRatingsController:
     ROUTE_UPDATE = 'update_comment/'
 
     @staticmethod
-    def action_update_comment(comment_id: int, comment_data: dict) -> JsonResponse:
+    def action_update_comment(comment_id: int, comment_str: str|None, rating_fl: float|None) -> JsonResponse:
         try:
+            print(comment_id)
+            print(comment_str)
+            print(rating_fl)
             comment = CommentsRatings.objects.get(id=comment_id)
-            comment.comment = comment_data.get('comment')
-            comment.rating = comment_data.get('rating')
+            comment.comment = comment_str
+            comment.rating = rating_fl
             comment.save()
             return JsonResponse({'comment_id': comment.id}, status=200)
         except CommentsRatings.DoesNotExist:
