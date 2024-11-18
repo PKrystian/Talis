@@ -3,7 +3,6 @@ from django.urls import path
 
 from .controllers.CategoryController import CategoryController
 from .controllers.CommentsRatingsController import CommentsRatingsController
-from .controllers.GameAddController import GameAddController
 from .controllers.InviteController import InviteController
 from .controllers.SettingsController import SettingsController
 from .utils import SitemapsHelper
@@ -63,7 +62,7 @@ urlpatterns = [
     path(API_PREFIX + InviteController.ROUTE_GET_JOIN_REQUESTS, views.get_join_requests, name='get-join-requests'),
     path(API_PREFIX + InviteController.ROUTE_ACCEPT_REJECT_INVITE, views.accept_or_reject_invite, name='accept_reject_invite'),
     path(API_PREFIX + SettingsController.ROUTE_DETAIL, views.update_user, name='update-user'),
-    path(API_PREFIX + GameAddController.ROUTE, views.game_add, name='game-add'),
+    path(API_PREFIX + BoardGameController.ROUTE_ADD, views.game_add, name='game-add'),
     path(API_PREFIX + CategoryController.ROUTE_GET_ALL, views.get_all_game_categories, name='get-all-game-categories'),
     path(API_PREFIX + CommentsRatingsController.ROUTE_ADD, views.add_comment, name='add-comment'),
     path(API_PREFIX + CommentsRatingsController.ROUTE_GET, views.get_comments, name='get-comments'),

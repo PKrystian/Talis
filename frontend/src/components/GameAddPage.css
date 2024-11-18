@@ -15,7 +15,7 @@
   margin-bottom: 1.5rem;
 }
 
-.custom-form-label {
+.game-add-form-label {
   font-size: var(--font-size-medium);
   color: var(--text-color-light-medium);
 }
@@ -65,7 +65,6 @@
   border-color: var(--hover-background-color);
 }
 
-/* GameAddPage.css */
 .select__control {
   background-color: var(--background-color-dark-light);
   color: var(--text-color-dark);
