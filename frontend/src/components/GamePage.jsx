@@ -3,7 +3,10 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { toast } from 'react-toastify';
+import { formatDistanceToNow } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RiUserStarFill } from 'react-icons/ri';
 import {
   faUsers,
   faClock,
@@ -14,6 +17,7 @@ import {
   faCheck,
   faEdit,
   faTimes,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
 import LoginContainer from './utils/LoginContainer';
@@ -34,6 +38,12 @@ const GamePage = ({ apiPrefix, user }) => {
     wishlist: false,
     library: false,
   });
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [newRating, setNewRating] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editCommentId, setEditCommentId] = useState(null);
+  const [averageRating, setAverageRating] = useState(null);
 
   const handleMouseEnter = (status) => {
     setHoverStatus((prevState) => ({
@@ -134,6 +144,46 @@ const GamePage = ({ apiPrefix, user }) => {
     fetchCollectionData().then((r) => r);
   }, [user, fetchCollectionData]);
 
+  const fetchComments = () => {
+    axios
+      .post(
+        `${apiPrefix}get-comments/`,
+        { board_game_id: boardGame.id },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then((response) => setComments(response.data.comments))
+      .catch((error) => console.error('Error fetching comments:', error));
+  };
+
+  useEffect(() => {
+    if (boardGame) {
+      fetchComments();
+    }
+  }, [boardGame]);
+
+  const fetchAverageRating = useCallback(async () => {
+    if (!boardGame) return;
+
+    try {
+      const response = await axios.post(
+        `${apiPrefix}get-user-ratings/`,
+        { board_game_id: boardGame.id },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      );
+      setAverageRating(response.data.average_rating);
+    } catch (error) {
+      console.error('Error fetching average rating:', error);
+    }
+  }, [apiPrefix, boardGame]);
+
+  useEffect(() => {
+    fetchAverageRating();
+  }, [fetchAverageRating]);
+
   if (!boardGame) {
     return <div>Loading...</div>;
   }
@@ -224,6 +274,100 @@ const GamePage = ({ apiPrefix, user }) => {
     return `Board Game - ${boardGame.name}${publishedText}${publisherText}${yearPublishedText}. Uncover more details about the game like precise description on Talis.`;
   };
 
+  const handleAddComment = () => {
+    if (!user.user_id) {
+      return;
+    }
+
+    if (newComment.trim() === '' && newRating.trim() === '') {
+      toast.warn('Please fill in either the comment or the rating.');
+      return;
+    }
+
+    axios
+      .post(
+        `${apiPrefix}add-comment/`,
+        {
+          user_id: user.user_id,
+          board_game_id: boardGame.id,
+          comment: newComment,
+          rating: newRating === '' ? null : newRating,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then(() => {
+        fetchComments();
+        fetchAverageRating();
+        setNewComment('');
+        setNewRating('');
+      })
+      .catch((error) => console.error('Error adding comment:', error));
+  };
+
+  const handleUpdateComment = () => {
+    if (newComment.trim() === '' && newRating.trim() === '') {
+      toast.warn('Please fill in either the comment or the rating.');
+      return;
+    }
+
+    axios
+      .post(
+        `${apiPrefix}update-comment/`,
+        {
+          comment_id: editCommentId,
+          comment: newComment,
+          rating: newRating,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then(() => {
+        fetchComments();
+        setIsEditing(false);
+        setEditCommentId(null);
+        setNewComment('');
+        setNewRating('');
+      })
+      .catch((error) => console.error('Error updating comment:', error));
+  };
+
+  const handleEditComment = (commentId) => {
+    const commentToEdit = comments.find(
+      (comment) => comment.comment_id === commentId,
+    );
+    setIsEditing(true);
+    setEditCommentId(commentId);
+
+    setNewComment(commentToEdit.comment || '');
+    setNewRating(commentToEdit.rating ? commentToEdit.rating.toString() : '');
+  };
+
+  const handleDeleteComment = (commentId) => {
+    axios
+      .post(
+        `${apiPrefix}delete-comment/`,
+        { comment_id: commentId },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then(() => {
+        fetchComments();
+        setIsEditing(false);
+        fetchAverageRating();
+      })
+      .catch((error) => console.error('Error deleting comment:', error));
+  };
+
   return (
     <div className="container">
       {boardGame && (
@@ -279,6 +423,14 @@ const GamePage = ({ apiPrefix, user }) => {
                 />
                 <div className="basic-info-text">
                   {boardGame.rating.toFixed(2)}/10
+                </div>
+              </div>
+            ) : null}
+            {averageRating ? (
+              <div className="basic-info-item px-3 d-flex flex-column">
+                <RiUserStarFill className="nav-icon basic-game-icon" />
+                <div className="basic-info-text">
+                  {averageRating.toFixed(2)}/10
                 </div>
               </div>
             ) : null}
@@ -582,6 +734,90 @@ const GamePage = ({ apiPrefix, user }) => {
           </button>
         )}
       </div>
+      <div className="comments-ratings-section mt-4">
+        <h2>Comments and Ratings</h2>
+        {user.user_id ? (
+          <div className="add-comment">
+            <h3>{isEditing ? 'Edit Comment' : 'Add Comment'}</h3>
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Write your comment here..."
+            />
+            <input
+              type="number"
+              value={newRating}
+              onChange={(e) => setNewRating(e.target.value)}
+              placeholder="Rating (0.01-10.00), e.g. 7.51"
+              min="0.01"
+              max="10.00"
+              step="0.01"
+              required
+            />
+            <button
+              onClick={isEditing ? handleUpdateComment : handleAddComment}
+              disabled={newComment.trim() === '' && newRating.trim() === ''}
+            >
+              {isEditing ? 'Update Comment' : 'Add Comment'}
+            </button>
+          </div>
+        ) : (
+          <LoginContainer
+            ButtonTag={'a'}
+            buttonClass={
+              'text-decoration-none text-reset pointer-cursor d-flex align-items-center'
+            }
+          >
+            <FontAwesomeIcon
+              icon={faPlus}
+              className="nav-icon basic-game-icon pointer-cursor mr-2"
+            />
+            <p className="pointer-cursor mb-0">Add Comment</p>
+          </LoginContainer>
+        )}
+        {comments
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .map((comment) => (
+            <div
+              key={comment.comment_id}
+              className={`comment ${comment.rating !== null ? 'review' : ''}`}
+            >
+              <p>
+                <Link to={`/user/${comment.user_id}`}>
+                  <img
+                    src={comment.profile_image_url}
+                    alt={comment.user_name}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/static/default-profile.png';
+                    }}
+                    className="comment-profile-img"
+                  />
+                  <strong>{comment.user_name}</strong>
+                </Link>
+                {comment.rating !== null && ` rated: ${comment.rating}/10`}
+                <span className="comment-date">
+                  {' '}
+                  {formatDistanceToNow(new Date(comment.created_at))} ago
+                </span>
+              </p>
+              <p>{comment.comment}</p>
+              {comment.created_at !== comment.updated_at && <p>(Edited)</p>}
+              {user.user_id === comment.user_id && (
+                <div>
+                  <button onClick={() => handleEditComment(comment.comment_id)}>
+                    <FontAwesomeIcon icon={faEdit} /> Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteComment(comment.comment_id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} /> Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+      </div>
       {user.is_superuser && (
         <div className="mt-3">
           <h2>Admin actions:</h2>
@@ -602,12 +838,6 @@ const GamePage = ({ apiPrefix, user }) => {
             {boardGame.id ? (
               <p>
                 <span className="bold-text">ID:</span> {boardGame.id}
-              </p>
-            ) : null}
-            {boardGame.image_url ? (
-              <p>
-                <span className="bold-text">Image Url:</span>{' '}
-                {boardGame.image_url}
               </p>
             ) : null}
             {boardGame.rating ? (

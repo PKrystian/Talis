@@ -16,6 +16,7 @@ from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
 from .controllers.UserProfileController import UserProfileController
+from .controllers.CommentsRatingsController import CommentsRatingsController
 from .utils.EventFilterQuery import EventFilter
 
 
@@ -469,3 +470,63 @@ def get_all_game_categories(request) -> JsonResponse:
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
+
+@require_POST
+@csrf_exempt
+def add_comment(request) -> JsonResponse:
+    user_id = int(request.POST.get('user_id'))
+    board_game_id = int(request.POST.get('board_game_id'))
+    comment_str = request.POST.get('comment')
+    rating_fl = request.POST.get('rating')
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_add_comment(user_id, board_game_id, comment_str, rating_fl)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def get_comments(request) -> JsonResponse:
+    board_game_id = int(request.POST.get('board_game_id'))
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_get_comments(board_game_id)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def update_comment(request) -> JsonResponse:
+    comment_id = int(request.POST.get('comment_id'))
+    comment_str = request.POST.get('comment')
+    rating_fl = request.POST.get('rating')
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_update_comment(comment_id, comment_str, rating_fl)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def delete_comment(request) -> JsonResponse:
+    comment_id = int(request.POST.get('comment_id'))
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_delete_comment(comment_id)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def get_user_ratings_calculated(request) -> JsonResponse:
+    board_game_id = int(request.POST.get('board_game_id'))
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_get_user_ratings_calculated(board_game_id)
+
+    return response
