@@ -2,6 +2,7 @@ from . import views
 from django.urls import path
 
 from .controllers.CategoryController import CategoryController
+from .controllers.CommentsRatingsController import CommentsRatingsController
 from .controllers.GameAddController import GameAddController
 from .controllers.InviteController import InviteController
 from .controllers.SettingsController import SettingsController
@@ -64,6 +65,11 @@ urlpatterns = [
     path(API_PREFIX + SettingsController.ROUTE_DETAIL, views.update_user, name='update-user'),
     path(API_PREFIX + GameAddController.ROUTE, views.game_add, name='game-add'),
     path(API_PREFIX + CategoryController.ROUTE_GET_ALL, views.get_all_game_categories, name='get-all-game-categories'),
+    path(API_PREFIX + CommentsRatingsController.ROUTE_ADD, views.add_comment, name='add-comment'),
+    path(API_PREFIX + CommentsRatingsController.ROUTE_GET, views.get_comments, name='get-comments'),
+    path(API_PREFIX + CommentsRatingsController.ROUTE_UPDATE, views.update_comment, name='update-comment'),
+    path(API_PREFIX + CommentsRatingsController.ROUTE_DELETE, views.delete_comment, name='delete-comment'),
+    path(API_PREFIX + CommentsRatingsController.ROUTE_GET_USER_RATINGS, views.get_user_ratings_calculated, name='get-user-ratings'),
     path('sitemap.xml', sitemap_index, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('sitemap-boardgames-<int:offset>.xml', SitemapsHelper.board_game_sitemap_view, name='board-game-sitemap'),
 ]

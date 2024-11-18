@@ -17,6 +17,7 @@ from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
 from .controllers.UserProfileController import UserProfileController
+from .controllers.CommentsRatingsController import CommentsRatingsController
 from .utils.EventFilterQuery import EventFilter
 
 
@@ -470,3 +471,58 @@ def get_all_game_categories(request) -> JsonResponse:
 
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
+
+@require_POST
+@csrf_exempt
+def add_comment(request) -> JsonResponse:
+    comment_data = request.POST.dict()
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_add_comment(comment_data)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def get_comments(request) -> JsonResponse:
+    comment_data = request.POST.dict()
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_get_comments(comment_data)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def update_comment(request) -> JsonResponse:
+    comment_data = request.POST.dict()
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_update_comment(comment_data)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def delete_comment(request) -> JsonResponse:
+    comment_data = request.POST.dict()
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_delete_comment(comment_data)
+
+    return response
+
+@require_POST
+@csrf_exempt
+def get_user_ratings_calculated(request) -> JsonResponse:
+    comment_data = request.POST.dict()
+
+    comments_controller = CommentsRatingsController()
+
+    response = comments_controller.action_get_user_ratings_calculated(comment_data)
+
+    return response
