@@ -35,6 +35,8 @@ class CollectionController:
                 'name': board_game.name,
                 'image_url': board_game.image_url,
                 'rating': board_game.rating,
+                'added_by': board_game.added_by.id if board_game.added_by else None,
+                'accepted_by_admin': board_game.accepted_by_admin,
                 'collection_created_at': UserBoardGameCollection.objects.filter(board_game=board_game, user_id=user_id).first().created_at,
                 'is_expansion': board_game.boardgamecategory_set.filter(category_id=BoardGameCategory.CATEGORY_EXPANSION).exists()
             })
