@@ -138,6 +138,6 @@ class BoardGameRecommender:
         recommendations = BoardGame.objects.filter(
             id__in=board_game_ids,
             cluster__exact=cluster,
-        ).order_by('-rating').values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL, BoardGame.RATING)[:recommendations_count]
+        ).order_by('-rating').values(BoardGame.ID, BoardGame.NAME, BoardGame.IMAGE_URL, BoardGame.RATING, BoardGame.ADDED_BY, BoardGame.ACCEPTED_BY_ADMIN)[:recommendations_count]
 
         return recommendations
