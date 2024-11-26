@@ -39,6 +39,8 @@ const RegistrationPage = ({
   const [passwordErrorStyle, setPasswordErrorStyle] = useState('');
   const [repeatPasswordErrorStyle, setRepeatPasswordErrorStyle] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [submitClickedOnce, setSubmitClickedOnce] = useState(false);
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -127,6 +129,45 @@ const RegistrationPage = ({
     return true;
   }
 
+  const updateAlert = (toastId, setting) => {
+    setIsLoading(false);
+
+    switch (setting) {
+      case 'success':
+        toast.update(toastId, {
+          render: 'Registered Successfully',
+          type: 'success',
+          position: 'top-center',
+          theme: 'dark',
+          isLoading: false,
+          autoClose: 1500,
+        });
+        break;
+      case 'warning':
+        toast.update(toastId, {
+          render: 'User with this email already exists',
+          type: 'warning',
+          position: 'top-center',
+          theme: 'dark',
+          bodyClassName: () => 'd-flex p-2 text-center',
+          isLoading: false,
+          autoClose: 3000,
+        });
+        break;
+      default:
+        toast.update(toastId, {
+          render: 'Something went wrong',
+          type: 'error',
+          position: 'top-center',
+          theme: 'dark',
+          bodyClassName: () => 'd-flex p-2 text-center',
+          isLoading: false,
+          autoClose: 3000,
+        });
+        break;
+    }
+  };
+
   function handleSubmit() {
     setSubmitClickedOnce(true);
     let validations = [];
@@ -136,6 +177,12 @@ const RegistrationPage = ({
     });
 
     if (validations.every((v) => v === true)) {
+      setIsLoading(true);
+      const toastId = toast.loading('Loading', {
+        position: 'top-center',
+        theme: 'dark',
+      });
+
       let newUser = {
         [FormConstants.REGISTRATION_FIRST_NAME_FIELD]: firstName,
         [FormConstants.REGISTRATION_LAST_NAME_FIELD]: lastName,
@@ -155,6 +202,7 @@ const RegistrationPage = ({
         })
         .then((resp) => {
           if (resp.status === 200 && resp.data.is_authenticated) {
+            updateAlert(toastId, 'success');
             setUserState(resp.data.is_authenticated);
             setUserData({
               username: resp.data.username,
@@ -171,11 +219,7 @@ const RegistrationPage = ({
         })
         .catch((error) => {
           console.error('Error during registration:', error);
-          toast.warn('User with this email already exists', {
-            position: 'top-center',
-            theme: 'dark',
-            bodyClassName: () => 'd-flex p-2 text-center',
-          });
+          updateAlert(toastId, 'warning');
         });
     }
   }
@@ -332,7 +376,7 @@ const RegistrationPage = ({
               type="submit"
               className={`btn ${submitButtonStyle} registration-custom-button registration-form-control mt-2`}
               onClick={handleSubmit}
-              disabled={!isFormValid}
+              disabled={!isFormValid || isLoading}
             >
               Sign up
             </button>

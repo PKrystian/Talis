@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import OSMMap from '../utils/OSMMap';
 import MetaComponent from '../meta/MetaComponent';
 import DeleteEventModal from './DeleteEventModal.jsx';
+import { toast } from 'react-toastify';
 
 const UserEventsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
@@ -72,6 +73,9 @@ const UserEventsPage = ({ apiPrefix, user }) => {
         },
       )
       .then((response) => {
+        toast.success('Event deleted', {
+          theme: 'dark',
+        });
         setIsDeleteEventModalOpen(false);
         setChosenEvent(null);
         fetchEventData();

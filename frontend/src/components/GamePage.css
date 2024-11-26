@@ -119,6 +119,10 @@
   transition: var(--transition);
 }
 
+.add-comment button:disabled {
+  background-color: var(--hover-background-color);
+}
+
 .add-comment button:hover {
   background-color: var(--hover-background-color);
 }
