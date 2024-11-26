@@ -62,7 +62,13 @@ class CollectionController:
 
         UserBoardGameCollection.objects.create(user=user, board_game=board_game, status=status)
 
-        return JsonResponse({'detail': 'Board game added to your collection successfully.'}, status=200)
+        return JsonResponse(
+            data={
+                'detail': 'Board game added to your collection successfully.',
+                'type': 'added',
+            },
+            status=200,
+        )
 
     ROUTE_REMOVE = 'remove_from_collection/'
 
@@ -85,4 +91,10 @@ class CollectionController:
                 {'error': 'This board game is not in the user\'s collection with the specified status.'}, status=404)
 
         collection_entry.delete()
-        return JsonResponse({'detail': 'Board game removed from your collection successfully.'}, status=200)
+        return JsonResponse(
+            {
+                'detail': 'Board game removed from your collection successfully.',
+                'type': 'removed',
+            },
+            status=200
+        )

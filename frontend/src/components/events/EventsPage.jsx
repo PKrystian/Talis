@@ -10,6 +10,7 @@ import EventItem from './EventItem';
 import FilterConstants from '../../constValues/FilterConstants';
 import EventTagsModal from './EventTagsModal';
 import MetaComponent from '../meta/MetaComponent';
+import { toast } from 'react-toastify';
 
 const EventsPage = ({ apiPrefix, user }) => {
   const navigate = useNavigate();
@@ -114,6 +115,11 @@ const EventsPage = ({ apiPrefix, user }) => {
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
       )
       .then(() => {
+        toast.success('Request sent', {
+          theme: 'dark',
+          position: 'top-center',
+          bodyClassName: () => 'd-flex p-2 text-center',
+        });
         fetchJoinRequests();
       });
   };
@@ -122,6 +128,10 @@ const EventsPage = ({ apiPrefix, user }) => {
     const currentEventStatus = requestedEvents.find(
       (requestedEvent) => requestedEvent.event_id === chosenEvent.id,
     );
+
+    if (chosenEvent.host.id === user.user_id) {
+      return '';
+    }
 
     if (
       chosenEvent.attendees.find((attendee) => attendee.id === user.user_id)

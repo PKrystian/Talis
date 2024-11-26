@@ -58,8 +58,6 @@ class Event(models.Model):
         return self.title
 
     def set_title(self, title: str) -> None:
-        if profanity.contains_profanity(title):
-            title = profanity.censor(title)
         self.title = title
 
     def set_host(self, host: str) -> None:
@@ -81,8 +79,6 @@ class Event(models.Model):
         self.tags.add(*tags)
 
     def set_description(self, description: str) -> None:
-        if profanity.contains_profanity(description):
-            description = profanity.censor(description)
         self.description = description
 
     def set_attendees(self, attendees: List) -> None:
@@ -102,19 +98,25 @@ class Event(models.Model):
     def serialize(self) -> dict:
         return {
             self.ID: self.id,
-            self.TITLE: self.title,
+            self.TITLE: self.serialize_text(self.title),
             self.HOST: self.serialize_host(),
             self.CITY: self.city,
             self.ZIP_CODE: self.zip_code,
             self.STREET: self.street,
             self.BOARD_GAMES: self.serialize_board_games(),
             self.TAGS: self.serialize_tags(),
-            self.DESCRIPTION: self.description,
+            self.DESCRIPTION: self.serialize_text(self.description),
             self.ATTENDEES: self.serialize_attendees(),
             self.MAX_PLAYERS: self.max_players,
             self.EVENT_START_DATE: self.event_start_date,
             self.COORDINATES: self.coordinates,
         }
+
+    @staticmethod
+    def serialize_text(text) -> str:
+        if profanity.contains_profanity(text):
+            text = profanity.censor(text)
+        return text
     
     def serialize_host(self) -> dict:
         return {

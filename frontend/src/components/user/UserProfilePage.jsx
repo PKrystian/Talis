@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import './UserProfilePage.css';
 import CollectionPage from '../CollectionPage';
 import MetaComponent from '../meta/MetaComponent';
+import { toast } from 'react-toastify';
 
 const UserProfilePage = ({ apiPrefix, user }) => {
   const { id } = useParams();
@@ -52,7 +53,12 @@ const UserProfilePage = ({ apiPrefix, user }) => {
           },
         },
       )
-      .then(() => setFriendStatus('pending'))
+      .then(() => {
+        toast.success('Friend request sent', {
+          theme: 'dark',
+        });
+        setFriendStatus('pending');
+      })
       .catch((error) => console.error('Error sending friend request:', error));
   };
 
@@ -90,7 +96,12 @@ const UserProfilePage = ({ apiPrefix, user }) => {
           },
         },
       )
-      .then(() => setFriendStatus(null))
+      .then(() => {
+        toast.info('Friend removed', {
+          theme: 'dark',
+        });
+        setFriendStatus(null);
+      })
       .catch((error) => console.error('Error removing friend:', error));
   };
 
