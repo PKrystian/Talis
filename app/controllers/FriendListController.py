@@ -33,6 +33,8 @@ class FriendListController:
             return JsonResponse({'error': 'User ID and friend ID are required.'}, status=400)
         if user_id == friend_id:
             return JsonResponse({'error': 'Cannot add yourself to friends.'}, status=400)
+        if not FriendList.objects.filter(user_id=user_id, friend_id=friend_id).exists():
+            return JsonResponse({'error': 'User doesn\'t exist.'}, status=400)
 
         friend_list = FriendList.objects.filter(
             user_id=user_id,

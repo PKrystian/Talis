@@ -185,7 +185,13 @@ const GamePage = ({ apiPrefix, user }) => {
   }, [fetchAverageRating]);
 
   if (!boardGame) {
-    return <div>Loading...</div>;
+    return (
+      <div className="text-center vh-100 align-content-center">
+        <div className="spinner-border">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
   }
 
   const handleShare = async () => {
@@ -235,6 +241,29 @@ const GamePage = ({ apiPrefix, user }) => {
         },
       )
       .then((response) => {
+        switch (response.data.type) {
+          case 'added':
+            toast.success(response.data.detail, {
+              theme: 'dark',
+              bodyClassName: () => 'd-flex p-2 text-center',
+              autoClose: 1500,
+            });
+            break;
+          case 'removed':
+            toast.info(response.data.detail, {
+              theme: 'dark',
+              bodyClassName: () => 'd-flex p-2 text-center',
+              autoClose: 1500,
+            });
+            break;
+          default:
+            toast.error(response.data.detail, {
+              theme: 'dark',
+              bodyClassName: () => 'd-flex p-2 text-center',
+              autoClose: 1500,
+            });
+            break;
+        }
         setCollectionStatus((prevState) => ({
           ...prevState,
           [status]: !prevState[status],

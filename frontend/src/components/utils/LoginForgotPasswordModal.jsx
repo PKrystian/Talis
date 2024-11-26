@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginForgotPasswordModal.css';
 import { FaArrowLeft } from 'react-icons/fa6';
+import { toast } from 'react-toastify';
 
 const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
   const navigate = useNavigate();
@@ -63,6 +64,11 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
           if (resp.status === 200) {
             if (resp.data.validate) {
               document.getElementById('quitForgotPassword').click();
+              toast.success('Password reset link sent', {
+                position: 'top-center',
+                theme: 'dark',
+                bodyClassName: () => 'd-flex p-2 text-center',
+              });
             }
           }
         })
