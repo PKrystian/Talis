@@ -5,6 +5,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import FormConstants from '../../constValues/FormConstants';
 import MetaComponent from '../meta/MetaComponent';
+import { toast } from 'react-toastify';
 
 const CreateEventPage = ({ apiPrefix, user, userState }) => {
   const navigate = useNavigate();
@@ -38,6 +39,8 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
   const [boardGamesError, setBoardGamesError] = useState('');
   const [tagsError, setTagsError] = useState('');
   const [friendsError, setFriendsError] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const cancelTokenSource = useRef(null);
   const createEventFormRef = useRef(null);
@@ -175,6 +178,34 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
     }
   }, [friendsQuery, isFriendsInputFocused, apiPrefix]);
 
+  const updateAlert = (toastId, setting) => {
+    setIsLoading(false);
+
+    switch (setting) {
+      case 'success':
+        toast.update(toastId, {
+          render: 'Event created',
+          type: 'success',
+          position: 'top-center',
+          theme: 'dark',
+          isLoading: false,
+          autoClose: 1500,
+        });
+        break;
+      default:
+        toast.update(toastId, {
+          render: 'Something went wrong',
+          type: 'error',
+          position: 'top-center',
+          theme: 'dark',
+          bodyClassName: () => 'd-flex p-2 text-center',
+          isLoading: false,
+          autoClose: 3000,
+        });
+        break;
+    }
+  };
+
   function handleSubmit() {
     setSubmitClickedOnce(true);
     let validations = [];
@@ -184,6 +215,12 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
     });
 
     if (validations.every((v) => v === true)) {
+      setIsLoading(true);
+      const toastId = toast.loading('Loading', {
+        position: 'top-center',
+        theme: 'dark',
+        bodyClassName: () => 'd-flex p-2 text-center',
+      });
       const boardGameIds = boardGames.map((boardGame) => boardGame.id);
       const friendIds = friends.map((friend) => friend.id);
       var topTags = [];
@@ -228,10 +265,12 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
         })
         .then((resp) => {
           if (resp.status === 200) {
-            navigate('/');
+            updateAlert(toastId, 'success');
+            navigate('/user-events');
           }
         })
         .catch((error) => {
+          updateAlert(toastId, 'error');
           console.error(error);
         });
     }
@@ -632,7 +671,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               type="submit"
               className={`btn ${submitButtonStyle} form-control mt-2`}
               onClick={handleSubmit}
-              disabled={!isFormValid}
+              disabled={!isFormValid || isLoading}
             >
               Create
             </button>

@@ -119,6 +119,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
         console.error('Error sending invite:', error);
         toast.error(error.response.data.error, {
           theme: 'dark',
+          position: 'top-center',
         });
       });
   };
