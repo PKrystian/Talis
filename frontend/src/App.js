@@ -140,14 +140,7 @@ const App = () => {
           />
           <Route
             path="/verify/:token"
-            element={
-              <VerifyAccount
-                apiPrefix={apiPrefix}
-                user={user}
-                setUserState={setUserState}
-                setUserData={setUser}
-              />
-            }
+            element={<VerifyAccount apiPrefix={apiPrefix} user={user} />}
           />
           <Route
             path="/forgot-password/:token"

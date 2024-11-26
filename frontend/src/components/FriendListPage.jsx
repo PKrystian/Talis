@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './FriendListPage.css';
 import MetaComponent from './meta/MetaComponent';
+import { toast } from 'react-toastify';
 
 const FriendListPage = ({ apiPrefix, user }) => {
   const [friends, setFriends] = useState([]);
@@ -109,12 +110,17 @@ const FriendListPage = ({ apiPrefix, user }) => {
         },
       )
       .then(() => {
-        setInviteMessage('Invite sent successfully');
+        toast.success('Friend request sent', {
+          theme: 'dark',
+        });
         setFriendId('');
       })
       .catch((error) => {
         console.error('Error sending invite:', error);
-        setInviteMessage('Failed to send invite. Please try again.');
+        toast.error(error.response.data.error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 

@@ -349,7 +349,7 @@ class UserController:
 
     ROUTE_VERIFY_ACCOUNT = 'verify/<str:token>/'
 
-    def action_verify_account(self, request, token: str):
+    def action_verify_account(self, token: str):
         response = self.__check_token_validity(token)
 
         if type(response) is JsonResponse:
@@ -361,4 +361,7 @@ class UserController:
 
         response.delete()
 
-        return self.__login_user_and_send_response(request, user)
+        return JsonResponse(
+            data={'detail': 'Account Verified'},
+            status=200,
+        )

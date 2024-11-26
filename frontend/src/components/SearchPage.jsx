@@ -39,7 +39,9 @@ const SearchPage = ({ apiPrefix }) => {
   const filter = new URLSearchParams(location.search).get('filter') || '';
 
   const [searchResults, setSearchResults] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
@@ -71,6 +73,16 @@ const SearchPage = ({ apiPrefix }) => {
     publisher: '',
     year: '',
   });
+
+  const loadingSpinner = () => {
+    return (
+      <div className="col-md-10 text-center align-content-center">
+        <div className="spinner-border">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  };
 
   const handleInputChange = (e) => {
     const { name, value, checked, type } = e.target;
@@ -242,16 +254,6 @@ const SearchPage = ({ apiPrefix }) => {
     setFilters(newFilters);
     setSort(searchParams.get('sort') || 'rating_desc');
   }, [location.search]);
-
-  if (isLoading) {
-    return (
-      <div className="text-center vh-100 align-content-center">
-        <div className="spinner-border">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -550,28 +552,32 @@ const SearchPage = ({ apiPrefix }) => {
             </div>
           </div>
         </div>
-        <div className="col-md-10">
-          <div className="d-flex flex-wrap">
-            {searchResults.length > 0 ? (
-              searchResults.map((boardGame) => (
-                <TableItem key={boardGame.id} boardGame={boardGame} />
-              ))
-            ) : (
-              <div>No results found.</div>
+        {isLoading ? (
+          loadingSpinner()
+        ) : (
+          <div className="col-md-10">
+            <div className="d-flex flex-wrap">
+              {searchResults.length > 0 ? (
+                searchResults.map((boardGame) => (
+                  <TableItem key={boardGame.id} boardGame={boardGame} />
+                ))
+              ) : (
+                <div>No results found.</div>
+              )}
+            </div>
+            {hasMore && (
+              <div className="text-center">
+                <button
+                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                  className="btn btn-primary my-3"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Loading...' : 'Load More'}
+                </button>
+              </div>
             )}
           </div>
-          {hasMore && (
-            <div className="text-center">
-              <button
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-                className="btn btn-primary my-3"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Loading...' : 'Load More'}
-              </button>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );
