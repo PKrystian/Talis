@@ -58,7 +58,7 @@ const LandingPage = ({ apiPrefix, user }) => {
   }
 
   return (
-    <div className="container mt-4">
+    <div className="container landing-page-container">
       {Object.keys(boardGames).map((category) => (
         <div key={category} className="mb-5">
           <h3 className="text-light">

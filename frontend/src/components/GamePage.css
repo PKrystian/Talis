@@ -1,3 +1,7 @@
+.game-page-container {
+  padding-top: 50px !important;
+}
+
 .game-image,
 .boardgame-img {
   max-width: 350px;

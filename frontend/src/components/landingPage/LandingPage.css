@@ -3,8 +3,12 @@ body {
   color: var(--text-color-light);
 }
 
+.landing-page-container {
+  padding-top: 50px !important;
+}
+
 .card {
-  background-color: var(--background-color-dark-medium);
+  background-color: var(--background-color-dark-heavy);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);

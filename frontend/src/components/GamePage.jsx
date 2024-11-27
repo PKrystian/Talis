@@ -398,7 +398,7 @@ const GamePage = ({ apiPrefix, user }) => {
   };
 
   return (
-    <div className="container">
+    <div className="container game-page-container">
       {boardGame && (
         <MetaComponent
           title={boardGame.name}
