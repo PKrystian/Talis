@@ -127,7 +127,7 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
 
   return (
     <nav
-      className={`navbar navbar-expand-lg navbar-dark fixed-top ${isFloating ? 'navbar-floating' : ''}`}
+      className={`navbar navbar-expand-lg navbar-dark fixed-top px-5 ${isFloating ? 'navbar-floating' : ''}`}
     >
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
