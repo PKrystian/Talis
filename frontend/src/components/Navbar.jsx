@@ -189,9 +189,9 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
               </div>
             )}
           </form>
-          <div className="mx-auto">
-            <ul className="navbar-nav">
-              {user.user_id && (
+          {user.user_id && (
+            <div className="mx-auto">
+              <ul className="navbar-nav">
                 <li className="nav-item me-2">
                   <Link
                     className="nav-link d-flex align-items-center"
@@ -201,8 +201,6 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                     <div className="navbar-text">My Collection</div>
                   </Link>
                 </li>
-              )}
-              {user.user_id && (
                 <li className="nav-item ms-2">
                   <Link
                     className="nav-link d-flex align-items-center"
@@ -212,10 +210,10 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                     <div className="navbar-text">Local Game Meetings</div>
                   </Link>
                 </li>
-              )}
-            </ul>
-          </div>
-          <div className="mx-auto me-0">
+              </ul>
+            </div>
+          )}
+          <div className={`me-0${userState ? ' mx-auto' : ''}`}>
             <ul className="navbar-nav me-auto">
               {userState && (
                 <li className="nav-item me-2">
