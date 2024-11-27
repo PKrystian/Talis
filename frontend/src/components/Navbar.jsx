@@ -2,17 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropsTypes from 'prop-types';
 import {
-  FaSearch,
   FaUserFriends,
-  FaMapPin,
   FaCog,
   FaBullhorn,
   FaSignOutAlt,
   FaUser,
-  FaBell,
 } from 'react-icons/fa';
-import { FaLocationDot } from 'react-icons/fa6';
-import { HiSquaresPlus } from 'react-icons/hi2';
+import { MagnifyingGlass, Equals, MapPin, Bell } from '@phosphor-icons/react';
 import { MdAddHome } from 'react-icons/md';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,14 +20,16 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState('');
-  const [filterType, setFilterType] = useState('');
-  const [filter, setFilter] = useState('');
+  const [filterType] = useState('');
+  const [filter] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const searchFormRef = useRef(null);
   const userDropdownRef = useRef(null);
   const cancelTokenSource = useRef(null);
+
+  const [isFloating, setIsFloating] = useState(false);
 
   useEffect(() => {
     if (query.length >= 3 && isInputFocused) {
@@ -115,10 +113,22 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
     };
   }, []);
 
-  const onUserProfileClick = () => setShowUserDropdown(!showUserDropdown);
+  const checkScrollPosition = () => {
+    if (window.scrollY > 50) {
+      setIsFloating(true);
+    } else {
+      setIsFloating(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', checkScrollPosition, { passive: true });
+  }, []);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav
+      className={`navbar navbar-expand-lg navbar-dark fixed-top px-5 ${isFloating ? 'navbar-floating' : ''}`}
+    >
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           <div className="d-flex align-items-center">
@@ -148,7 +158,7 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
             onSubmit={handleSubmit}
           >
             <input
-              className="form-control flex-grow-1"
+              className="navbar-search"
               type="search"
               placeholder="Search Talis"
               aria-label="Search"
@@ -157,11 +167,11 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
               onFocus={() => setIsInputFocused(true)}
             />
             <button
-              className="btn form-button btn-outline-light flex-shrink-0 mx-1"
+              className="navbar-search-submit"
               type="submit"
               aria-label="Search"
             >
-              <FaSearch />
+              <MagnifyingGlass size={20} />
             </button>
             {suggestions.length > 0 && isInputFocused && (
               <div className="search-suggestions bg-dark position-absolute w-50 top-100">
@@ -179,26 +189,34 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
               </div>
             )}
           </form>
-          <div className="navbar-nav-wrapper">
+          {user.user_id && (
+            <div className="mx-auto">
+              <ul className="navbar-nav">
+                <li className="nav-item me-2">
+                  <Link
+                    className="nav-link d-flex align-items-center"
+                    to="/collection"
+                  >
+                    <Equals size={24} className="me-2" />
+                    <div className="navbar-text">My Collection</div>
+                  </Link>
+                </li>
+                <li className="nav-item ms-2">
+                  <Link
+                    className="nav-link d-flex align-items-center"
+                    to="/events"
+                  >
+                    <MapPin size={24} className="me-2" />
+                    <div className="navbar-text">Local Game Meetings</div>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          )}
+          <div className={`me-0${userState ? ' mx-auto' : ''}`}>
             <ul className="navbar-nav me-auto">
-              {user.user_id && (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/collection">
-                    <HiSquaresPlus className="me-1" />
-                    My Collection
-                  </Link>
-                </li>
-              )}
-              {user.user_id && (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/events">
-                    <FaLocationDot className="me-1" />
-                    Local Game Meetings
-                  </Link>
-                </li>
-              )}
               {userState && (
-                <li className="nav-item">
+                <li className="nav-item me-2">
                   <button
                     className="nav-link"
                     data-bs-toggle="modal"
@@ -213,13 +231,17 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                     >
                       {inviteCount}
                     </div>
-                    <FaBell />
+                    <Bell size={24} />
                   </button>
                 </li>
               )}
               {userState ? (
                 <li className="nav-item nav-user-profile mx-1">
-                  <button className="nav-link" onClick={onUserProfileClick}>
+                  <button
+                    ref={userDropdownRef}
+                    className="nav-link"
+                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  >
                     <img
                       src={
                         user.profile_image_url || '/static/default-profile.png'
@@ -255,7 +277,7 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                         className="nav-user-profile-link pb-2"
                         to="/user-events"
                       >
-                        <FaMapPin className="me-1" />
+                        <MapPin size={20} className="me-1" />
                         Scheduled Meetings
                       </Link>
                       <Link
@@ -292,18 +314,14 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                 </li>
               ) : (
                 <li className="d-inline-flex">
-                  <div className="mx-1">
-                    <Link className="btn btn-secondary" to="/register">
-                      Register
-                    </Link>
-                  </div>
-                  <div className="mx-1">
-                    <LoginButton
-                      ButtonTag={'button'}
-                      buttonClass={'btn btn-primary'}
-                      buttonText={'Login'}
-                    />
-                  </div>
+                  <LoginButton
+                    ButtonTag={'button'}
+                    buttonClass={'navbar-button login mx-1'}
+                    buttonText={'Log In'}
+                  />
+                  <Link className="mx-1" to="/register">
+                    <button className="navbar-button register">Sign up</button>
+                  </Link>
                 </li>
               )}
             </ul>
