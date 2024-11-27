@@ -5,6 +5,19 @@
   width: 100%;
   z-index: 1000;
   background-color: var(--background-color-dark-heavy);
+  transition: ease-in-out;
+  animation: navbar-slide-top-down 1s;
+}
+
+@keyframes navbar-slide-top-down {
+  0% {
+      opacity: 0;
+      transform: translateY(-70px);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
 }
 
 .navbar-floating {
