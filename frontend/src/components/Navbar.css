@@ -1,11 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
-
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
+  background-color: var(--background-color-dark-heavy);
+  transition: ease-in-out;
+  animation: navbar-slide-top-down 1s;
+}
+
+@keyframes navbar-slide-top-down {
+  0% {
+      opacity: 0;
+      transform: translateY(-70px);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.navbar-floating {
+  box-shadow: 0px 1px 5px var(--button-primary-color);
 }
 
 .form-search {
@@ -33,6 +49,43 @@ body {
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   letter-spacing: 1px;
+}
+
+.navbar-search {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-bottom: 1px solid var(--button-primary-color);
+  background-color: transparent;
+  color: var(--text-color-light);
+  padding-left: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  transition: 0.4s;
+}
+
+.navbar-search::placeholder {
+  color: var(--text-color-light-medium);
+}
+
+.navbar-search:focus {
+  outline: none;
+  border-bottom: 1px solid var(--accent-bright);
+}
+
+.navbar-search:focus + .navbar-search-submit {
+  outline: none;
+  border-bottom: 1px solid var(--accent-bright);
+}
+
+.navbar-search-submit {
+  border: none;
+  border-bottom: 1px solid var(--button-primary-color);
+  background-color: transparent;
+  color: var(--text-color-light);
+  padding-right: 10px;
+  transition: 0.4s;
 }
 
 .wip-badge {
@@ -87,7 +140,7 @@ body {
 
 @media (min-width: 992px) {
   .form-search {
-    width: 40vw;
+    width: 45vw;
   }
 }
 
@@ -124,22 +177,17 @@ body {
 .navbar-nav {
   display: flex;
   align-items: center;
-  margin-left: auto;
 }
 
 .navbar-nav .nav-link {
   font-size: var(--font-size-medium);
   color: var(--text-color-light);
-  margin-left: 15px;
+  transition: 0.4s;
 }
 
 .navbar-nav .nav-link:hover {
-  background-color: var(--hover-background-color);
   border-radius: var(--border-radius);
-}
-
-.navbar-nav .nav-link .me-2 {
-  font-size: var(--font-size-medium);
+  box-shadow: rgba(91, 65, 236, 0.8) 0px 1px 0px, rgba(91, 65, 236, 0.8) 0px 0px 0px inset;
 }
 
 .form-button {
@@ -172,8 +220,8 @@ body {
 }
 
 .small-avatar {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
@@ -189,4 +237,37 @@ body {
   font-size: 12px;
   background: rgb(80, 79, 79);
   border-radius: 20%;
+}
+
+.navbar-button {
+  min-width: 100px;
+  min-height: 40px;
+  border-radius: 8px;
+  border: none;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: 0.5s;
+}
+
+.navbar-button.login:hover, .navbar-button.register:hover {
+  background-color: var(--accent-bright);
+  color: var(--text-color-light);
+}
+
+.navbar-button.login {
+  color: var(--button-secondary-color);
+  background-color: var(--button-primary-color);
+}
+
+.navbar-button.register {
+  color: var(--button-primary-color);
+  background-color: var(--button-secondary-color);
+}
+
+.navbar-text {
+  color: var(--text-color-light);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
 }
