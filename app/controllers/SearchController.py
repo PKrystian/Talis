@@ -9,7 +9,7 @@ class SearchController:
     ROUTE: str = 'search/'
 
     BIG_LIMIT: int = 48
-    MEDIUM_LIMIT: int = 18
+    MEDIUM_LIMIT: int = 24
     SMALL_LIMIT: int = 5
 
     AGE_RANGES = {
