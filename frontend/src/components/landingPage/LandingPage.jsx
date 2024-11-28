@@ -3,19 +3,20 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './LandingPage.css';
 import {
-  FaStarOfLife,
-  FaListCheck,
-  FaChartLine,
-  FaUsers,
-} from 'react-icons/fa6';
+  Asterisk,
+  ChartLineUp,
+  Confetti,
+  Sparkle,
+} from '@phosphor-icons/react';
 import TableItem from '../TableItem';
 import axios from 'axios';
+import LandingPagePlaceholder from './LandingPagePlaceholder';
 
 const iconMap = {
-  'Based on your games': <FaStarOfLife />,
-  Wishlist: <FaListCheck />,
-  'On top': <FaChartLine />,
-  'Best for a party': <FaUsers />,
+  'Based on your games': <Asterisk size={24} color="#FF6584" />,
+  Wishlist: <Sparkle size={24} color="#9FC4F3" />,
+  'On top': <ChartLineUp size={24} color="#F3DE9F" />,
+  'Best for a party': <Confetti size={24} color="#9FF3A9" />,
 };
 
 const LandingPage = ({ apiPrefix, user }) => {
@@ -44,13 +45,7 @@ const LandingPage = ({ apiPrefix, user }) => {
   }, [apiPrefix, user]);
 
   if (isLoading) {
-    return (
-      <div className="text-center vh-100 align-content-center">
-        <div className="spinner-border">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
+    return <LandingPagePlaceholder />;
   }
 
   if (error) {
@@ -58,15 +53,15 @@ const LandingPage = ({ apiPrefix, user }) => {
   }
 
   return (
-    <div className="container landing-page-container">
+    <div className="container-fluid landing-page-container">
       {Object.keys(boardGames).map((category) => (
         <div key={category} className="mb-5">
-          <h3 className="text-light">
-            {iconMap[category]} <span className="me-3">{category}</span>
-          </h3>
-          <div className="row g-2">
+          <h5 className="text-light d-flex align-items-center ms-5">
+            {iconMap[category]} <span className="ms-1">{category}</span>
+          </h5>
+          <div className="lading-page-card-container g-2 px-5">
             {boardGames[category].map((boardGame) => (
-              <div key={boardGame.id} className="col-12 col-sm-5 col-lg-2">
+              <div key={boardGame.id} className="d-flex justify-content-center">
                 <TableItem boardGame={boardGame} />
               </div>
             ))}

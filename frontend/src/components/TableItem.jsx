@@ -16,7 +16,7 @@ const TableItem = ({ boardGame }) => {
 
   return (
     <div className="table-item-container">
-      <div key={boardGame.id} className={cardClass}>
+      <div className={cardClass}>
         <div className="card-img-wrapper">
           <a href={`/game/${boardGame.id}`} target="_self">
             <picture>

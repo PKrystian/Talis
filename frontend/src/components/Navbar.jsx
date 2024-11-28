@@ -130,15 +130,13 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
       className={`navbar navbar-expand-lg navbar-dark fixed-top px-5 ${isFloating ? 'navbar-floating' : ''}`}
     >
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
-          <div className="d-flex align-items-center">
-            <img
-              src="/static/logo512.png"
-              alt="Logo"
-              className="navbar-logo me-2"
-            />
-            <span className="site-name">Talis</span>
-          </div>
+        <Link className="navbar-brand d-flex align-items-center" to="/">
+          <img
+            src="/static/logo512.png"
+            alt="Logo"
+            className="navbar-logo me-2"
+          />
+          <span className="site-name">Talis</span>
         </Link>
         <button
           className="navbar-toggler"
@@ -194,20 +192,20 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
               <ul className="navbar-nav">
                 <li className="nav-item me-2">
                   <Link
-                    className="nav-link d-flex align-items-center"
+                    className="nav-link navbar-text d-flex align-items-center"
                     to="/collection"
                   >
                     <Equals size={24} className="me-2" />
-                    <div className="navbar-text">My Collection</div>
+                    <div>My Collection</div>
                   </Link>
                 </li>
                 <li className="nav-item ms-2">
                   <Link
-                    className="nav-link d-flex align-items-center"
+                    className="nav-link navbar-text d-flex align-items-center"
                     to="/events"
                   >
                     <MapPin size={24} className="me-2" />
-                    <div className="navbar-text">Local Game Meetings</div>
+                    <div>Local Game Meetings</div>
                   </Link>
                 </li>
               </ul>
@@ -236,7 +234,7 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                 </li>
               )}
               {userState ? (
-                <li className="nav-item nav-user-profile mx-1">
+                <li className="nav-item navbar-profile nav-user-profile mx-1">
                   <button
                     ref={userDropdownRef}
                     className="nav-link"
