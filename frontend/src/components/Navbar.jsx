@@ -130,15 +130,9 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
       className={`navbar navbar-expand-lg navbar-dark fixed-top px-5 ${isFloating ? 'navbar-floating' : ''}`}
     >
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
-          <div className="d-flex align-items-center">
-            <img
-              src="/static/logo512.png"
-              alt="Logo"
-              className="navbar-logo me-2"
-            />
-            <span className="site-name">Talis</span>
-          </div>
+        <Link className="navbar-brand d-flex align-items-center" to="/">
+          <img src="/logo512.png" alt="Logo" className="navbar-logo me-2" />
+          <span className="site-name">Talis</span>
         </Link>
         <button
           className="navbar-toggler"
