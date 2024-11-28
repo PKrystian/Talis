@@ -10,6 +10,7 @@ import {
 } from '@phosphor-icons/react';
 import TableItem from '../TableItem';
 import axios from 'axios';
+import LandingPagePlaceholder from './LandingPagePlaceholder';
 
 const iconMap = {
   'Based on your games': <Asterisk size={24} color="#FF6584" />,
@@ -44,13 +45,7 @@ const LandingPage = ({ apiPrefix, user }) => {
   }, [apiPrefix, user]);
 
   if (isLoading) {
-    return (
-      <div className="text-center vh-100 align-content-center">
-        <div className="spinner-border">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
+    return <LandingPagePlaceholder />;
   }
 
   if (error) {
