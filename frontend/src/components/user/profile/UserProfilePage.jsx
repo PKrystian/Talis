@@ -15,7 +15,13 @@ const UserProfilePage = ({ apiPrefix, user }) => {
   useEffect(() => {
     axios
       .get(`${apiPrefix}user/${id}/`)
-      .then((response) => setUserProfile(response.data));
+      .then((response) => setUserProfile(response.data))
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
+      });
 
     if (user && user.user_id && user.user_id !== parseInt(id)) {
       axios
@@ -31,7 +37,13 @@ const UserProfilePage = ({ apiPrefix, user }) => {
             },
           },
         )
-        .then((response) => setFriendStatus(response.data.status));
+        .then((response) => setFriendStatus(response.data.status))
+        .catch((error) => {
+          toast.error(error, {
+            theme: 'dark',
+            position: 'top-center',
+          });
+        });
     }
   }, [apiPrefix, id, user]);
 
@@ -54,6 +66,12 @@ const UserProfilePage = ({ apiPrefix, user }) => {
           theme: 'dark',
         });
         setFriendStatus('pending');
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 
@@ -77,6 +95,12 @@ const UserProfilePage = ({ apiPrefix, user }) => {
           position: 'top-center',
         });
         setFriendStatus(null);
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 
@@ -99,6 +123,12 @@ const UserProfilePage = ({ apiPrefix, user }) => {
           theme: 'dark',
         });
         setFriendStatus(null);
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 

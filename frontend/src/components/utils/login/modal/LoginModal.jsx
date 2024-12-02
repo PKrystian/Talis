@@ -176,6 +176,12 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
 
             document.getElementById('quitModal').click();
           }
+        })
+        .catch((error) => {
+          toast.error(error, {
+            theme: 'dark',
+            position: 'top-center',
+          });
         });
     }
   }

@@ -26,6 +26,7 @@ import EventSinglePage from './components/events/single/EventSinglePage';
 import AccountVerificationModal from './components/user/verification/account/AccountVerificationModal';
 import VerifyAccount from './components/user/verification/verify/VerifyAccount';
 import MetaComponent from './components/meta/MetaComponent';
+import { toast } from 'react-toastify';
 
 const App = () => {
   const apiPrefix =
@@ -52,6 +53,12 @@ const App = () => {
       )
       .then((resp) => {
         setInvites(resp.data);
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   }, [apiPrefix, user.user_id]);
 

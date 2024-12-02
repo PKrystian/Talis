@@ -101,7 +101,7 @@ const GameAddPage = ({ apiPrefix, user }) => {
         navigate(`/game/${response.data.game_id}`);
       })
       .catch((error) => {
-        toast(error.response.data.error, {
+        toast(error, {
           theme: 'dark',
           position: 'top-center',
         });

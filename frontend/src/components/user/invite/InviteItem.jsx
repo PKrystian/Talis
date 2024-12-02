@@ -5,6 +5,7 @@ import FriendRequestTile from '../request/friend/FriendRequestTile';
 import InviteConstants from '../../../constValues/InviteConstants';
 import React from 'react';
 import './InviteItem.css';
+import { toast } from 'react-toastify';
 
 const InviteItem = ({ apiPrefix, user, invite, fetchInvites }) => {
   const handleInviteAction = (choice) => {
@@ -20,6 +21,12 @@ const InviteItem = ({ apiPrefix, user, invite, fetchInvites }) => {
       )
       .then(() => {
         fetchInvites();
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 

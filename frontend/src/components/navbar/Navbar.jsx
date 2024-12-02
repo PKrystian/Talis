@@ -49,7 +49,7 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
         })
         .catch((error) => {
           if (!axios.isCancel(error)) {
-            toast.error(error.response.data.error, {
+            toast.error(error, {
               theme: 'dark',
               position: 'top-center',
             });
@@ -108,7 +108,7 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
         }
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });

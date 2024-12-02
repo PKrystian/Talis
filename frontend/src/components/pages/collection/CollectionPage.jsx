@@ -25,7 +25,7 @@ const CollectionPage = ({ user }) => {
 
   const fetchCollectionData = useCallback(async () => {
     if (!user || !user.user_id) {
-      toast.error('User not found', {
+      toast.error('User ID is not available', {
         theme: 'dark',
         position: 'top-center',
       });
@@ -45,7 +45,7 @@ const CollectionPage = ({ user }) => {
       setFilteredWishlist(response.data.wishlist);
       setFilteredLibrary(response.data.library);
     } catch (error) {
-      toast.error(error.response.data.error, {
+      toast.error(error, {
         theme: 'dark',
         position: 'top-center',
       });

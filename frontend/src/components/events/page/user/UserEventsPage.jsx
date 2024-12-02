@@ -41,7 +41,7 @@ const UserEventsPage = ({ apiPrefix, user }) => {
       );
       setEventData(response.data);
     } catch (error) {
-      toast.error(error.response.data.error, {
+      toast.error(error, {
         theme: 'dark',
         position: 'top-center',
       });
@@ -86,7 +86,7 @@ const UserEventsPage = ({ apiPrefix, user }) => {
         fetchEventData();
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });

@@ -20,7 +20,7 @@ const ForgotPasswordPage = ({ apiPrefix, userState }) => {
   useEffect(() => {
     axios.get(`${apiPrefix}check-access/${token}/`).catch((error) => {
       navigate('/');
-      toast.error(error.response.data.error, {
+      toast.error(error, {
         theme: 'dark',
         position: 'top-center',
       });
@@ -104,6 +104,12 @@ const ForgotPasswordPage = ({ apiPrefix, userState }) => {
           if (resp.data.validate === true) {
             navigate('/');
           }
+        })
+        .catch((error) => {
+          toast.error(error, {
+            theme: 'dark',
+            position: 'top-center',
+          });
         });
     }
   };

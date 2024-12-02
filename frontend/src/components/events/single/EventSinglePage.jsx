@@ -27,7 +27,7 @@ const EventSinglePage = ({ apiPrefix, user }) => {
         setEventData(response.data);
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });

@@ -30,6 +30,12 @@ const VerifyAccount = ({ apiPrefix, user }) => {
             bodyClassName: () => 'd-flex p-2 text-center',
           });
         }
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
     navigate('/');
   }, [apiPrefix, navigate, token]);
