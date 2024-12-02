@@ -76,7 +76,10 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
         setPassword(value);
         break;
       default:
-        toast.error('Something went wrong');
+        toast.warn('Unhandled case', {
+          theme: 'dark',
+          position: 'top-center',
+        });
     }
   }
 

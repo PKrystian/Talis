@@ -56,6 +56,10 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
 
   const fetchCollectionData = useCallback(async () => {
     if (!user || !user.user_id) {
+      toast.error('User ID is not available', {
+        theme: 'dark',
+        position: 'top-center',
+      });
       return;
     }
     axios
