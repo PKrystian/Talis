@@ -129,9 +129,17 @@ const GamePage = ({ apiPrefix, user }) => {
       process.env.NODE_ENV === 'development'
         ? 'http://127.0.0.1:8000/api/'
         : '/api/';
-    axios.get(apiPrefix + `board-games/${id}/`).then((response) => {
-      setBoardGame(response.data);
-    });
+    axios
+      .get(apiPrefix + `board-games/${id}/`)
+      .then((response) => {
+        setBoardGame(response.data);
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
+      });
   }, [id]);
 
   useEffect(() => {
@@ -156,7 +164,13 @@ const GamePage = ({ apiPrefix, user }) => {
           },
         },
       )
-      .then((response) => setComments(response.data.comments));
+      .then((response) => setComments(response.data.comments))
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
+      });
   }, [apiPrefix, boardGame]);
 
   useEffect(() => {
@@ -342,6 +356,12 @@ const GamePage = ({ apiPrefix, user }) => {
         fetchAverageRating();
         setNewComment('');
         setNewRating('');
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 
@@ -371,6 +391,12 @@ const GamePage = ({ apiPrefix, user }) => {
         setEditCommentId(null);
         setNewComment('');
         setNewRating('');
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 
@@ -400,6 +426,12 @@ const GamePage = ({ apiPrefix, user }) => {
         fetchComments();
         setIsEditing(false);
         fetchAverageRating();
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 

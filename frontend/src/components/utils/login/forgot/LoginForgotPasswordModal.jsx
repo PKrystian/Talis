@@ -74,6 +74,10 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
           }
         })
         .catch((error) => {
+          toast.error(error, {
+            theme: 'dark',
+            position: 'top-center',
+          });
           setEmailError('Email doesnt exist');
           setEmailErrorStyle(' wrong-input');
         });
