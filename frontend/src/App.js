@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './components/landingPage/LandingPage';
-import EventsPage from './components/events/EventsPage';
-import UserEventsPage from './components/events/UserEventsPage';
-import Navbar from './components/Navbar';
-import GamePage from './components/GamePage';
-import UserProfilePage from './components/user/UserProfilePage';
-import RegistrationPage from './components/user/RegistrationPage';
-import SearchPage from './components/SearchPage';
-import CollectionPage from './components/CollectionPage';
-import Footer from './components/Footer';
-import PolicyPage from './components/PolicyPage';
-import LicensePage from './components/LicensePage';
-import LoginModal from './components/utils/LoginModal';
-import CreateEventPage from './components/events/CreateEventPage';
-import FriendListPage from './components/FriendListPage';
-import CookieConsentModal from './components/utils/CookieConsentModal';
-import NotificationModal from './components/utils/NotificationModal';
+import LandingPage from './components/pages/landing/LandingPage';
+import EventsPage from './components/events/page/events/EventsPage';
+import UserEventsPage from './components/events/page/user/UserEventsPage';
+import Navbar from './components/navbar/Navbar';
+import GamePage from './components/pages/game/GamePage';
+import UserProfilePage from './components/user/profile/UserProfilePage';
+import RegistrationPage from './components/user/registration/RegistrationPage';
+import SearchPage from './components/pages/search/SearchPage';
+import CollectionPage from './components/pages/collection/CollectionPage';
+import Footer from './components/footer/Footer';
+import PolicyPage from './components/pages/policy/PolicyPage';
+import LicensePage from './components/pages/license/LicensePage';
+import LoginModal from './components/utils/login/modal/LoginModal';
+import CreateEventPage from './components/events/create/CreateEventPage';
+import FriendListPage from './components/pages/friendList/FriendListPage';
+import CookieConsentModal from './components/utils/cookie/CookieConsentModal';
+import NotificationModal from './components/utils/notification/NotificationModal';
 import axios from 'axios';
-import LoginForgotPasswordModal from './components/utils/LoginForgotPasswordModal';
-import ForgotPasswordPage from './components/user/ForgotPasswordPage';
-import SettingsPage from './components/SettingsPage';
-import GameAddPage from './components/GameAddPage';
-import EventSinglePage from './components/events/EventSinglePage';
-import AccountVerificationModal from './components/user/AccountVerificationModal';
-import VerifyAccount from './components/user/VerifyAccount';
+import LoginForgotPasswordModal from './components/utils/login/forgot/LoginForgotPasswordModal';
+import ForgotPasswordPage from './components/user/forgot/ForgotPasswordPage';
+import SettingsPage from './components/pages/settings/SettingsPage';
+import GameAddPage from './components/pages/gameAdd/GameAddPage';
+import EventSinglePage from './components/events/single/EventSinglePage';
+import AccountVerificationModal from './components/user/verification/account/AccountVerificationModal';
+import VerifyAccount from './components/user/verification/verify/VerifyAccount';
 import MetaComponent from './components/meta/MetaComponent';
 
 const App = () => {
@@ -43,7 +43,7 @@ const App = () => {
     setUserState(false);
   };
 
-  const fetchInvites = () => {
+  const fetchInvites = useCallback(() => {
     axios
       .post(
         apiPrefix + 'invite/get/',
@@ -53,13 +53,13 @@ const App = () => {
       .then((resp) => {
         setInvites(resp.data);
       });
-  };
+  }, [apiPrefix, user.user_id]);
 
   useEffect(() => {
     if (userState) {
       fetchInvites();
     }
-  }, [userState]);
+  }, [fetchInvites, userState]);
 
   return (
     <Router>
