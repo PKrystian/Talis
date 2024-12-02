@@ -75,7 +75,13 @@ const GamePage = ({ apiPrefix, user }) => {
           },
         },
       )
-      .then((response) => setFriendsWithGame(response.data));
+      .then((response) => setFriendsWithGame(response.data))
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
+      });
   }, [user, apiPrefix, id]);
 
   useEffect(() => {
@@ -270,7 +276,7 @@ const GamePage = ({ apiPrefix, user }) => {
         }));
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });

@@ -24,6 +24,12 @@ const FriendListPage = ({ apiPrefix, user }) => {
         })
         .then((response) => {
           setFriends(response.data);
+        })
+        .catch((error) => {
+          toast.error(error, {
+            theme: 'dark',
+            position: 'top-center',
+          });
         });
 
       axios
@@ -34,7 +40,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
           setPendingInvites(response.data);
         })
         .catch((error) => {
-          toast.error(error.response.data.error, {
+          toast.error(error, {
             theme: 'dark',
             position: 'top-center',
           });
@@ -72,7 +78,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
         }
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });
@@ -103,7 +109,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
         );
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });
@@ -140,7 +146,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
         setFriendId('');
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });

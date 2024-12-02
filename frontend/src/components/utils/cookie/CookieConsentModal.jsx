@@ -18,6 +18,12 @@ const CookieConsentModal = ({ apiPrefix, user, setUser }) => {
         })
         .then((response) => {
           setCookieConsent(response.data.cookie_consent);
+        })
+        .catch((error) => {
+          toast.error(error, {
+            theme: 'dark',
+            position: 'top-center',
+          });
         });
     }
   }, [apiPrefix, cookieConsent, user.user_id]);
@@ -46,6 +52,12 @@ const CookieConsentModal = ({ apiPrefix, user, setUser }) => {
           ...prevUser,
           cookie_consent: decision,
         }));
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
       });
   };
 

@@ -34,7 +34,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
           setBirthdate(response.data.birth_date);
         })
         .catch((error) => {
-          toast.error(error.response.data.error, {
+          toast.error(error, {
             theme: 'dark',
             position: 'top-center',
           });
@@ -93,7 +93,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
         navigate(`/user/${user.user_id}`);
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });

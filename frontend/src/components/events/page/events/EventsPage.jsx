@@ -62,7 +62,7 @@ const EventsPage = ({ apiPrefix, user }) => {
       });
       setEventData(response.data);
     } catch (error) {
-      toast.error(error.response.data.error, {
+      toast.error(error, {
         theme: 'dark',
         position: 'top-center',
       });
@@ -86,7 +86,7 @@ const EventsPage = ({ apiPrefix, user }) => {
         setRequestedEvents(resp.data);
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });
@@ -132,7 +132,7 @@ const EventsPage = ({ apiPrefix, user }) => {
         fetchJoinRequests();
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
           bodyClassName: () => 'd-flex p-2 text-center',
@@ -212,7 +212,7 @@ const EventsPage = ({ apiPrefix, user }) => {
         }
       })
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });

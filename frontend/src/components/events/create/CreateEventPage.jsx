@@ -72,7 +72,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
       )
       .then((response) => setUserFriendsList(response.data))
       .catch((error) => {
-        toast.error(error.response.data.error, {
+        toast.error(error, {
           theme: 'dark',
           position: 'top-center',
         });
@@ -138,7 +138,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
         })
         .catch((error) => {
           if (!axios.isCancel(error)) {
-            toast.error('Something went wrong', {
+            toast.error(error, {
               theme: 'dark',
               position: 'top-center',
             });
@@ -279,7 +279,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
         })
         .catch((error) => {
           updateAlert(toastId, 'error');
-          toast.error(error.response.data.error, {
+          toast.error(error, {
             theme: 'dark',
             position: 'top-center',
           });
