@@ -5,7 +5,7 @@ Application to help select board games and organize them.
 ## Prerequisites
 
 - [Python 3.11](https://www.python.org/downloads/) or higher
-- [Node.js $ npm](https://nodejs.org/en/download/package-manager/current)
+- [Node.js & npm](https://nodejs.org/en/download/package-manager/current)
 - [PostgresSQL](https://www.postgresql.org/download/)
 - [PyCharm Professional or Community](https://www.jetbrains.com/pycharm/download/) (optional)
 

@@ -1,6 +1,7 @@
 from app.models import UserBoardGameCollection
 from app.models.friend_list import FriendList
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 from app.models.invite import Invite
 
@@ -33,7 +34,7 @@ class FriendListController:
             return JsonResponse({'error': 'User ID and friend ID are required.'}, status=400)
         if user_id == friend_id:
             return JsonResponse({'error': 'Cannot add yourself to friends.'}, status=400)
-        if not FriendList.objects.filter(user_id=user_id, friend_id=friend_id).exists():
+        if not User.objects.filter(id=friend_id).exists():
             return JsonResponse({'error': 'User doesn\'t exist.'}, status=400)
 
         friend_list = FriendList.objects.filter(
@@ -43,7 +44,7 @@ class FriendListController:
         ).order_by('-created_at').first()
 
         if friend_list:
-            return JsonResponse({'error': 'Friend already exists.'}, status=400)
+            return JsonResponse({'error': 'Already friends or request pending.'}, status=400)
 
         FriendList.objects.create(user_id=user_id, friend_id=friend_id, status=FriendList.STATUS_PENDING)
         Invite.objects.create(user_id=user_id, invited_user_id=friend_id, type=Invite.INVITE_TYPE_NEW_FRIEND_REQUEST, status=Invite.INVITE_STATUS_PENDING)
