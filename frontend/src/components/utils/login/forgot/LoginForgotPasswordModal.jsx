@@ -74,7 +74,7 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
           }
         })
         .catch((error) => {
-          toast.error(error, {
+          toast.error(error.message, {
             theme: 'dark',
             position: 'top-center',
           });

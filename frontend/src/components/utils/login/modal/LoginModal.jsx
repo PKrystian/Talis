@@ -131,6 +131,14 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
     }
   };
 
+  function setFormWarning() {
+    setWarningStyle('text-warning');
+    setEmailError('Email could be incorrect');
+    setEmailErrorStyle(' warning-input');
+    setPasswordError('Password could be incorrect');
+    setPasswordErrorStyle(' warning-input');
+  }
+
   function handleSubmit() {
     setSubmitClickedOnce(true);
     let validations = [];
@@ -181,10 +189,8 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
           }
         })
         .catch((error) => {
-          toast.error(error, {
-            theme: 'dark',
-            position: 'top-center',
-          });
+          setFormWarning();
+          updateAlert(toastId, 'warning');
         });
     }
   }
