@@ -78,7 +78,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
         }
       })
       .catch((error) => {
-        toast.error(error, {
+        toast.error(error.response.data.error, {
           theme: 'dark',
           position: 'top-center',
         });
@@ -109,7 +109,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
         );
       })
       .catch((error) => {
-        toast.error(error, {
+        toast.error(error.response.data.error, {
           theme: 'dark',
           position: 'top-center',
         });
@@ -146,7 +146,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
         setFriendId('');
       })
       .catch((error) => {
-        toast.error(error, {
+        toast.error(error.response.data.error, {
           theme: 'dark',
           position: 'top-center',
         });
