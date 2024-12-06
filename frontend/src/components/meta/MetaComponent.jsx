@@ -1,5 +1,7 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import './MetaComponent.css';
 
 const MetaComponent = ({ title, description, canonical = '' }) => {
   return (
