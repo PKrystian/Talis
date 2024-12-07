@@ -6,7 +6,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from 'react-toastify';
 import { formatDistanceToNow } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RiUserStarFill } from 'react-icons/ri';
+import {
+  Star,
+  User,
+  Users,
+  Clock,
+  Sparkle,
+  Check,
+  X,
+  Plus,
+} from '@phosphor-icons/react';
 import {
   faUsers,
   faClock,
@@ -474,27 +483,18 @@ const GamePage = ({ apiPrefix, user }) => {
           </div>
           <div className="basic-game-info mb-3 mt-4 d-flex">
             <div className="basic-info-item px-3 d-flex flex-column">
-              <FontAwesomeIcon
-                icon={faUsers}
-                className="nav-icon basic-game-icon"
-              />
+              <Users size={45} className="nav-icon basic-game-icon" />
               <div className="basic-info-text">
                 {boardGame.min_players}-{boardGame.max_players} Players
               </div>
             </div>
             <div className="basic-info-item px-3 d-flex flex-column">
-              <FontAwesomeIcon
-                icon={faClock}
-                className="nav-icon basic-game-icon"
-              />
+              <Clock size={45} className="nav-icon basic-game-icon" />
               <div className="basic-info-text">{playtime} Min</div>
             </div>
             {boardGame.rating ? (
               <div className="basic-info-item px-3 d-flex flex-column">
-                <FontAwesomeIcon
-                  icon={faStar}
-                  className="nav-icon basic-game-icon"
-                />
+                <Star size={45} />
                 <div className="basic-info-text">
                   {boardGame.rating.toFixed(2)}/10
                 </div>
@@ -502,14 +502,17 @@ const GamePage = ({ apiPrefix, user }) => {
             ) : null}
             {averageRating ? (
               <div className="basic-info-item px-3 d-flex flex-column">
-                <RiUserStarFill className="nav-icon basic-game-icon" />
+                <div className="d-flex align-items-center">
+                  <User size={45} className="nav-icon basic-game-icon" />
+                  <Star />
+                </div>
                 <div className="basic-info-text">
                   {averageRating.toFixed(2)}/10
                 </div>
               </div>
             ) : null}
             <div className="basic-info-item px-3 d-flex flex-column">
-              <div className="circle">{boardGame.age}+</div>
+              <div className="age-circle">{boardGame.age}+</div>
             </div>
           </div>
           <div className="other-info">
@@ -529,7 +532,7 @@ const GamePage = ({ apiPrefix, user }) => {
                 <span className="bold-text">Publisher:</span>{' '}
                 <Link
                   to={`/search?query=&filters=publisher%7C${boardGame.publisher}`}
-                  className="expansion-link"
+                  className="expansion-link text-white"
                 >
                   {boardGame.publisher}
                 </Link>
@@ -540,7 +543,7 @@ const GamePage = ({ apiPrefix, user }) => {
                 <span className="bold-text">Year:</span>{' '}
                 <Link
                   to={`/search?query=&filters=year%7C${boardGame.year_published}`}
-                  className="expansion-link"
+                  className="expansion-link text-white"
                 >
                   {boardGame.year_published}
                 </Link>
@@ -553,7 +556,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <React.Fragment key={category}>
                     <Link
                       to={`/search?query=&filters=category%7C${category}`}
-                      className="expansion-link"
+                      className="expansion-link text-white"
                     >
                       {category}
                     </Link>
@@ -569,7 +572,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <React.Fragment key={mechanic}>
                     <Link
                       to={`/search?query=&filters=mechanic%7C${mechanic}`}
-                      className="expansion-link"
+                      className="expansion-link text-white"
                     >
                       {mechanic}
                     </Link>
@@ -583,7 +586,7 @@ const GamePage = ({ apiPrefix, user }) => {
                 <span className="bold-text">Main Game: </span>
                 <Link
                   to={`/game/${boardGame.main_game.id}`}
-                  className="expansion-link"
+                  className="expansion-link text-white"
                 >
                   {boardGame.main_game.name}
                 </Link>
@@ -597,7 +600,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <React.Fragment key={expansion.expansion_id}>
                     <Link
                       to={`/game/${expansion.expansion_id}`}
-                      className="expansion-link"
+                      className="expansion-link text-white"
                     >
                       {expansion.expansion_name}
                     </Link>
@@ -630,15 +633,15 @@ const GamePage = ({ apiPrefix, user }) => {
                       }
                     >
                       <div>
-                        <FontAwesomeIcon
-                          icon={
-                            collectionStatus.wishlist
-                              ? hoverStatus.wishlist
-                                ? faTimes
-                                : faCheck
-                              : faClipboardList
-                          }
-                        />
+                        {collectionStatus.wishlist ? (
+                          hoverStatus.wishlist ? (
+                            <X size={16} />
+                          ) : (
+                            <Check size={16} />
+                          )
+                        ) : (
+                          <Sparkle size={16} />
+                        )}
                       </div>
                       <div className="ms-1">
                         {collectionStatus.wishlist
@@ -668,15 +671,15 @@ const GamePage = ({ apiPrefix, user }) => {
                       }
                     >
                       <div>
-                        <FontAwesomeIcon
-                          icon={
-                            collectionStatus.library
-                              ? hoverStatus.library
-                                ? faTimes
-                                : faCheck
-                              : faPlus
-                          }
-                        />
+                        {collectionStatus.library ? (
+                          hoverStatus.library ? (
+                            <X size={16} />
+                          ) : (
+                            <Check size={16} />
+                          )
+                        ) : (
+                          <Plus size={16} />
+                        )}
                       </div>
                       <div className="ms-1">
                         {collectionStatus.library
@@ -702,10 +705,7 @@ const GamePage = ({ apiPrefix, user }) => {
                     }
                   >
                     <div>
-                      <FontAwesomeIcon
-                        icon={faClipboardList}
-                        className="me-2"
-                      />
+                      <Sparkle className="me-2" />
                     </div>
                     <div className="pointer-cursor">Add to Wishlist</div>
                   </LoginContainer>
@@ -916,41 +916,59 @@ const GamePage = ({ apiPrefix, user }) => {
           .map((comment) => (
             <div
               key={comment.comment_id}
-              className={`comment ${comment.rating !== null ? 'review' : ''} mb-3`}
+              className={`comment ${comment.rating !== null ? 'review' : ''} mb-3 row`}
             >
-              <p>
+              <div className="col-1 align-items-center justify-content-center d-flex">
                 <Link to={`/user/${comment.user_id}`}>
-                  <img
-                    src={comment.profile_image_url}
-                    alt={comment.user_name}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/static/default-profile.png';
-                    }}
-                    className="comment-profile-img"
-                  />
-                  <strong>{comment.user_name}</strong>
+                  <div className="text-center">
+                    <img
+                      src={comment.profile_image_url}
+                      alt={comment.user_name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/static/default-profile.png';
+                      }}
+                      className="comment-profile-img"
+                    />
+                  </div>
+                  <div className="text-center">
+                    <strong>{comment.user_name}</strong>
+                  </div>
                 </Link>
-                {comment.rating !== null && ` rated: ${comment.rating}/10`}
-                <span className="comment-date">
-                  {' '}
-                  {formatDistanceToNow(new Date(comment.created_at))} ago
-                </span>
-              </p>
-              <p>{comment.comment}</p>
-              {comment.created_at !== comment.updated_at && <p>(Edited)</p>}
-              {user.user_id === comment.user_id && (
-                <div>
-                  <button onClick={() => handleEditComment(comment.comment_id)}>
-                    <FontAwesomeIcon icon={faEdit} /> Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteComment(comment.comment_id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} /> Delete
-                  </button>
+              </div>
+              <div className="col-11 d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                  <span>
+                    {comment.rating !== null && (
+                      <>
+                        <FontAwesomeIcon icon={faStar} className="me-1" />{' '}
+                        {comment.rating}/10
+                      </>
+                    )}
+                  </span>
+                  <span className="comment-date">
+                    {formatDistanceToNow(new Date(comment.created_at))} ago
+                  </span>
                 </div>
-              )}
+                <div className="comment-text d-inline-block p-3">
+                  {comment.comment}
+                </div>
+                {comment.created_at !== comment.updated_at && <p>(Edited)</p>}
+                {user.user_id === comment.user_id && (
+                  <div>
+                    <button
+                      onClick={() => handleEditComment(comment.comment_id)}
+                    >
+                      <FontAwesomeIcon icon={faEdit} /> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteComment(comment.comment_id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} /> Delete
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
       </div>

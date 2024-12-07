@@ -38,6 +38,17 @@
   font-size: 1.2em;
 }
 
+.age-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  font-size: 1.2em;
+}
+
 .game-page-user-action-item {
   width: 100px;
 }
@@ -83,11 +94,14 @@
   margin-top: 20px;
   padding: 20px;
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+}
+
+.outline-icon {
+  text-shadow: 0px 0px 1px red;
+  color: white; 
 }
 
 .comment {
-  background-color: var(--button-secondary-color);
   border-bottom: 1px solid var(--border-color-light);
   padding: 10px 0;
   color: var(--text-color-light);
@@ -144,7 +158,6 @@
 }
 
 .review {
-  background-color: var(--button-secondary-color);
   border-left: 5px solid var(--button-primary-color);
   padding: 10px;
   margin-bottom: 10px;
@@ -167,14 +180,18 @@
   vertical-align: middle;
 }
 
+.comment-text {
+  background-color: var(--button-secondary-color);
+}
+
 .game-page-user-button {
-  background-color: var(--background-color-dark-heavy);
+  background-color: var(--button-secondary-color);
   color: var(--button-primary-color);
   --bs-btn-hover-bg: var(--accent-bright);
 }
 
 .game-page-form-control {
-  background-color: #3F3D56;
+  background-color: var(--button-secondary-color);
   color: var(--text-color-light);
   width: 200px;
   min-height: 35px;
