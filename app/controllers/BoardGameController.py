@@ -151,7 +151,10 @@ class BoardGameController:
 
             expansions = [{
                 'expansion_id': expansion.expansion_board_game.id,
-                'expansion_name': expansion.expansion_board_game.name
+                'expansion_name': expansion.expansion_board_game.name,
+                'expansion_img': expansion.expansion_board_game.image_url,
+                'expansion_rating': expansion.expansion_board_game.rating,
+                'expansion_accepted_by_admin': expansion.expansion_board_game.accepted_by_admin
             } for expansion in board_game.expansions.all()]
 
             data = {
