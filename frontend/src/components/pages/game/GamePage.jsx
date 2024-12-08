@@ -17,15 +17,10 @@ import {
   Plus,
 } from '@phosphor-icons/react';
 import {
-  faUsers,
-  faClock,
   faStar,
-  faClipboardList,
   faPlus,
   faShare,
-  faCheck,
   faEdit,
-  faTimes,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
@@ -592,23 +587,6 @@ const GamePage = ({ apiPrefix, user }) => {
                 </Link>
               </p>
             ) : null}
-            {Array.isArray(boardGame.expansions) &&
-            boardGame.expansions.length > 0 ? (
-              <p>
-                <span className="bold-text">Expansions: </span>
-                {boardGame.expansions.map((expansion, index) => (
-                  <React.Fragment key={expansion.expansion_id}>
-                    <Link
-                      to={`/game/${expansion.expansion_id}`}
-                      className="expansion-link text-white"
-                    >
-                      {expansion.expansion_name}
-                    </Link>
-                    {index < boardGame.expansions.length - 1 && ', '}
-                  </React.Fragment>
-                ))}
-              </p>
-            ) : null}
           </div>
         </div>
         <div className="mt-3 col">
@@ -775,7 +753,7 @@ const GamePage = ({ apiPrefix, user }) => {
                 </>
               )}
             {friendsWithGame.filter((f) => f.status === 'library').length >
-            5 ? (
+            3 ? (
               <button
                 className="btn game-page-user-button mb-3"
                 onClick={toggleFriendsModal}
