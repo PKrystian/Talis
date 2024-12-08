@@ -14,7 +14,6 @@ from .controllers.InviteController import InviteController
 from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
-from .controllers.UserProfileController import UserProfileController
 from .controllers.CommentsRatingsController import CommentsRatingsController
 from .utils.EventFilter import EventFilter
 
