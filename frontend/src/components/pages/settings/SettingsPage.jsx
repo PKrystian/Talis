@@ -77,7 +77,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
 
     axios
       .post(
-        `${apiPrefix}update_user/`,
+        `${apiPrefix}update-user/`,
         {
           user_id: user.user_id,
           updated_user: updatedUser,

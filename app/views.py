@@ -11,13 +11,12 @@ from .controllers.CategoryController import CategoryController
 from .controllers.CollectionController import CollectionController
 from .controllers.FriendListController import FriendListController
 from .controllers.InviteController import InviteController
-from .controllers.SettingsController import SettingsController
 from .controllers.UserController import UserController
 from .controllers.SearchController import SearchController
 from .controllers.EventController import EventController
 from .controllers.UserProfileController import UserProfileController
 from .controllers.CommentsRatingsController import CommentsRatingsController
-from .utils.EventFilterQuery import EventFilter
+from .utils.EventFilter import EventFilter
 
 
 def index(request) -> None:
@@ -107,8 +106,11 @@ def check_cookie_consent(request) -> JsonResponse:
 @require_POST
 @csrf_exempt
 def change_cookie_consent(request) -> JsonResponse:
+    user_id = request.POST.get('user_id', None)
+    user_decision = request.POST.get('cookie_consent')
+
     user_controller = UserController()
-    response = user_controller.change_cookie_consent(request)
+    response = user_controller.change_cookie_consent(user_id, user_decision)
 
     return response
 
@@ -267,8 +269,8 @@ def remove_event(request) -> JsonResponse:
 
 @require_GET
 def user_profile_detail(request, user_id) -> JsonResponse:
-    user_profile_controller = UserProfileController()
-    response = user_profile_controller.action_user_profile_detail(user_id)
+    user_controller = UserController()
+    response = user_controller.action_user_profile_detail(user_id)
 
     return response
 
@@ -443,9 +445,9 @@ def update_user(request) -> JsonResponse:
     user_id = request.POST.get('user_id')
     updated_user_data = request.POST.dict()
 
-    settings_controller = SettingsController()
+    user_controller = UserController()
 
-    response = settings_controller.action_update_user(user_id, updated_user_data)
+    response = user_controller.action_update_user(user_id, updated_user_data)
 
     return response
 

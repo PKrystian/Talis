@@ -183,9 +183,7 @@ class UserController:
     ROUTE_CHANGE_COOKIE_CONSENT = 'change-cookie-consent/'
 
     @staticmethod
-    def change_cookie_consent(request) -> JsonResponse:
-        user_decision = request.POST.get('cookie_consent')
-        user_id = request.POST.get('user_id')
+    def change_cookie_consent(user_id: int, user_decision: str) -> JsonResponse:
         if user_id:
             try:
                 if user_decision is None:
@@ -365,3 +363,54 @@ class UserController:
             data={'detail': 'Account Verified'},
             status=200,
         )
+
+    ROUTE_UPDATE_USER: str = 'update-user/'
+
+    @staticmethod
+    def action_update_user(user_id: int, updated_user_data: dict) -> JsonResponse:
+        try:
+            registered_user = RegisteredUser.objects.get(user_id=user_id)
+            user = registered_user.user
+
+            user.email = updated_user_data.get('updated_user[email]', user.email)
+            user.username = updated_user_data.get('updated_user[email]', user.email)
+            user.first_name = updated_user_data.get('updated_user[first_name]', user.first_name)
+            user.last_name = updated_user_data.get('updated_user[last_name]', user.last_name)
+            registered_user.profile_image_url = updated_user_data.get('updated_user[profile_image_url]',
+                                                                      registered_user.profile_image_url)
+            registered_user.birth_date = updated_user_data.get('updated_user[birth_date]', registered_user.birth_date)
+
+            user.save()
+            registered_user.save()
+
+        except RegisteredUser.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+
+        return JsonResponse({'message': 'User profile updated successfully'})
+
+    ROUTE_DETAIL: str = 'user/<int:user_id>/'
+
+    @staticmethod
+    def action_user_profile_detail(user_id: int) -> JsonResponse:
+        try:
+            registered_user = RegisteredUser.objects.get(user_id=user_id)
+            user = User.objects.get(id=user_id)
+            user_profile = {
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'profile_image_url': registered_user.profile_image_url,
+                'date_joined': user.date_joined,
+
+                'email': user.email,
+                'birth_date': registered_user.birth_date,
+
+                'user_id': user.id,
+                'username': user.username,
+                'is_superuser': user.is_superuser,
+                'last_login': user.last_login,
+                'is_active': user.is_active,
+            }
+        except RegisteredUser.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+
+        return JsonResponse(user_profile)

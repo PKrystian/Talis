@@ -60,7 +60,7 @@ class Event(models.Model):
     def set_title(self, title: str) -> None:
         self.title = title
 
-    def set_host(self, host: str) -> None:
+    def set_host(self, host) -> None:
         self.host = host
 
     def set_city(self, city: str) -> None:

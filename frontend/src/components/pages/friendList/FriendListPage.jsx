@@ -33,7 +33,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
         });
 
       axios
-        .get(`${apiPrefix}friend_invites/`, {
+        .get(`${apiPrefix}friend-invites/`, {
           params: { user_id: user.user_id },
         })
         .then((response) => {
@@ -51,7 +51,7 @@ const FriendListPage = ({ apiPrefix, user }) => {
   const handleAccept = (friendId) => {
     axios
       .post(
-        `${apiPrefix}accept_friend/`,
+        `${apiPrefix}accept-friend/`,
         {
           user_id: user.user_id,
           friend_id: friendId,
