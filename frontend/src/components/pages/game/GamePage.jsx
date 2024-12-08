@@ -242,8 +242,8 @@ const GamePage = ({ apiPrefix, user }) => {
 
   const handleToggleCollection = (status) => {
     const apiAction = collectionStatus[status]
-      ? 'remove_from_collection/'
-      : 'add_to_collection/';
+      ? 'remove-from-collection/'
+      : 'add-to-collection/';
     const requestUrl = apiPrefix + apiAction;
 
     axios

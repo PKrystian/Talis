@@ -8,7 +8,7 @@ class CategoryController:
 
     @staticmethod
     def action_get_all_game_categories() -> JsonResponse:
-        categories = Category.objects.values('id', 'name')
+        categories = list(Category.objects.values('id', 'name'))
 
         return JsonResponse(
             data=categories,
