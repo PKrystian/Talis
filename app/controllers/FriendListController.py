@@ -158,7 +158,7 @@ class FriendListController:
                 'profile_image_url': collection.user.registereduser.profile_image_url,
                 'status': collection.status
             }
-            for collection in friends_with_game[:3]
+            for collection in friends_with_game
         ]
 
         return JsonResponse(data, safe=False)

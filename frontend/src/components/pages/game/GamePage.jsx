@@ -6,28 +6,35 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { toast } from 'react-toastify';
 import { formatDistanceToNow } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RiUserStarFill } from 'react-icons/ri';
 import {
-  faUsers,
-  faClock,
+  Star,
+  User,
+  Users,
+  Clock,
+  Sparkle,
+  Check,
+  X,
+  Plus,
+} from '@phosphor-icons/react';
+import {
   faStar,
-  faClipboardList,
   faPlus,
   faShare,
-  faCheck,
   faEdit,
-  faTimes,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
 import LoginContainer from '../../utils/login/container/LoginContainer';
 import MetaComponent from '../../meta/MetaComponent';
+import FriendsModal from '../friendsWithGame/FriendsWithGame.jsx';
+import TableItem from '../../utils/table/TableItem.jsx';
 
 const GamePage = ({ apiPrefix, user }) => {
   const { id } = useParams();
   const [boardGame, setBoardGame] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
+  const [isFriendsModalOpen, setIsFriendsModalOpen] = useState(false);
   const descriptionRef = useRef(null);
   const [collectionStatus, setCollectionStatus] = useState({
     wishlist: user.wishlist || false,
@@ -411,6 +418,10 @@ const GamePage = ({ apiPrefix, user }) => {
     setNewRating(commentToEdit.rating ? commentToEdit.rating.toString() : '');
   };
 
+  const toggleFriendsModal = () => {
+    setIsFriendsModalOpen((prev) => !prev);
+  };
+
   const handleDeleteComment = (commentId) => {
     axios
       .post(
@@ -461,33 +472,24 @@ const GamePage = ({ apiPrefix, user }) => {
             <p className="text-danger">Game not yet verified</p>
           )}
         </div>
-        <div className="col flex-grow">
-          <div className="d-flex justify-content-between">
+        <div className="col-md-5">
+          <div className="d-flex justify-content-md-between justify-content-center">
             <h1 className="game-title">{boardGame.name}</h1>
           </div>
           <div className="basic-game-info mb-3 mt-4 d-flex">
-            <div className="basic-info-item px-3 d-flex flex-column">
-              <FontAwesomeIcon
-                icon={faUsers}
-                className="nav-icon basic-game-icon"
-              />
+            <div className="basic-info-item px-3 d-flex flex-column align-items-center">
+              <Users size={40} className="nav-icon basic-game-icon" />
               <div className="basic-info-text">
                 {boardGame.min_players}-{boardGame.max_players} Players
               </div>
             </div>
-            <div className="basic-info-item px-3 d-flex flex-column">
-              <FontAwesomeIcon
-                icon={faClock}
-                className="nav-icon basic-game-icon"
-              />
+            <div className="basic-info-item px-3 d-flex flex-column align-items-center">
+              <Clock size={40} className="nav-icon basic-game-icon" />
               <div className="basic-info-text">{playtime} Min</div>
             </div>
             {boardGame.rating ? (
-              <div className="basic-info-item px-3 d-flex flex-column">
-                <FontAwesomeIcon
-                  icon={faStar}
-                  className="nav-icon basic-game-icon"
-                />
+              <div className="basic-info-item px-3 d-flex flex-column align-items-center">
+                <Star size={40} />
                 <div className="basic-info-text">
                   {boardGame.rating.toFixed(2)}/10
                 </div>
@@ -495,14 +497,17 @@ const GamePage = ({ apiPrefix, user }) => {
             ) : null}
             {averageRating ? (
               <div className="basic-info-item px-3 d-flex flex-column">
-                <RiUserStarFill className="nav-icon basic-game-icon" />
+                <div className="d-flex p-0 align-items-center">
+                  <User size={40} className="nav-icon basic-game-icon" />
+                  <Star />
+                </div>
                 <div className="basic-info-text">
                   {averageRating.toFixed(2)}/10
                 </div>
               </div>
             ) : null}
             <div className="basic-info-item px-3 d-flex flex-column">
-              <div className="circle">{boardGame.age}+</div>
+              <div className="age-circle">{boardGame.age}+</div>
             </div>
           </div>
           <div className="other-info">
@@ -522,7 +527,7 @@ const GamePage = ({ apiPrefix, user }) => {
                 <span className="bold-text">Publisher:</span>{' '}
                 <Link
                   to={`/search?query=&filters=publisher%7C${boardGame.publisher}`}
-                  className="expansion-link"
+                  className="expansion-link text-white"
                 >
                   {boardGame.publisher}
                 </Link>
@@ -533,7 +538,7 @@ const GamePage = ({ apiPrefix, user }) => {
                 <span className="bold-text">Year:</span>{' '}
                 <Link
                   to={`/search?query=&filters=year%7C${boardGame.year_published}`}
-                  className="expansion-link"
+                  className="expansion-link text-white"
                 >
                   {boardGame.year_published}
                 </Link>
@@ -546,7 +551,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <React.Fragment key={category}>
                     <Link
                       to={`/search?query=&filters=category%7C${category}`}
-                      className="expansion-link"
+                      className="expansion-link text-white"
                     >
                       {category}
                     </Link>
@@ -562,7 +567,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <React.Fragment key={mechanic}>
                     <Link
                       to={`/search?query=&filters=mechanic%7C${mechanic}`}
-                      className="expansion-link"
+                      className="expansion-link text-white"
                     >
                       {mechanic}
                     </Link>
@@ -576,151 +581,145 @@ const GamePage = ({ apiPrefix, user }) => {
                 <span className="bold-text">Main Game: </span>
                 <Link
                   to={`/game/${boardGame.main_game.id}`}
-                  className="expansion-link"
+                  className="expansion-link text-white"
                 >
                   {boardGame.main_game.name}
                 </Link>
               </p>
             ) : null}
-            {Array.isArray(boardGame.expansions) &&
-            boardGame.expansions.length > 0 ? (
-              <p>
-                <span className="bold-text">Expansions: </span>
-                {boardGame.expansions.map((expansion, index) => (
-                  <React.Fragment key={expansion.expansion_id}>
-                    <Link
-                      to={`/game/${expansion.expansion_id}`}
-                      className="expansion-link"
-                    >
-                      {expansion.expansion_name}
-                    </Link>
-                    {index < boardGame.expansions.length - 1 && ', '}
-                  </React.Fragment>
-                ))}
-              </p>
-            ) : null}
           </div>
         </div>
         <div className="mt-3 col">
-          <div className="game-page-user-action d-flex">
+          <div className="game-page-user-action text-md-end justify-content-md-end text-center justify-content-center row">
             {user && user.user_id ? (
               <>
-                <div
-                  className="game-page-user-action-item text-center"
-                  onClick={() => handleToggleCollection('wishlist')}
-                  onMouseEnter={() => handleMouseEnter('wishlist')}
-                  onMouseLeave={() => handleMouseLeave('wishlist')}
-                  title={
-                    collectionStatus.wishlist
-                      ? hoverStatus.wishlist
-                        ? 'Click to remove from wishlist'
-                        : 'Game is in wishlist'
-                      : 'Click to add to wishlist'
-                  }
-                >
-                  <p>
-                    <FontAwesomeIcon
-                      icon={
+                <div>
+                  <button
+                    className="btn game-page-user-button game-page-form-control mb-3"
+                    onClick={() => handleToggleCollection('wishlist')}
+                    onMouseEnter={() => handleMouseEnter('wishlist')}
+                    onMouseLeave={() => handleMouseLeave('wishlist')}
+                  >
+                    <div
+                      className="d-flex p-0 justify-content-center"
+                      title={
                         collectionStatus.wishlist
                           ? hoverStatus.wishlist
-                            ? faTimes
-                            : faCheck
-                          : faClipboardList
+                            ? 'Click to remove from wishlist'
+                            : 'Game is in wishlist'
+                          : 'Click to add to wishlist'
                       }
-                      className="nav-icon basic-game-icon pointer-cursor"
-                    />
-                  </p>
-                  <p className="pointer-cursor">
-                    {collectionStatus.wishlist
-                      ? hoverStatus.wishlist
-                        ? 'Remove from Wishlist'
-                        : 'Game is in Wishlist'
-                      : 'Add to Wishlist'}
-                  </p>
+                    >
+                      <div>
+                        {collectionStatus.wishlist ? (
+                          hoverStatus.wishlist ? (
+                            <X color="#B3A7F0" size={16} />
+                          ) : (
+                            <Check color="#B3A7F0" size={16} />
+                          )
+                        ) : (
+                          <Sparkle color="#9FC4F3" size={16} />
+                        )}
+                      </div>
+                      <div className="ms-1">
+                        {collectionStatus.wishlist
+                          ? hoverStatus.wishlist
+                            ? 'Remove from Wishlist'
+                            : 'Game is in Wishlist'
+                          : 'Add to Wishlist'}
+                      </div>
+                    </div>
+                  </button>
                 </div>
-                <div
-                  className="game-page-user-action-item text-center"
-                  onClick={() => handleToggleCollection('library')}
-                  onMouseEnter={() => handleMouseEnter('library')}
-                  onMouseLeave={() => handleMouseLeave('library')}
-                  title={
-                    collectionStatus.library
-                      ? hoverStatus.library
-                        ? 'Click to remove from library'
-                        : 'Game is in library'
-                      : 'Click to add to library'
-                  }
-                >
-                  <p>
-                    <FontAwesomeIcon
-                      icon={
+                <div>
+                  <button
+                    className="btn game-page-user-button game-page-form-control mb-3"
+                    onClick={() => handleToggleCollection('library')}
+                    onMouseEnter={() => handleMouseEnter('library')}
+                    onMouseLeave={() => handleMouseLeave('library')}
+                  >
+                    <div
+                      className="d-flex p-0 justify-content-center"
+                      title={
                         collectionStatus.library
                           ? hoverStatus.library
-                            ? faTimes
-                            : faCheck
-                          : faPlus
+                            ? 'Click to remove from library'
+                            : 'Game is in library'
+                          : 'Click to add to library'
                       }
-                      className="nav-icon basic-game-icon pointer-cursor"
-                    />
-                  </p>
-                  <p className="pointer-cursor">
-                    {collectionStatus.library
-                      ? hoverStatus.library
-                        ? 'Remove from Library'
-                        : 'Game is in Library'
-                      : 'Add to Library'}
-                  </p>
+                    >
+                      <div>
+                        {collectionStatus.library ? (
+                          hoverStatus.library ? (
+                            <X color="#B3A7F0" size={16} />
+                          ) : (
+                            <Check color="#B3A7F0" size={16} />
+                          )
+                        ) : (
+                          <Plus color="#B3A7F0" size={16} />
+                        )}
+                      </div>
+                      <div className="ms-1">
+                        {collectionStatus.library
+                          ? hoverStatus.library
+                            ? 'Remove from Library'
+                            : 'Game is in Library'
+                          : 'Add to Library'}
+                      </div>
+                    </div>
+                  </button>
                 </div>
               </>
             ) : (
               <>
                 <div
-                  className="game-page-user-action-item text-center"
+                  className="justify-content-md-end justify-content-center d-flex py-0"
                   title="Login to add to Wishlist"
                 >
                   <LoginContainer
                     ButtonTag={'a'}
                     buttonClass={
-                      'text-decoration-none text-reset pointer-cursor'
+                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center'
                     }
                   >
-                    <p>
-                      <FontAwesomeIcon
-                        icon={faClipboardList}
-                        className="nav-icon basic-game-icon pointer-cursor"
-                      />
-                    </p>
-                    <p className="pointer-cursor">Add to Wishlist</p>
+                    <div className="d-flex align-items-center p-0">
+                      <Sparkle color="#9FC4F3" className="me-2" />
+                    </div>
+                    <div className="pointer-cursor">Add to Wishlist</div>
                   </LoginContainer>
                 </div>
                 <div
-                  className="game-page-user-action-item text-center"
+                  className="justify-content-md-end justify-content-center d-flex py-0"
                   title="Login to add to Library"
                 >
                   <LoginContainer
                     ButtonTag={'a'}
                     buttonClass={
-                      'text-decoration-none text-reset pointer-cursor'
+                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center'
                     }
                   >
-                    <p>
+                    <div>
                       <FontAwesomeIcon
                         icon={faPlus}
-                        className="nav-icon basic-game-icon pointer-cursor"
+                        color="#B3A7F0"
+                        className="me-2"
                       />
-                    </p>
-                    <p className="pointer-cursor">Add to Library</p>
+                    </div>
+                    <div className="pointer-cursor">Add to Library</div>
                   </LoginContainer>
                 </div>
               </>
             )}
-            <div className="game-page-user-action-item text-center">
-              <button className="btn btn-info" onClick={handleShare}>
+            <div className="game-page-user-action-item justify-content-end d-flex">
+              <button
+                className="btn game-page-user-button"
+                onClick={handleShare}
+              >
                 <FontAwesomeIcon icon={faShare} /> Share
               </button>
             </div>
           </div>
-          <div className="game-page-friends-info">
+          <div className="game-page-friends-info text-center text-md-end">
             {Array.isArray(friendsWithGame) &&
               friendsWithGame.filter(
                 (friend) =>
@@ -728,13 +727,14 @@ const GamePage = ({ apiPrefix, user }) => {
               ).length > 0 && (
                 <>
                   <p>Friends that already have this game:</p>
-                  <div className="game-page-friend-icons d-flex">
+                  <div className="game-page-friend-icons d-flex p-0 justify-content-center justify-content-md-end">
                     {friendsWithGame
                       .filter(
                         (friend) =>
                           friend.status === 'library' &&
                           friend.id !== user.user_id,
                       )
+                      .slice(0, 5)
                       .map((friend) => (
                         <Link to={`/user/${friend.id}`} key={friend.id}>
                           <img
@@ -752,42 +752,80 @@ const GamePage = ({ apiPrefix, user }) => {
                   </div>
                 </>
               )}
+            {friendsWithGame.filter((f) => f.status === 'library').length >
+            3 ? (
+              <button
+                className="btn game-page-user-button mb-3"
+                onClick={toggleFriendsModal}
+              >
+                show all
+              </button>
+            ) : (
+              <></>
+            )}
+            {isFriendsModalOpen && (
+              <FriendsModal
+                toggleFriendsModal={toggleFriendsModal}
+                friendsWithGame={friendsWithGame.filter(
+                  (f) => f.status === 'library',
+                )}
+              />
+            )}
 
-            {Array.isArray(friendsWithGame) &&
-              friendsWithGame.filter(
-                (friend) =>
-                  friend.status === 'wishlist' && friend.id !== user.user_id,
-              ).length > 0 && (
-                <>
-                  <p>Friends that wishlisted this game:</p>
-                  <div className="game-page-friend-icons d-flex">
-                    {friendsWithGame
-                      .filter(
-                        (friend) =>
-                          friend.status === 'wishlist' &&
-                          friend.id !== user.user_id,
-                      )
-                      .map((friend) => (
-                        <Link to={`/user/${friend.id}`} key={friend.id}>
-                          <img
-                            src={friend.profile_image_url}
-                            alt={`${friend.first_name} ${friend.last_name}`}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/static/default-profile.png';
-                            }}
-                            title={`${friend.first_name} ${friend.last_name}`}
-                            className="friend-profile-img"
-                          />
-                        </Link>
-                      ))}
-                  </div>
-                </>
-              )}
+            {friendsWithGame.filter(
+              (friend) =>
+                friend.status === 'wishlist' && friend.id !== user.user_id,
+            ).length > 0 && (
+              <>
+                <p>Friends that wishlisted this game:</p>
+                <div className="game-page-friend-icons d-flex justify-content-center justify-content-md-end">
+                  {friendsWithGame
+                    .filter(
+                      (friend) =>
+                        friend.status === 'wishlist' &&
+                        friend.id !== user.user_id,
+                    )
+                    .slice(0, 5)
+                    .map((friend) => (
+                      <Link to={`/user/${friend.id}`} key={friend.id}>
+                        <img
+                          src={friend.profile_image_url}
+                          alt={`${friend.first_name} ${friend.last_name}`}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/static/default-profile.png';
+                          }}
+                          title={`${friend.first_name} ${friend.last_name}`}
+                          className="friend-profile-img"
+                        />
+                      </Link>
+                    ))}
+                </div>
+              </>
+            )}
+            {friendsWithGame.filter((f) => f.status === 'library').length >
+            5 ? (
+              <button
+                className="btn game-page-user-button mb-3"
+                onClick={toggleFriendsModal}
+              >
+                show all
+              </button>
+            ) : (
+              <></>
+            )}
+            {isFriendsModalOpen && (
+              <FriendsModal
+                toggleFriendsModal={toggleFriendsModal}
+                friendsWithGame={friendsWithGame.filter(
+                  (f) => f.status === 'library',
+                )}
+              />
+            )}
           </div>
         </div>
       </div>
-      <div className="description mt-4">
+      <div className="description text-center text-md-start mt-4">
         <h2>Description:</h2>
         <div
           ref={descriptionRef}
@@ -795,15 +833,32 @@ const GamePage = ({ apiPrefix, user }) => {
           dangerouslySetInnerHTML={{ __html: boardGame.description }}
         />
         {isOverflowing && (
-          <button
-            className="btn btn-primary mt-3 mb-3"
-            onClick={toggleReadMore}
-          >
-            {isExpanded ? 'Read less' : 'Read more'}
-          </button>
+          <div className="d-flex justify-content-end">
+            <button
+              className="btn game-page-user-button mt-3 mb-3"
+              onClick={toggleReadMore}
+            >
+              {isExpanded ? 'Read less' : 'Read more'}
+            </button>
+          </div>
         )}
       </div>
-      <div className="comments-ratings-section mt-4">
+      {boardGame.expansions.length > 0 && (
+        <>
+          <h2>Expansions</h2>
+          <div className="game-page-expansions d-flex overflow-auto">
+            {boardGame.expansions.map((expansion) => (
+              <div
+                key={expansion.expansion_id}
+                className="d-flex justify-content-center"
+              >
+                <TableItem boardGame={expansion} />
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+      <div className="comments-ratings-section mt-4 p-3 p-md-0">
         <h2>Comments and Ratings</h2>
         {user.user_id ? (
           <div className="add-comment">
@@ -834,7 +889,7 @@ const GamePage = ({ apiPrefix, user }) => {
           <LoginContainer
             ButtonTag={'a'}
             buttonClass={
-              'text-decoration-none text-reset pointer-cursor d-flex align-items-center'
+              'btn game-page-user-button text-decoration-none text-reset pointer-cursor d-inline-flex align-items-center mb-2'
             }
           >
             <FontAwesomeIcon
@@ -849,41 +904,63 @@ const GamePage = ({ apiPrefix, user }) => {
           .map((comment) => (
             <div
               key={comment.comment_id}
-              className={`comment ${comment.rating !== null ? 'review' : ''}`}
+              className={`comment ${comment.rating !== null ? 'review' : ''} mb-3 row`}
             >
-              <p>
+              <div className="col-1 align-items-center justify-content-center d-flex">
                 <Link to={`/user/${comment.user_id}`}>
-                  <img
-                    src={comment.profile_image_url}
-                    alt={comment.user_name}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/static/default-profile.png';
-                    }}
-                    className="comment-profile-img"
-                  />
-                  <strong>{comment.user_name}</strong>
+                  <div className="text-center">
+                    <img
+                      src={comment.profile_image_url}
+                      alt={comment.user_name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/static/default-profile.png';
+                      }}
+                      className="comment-profile-img"
+                    />
+                  </div>
+                  <div className="text-center">
+                    <strong>{comment.user_name}</strong>
+                  </div>
                 </Link>
-                {comment.rating !== null && ` rated: ${comment.rating}/10`}
-                <span className="comment-date">
-                  {' '}
-                  {formatDistanceToNow(new Date(comment.created_at))} ago
-                </span>
-              </p>
-              <p>{comment.comment}</p>
-              {comment.created_at !== comment.updated_at && <p>(Edited)</p>}
-              {user.user_id === comment.user_id && (
-                <div>
-                  <button onClick={() => handleEditComment(comment.comment_id)}>
-                    <FontAwesomeIcon icon={faEdit} /> Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteComment(comment.comment_id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} /> Delete
-                  </button>
+              </div>
+              <div className="col-11 d-flex flex-column">
+                <div className="d-flex justify-content-between">
+                  <span>
+                    {comment.rating !== null && (
+                      <>
+                        <FontAwesomeIcon
+                          icon={faStar}
+                          color="#F3DE9F"
+                          className="me-1"
+                        />{' '}
+                        {comment.rating}/10
+                      </>
+                    )}
+                  </span>
+                  <span className="comment-date">
+                    {formatDistanceToNow(new Date(comment.created_at))} ago
+                  </span>
                 </div>
-              )}
+                <div className="comment-text d-inline-block p-3">
+                  {comment.comment}
+                </div>
+                {comment.created_at !== comment.updated_at && <p>(Edited)</p>}
+                {user.user_id === comment.user_id && (
+                  <div>
+                    <button
+                      onClick={() => handleEditComment(comment.comment_id)}
+                    >
+                      <FontAwesomeIcon icon={faEdit} /> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteComment(comment.comment_id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} /> Delete
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
       </div>
