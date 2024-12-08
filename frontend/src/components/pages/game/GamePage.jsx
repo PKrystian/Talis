@@ -477,24 +477,24 @@ const GamePage = ({ apiPrefix, user }) => {
             <p className="text-danger">Game not yet verified</p>
           )}
         </div>
-        <div className="col flex-grow">
-          <div className="d-flex justify-content-between">
+        <div className="col-md-5">
+          <div className="d-flex justify-content-md-between justify-content-center">
             <h1 className="game-title">{boardGame.name}</h1>
           </div>
           <div className="basic-game-info mb-3 mt-4 d-flex">
-            <div className="basic-info-item px-3 d-flex flex-column">
-              <Users size={45} className="nav-icon basic-game-icon" />
+            <div className="basic-info-item px-3 d-flex flex-column align-items-center">
+              <Users size={40} className="nav-icon basic-game-icon" />
               <div className="basic-info-text">
                 {boardGame.min_players}-{boardGame.max_players} Players
               </div>
             </div>
-            <div className="basic-info-item px-3 d-flex flex-column">
-              <Clock size={45} className="nav-icon basic-game-icon" />
+            <div className="basic-info-item px-3 d-flex flex-column align-items-center">
+              <Clock size={40} className="nav-icon basic-game-icon" />
               <div className="basic-info-text">{playtime} Min</div>
             </div>
             {boardGame.rating ? (
-              <div className="basic-info-item px-3 d-flex flex-column">
-                <Star size={45} />
+              <div className="basic-info-item px-3 d-flex flex-column align-items-center">
+                <Star size={40} />
                 <div className="basic-info-text">
                   {boardGame.rating.toFixed(2)}/10
                 </div>
@@ -502,8 +502,8 @@ const GamePage = ({ apiPrefix, user }) => {
             ) : null}
             {averageRating ? (
               <div className="basic-info-item px-3 d-flex flex-column">
-                <div className="d-flex align-items-center">
-                  <User size={45} className="nav-icon basic-game-icon" />
+                <div className="d-flex p-0 align-items-center">
+                  <User size={40} className="nav-icon basic-game-icon" />
                   <Star />
                 </div>
                 <div className="basic-info-text">
@@ -612,7 +612,7 @@ const GamePage = ({ apiPrefix, user }) => {
           </div>
         </div>
         <div className="mt-3 col">
-          <div className="game-page-user-action text-end justify-content-end row">
+          <div className="game-page-user-action text-md-end justify-content-md-end text-center justify-content-center row">
             {user && user.user_id ? (
               <>
                 <div>
@@ -635,12 +635,12 @@ const GamePage = ({ apiPrefix, user }) => {
                       <div>
                         {collectionStatus.wishlist ? (
                           hoverStatus.wishlist ? (
-                            <X size={16} />
+                            <X color="#B3A7F0" size={16} />
                           ) : (
-                            <Check size={16} />
+                            <Check color="#B3A7F0" size={16} />
                           )
                         ) : (
-                          <Sparkle size={16} />
+                          <Sparkle color="#9FC4F3" size={16} />
                         )}
                       </div>
                       <div className="ms-1">
@@ -673,12 +673,12 @@ const GamePage = ({ apiPrefix, user }) => {
                       <div>
                         {collectionStatus.library ? (
                           hoverStatus.library ? (
-                            <X size={16} />
+                            <X color="#B3A7F0" size={16} />
                           ) : (
-                            <Check size={16} />
+                            <Check color="#B3A7F0" size={16} />
                           )
                         ) : (
-                          <Plus size={16} />
+                          <Plus color="#B3A7F0" size={16} />
                         )}
                       </div>
                       <div className="ms-1">
@@ -695,7 +695,7 @@ const GamePage = ({ apiPrefix, user }) => {
             ) : (
               <>
                 <div
-                  className="justify-content-end d-flex py-0"
+                  className="justify-content-md-end justify-content-center d-flex py-0"
                   title="Login to add to Wishlist"
                 >
                   <LoginContainer
@@ -704,14 +704,14 @@ const GamePage = ({ apiPrefix, user }) => {
                       'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center'
                     }
                   >
-                    <div>
-                      <Sparkle className="me-2" />
+                    <div className="d-flex align-items-center p-0">
+                      <Sparkle color="#9FC4F3" className="me-2" />
                     </div>
                     <div className="pointer-cursor">Add to Wishlist</div>
                   </LoginContainer>
                 </div>
                 <div
-                  className="justify-content-end d-flex py-0"
+                  className="justify-content-md-end justify-content-center d-flex py-0"
                   title="Login to add to Library"
                 >
                   <LoginContainer
@@ -721,7 +721,11 @@ const GamePage = ({ apiPrefix, user }) => {
                     }
                   >
                     <div>
-                      <FontAwesomeIcon icon={faPlus} className="me-2" />
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        color="#B3A7F0"
+                        className="me-2"
+                      />
                     </div>
                     <div className="pointer-cursor">Add to Library</div>
                   </LoginContainer>
@@ -737,7 +741,7 @@ const GamePage = ({ apiPrefix, user }) => {
               </button>
             </div>
           </div>
-          <div className="game-page-friends-info text-end">
+          <div className="game-page-friends-info text-center text-md-end">
             {Array.isArray(friendsWithGame) &&
               friendsWithGame.filter(
                 (friend) =>
@@ -745,7 +749,7 @@ const GamePage = ({ apiPrefix, user }) => {
               ).length > 0 && (
                 <>
                   <p>Friends that already have this game:</p>
-                  <div className="game-page-friend-icons d-flex p-0 justify-content-end">
+                  <div className="game-page-friend-icons d-flex p-0 justify-content-center justify-content-md-end">
                     {friendsWithGame
                       .filter(
                         (friend) =>
@@ -796,7 +800,7 @@ const GamePage = ({ apiPrefix, user }) => {
             ).length > 0 && (
               <>
                 <p>Friends that wishlisted this game:</p>
-                <div className="game-page-friend-icons d-flex justify-content-end">
+                <div className="game-page-friend-icons d-flex justify-content-center justify-content-md-end">
                   {friendsWithGame
                     .filter(
                       (friend) =>
@@ -843,7 +847,7 @@ const GamePage = ({ apiPrefix, user }) => {
           </div>
         </div>
       </div>
-      <div className="description mt-4">
+      <div className="description text-center text-md-start mt-4">
         <h2>Description:</h2>
         <div
           ref={descriptionRef}
@@ -851,26 +855,32 @@ const GamePage = ({ apiPrefix, user }) => {
           dangerouslySetInnerHTML={{ __html: boardGame.description }}
         />
         {isOverflowing && (
-          <button
-            className="btn btn-primary mt-3 mb-3"
-            onClick={toggleReadMore}
-          >
-            {isExpanded ? 'Read less' : 'Read more'}
-          </button>
+          <div className="d-flex justify-content-end">
+            <button
+              className="btn game-page-user-button mt-3 mb-3"
+              onClick={toggleReadMore}
+            >
+              {isExpanded ? 'Read less' : 'Read more'}
+            </button>
+          </div>
         )}
       </div>
-      <h2>Expansions</h2>
-      <div className="game-page-expansions d-flex overflow-auto">
-        {boardGame.expansions.map((expansion) => (
-          <div
-            key={expansion.expansion_id}
-            className="d-flex justify-content-center"
-          >
-            <TableItem boardGame={expansion} />
+      {boardGame.expansions.length > 0 && (
+        <>
+          <h2>Expansions</h2>
+          <div className="game-page-expansions d-flex overflow-auto">
+            {boardGame.expansions.map((expansion) => (
+              <div
+                key={expansion.expansion_id}
+                className="d-flex justify-content-center"
+              >
+                <TableItem boardGame={expansion} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="comments-ratings-section mt-4">
+        </>
+      )}
+      <div className="comments-ratings-section mt-4 p-3 p-md-0">
         <h2>Comments and Ratings</h2>
         {user.user_id ? (
           <div className="add-comment">
@@ -941,7 +951,11 @@ const GamePage = ({ apiPrefix, user }) => {
                   <span>
                     {comment.rating !== null && (
                       <>
-                        <FontAwesomeIcon icon={faStar} className="me-1" />{' '}
+                        <FontAwesomeIcon
+                          icon={faStar}
+                          color="#F3DE9F"
+                          className="me-1"
+                        />{' '}
                         {comment.rating}/10
                       </>
                     )}
