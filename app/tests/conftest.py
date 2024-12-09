@@ -1,2 +1,4 @@
 import pytest
-from fixtures.board_game_fixtures import custom_board_game_fixture, actual_board_game_fixture
+from .fixtures.board_game_fixtures import custom_board_game_fixture, actual_board_game_fixture
+from .fixtures.user_fixtures import new_registered_user_fixture, new_registered_users_fixture
+from .fixtures.event_fixtures import new_event_fixture

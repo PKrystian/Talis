@@ -1,6 +1,3 @@
-from types import NoneType
-
-from django.contrib.auth.models import User
 from django.http import JsonResponse
 
 from app.models.invite import Invite
