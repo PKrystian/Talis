@@ -11,7 +11,12 @@ class FriendListController:
 
     @staticmethod
     def action_friend_list(user_id: int, limit: int, tags: list | None) -> JsonResponse:
-        friend_list = FriendList.objects.filter(user_id=user_id, status=tags).order_by('-created_at')[:limit]
+        friend_query = FriendList.objects.filter(user_id=user_id)
+
+        if tags:
+            friend_query = friend_query.filter(status__in=tags)
+
+        friend_list = friend_query.order_by('-created_at')[:limit]
 
         data = []
 
@@ -51,7 +56,7 @@ class FriendListController:
 
         return JsonResponse({'success': True})
 
-    ROUTE_ACCEPT: str = 'accept_friend/'
+    ROUTE_ACCEPT: str = 'accept-friend/'
 
     def action_accept_friend(self, user_id: int, friend_id: int) -> JsonResponse:
         if not user_id or not friend_id:
@@ -64,7 +69,7 @@ class FriendListController:
         friend_list.status = FriendList.STATUS_ACCEPTED
         friend_list.save()
 
-        self.dismiss_invites(user_id, friend_id)
+        self.__dismiss_invites(user_id, friend_id)
 
         return JsonResponse({'success': True})
 
@@ -81,7 +86,7 @@ class FriendListController:
         friend_list.status = FriendList.STATUS_REJECTED
         friend_list.save()
 
-        self.dismiss_invites(user_id, friend_id)
+        self.__dismiss_invites(user_id, friend_id)
 
         return JsonResponse({'success': True})
 
@@ -103,7 +108,7 @@ class FriendListController:
 
         return JsonResponse({'success': True})
 
-    ROUTE_INVITES: str = 'friend_invites/'
+    ROUTE_INVITES: str = 'friend-invites/'
 
     @staticmethod
     def action_pending_invites(user_id) -> JsonResponse:
@@ -185,7 +190,7 @@ class FriendListController:
         return JsonResponse(data, safe=False, status=200)
 
     @staticmethod
-    def dismiss_invites(user_id: int, friend_id: int) -> None:
+    def __dismiss_invites(user_id: int, friend_id: int) -> None:
         if Invite.objects.filter(user_id=friend_id, invited_user_id=user_id, type=Invite.INVITE_TYPE_NEW_FRIEND_REQUEST, status=Invite.INVITE_STATUS_PENDING).exists():
             invite = Invite.objects.filter(user_id=friend_id, invited_user_id=user_id, type=Invite.INVITE_TYPE_NEW_FRIEND_REQUEST, status=Invite.INVITE_STATUS_PENDING).get()
             invite.status = Invite.INVITE_STATUS_ACCEPTED

@@ -8,7 +8,7 @@ from django.utils import timezone
 from app.models import BoardGame, Category
 from app.models.event import Event
 from app.models.invite import Invite
-from app.utils.EventFilterQuery import EventFilter
+from app.utils.EventFilter import EventFilter
 from app.utils.creators.EventCreator import EventCreator
 from app.utils.photon_api.PhotonAPILocationMatcher import PhotonAPILocationMatcher
 
