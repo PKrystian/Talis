@@ -160,7 +160,6 @@ const SettingsPage = ({ apiPrefix, user }) => {
             className="form-control"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            required
           />
         </div>
 
