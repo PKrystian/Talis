@@ -25,7 +25,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
 import LoginContainer from '../../utils/login/container/LoginContainer';
-import MetaComponent from '../../meta/MetaComponent';
 import FriendsModal from '../friendsWithGame/FriendsWithGame.jsx';
 import TableItem from '../../utils/table/TableItem.jsx';
 
@@ -318,21 +317,6 @@ const GamePage = ({ apiPrefix, user }) => {
     setIsExpanded(!isExpanded);
   };
 
-  const getMetaDescription = () => {
-    const publisherText = boardGame.publisher
-      ? ` by ${boardGame.publisher}`
-      : '';
-
-    const yearPublishedText = boardGame.yearPublishedText
-      ? ` in ${boardGame.year_published}`
-      : '';
-
-    const publishedText =
-      publisherText || yearPublishedText ? ' published' : '';
-
-    return `Board Game - ${boardGame.name}${publishedText}${publisherText}${yearPublishedText}. Uncover more details about the game like precise description on Talis.`;
-  };
-
   const handleAddComment = () => {
     if (!user.user_id) {
       return;
@@ -448,13 +432,6 @@ const GamePage = ({ apiPrefix, user }) => {
 
   return (
     <div className="container game-page-container">
-      {boardGame && (
-        <MetaComponent
-          title={boardGame.name}
-          description={getMetaDescription()}
-          canonical={`game/${boardGame.id}`}
-        />
-      )}
       <div className="row ml-0 mt-4">
         <div className="col-sm-auto text-center">
           <img
