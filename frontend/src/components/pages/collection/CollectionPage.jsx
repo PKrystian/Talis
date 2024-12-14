@@ -5,7 +5,7 @@ import './CollectionPage.css';
 import TableItem from '../../utils/table/TableItem';
 import MetaComponent from '../../meta/MetaComponent';
 import { toast } from 'react-toastify';
-import { MagnifyingGlass, CaretDown } from '@phosphor-icons/react';
+import { MagnifyingGlass, CaretDown, Equals } from '@phosphor-icons/react';
 
 const CollectionPage = ({ user }) => {
   const [collectionData, setCollectionData] = useState(null);
@@ -143,11 +143,14 @@ const CollectionPage = ({ user }) => {
         description="Display your wishlisted and library saved games"
         canonical="collection"
       />
-      <h1 className="text-left">Your {activeTab}</h1>
+      <div className="d-flex align-items-center mb-4">
+        <Equals size={24} className="me-2" />
+        <h1 className="text-left">Your {activeTab}</h1>
+      </div>
       <ul className="nav nav-tabs border-bottom-0">
         <li>
           <button
-            className={`nav-link collection-tab ${activeTab === 'wishlist' ? 'wishlist-active' : ''}`}
+            className={`nav-link collection-tab ${activeTab === 'wishlist' ? 'wishlist-active' : 'wishlist-inactive'}`}
             onClick={() => setActiveTab('wishlist')}
           >
             Wishlist
@@ -155,7 +158,7 @@ const CollectionPage = ({ user }) => {
         </li>
         <li>
           <button
-            className={`nav-link collection-tab ${activeTab === 'library' ? 'library-active' : ''}`}
+            className={`nav-link collection-tab ${activeTab === 'library' ? 'library-active' : 'library-inactive'}`}
             onClick={() => setActiveTab('library')}
           >
             Library
@@ -165,7 +168,7 @@ const CollectionPage = ({ user }) => {
       <div className="tab-content">
         {activeTab === 'wishlist' && (
           <div className="tab-pane active">
-            <div className="collection-search-tab p-4 col-md-6">
+            <div className="collection-search-tab p-4 col-md-6 mb-4">
               <div className="d-flex mb-4">
                 <input
                   type="text"
@@ -187,7 +190,6 @@ const CollectionPage = ({ user }) => {
                 value={wishlistSortOption}
                 onChange={(e) => setWishlistSortOption(e.target.value)}
               >
-                <option value="">Sort by...</option>
                 <option value="oldest">Oldest</option>
                 <option value="newest">Newest</option>
                 <option value="rating_asc">Rating &#x2191;</option>
@@ -200,7 +202,7 @@ const CollectionPage = ({ user }) => {
             <div className="row g-2">
               {filteredWishlist && filteredWishlist.length > 0 ? (
                 filteredWishlist.map((boardGame) => (
-                  <div key={boardGame.id} className="col-12 col-sm-5 col-lg-2">
+                  <div key={boardGame.id} className="col col-md-4 col-lg-2">
                     <TableItem boardGame={boardGame} />
                     <p className="collection-date">
                       Added on:{' '}
@@ -218,7 +220,7 @@ const CollectionPage = ({ user }) => {
         )}
         {activeTab === 'library' && (
           <div className="tab-pane active">
-            <div className="collection-search-tab p-4 col-md-6">
+            <div className="collection-search-tab p-4 col-md-6 mb-4">
               <div className="d-flex mb-4">
                 <input
                   type="text"
@@ -240,7 +242,6 @@ const CollectionPage = ({ user }) => {
                 value={librarySortOption}
                 onChange={(e) => setLibrarySortOption(e.target.value)}
               >
-                <option value="">Sort by...</option>
                 <option value="oldest">Oldest</option>
                 <option value="newest">Newest</option>
                 <option value="rating_asc">Rating &#x2191;</option>
@@ -253,7 +254,7 @@ const CollectionPage = ({ user }) => {
             <div className="row g-2">
               {filteredLibrary && filteredLibrary.length > 0 ? (
                 filteredLibrary.map((boardGame) => (
-                  <div key={boardGame.id} className="col-12 col-sm-5 col-lg-2">
+                  <div key={boardGame.id} className="col col-md-4 col-lg-2">
                     <TableItem boardGame={boardGame} />
                     <p className="collection-date">
                       Added on:{' '}
