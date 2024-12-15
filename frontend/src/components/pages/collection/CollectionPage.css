@@ -9,12 +9,108 @@
   color: #fff;
 }
 
-.tab-content {
-  margin-top: 20px;
+.collection-container {
+  padding-top: 30px;
+}
+
+.collection-search-tab {
+  background-color: var(--button-secondary-color);
+  border-top-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.collection-form-control {
+  width: 100%;
+  background-color: var(--button-secondary-color);
+  border: 0px;
+}
+
+.collection-search-submit {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--text-color-light);
+  padding-right: 10px;
+  transition: 0.4s;
+}
+
+.collection-form-select {
+  border-color: var(--button-secondary-color);
+  background-color: transparent;
+  color: var(--text-color-light);
+  width: 130px;
+  padding-right: 10px;
+  transition: 0.4s;
+  appearance: none;
+}
+
+.collection-form-control::placeholder,
+.collection-form-select::placeholder {
+  color: var(--text-color-light);
+}
+
+.collection-form-control:focus,
+.collection-form-select:focus {
+  background-color: var(--button-secondary-color);
+  color: var(--text-color-light);
+}
+
+.wishlist {
+  border-bottom: 1px solid #9FC4F3;
+}
+
+.library {
+  border-bottom: 1px solid var(--button-primary-color);
+}
+
+.collection-tab {
+  background-color: var(--button-secondary-color);
+  color: #fff;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.collection-tab.wishlist-active {
+  background-color: #9FC4F3;
+  color: #000;
+}
+
+.collection-tab.wishlist-inactive {
+  border: none;
+  background-color: var(--button-secondary-color);
+  color: #fff;
+}
+
+.collection-tab.library-active {
+  background-color: var(--button-primary-color);
+  color: #000;
+}
+
+.collection-tab.library-inactive {
+  border: none;
+  background-color: var(--button-secondary-color);
+  color: #fff;
+}
+
+.collection-tab.wishlist-inactive:hover {
+  background-color: #9FC4F3;
+  color: #000;
+}
+
+.collection-tab.library-inactive:hover {
+  background-color: var(--button-primary-color);
+  color: #000;
 }
 
 .collection-date {
   color: white;
   text-align: center;
   font-size: 0.9rem;
+}
+
+.dropdown-arrow {
+  transform: translateX(-100%);
+  pointer-events: none;
+  color: #fff;
 }

@@ -25,7 +25,7 @@ describe('CollectionPage Component', () => {
     await act(async () => {
       render(<CollectionPage user={mockUser} />);
     });
-    expect(screen.getByText('Collection')).toBeInTheDocument();
+    expect(screen.getByText('Your wishlist')).toBeInTheDocument();
   });
 
   test('displays user wishlist', async () => {

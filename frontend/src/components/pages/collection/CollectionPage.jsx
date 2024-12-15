@@ -5,6 +5,7 @@ import './CollectionPage.css';
 import TableItem from '../../utils/table/TableItem';
 import MetaComponent from '../../meta/MetaComponent';
 import { toast } from 'react-toastify';
+import { MagnifyingGlass, CaretDown, Equals } from '@phosphor-icons/react';
 
 const CollectionPage = ({ user }) => {
   const [collectionData, setCollectionData] = useState(null);
@@ -136,25 +137,28 @@ const CollectionPage = ({ user }) => {
   }
 
   return (
-    <div className="container mt-4">
+    <div className="container collection-container mt-4">
       <MetaComponent
         title="My Collection"
         description="Display your wishlisted and library saved games"
         canonical="collection"
       />
-      <h1 className="text-center">Collection</h1>
-      <ul className="nav nav-tabs">
-        <li className="nav-item">
+      <div className="d-flex align-items-center mb-4">
+        <Equals size={24} className="me-2" />
+        <h1 className="text-left">Your {activeTab}</h1>
+      </div>
+      <ul className="nav nav-tabs border-bottom-0">
+        <li>
           <button
-            className={`nav-link ${activeTab === 'wishlist' ? 'active' : ''}`}
+            className={`nav-link collection-tab ${activeTab === 'wishlist' ? 'wishlist-active' : 'wishlist-inactive'}`}
             onClick={() => setActiveTab('wishlist')}
           >
             Wishlist
           </button>
         </li>
-        <li className="nav-item">
+        <li>
           <button
-            className={`nav-link ${activeTab === 'library' ? 'active' : ''}`}
+            className={`nav-link collection-tab ${activeTab === 'library' ? 'library-active' : 'library-inactive'}`}
             onClick={() => setActiveTab('library')}
           >
             Library
@@ -164,30 +168,41 @@ const CollectionPage = ({ user }) => {
       <div className="tab-content">
         {activeTab === 'wishlist' && (
           <div className="tab-pane active">
-            <input
-              type="text"
-              className="form-control mb-4"
-              placeholder="Search for a game in wishlist..."
-              value={wishlistSearchTerm}
-              onChange={handleWishlistSearch}
-            />
-            <select
-              className="form-select mb-4"
-              value={wishlistSortOption}
-              onChange={(e) => setWishlistSortOption(e.target.value)}
-            >
-              <option value="">Sort by...</option>
-              <option value="oldest">Oldest</option>
-              <option value="newest">Newest</option>
-              <option value="rating_asc">Rating &#x2191;</option>
-              <option value="rating_desc">Rating &#x2193;</option>
-              <option value="name_asc">Name &#x2191;</option>
-              <option value="name_desc">Name &#x2193;</option>
-            </select>
+            <div className="collection-search-tab p-4 col-md-6 mb-4">
+              <div className="d-flex mb-4">
+                <input
+                  type="text"
+                  className="collection-form-control wishlist"
+                  placeholder="Search for a game in wishlist..."
+                  value={wishlistSearchTerm}
+                  onChange={handleWishlistSearch}
+                />
+                <button
+                  className="collection-search-submit wishlist"
+                  type="submit"
+                  aria-label="Search"
+                >
+                  <MagnifyingGlass size={20} />
+                </button>
+              </div>
+              <select
+                className="collection-form-select mb-4"
+                value={wishlistSortOption}
+                onChange={(e) => setWishlistSortOption(e.target.value)}
+              >
+                <option value="oldest">Oldest</option>
+                <option value="newest">Newest</option>
+                <option value="rating_asc">Rating &#x2191;</option>
+                <option value="rating_desc">Rating &#x2193;</option>
+                <option value="name_asc">Name &#x2191;</option>
+                <option value="name_desc">Name &#x2193;</option>
+              </select>
+              <CaretDown size={20} className="dropdown-arrow"></CaretDown>
+            </div>
             <div className="row g-2">
               {filteredWishlist && filteredWishlist.length > 0 ? (
                 filteredWishlist.map((boardGame) => (
-                  <div key={boardGame.id} className="col-12 col-sm-5 col-lg-2">
+                  <div key={boardGame.id} className="col col-md-4 col-lg-2">
                     <TableItem boardGame={boardGame} />
                     <p className="collection-date">
                       Added on:{' '}
@@ -205,30 +220,41 @@ const CollectionPage = ({ user }) => {
         )}
         {activeTab === 'library' && (
           <div className="tab-pane active">
-            <input
-              type="text"
-              className="form-control mb-4"
-              placeholder="Search for a game in library..."
-              value={librarySearchTerm}
-              onChange={handleLibrarySearch}
-            />
-            <select
-              className="form-select mb-4"
-              value={librarySortOption}
-              onChange={(e) => setLibrarySortOption(e.target.value)}
-            >
-              <option value="">Sort by...</option>
-              <option value="oldest">Oldest</option>
-              <option value="newest">Newest</option>
-              <option value="rating_asc">Rating &#x2191;</option>
-              <option value="rating_desc">Rating &#x2193;</option>
-              <option value="name_asc">Name &#x2191;</option>
-              <option value="name_desc">Name &#x2193;</option>
-            </select>
+            <div className="collection-search-tab p-4 col-md-6 mb-4">
+              <div className="d-flex mb-4">
+                <input
+                  type="text"
+                  className="collection-form-control library"
+                  placeholder="Search for a game in library..."
+                  value={librarySearchTerm}
+                  onChange={handleLibrarySearch}
+                />
+                <button
+                  className="collection-search-submit library"
+                  type="submit"
+                  aria-label="Search"
+                >
+                  <MagnifyingGlass size={20} />
+                </button>
+              </div>
+              <select
+                className="collection-form-select mb-4"
+                value={librarySortOption}
+                onChange={(e) => setLibrarySortOption(e.target.value)}
+              >
+                <option value="oldest">Oldest</option>
+                <option value="newest">Newest</option>
+                <option value="rating_asc">Rating &#x2191;</option>
+                <option value="rating_desc">Rating &#x2193;</option>
+                <option value="name_asc">Name &#x2191;</option>
+                <option value="name_desc">Name &#x2193;</option>
+              </select>
+              <CaretDown size={20} className="dropdown-arrow"></CaretDown>
+            </div>
             <div className="row g-2">
               {filteredLibrary && filteredLibrary.length > 0 ? (
                 filteredLibrary.map((boardGame) => (
-                  <div key={boardGame.id} className="col-12 col-sm-5 col-lg-2">
+                  <div key={boardGame.id} className="col col-md-4 col-lg-2">
                     <TableItem boardGame={boardGame} />
                     <p className="collection-date">
                       Added on:{' '}
@@ -239,7 +265,7 @@ const CollectionPage = ({ user }) => {
                   </div>
                 ))
               ) : (
-                <p>No games found in library.</p>
+                <p>No games found in wishlist.</p>
               )}
             </div>
           </div>
