@@ -71,6 +71,10 @@
   border-top-right-radius: 15px;
 }
 
+.collection-tab:focus {
+  border: none;
+}
+
 .collection-tab.wishlist-active {
   background-color: #9FC4F3;
   color: #000;
