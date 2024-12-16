@@ -154,7 +154,7 @@ const GamePage = ({ apiPrefix, user }) => {
       setIsOverflowing(scrollHeight > clientHeight);
     }
     fetchCollectionData();
-  }, [boardGame]);
+  }, [boardGame, fetchCollectionData]);
 
   const fetchComments = useCallback(() => {
     axios
@@ -288,10 +288,6 @@ const GamePage = ({ apiPrefix, user }) => {
             break;
         }
         fetchCollectionData();
-        // setCollectionStatus((prevState) => ({
-        //   ...prevState,
-        //   [status]: !prevState[status],
-        // }));
       })
       .catch((error) => {
         toast.error(error, {

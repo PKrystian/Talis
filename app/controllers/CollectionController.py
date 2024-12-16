@@ -65,7 +65,7 @@ class CollectionController:
         opposite_status = [x for x in UserBoardGameCollection.AVAILABLE_STATUSES if x != status][0]
 
         if UserBoardGameCollection.objects.filter(user=user, board_game=board_game, status=opposite_status).exists():
-            collection_entry = UserBoardGameCollection.objects.filter(user=user, status=opposite_status)
+            collection_entry = UserBoardGameCollection.objects.filter(user=user, board_game=board_game, status=opposite_status)
             collection_entry.delete()
 
         return JsonResponse(
