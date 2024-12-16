@@ -153,11 +153,8 @@ const GamePage = ({ apiPrefix, user }) => {
       const { clientHeight, scrollHeight } = descriptionRef.current;
       setIsOverflowing(scrollHeight > clientHeight);
     }
+    fetchCollectionData();
   }, [boardGame]);
-
-  useEffect(() => {
-    fetchCollectionData().then((r) => r);
-  }, [user, fetchCollectionData]);
 
   const fetchComments = useCallback(() => {
     axios
@@ -290,10 +287,11 @@ const GamePage = ({ apiPrefix, user }) => {
             });
             break;
         }
-        setCollectionStatus((prevState) => ({
-          ...prevState,
-          [status]: !prevState[status],
-        }));
+        fetchCollectionData();
+        // setCollectionStatus((prevState) => ({
+        //   ...prevState,
+        //   [status]: !prevState[status],
+        // }));
       })
       .catch((error) => {
         toast.error(error, {
@@ -656,7 +654,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <LoginContainer
                     ButtonTag={'a'}
                     buttonClass={
-                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center'
+                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center align-items-center'
                     }
                   >
                     <div className="d-flex align-items-center p-0">
@@ -672,7 +670,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <LoginContainer
                     ButtonTag={'a'}
                     buttonClass={
-                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center'
+                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center align-items-center'
                     }
                   >
                     <div>

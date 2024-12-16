@@ -186,7 +186,7 @@ const CollectionPage = ({ user }) => {
                 </button>
               </div>
               <select
-                className="collection-form-select mb-4"
+                className="collection-form-select"
                 value={wishlistSortOption}
                 onChange={(e) => setWishlistSortOption(e.target.value)}
               >
