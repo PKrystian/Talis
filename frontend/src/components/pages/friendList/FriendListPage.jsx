@@ -166,7 +166,6 @@ const FriendListPage = ({ apiPrefix, user }) => {
       <MetaComponent
         title="Your Friends"
         description="Manage and connect with new friends"
-        canonical="friends"
       />
 
       <h1>Your Friends</h1>
