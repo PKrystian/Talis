@@ -105,7 +105,6 @@ const SettingsPage = ({ apiPrefix, user }) => {
       <MetaComponent
         title="User Settings"
         description="Manage your account details"
-        canonical="settings"
       />
       <h2 className="text-center mb-4">Settings</h2>
       <form onSubmit={handleSubmit}>

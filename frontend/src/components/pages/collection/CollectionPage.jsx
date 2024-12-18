@@ -141,7 +141,6 @@ const CollectionPage = ({ user }) => {
       <MetaComponent
         title="My Collection"
         description="Display your wishlisted and library saved games"
-        canonical="collection"
       />
       <div className="d-flex align-items-center mb-4">
         <Equals size={24} className="me-2" />

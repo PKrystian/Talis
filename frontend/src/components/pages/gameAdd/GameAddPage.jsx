@@ -183,7 +183,6 @@ const GameAddPage = ({ apiPrefix, user }) => {
       <MetaComponent
         title="Add Game"
         description="Add a new game to the database"
-        canonical="/game-add"
       />
       <h2 className="text-center mb-4">Add Game</h2>
       <form onSubmit={handleSubmit}>

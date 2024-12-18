@@ -238,7 +238,6 @@ const RegistrationPage = ({
       <MetaComponent
         title="Register"
         description="Register on Talis now to gain access to your own library of games, wishlisting as well as joining and creating social events"
-        canonical="register"
       />
       <div className="col-md-6 col-12 ps-md-5 fade-in-1s d-flex justify-content-center justify-content-md-end me-5">
         <div className="register-form-container mt-4">

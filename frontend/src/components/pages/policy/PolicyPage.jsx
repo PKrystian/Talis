@@ -9,7 +9,6 @@ const PolicyPage = () => {
         <MetaComponent
           title="Talis Policy"
           description="View our website policy"
-          canonical="policy"
         />
         <h2 id="policy-content" className="policy-header">
           Policy Rules

@@ -17,27 +17,6 @@ describe('MetaComponent', () => {
       expect(document.querySelector('meta[name="description"]').content).toBe(
         'Test Description',
       );
-      expect(document.querySelector('link[rel="canonical"]').href).toBe(
-        'https://talis.live/',
-      );
-    });
-  });
-
-  test('renders with optional canonical prop', async () => {
-    render(
-      <HelmetProvider>
-        <MetaComponent
-          title="Test Title"
-          description="Test Description"
-          canonical="test-canonical"
-        />
-      </HelmetProvider>,
-    );
-
-    await waitFor(() => {
-      expect(document.querySelector('link[rel="canonical"]').href).toBe(
-        'https://talis.live/test-canonical',
-      );
     });
   });
 
@@ -55,9 +34,6 @@ describe('MetaComponent', () => {
       expect(
         document.querySelector('meta[property="og:description"]').content,
       ).toBe('Test Description');
-      expect(document.querySelector('meta[property="og:url"]').content).toBe(
-        'https://talis.live/',
-      );
     });
   });
 
