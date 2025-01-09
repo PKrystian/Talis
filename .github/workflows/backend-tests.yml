@@ -31,20 +31,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.11
-
-      - name: Install Poetry and Dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install poetry==1.6.1
-          poetry install -vvv
-
-      - name: Debug Poetry and Environment
-        run: |
-          poetry --version
-          poetry about
-          poetry env list
-
-      - name: Run Tests
+          pip install poetry
+          poetry install
+      - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:local@localhost:5432/db_dev
         run: |
