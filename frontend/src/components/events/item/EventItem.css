@@ -1,6 +1,6 @@
 .event-details-box {
   min-height: 700px;
-  max-height: 700px;
+  background-color: var(--button-secondary-color);
 }
 
 .description .text.collapsed {
@@ -12,4 +12,13 @@
 
 .description .text.expanded {
   display: block;
+}
+
+.event-tags {
+  background-color: var(--accent-dark);
+}
+
+.event-map {
+  height: 16vw;
+  overflow: hidden;
 }

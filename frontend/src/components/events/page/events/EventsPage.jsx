@@ -9,8 +9,16 @@ import { FaCheck } from 'react-icons/fa6';
 import EventItem from '../../item/EventItem';
 import FilterConstants from '../../../../constValues/FilterConstants';
 import EventTagsModal from '../../tags/EventTagsModal';
+import EventModal from '../event_modal/EventModal';
 import MetaComponent from '../../../meta/MetaComponent';
 import { toast } from 'react-toastify';
+import {
+  MapPin,
+  CalendarDots,
+  Users,
+  Plus,
+  CalendarStar,
+} from '@phosphor-icons/react';
 
 const EventsPage = ({ apiPrefix, user }) => {
   const navigate = useNavigate();
@@ -19,6 +27,7 @@ const EventsPage = ({ apiPrefix, user }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [chosenEvent, setChosenEvent] = useState(null);
   const [requestedEvents, setRequestedEvents] = useState(null);
+  const [IsSmallScreen, setIsSmallScreen] = useState(false);
   const [, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
 
@@ -29,6 +38,7 @@ const EventsPage = ({ apiPrefix, user }) => {
   const [onlyCreatedByFriends, setOnlyCreatedByFriends] = useState(false);
 
   const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
   const filterSetterMap = {
     [FilterConstants.EVENT_FILTER_STARTING_FROM]: setStartingFrom,
@@ -40,7 +50,7 @@ const EventsPage = ({ apiPrefix, user }) => {
 
   const dateFormat = {
     year: 'numeric',
-    month: 'long',
+    month: 'numeric',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
@@ -105,8 +115,26 @@ const EventsPage = ({ apiPrefix, user }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const smallScreen = window.matchMedia('(max-width: 991px)').matches;
+      setIsSmallScreen(smallScreen);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+    };
+  }, []);
+
   const changeDisplayedEvent = (id) => {
     setChosenEvent(eventData.find((event) => event.id === id));
+    if (IsSmallScreen) {
+      toggleEventModal();
+    }
+    console.log(chosenEvent);
   };
 
   const onCreateEvent = () => {
@@ -223,6 +251,10 @@ const EventsPage = ({ apiPrefix, user }) => {
     setIsTagsModalOpen((prev) => !prev);
   };
 
+  const toggleEventModal = () => {
+    setIsEventModalOpen((prev) => !prev);
+  };
+
   if (isLoading) {
     return (
       <div className="text-center vh-100 align-content-center">
@@ -241,7 +273,19 @@ const EventsPage = ({ apiPrefix, user }) => {
         canonical="events"
       />
       <div className="container text-center navbar-expand-lg">
-        <div className="container-fluid">
+        <div className="display-5 pb-5 text-start row">
+          <div className="col-6">Local game Meetings</div>
+          <div className="col-6">
+            <button
+              className="btn event-page-create-button float-end mt-3"
+              onClick={() => onCreateEvent()}
+            >
+              Create an event
+              <CalendarStar className="ms-1" size={25}></CalendarStar>
+            </button>
+          </div>
+        </div>
+        <div className="container-fluid pb-4">
           <button
             className="navbar-toggler navbar-dark mb-2"
             type="button"
@@ -253,14 +297,14 @@ const EventsPage = ({ apiPrefix, user }) => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div
-            className="row border bg-black mt-3 mb-3 collapse navbar-collapse"
+            className="row mt-3 mb-3 collapse navbar-collapse"
             id="meetingsFilter"
           >
-            <div className="col-sm py-2 d-flex flex-column justify-content-center text-center">
+            <div className="col-sm py-2 d-flex flex-column text-center">
               <label htmlFor="date-from">Events Starting From</label>
               <input
                 id={[FilterConstants.EVENT_FILTER_STARTING_FROM]}
-                className="date-input form-control align-self-center"
+                className="event-page-form-control date-input align-self-center"
                 value={startingFrom}
                 onChange={handleOnFilterChange}
                 type="datetime-local"
@@ -271,7 +315,7 @@ const EventsPage = ({ apiPrefix, user }) => {
               <span>
                 <input
                   id={[FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MIN]}
-                  className="number-input"
+                  className="number-input event-page-form-control"
                   type="number"
                   min="1"
                   max={playerNumberMax}
@@ -281,7 +325,7 @@ const EventsPage = ({ apiPrefix, user }) => {
                 to{' '}
                 <input
                   id={[FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MAX]}
-                  className="number-input"
+                  className="number-input event-page-form-control"
                   type="number"
                   min={playerNumberMin}
                   max="99"
@@ -290,12 +334,17 @@ const EventsPage = ({ apiPrefix, user }) => {
                 />{' '}
               </span>
             </div>
-            <button
-              className="col-sm btn btn-secondary"
-              onClick={toggleTagsModal}
-            >
+            <div className="col-sm">
               Choose Categories
-            </button>
+              <div>
+                <button
+                  className="btn event-page-tags-button"
+                  onClick={toggleTagsModal}
+                >
+                  <Plus size={25}></Plus>
+                </button>
+              </div>
+            </div>
             {isTagsModalOpen && (
               <EventTagsModal
                 toggleTagsModal={toggleTagsModal}
@@ -316,31 +365,23 @@ const EventsPage = ({ apiPrefix, user }) => {
             </div>
             <div className="col-sm">
               <button
-                className="btn btn-secondary"
+                className="btn event-page-filter-button"
                 onClick={() => onApplyFilters()}
               >
                 Apply filters
-              </button>
-            </div>
-            <div className="col-sm">
-              <button
-                className="btn btn-primary"
-                onClick={() => onCreateEvent()}
-              >
-                Create an event
               </button>
             </div>
           </div>
           {eventData.length === 0 ? (
             <h2>NO EVENTS FOUND</h2>
           ) : (
-            <div className="row border bg-dark">
-              <div className="col-4 border bg-dark px-0 meeting-list">
+            <div className="row">
+              <div className="col-lg-4 rounded-3 px-0 meeting-list">
                 {eventData &&
                   eventData.map((event) => (
                     <div
                       key={event.id}
-                      className="row border mx-0"
+                      className="row rounded-2 mb-3 mx-0 meeting-list-item"
                       onClick={() => changeDisplayedEvent(event.id)}
                     >
                       <div className="col-6 px-0 event-box">
@@ -359,22 +400,29 @@ const EventsPage = ({ apiPrefix, user }) => {
                         ></img>
                       </div>
                       <div className="col-6">
-                        <div className="py-1">{event.title}</div>
-                        <div className="py-1">{event.city}</div>
-                        <div className="py-1">
+                        <div className="py-1 text-start fw-bold">
+                          {event.title}
+                        </div>
+                        <div className="pb-1 text-start">
+                          <MapPin size={18} className="me-1" />
+                          {event.street} {event.city}
+                        </div>
+                        <div className="pb-1 text-start">
+                          <CalendarDots size={18} className="me-1" />
                           {new Date(event.event_start_date).toLocaleString(
                             'en-US',
                             dateFormat,
                           )}
                         </div>
-                        <div className="py-1">
+                        <div className="pb-1 text-start">
+                          <Users size={18} className="me-1" />
                           {event.attendees.length}/{event.max_players}
                         </div>
                       </div>
                     </div>
                   ))}
               </div>
-              {chosenEvent !== null ? (
+              {chosenEvent !== null && !IsSmallScreen ? (
                 <EventItem
                   chosenEvent={chosenEvent}
                   joinButton={generateJoinButton()}
@@ -382,6 +430,13 @@ const EventsPage = ({ apiPrefix, user }) => {
                 />
               ) : null}
             </div>
+          )}
+          {isEventModalOpen && IsSmallScreen && (
+            <EventModal
+              toggleEventModal={toggleEventModal}
+              chosenEvent={chosenEvent}
+              joinButton={generateJoinButton()}
+            />
           )}
         </div>
       </div>
