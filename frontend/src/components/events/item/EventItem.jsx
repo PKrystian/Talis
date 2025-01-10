@@ -3,12 +3,35 @@ import PropTypes from 'prop-types';
 import OSMMap from '../../utils/map/OSMMap';
 import './EventItem.css';
 import { Link } from 'react-router-dom';
-import { MapPin, UserCircleGear, Users } from '@phosphor-icons/react';
+import {
+  CalendarDots,
+  MapPin,
+  UserCircleGear,
+  Users,
+} from '@phosphor-icons/react';
+
+const dateFormat = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+};
 
 const EventItem = ({ chosenEvent, joinButton = null, user }) => {
   return (
     <div className="col ms-3 rounded-4 text-left event-details-box p-3">
-      <h1 className="text-start">{chosenEvent.title}</h1>
+      <div className="row">
+        <h1 className="text-start col-6">{chosenEvent.title}</h1>
+        <div className="col-6 mt-3 text-end">
+          <CalendarDots size={25}></CalendarDots>
+          {new Date(chosenEvent.event_start_date).toLocaleString(
+            'en-US',
+            dateFormat,
+          )}
+        </div>
+      </div>
       <div className="description text-start">
         <p>{chosenEvent.description}</p>
       </div>
