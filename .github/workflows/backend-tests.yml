@@ -40,6 +40,7 @@ jobs:
           poetry cache clear --all pypi
       - name: Install dependencies
         run: |
+          pip install -U poetry
           poetry install
       - name: Run tests
         env:
