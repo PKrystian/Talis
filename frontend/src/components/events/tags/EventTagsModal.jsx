@@ -18,13 +18,13 @@ const EventTagsModal = ({ toggleTagsModal, gameTags, setGameTags }) => {
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-content bg-dark">
+      <div className="tags-modal-content overflow-y-auto">
         <h2>Categories:</h2>
         <div className="d-flex flex-wrap">
           {sortedCategories.map((category) => (
             <div
               key={category}
-              className="col-3 d-flex align-items-center form-check col-auto"
+              className="col-6 col-lg-3 d-flex align-items-center form-check col-auto"
             >
               <input
                 type="checkbox"

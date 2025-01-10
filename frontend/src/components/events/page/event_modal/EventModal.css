@@ -1,0 +1,12 @@
+.event-close-button {
+  color: white;
+}
+
+.event-modal-content {
+  max-height: 600px;
+}
+
+.event-modal-map {
+  height: 30vw;
+  overflow: hidden;
+}
