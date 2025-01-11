@@ -296,7 +296,7 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
       setBoardGamesError('This boardGame is already on your list');
       return;
     }
-    if (boardGames.length > 6) {
+    if (boardGames.length >= 6) {
       setBoardGamesError('You can add maximum of 6 boardgames to your event');
       return;
     }

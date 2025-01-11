@@ -39,6 +39,20 @@ const mockEventData = [
   },
 ];
 
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  }),
+});
+
 describe('EventsPage Component', () => {
   beforeEach(() => {
     axios.get.mockResolvedValue({ data: mockEventData });
@@ -86,7 +100,7 @@ describe('EventsPage Component', () => {
 
     fireEvent.click(screen.getByText('Choose Categories'));
 
-    expect(screen.getByText('Mocked EventTagsModal')).toBeInTheDocument();
+    expect(screen.getByTestId('event-page-tags-button')).toBeInTheDocument();
   });
 
   test('applies filters and updates event data', async () => {

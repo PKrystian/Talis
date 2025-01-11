@@ -8,17 +8,17 @@
   background-color: var(--background-color-dark-light);
   color: white;
   width: 85%;
+  max-width: 250px;
 }
 
 .meeting-list {
-  min-height: 700px;
-  max-height: 700px;
+  min-height: 800px;
+  max-height: 800px;
   overflow-y: auto;
 }
 
-.event-details-box {
-  min-height: 700px;
-  max-height: 700px;
+.meeting-list-item {
+  background-color: var(--button-secondary-color);
 }
 
 .event-box {
@@ -29,11 +29,6 @@
   height: 100%;
   width: 100%;
   object-fit: cover;
-}
-
-.event-map {
-  height: 16vw;
-  overflow: hidden;
 }
 
 .description .text.collapsed {
@@ -85,11 +80,11 @@
 }
 
 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: var(--additional-gray);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px var(--additional-gray);
 }
 
 input:checked + .slider:before {
@@ -116,9 +111,69 @@ input:checked + .slider:before {
 }
 
 .modal-content {
+  background-color: var(--button-secondary-color);
   padding: 20px;
   border-radius: 8px;
   width: 90%;
   max-width: 1000px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.meeting-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.meeting-list::-webkit-scrollbar-track {
+  background: var(--button-secondary-color); 
+  border-left: 2px solid var(--accent-dark);
+}
+ 
+.meeting-list::-webkit-scrollbar-thumb {
+  background: var(--accent-bright); 
+}
+
+.meeting-list::-webkit-scrollbar-thumb:hover {
+  background: var(--highlight-color);
+}
+
+#meetingsFilter {
+  background-image: linear-gradient(to top, var(--button-secondary-color), var(--background-color-dark-heavy));
+  border-bottom: 2px solid var(--accent-dark);
+}
+
+.event-page-form-control {
+  background-color: var(--background-color-dark-heavy);
+  color: var(--text-color-light);
+  width: 100%;
+  min-height: 35px;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border: 1px solid var(--additional-gray);
+  border-radius: 10px;
+}
+
+.event-page-tags-button {
+  background-color: var(--additional-gray);
+  color: var(--background-color-dark-heavy);
+  --bs-btn-hover-bg: var(--accent-bright);
+  border: 1px solid var(--additional-gray);
+  border-radius: 10px;
+}
+
+.event-page-create-button {
+  background-color: var(--accent-bright);
+  color: #fff;
+  --bs-btn-hover-bg: var(--highlight-color);
+  border: 1px solid var(--additional-gray);
+  border-radius: 10px;
+}
+
+.event-page-filter-button {
+  background-color: var(--button-primary-color);
+  color: var(--background-color-dark-heavy);
+  --bs-btn-hover-bg: var(--accent-bright);
+  border: 1px solid var(--additional-gray);
+  border-radius: 10px;
 }
