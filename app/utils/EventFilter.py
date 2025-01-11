@@ -1,4 +1,3 @@
-import pytz
 from django.db.models import QuerySet
 
 from app.models import FriendList

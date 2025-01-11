@@ -14,6 +14,8 @@ class UserBoardGameCollection(models.Model):
         LIBRARY_STATUS,
     ]
 
+    AVAILABLE_STATUSES = ['wishlist', 'library']
+
     objects = None
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     board_game = models.ForeignKey(BoardGame, on_delete=models.CASCADE)

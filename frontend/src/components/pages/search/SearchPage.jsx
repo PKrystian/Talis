@@ -267,7 +267,6 @@ const SearchPage = ({ apiPrefix }) => {
       <MetaComponent
         title="Search Page"
         description="Search for your favourite board games here"
-        canonical="search"
       />
       {query && (
         <h3 className="text-light">Search Results for &quot;{query}&quot;</h3>

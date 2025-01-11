@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
+import MetaComponent from '../../meta/MetaComponent';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -25,7 +26,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import './GamePage.css';
 import LoginContainer from '../../utils/login/container/LoginContainer';
-import MetaComponent from '../../meta/MetaComponent';
 import FriendsModal from '../friendsWithGame/FriendsWithGame.jsx';
 import TableItem from '../../utils/table/TableItem.jsx';
 
@@ -154,11 +154,8 @@ const GamePage = ({ apiPrefix, user }) => {
       const { clientHeight, scrollHeight } = descriptionRef.current;
       setIsOverflowing(scrollHeight > clientHeight);
     }
-  }, [boardGame]);
-
-  useEffect(() => {
-    fetchCollectionData().then((r) => r);
-  }, [user, fetchCollectionData]);
+    fetchCollectionData();
+  }, [boardGame, fetchCollectionData]);
 
   const fetchComments = useCallback(() => {
     axios
@@ -249,8 +246,8 @@ const GamePage = ({ apiPrefix, user }) => {
 
   const handleToggleCollection = (status) => {
     const apiAction = collectionStatus[status]
-      ? 'remove_from_collection/'
-      : 'add_to_collection/';
+      ? 'remove-from-collection/'
+      : 'add-to-collection/';
     const requestUrl = apiPrefix + apiAction;
 
     axios
@@ -291,10 +288,7 @@ const GamePage = ({ apiPrefix, user }) => {
             });
             break;
         }
-        setCollectionStatus((prevState) => ({
-          ...prevState,
-          [status]: !prevState[status],
-        }));
+        fetchCollectionData();
       })
       .catch((error) => {
         toast.error(error, {
@@ -322,14 +316,11 @@ const GamePage = ({ apiPrefix, user }) => {
     const publisherText = boardGame.publisher
       ? ` by ${boardGame.publisher}`
       : '';
-
     const yearPublishedText = boardGame.yearPublishedText
       ? ` in ${boardGame.year_published}`
       : '';
-
     const publishedText =
       publisherText || yearPublishedText ? ' published' : '';
-
     return `Board Game - ${boardGame.name}${publishedText}${publisherText}${yearPublishedText}. Uncover more details about the game like precise description on Talis.`;
   };
 
@@ -452,7 +443,6 @@ const GamePage = ({ apiPrefix, user }) => {
         <MetaComponent
           title={boardGame.name}
           description={getMetaDescription()}
-          canonical={`game/${boardGame.id}`}
         />
       )}
       <div className="row ml-0 mt-4">
@@ -679,7 +669,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <LoginContainer
                     ButtonTag={'a'}
                     buttonClass={
-                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center'
+                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center align-items-center'
                     }
                   >
                     <div className="d-flex align-items-center p-0">
@@ -695,7 +685,7 @@ const GamePage = ({ apiPrefix, user }) => {
                   <LoginContainer
                     ButtonTag={'a'}
                     buttonClass={
-                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center'
+                      'btn game-page-user-button game-page-form-control mb-3 d-flex justify-content-center align-items-center'
                     }
                   >
                     <div>

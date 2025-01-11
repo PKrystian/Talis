@@ -8,7 +8,6 @@ const LicensePage = () => {
       <MetaComponent
         title="Talis License"
         description="View the license under which our website operates"
-        canonical="license"
       />
       <h1 className="license-header">MIT License</h1>
       <p className="license-paragraph">Copyright (c) 2024 Krystian Pińczak</p>

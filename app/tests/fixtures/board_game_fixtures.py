@@ -15,6 +15,7 @@ def custom_board_game_fixture():
         BoardGame.MIN_PLAYTIME: 30,
         BoardGame.MAX_PLAYTIME: 90,
         BoardGame.DESCRIPTION: 'This game belonged to the beloved Queen Marika',
+        BoardGame.RATING: 10,
     }
 
     board_game_creator = BoardGameCreator()
