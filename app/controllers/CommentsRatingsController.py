@@ -31,7 +31,7 @@ class CommentsRatingsController:
             )
             comment.save()
 
-            return JsonResponse({'comment_id': comment.id}, status=201)
+            return JsonResponse({'comment_id': comment.id}, status=200)
         except ValidationError as e:
             return JsonResponse({'error': e.message}, status=400)
         except User.DoesNotExist:

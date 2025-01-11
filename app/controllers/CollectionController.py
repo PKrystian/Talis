@@ -18,8 +18,8 @@ class CollectionController:
         wishlist_games = BoardGame.objects.filter(id__in=wishlist_games_ids)
         library_games = BoardGame.objects.filter(id__in=library_games_ids)
 
-        wishlist_data = self.serialize_board_games(wishlist_games, user_id)
-        library_data = self.serialize_board_games(library_games, user_id)
+        wishlist_data = self.__serialize_board_games(wishlist_games, user_id)
+        library_data = self.__serialize_board_games(library_games, user_id)
 
         return JsonResponse({
             'wishlist': wishlist_data,
@@ -27,7 +27,7 @@ class CollectionController:
         }, safe=False)
 
     @staticmethod
-    def serialize_board_games(board_games: list, user_id: int):
+    def __serialize_board_games(board_games: list, user_id: int):
         data = []
         for board_game in board_games:
             data.append({
@@ -42,7 +42,7 @@ class CollectionController:
             })
         return data
 
-    ROUTE_ADD = 'add_to_collection/'
+    ROUTE_ADD = 'add-to-collection/'
 
     @staticmethod
     def action_add_to_collection(user_id: int, board_game_id: int, status: str) -> JsonResponse:
@@ -62,6 +62,12 @@ class CollectionController:
 
         UserBoardGameCollection.objects.create(user=user, board_game=board_game, status=status)
 
+        opposite_status = [x for x in UserBoardGameCollection.AVAILABLE_STATUSES if x != status][0]
+
+        if UserBoardGameCollection.objects.filter(user=user, board_game=board_game, status=opposite_status).exists():
+            collection_entry = UserBoardGameCollection.objects.filter(user=user, board_game=board_game, status=opposite_status)
+            collection_entry.delete()
+
         return JsonResponse(
             data={
                 'detail': 'Board game added to your collection successfully.',
@@ -70,7 +76,7 @@ class CollectionController:
             status=200,
         )
 
-    ROUTE_REMOVE = 'remove_from_collection/'
+    ROUTE_REMOVE = 'remove-from-collection/'
 
     @staticmethod
     def action_remove_from_collection(user_id: int, board_game_id: int, status: str) -> JsonResponse:

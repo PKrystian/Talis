@@ -8,6 +8,7 @@ const LoginContainer = ({ buttonClass, ButtonTag, children }) => {
       className={buttonClass}
       data-bs-toggle="modal"
       data-bs-target="#loginModal"
+      href="#loginModal"
     >
       {children}
     </ButtonTag>
