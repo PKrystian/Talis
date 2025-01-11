@@ -288,16 +288,18 @@ const EventsPage = ({ apiPrefix, user }) => {
           </div>
         </div>
         <div className="container-fluid pb-4">
-          <p className="d-lg-none fs-2 mb-1">Filter</p>
           <button
-            className="navbar-toggler navbar-dark mb-4"
+            className="col filter-button navbar-toggler navbar-dark mb-4 rounded-3"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#meetingsFilter"
             aria-controls="meetingsFilter"
             aria-expanded="false"
           >
-            <span className="navbar-toggler-icon display-6"></span>
+            <div className="fs-2 mx-2">
+              Filters
+              <span className="navbar-toggler-icon"></span>
+            </div>
           </button>
           <div
             className="row mt-3 mb-3 collapse navbar-collapse"
