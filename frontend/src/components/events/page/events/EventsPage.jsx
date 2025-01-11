@@ -192,7 +192,10 @@ const EventsPage = ({ apiPrefix, user }) => {
       (currentEventStatus && currentEventStatus.invite_status === 'rejected')
     ) {
       return (
-        <button className="btn btn-primary" onClick={handleAskToJoin}>
+        <button
+          className="btn event-page-create-button"
+          onClick={handleAskToJoin}
+        >
           Ask to join
         </button>
       );
@@ -285,33 +288,34 @@ const EventsPage = ({ apiPrefix, user }) => {
           </div>
         </div>
         <div className="container-fluid pb-4">
+          <p className="d-lg-none fs-2 mb-1">Filter</p>
           <button
-            className="navbar-toggler navbar-dark mb-2"
+            className="navbar-toggler navbar-dark mb-4"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#meetingsFilter"
             aria-controls="meetingsFilter"
             aria-expanded="false"
           >
-            <span className="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon display-6"></span>
           </button>
           <div
             className="row mt-3 mb-3 collapse navbar-collapse"
             id="meetingsFilter"
           >
-            <div className="col-sm py-2 d-flex flex-column text-center">
+            <div className="col-sm py-2 d-flex flex-column text-center mb-2 mb-lg-0">
               <label htmlFor="date-from">Events Starting From</label>
               <input
                 id={[FilterConstants.EVENT_FILTER_STARTING_FROM]}
-                className="event-page-form-control date-input align-self-center"
+                className="event-page-form-control date-input align-self-center mt-1"
                 value={startingFrom}
                 onChange={handleOnFilterChange}
                 type="datetime-local"
               />
             </div>
-            <div className="col-sm py-2 d-flex flex-column">
+            <div className="col-sm py-2 d-flex flex-column mb-2 mb-lg-0">
               <div>No. of players</div>
-              <span>
+              <span className="mt-1">
                 <input
                   id={[FilterConstants.EVENT_FILTER_PLAYER_NUMBER_MIN]}
                   className="number-input event-page-form-control"
@@ -333,11 +337,11 @@ const EventsPage = ({ apiPrefix, user }) => {
                 />{' '}
               </span>
             </div>
-            <div className="col-sm">
+            <div className="col-sm mb-2 mb-lg-0">
               Choose Categories
               <div>
                 <button
-                  className="btn event-page-tags-button"
+                  className="btn event-page-tags-button mt-1"
                   data-testid="event-page-tags-button"
                   onClick={toggleTagsModal}
                 >
@@ -352,9 +356,9 @@ const EventsPage = ({ apiPrefix, user }) => {
                 gameTags={gameTags}
               />
             )}
-            <div className="col-sm">
+            <div className="col-sm mb-2 mb-lg-0">
               Show only events created by your friends
-              <label className="switch mx-2">
+              <label className="switch mx-2 mt-1">
                 <input
                   id={[FilterConstants.EVENT_FILTER_CREATED_BY_FRIENDS]}
                   type="checkbox"
@@ -363,7 +367,7 @@ const EventsPage = ({ apiPrefix, user }) => {
                 <span className="slider round"></span>
               </label>
             </div>
-            <div className="col-sm">
+            <div className="col-sm mb-1 mb-lg-0">
               <button
                 className="btn event-page-filter-button"
                 onClick={() => onApplyFilters()}

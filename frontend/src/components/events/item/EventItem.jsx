@@ -38,7 +38,7 @@ const EventItem = ({ chosenEvent, joinButton = null, user }) => {
       <div className="text-start d-flex flex-wrap">
         {chosenEvent.tags.map((tag) => {
           return (
-            <div key={tag} className="px-2 m-1 event-tags">
+            <div key={tag} className="px-2 py-1 rounded-3 m-1 event-tags">
               {tag}
             </div>
           );
@@ -47,12 +47,12 @@ const EventItem = ({ chosenEvent, joinButton = null, user }) => {
       <div className="row">
         <div className="col-5">
           <div className="text-start">
-            <div className="display-6">
-              <UserCircleGear className="me-3" size={50}></UserCircleGear>
+            <div className="fs-4 mb-3">
+              <UserCircleGear className="me-3" size={45}></UserCircleGear>
               Hosted by:
             </div>
             <Link to={`/user/${chosenEvent.host.id}`}>
-              <div className="d-inline-flex">
+              <div className="d-inline-flex mb-2">
                 <img
                   src={chosenEvent.host.profile_image_url}
                   alt={`${chosenEvent.host.first_name} ${chosenEvent.host.last_name}`}
@@ -69,8 +69,8 @@ const EventItem = ({ chosenEvent, joinButton = null, user }) => {
               </div>
             </Link>
           </div>
-          <div className="text-start display-6">
-            <Users size={50} className="me-3 mb-1" />
+          <div className="text-start fs-4 mb-2">
+            <Users size={45} className="me-3" />
             {chosenEvent.attendees.length}/{chosenEvent.max_players} Crew
           </div>
           <div className="text-start">
