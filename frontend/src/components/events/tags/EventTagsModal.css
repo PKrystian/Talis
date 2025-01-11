@@ -1,0 +1,14 @@
+.tags-modal-content {
+  background-color: var(--button-secondary-color);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 1000px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 991px) { 
+  .tags-modal-content {
+    max-height: 600px;
+  }
+}
