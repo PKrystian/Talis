@@ -100,7 +100,7 @@ describe('EventsPage Component', () => {
 
     fireEvent.click(screen.getByText('Choose Categories'));
 
-    expect(screen.getByText('Mocked EventTagsModal')).toBeInTheDocument();
+    expect(screen.getByTestId('event-page-tags-button')).toBeInTheDocument();
   });
 
   test('applies filters and updates event data', async () => {
