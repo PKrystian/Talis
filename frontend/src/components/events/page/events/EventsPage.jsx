@@ -338,6 +338,7 @@ const EventsPage = ({ apiPrefix, user }) => {
               <div>
                 <button
                   className="btn event-page-tags-button"
+                  data-testid="event-page-tags-button"
                   onClick={toggleTagsModal}
                 >
                   <Plus size={25}></Plus>
