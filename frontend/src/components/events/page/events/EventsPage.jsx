@@ -134,7 +134,6 @@ const EventsPage = ({ apiPrefix, user }) => {
     if (IsSmallScreen) {
       toggleEventModal();
     }
-    console.log(chosenEvent);
   };
 
   const onCreateEvent = () => {
