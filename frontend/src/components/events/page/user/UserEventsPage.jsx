@@ -4,17 +4,28 @@ import PropTypes from 'prop-types';
 import '../events/EventsPage.css';
 import axios from 'axios';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import OSMMap from '../../../utils/map/OSMMap';
 import MetaComponent from '../../../meta/MetaComponent';
 import DeleteEventModal from '../../delete/DeleteEventModal';
 import { toast } from 'react-toastify';
+import EventItem from '../../item/EventItem';
+import EventModal from '../event_modal/EventModal';
 import './UserEventsPage.css';
+import {
+  CalendarDots,
+  MapPin,
+  Trash,
+  UserCircleGear,
+  Users,
+} from '@phosphor-icons/react';
 
 const UserEventsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [chosenEvent, setChosenEvent] = useState(null);
+  const [IsSmallScreen, setIsSmallScreen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [, setIsOverflowing] = useState(false);
   const descriptionRef = useRef(null);
   const navigate = useNavigate();
@@ -22,6 +33,15 @@ const UserEventsPage = ({ apiPrefix, user }) => {
   const [isDeleteEventModalOpen, setIsDeleteEventModalOpen] = useState(false);
 
   const eventsUrl = apiPrefix + 'event/user-events/';
+
+  const dateFormat = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  };
 
   const fetchEventData = useCallback(async () => {
     if (!user || !user.user_id) {
@@ -49,6 +69,35 @@ const UserEventsPage = ({ apiPrefix, user }) => {
       setIsLoading(false);
     }
   }, [user, navigate, eventsUrl]);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const smallScreen = window.matchMedia('(max-width: 991px)').matches;
+      setIsSmallScreen(smallScreen);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+    };
+  }, []);
+
+  const generateJoinButton = () => {
+    if (user.user_id === chosenEvent.host.id) {
+      return (
+        <button
+          className="btn btn-danger event-delete-button my-2"
+          onClick={toggleDeleteEventModal}
+        >
+          Delete Event
+          <Trash size={20} className="ms-2"></Trash>
+        </button>
+      );
+    }
+    return null;
+  };
 
   useEffect(() => {
     fetchEventData();
@@ -95,6 +144,13 @@ const UserEventsPage = ({ apiPrefix, user }) => {
 
   const changeDisplayedEvent = (id) => {
     setChosenEvent(eventData.find((event) => event.id === id));
+    if (IsSmallScreen) {
+      toggleEventModal();
+    }
+  };
+
+  const toggleEventModal = () => {
+    setIsEventModalOpen((prev) => !prev);
   };
 
   const toggleDeleteEventModal = () => {
@@ -119,13 +175,13 @@ const UserEventsPage = ({ apiPrefix, user }) => {
       />
       <div className="container text-center navbar-expand-lg">
         <div className="container-fluid">
-          <div className="row border bg-dark">
-            <div className="col-4 border bg-dark px-0 meeting-list">
+          <div className="row">
+            <div className="col-lg-4 rounded-3 px-0 meeting-list">
               {eventData &&
                 eventData.map((event) => (
                   <div
                     key={event.id}
-                    className={`row border mx-0 ${user.user_id === event.host.id ? 'bg-success' : 'bg-warning bg-opacity-75'}`}
+                    className="row rounded-2 mb-3 mx-0 meeting-list-item"
                     onClick={() => changeDisplayedEvent(event.id)}
                   >
                     <div className="col-6 px-0 event-box">
@@ -144,96 +200,49 @@ const UserEventsPage = ({ apiPrefix, user }) => {
                       ></img>
                     </div>
                     <div className="col-6">
-                      <p>{event.title}</p>
-                      <p>{event.city}</p>
-                      <p>
+                      <div className="py-1 text-start fw-bold">
+                        {event.title}
+                      </div>
+                      <div className="pb-1 text-start">
+                        <MapPin size={18} className="me-1" />
+                        {event.street} {event.city}
+                      </div>
+                      <div className="pb-1 text-start">
+                        <CalendarDots size={18} className="me-1" />
+                        {new Date(event.event_start_date).toLocaleString(
+                          'en-US',
+                          dateFormat,
+                        )}
+                      </div>
+                      <div className="pb-1 text-start">
+                        <Users size={18} className="me-1" />
                         {event.attendees.length}/{event.max_players}
-                      </p>
+                      </div>
                     </div>
                   </div>
                 ))}
             </div>
-            {chosenEvent !== null ? (
-              <div className="col-8 bg-dark text-left event-details-box">
-                <div className="d-flex justify-content-between">
-                  <h1>{chosenEvent.title}</h1>
-                  {user.user_id === chosenEvent.host.id && (
-                    <button
-                      className="btn btn-danger my-2"
-                      onClick={toggleDeleteEventModal}
-                    >
-                      Delete Event
-                    </button>
-                  )}
-                  {isDeleteEventModalOpen && (
-                    <DeleteEventModal
-                      toggleDeleteEventModal={toggleDeleteEventModal}
-                      handleDeleteEvent={handleDeleteEvent}
-                      event_id={chosenEvent.event_id}
-                    />
-                  )}
-                </div>
-                <div className="description">
-                  <p>{chosenEvent.description}</p>
-                </div>
-                <p className="text-start ">Event Tags Event Tags Event Tags</p>
-                <div className="row">
-                  <div className="col-7">
-                    <p className="text-start display-5">
-                      {chosenEvent.attendees.length}/{chosenEvent.max_players}{' '}
-                      Crew
-                    </p>
-                    <div className="row">
-                      <div className="circle me-2"></div>
-                      <div className="circle me-2"></div>
-                      <div className="circle me-2"></div>
-                    </div>
-                    {chosenEvent.coordinates && (
-                      <div className="bg-black mt-2 event-map">
-                        <OSMMap coordinates={chosenEvent.coordinates} />
-                      </div>
-                    )}
-                  </div>
-                  <div className="col-5">
-                    {chosenEvent.board_games.map((boardGame, index) => {
-                      if (index % 2 === 0) {
-                        return (
-                          <div className="row align-items-center" key={index}>
-                            <div className="col">
-                              <img
-                                className="img-fluid"
-                                src={boardGame.image_url}
-                                alt=""
-                                onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.src = '/static/favicon.ico';
-                                }}
-                              />
-                            </div>
-                            {chosenEvent.board_games[index + 1] && (
-                              <div className="col">
-                                <img
-                                  className="img-fluid"
-                                  src={
-                                    chosenEvent.board_games[index + 1].image_url
-                                  }
-                                  alt=""
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = '/static/favicon.ico';
-                                  }}
-                                />
-                              </div>
-                            )}
-                          </div>
-                        );
-                      }
-                      return null;
-                    })}
-                  </div>
-                </div>
-              </div>
+            {chosenEvent !== null && !IsSmallScreen ? (
+              <EventItem
+                chosenEvent={chosenEvent}
+                joinButton={generateJoinButton()}
+                user={user}
+              />
             ) : null}
+            {isDeleteEventModalOpen && (
+              <DeleteEventModal
+                toggleDeleteEventModal={toggleDeleteEventModal}
+                handleDeleteEvent={handleDeleteEvent}
+                event_id={chosenEvent.event_id}
+              />
+            )}
+            {isEventModalOpen && IsSmallScreen && (
+              <EventModal
+                toggleEventModal={toggleEventModal}
+                chosenEvent={chosenEvent}
+                joinButton={generateJoinButton()}
+              />
+            )}
           </div>
         </div>
       </div>
