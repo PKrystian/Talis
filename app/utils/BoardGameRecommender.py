@@ -11,6 +11,7 @@ from app.models import UserBoardGameCollection, BoardGameCategory
 from app.models.board_game import BoardGame
 from app.models.category import Category
 from app.models.mechanic import Mechanic
+from app.utils.creators.LogErrorCreator import LogErrorCreator
 from app.utils.getters.BoardGameCategoryGetter import BoardGameCategoryGetter
 from app.utils.getters.BoardGameMechanicGetter import BoardGameMechanicGetter
 
@@ -20,6 +21,7 @@ class BoardGameRecommender:
     MODEL_FILENAME: str = 'recommendation_model.sav'
     DEFAULT_VALUE: int = 0
     CATEGORIES_MATCH_PERCENT = 0.5
+    CUSTOM_CLUSTER = 5
 
     __board_game_category_getter: BoardGameCategoryGetter
     __board_game_mechanic_getter: BoardGameMechanicGetter
@@ -61,7 +63,18 @@ class BoardGameRecommender:
 
     def get_cluster_for_board_game(self, board_game: BoardGame) -> int:
         self.__convert_to_template(board_game)
-        return self.recommendation_model.predict(self.prediction_template)[0]
+
+        try:
+            cluster = self.recommendation_model.predict(self.prediction_template)[0]
+        except Exception as e:
+            LogErrorCreator().create().critical().log(
+                message=str(e),
+                trigger='get_cluster_for_board_game',
+                class_reference=str(self.__class__)
+            )
+            return self.CUSTOM_CLUSTER
+
+        return cluster
 
     def __convert_to_template(self, board_game: BoardGame) -> None:
         self.prediction_template[BoardGame.MIN_PLAYERS] = board_game.min_players / self.MAX_MIN_PLAYERS_SCALAR
