@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import '../events/EventsPage.css';
 import axios from 'axios';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import OSMMap from '../../../utils/map/OSMMap';
+import { useNavigate } from 'react-router-dom';
 import MetaComponent from '../../../meta/MetaComponent';
 import DeleteEventModal from '../../delete/DeleteEventModal';
 import { toast } from 'react-toastify';
@@ -16,7 +15,6 @@ import {
   CalendarDots,
   MapPin,
   Trash,
-  UserCircleGear,
   Users,
 } from '@phosphor-icons/react';
 
