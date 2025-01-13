@@ -166,7 +166,7 @@ const EventModal = ({ toggleEventModal, chosenEvent, joinButton = null }) => {
               {chosenEvent.city} {chosenEvent.street} {chosenEvent.zip_code}
             </div>
             {chosenEvent.coordinates && (
-              <div className=" mt-2 event-modal-map">
+              <div className=" mt-2 event-modal-map pb-2">
                 <OSMMap coordinates={chosenEvent.coordinates} />
               </div>
             )}
