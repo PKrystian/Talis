@@ -11,12 +11,7 @@ import { toast } from 'react-toastify';
 import EventItem from '../../item/EventItem';
 import EventModal from '../event_modal/EventModal';
 import './UserEventsPage.css';
-import {
-  CalendarDots,
-  MapPin,
-  Trash,
-  Users,
-} from '@phosphor-icons/react';
+import { CalendarDots, MapPin, Trash, Users } from '@phosphor-icons/react';
 
 const UserEventsPage = ({ apiPrefix, user }) => {
   const [eventData, setEventData] = useState(null);
