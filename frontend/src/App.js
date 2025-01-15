@@ -121,7 +121,10 @@ const App = () => {
             path="/"
             element={<LandingPage apiPrefix={apiPrefix} user={user} />}
           />
-          <Route path="/collection" element={<CollectionPage user={user} />} />
+          <Route
+            path="/collection"
+            element={<CollectionPage user={user} isFriendsProfile={false} />}
+          />
           <Route
             path="/events"
             element={<EventsPage apiPrefix={apiPrefix} user={user} />}
