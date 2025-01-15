@@ -174,7 +174,7 @@ const UserEventsPage = ({ apiPrefix, user }) => {
                 eventData.map((event) => (
                   <div
                     key={event.id}
-                    className="row rounded-2 mb-3 mx-0 meeting-list-item"
+                    className={`row rounded-2 mb-3 mx-0 meeting-list-item ${event.host.id === user.user_id ? 'host-event' : 'guest-event'}`}
                     onClick={() => changeDisplayedEvent(event.id)}
                   >
                     <div className="col-6 px-0 event-box">
