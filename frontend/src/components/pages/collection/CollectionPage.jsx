@@ -56,20 +56,18 @@ const CollectionPage = ({ user, isFriendsProfile }) => {
       setIsLoading(false);
     }
 
-    if( user && user.user_id ) {
-      axios
-        .get(`${apiPrefix}user/${user.user_id}`, {})
-        .then((response) => {
-          setUserName(response.data.first_name);
-        })
-        .catch((error) => {
-          toast.error(error, {
-            theme: 'dark',
-            position: 'top-center',
-          });
+    axios
+      .get(`${apiPrefix}user/${user.user_id}`, {})
+      .then((response) => {
+        setUserName(response.data.first_name);
+      })
+      .catch((error) => {
+        toast.error(error, {
+          theme: 'dark',
+          position: 'top-center',
         });
-    }
-  }, [user, collectionUrl]);
+      });
+  }, [apiPrefix, user, collectionUrl]);
 
   useEffect(() => {
     if (user && user.user_id) {

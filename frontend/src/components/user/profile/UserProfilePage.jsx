@@ -68,20 +68,21 @@ const UserProfilePage = ({ apiPrefix, user }) => {
             position: 'top-center',
           });
         });
-
-      axios
-        .get(`${apiPrefix}friend-invites/`, {
-          params: { user_id: user.user_id },
-        })
-        .then((response) => {
-          setPendingInvites(response.data);
-        })
-        .catch((error) => {
-          toast.error(error, {
-            theme: 'dark',
-            position: 'top-center',
+      if (user.user_id == id) {
+        axios
+          .get(`${apiPrefix}friend-invites/`, {
+            params: { user_id: user.user_id },
+          })
+          .then((response) => {
+            setPendingInvites(response.data);
+          })
+          .catch((error) => {
+            toast.error(error, {
+              theme: 'dark',
+              position: 'top-center',
+            });
           });
-        });
+      }
     }
   }, [apiPrefix, id, user]);
 
@@ -207,6 +208,74 @@ const UserProfilePage = ({ apiPrefix, user }) => {
       });
   };
 
+  const handleAccept = (friendId) => {
+    axios
+      .post(
+        `${apiPrefix}accept-friend/`,
+        {
+          user_id: user.user_id,
+          friend_id: friendId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then(() => {
+        toast.success('Friend request accepted', {
+          theme: 'dark',
+          position: 'top-center',
+        });
+        const acceptedFriend = pendingInvites.find(
+          (invite) => invite.id === friendId,
+        );
+        if (acceptedFriend) {
+          setFriends([...friends, acceptedFriend]);
+          setPendingInvites(
+            pendingInvites.filter((invite) => invite.id !== friendId),
+          );
+        }
+      })
+      .catch((error) => {
+        toast.error(error.response.data.error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
+      });
+  };
+
+  const handleReject = (friendId) => {
+    axios
+      .post(
+        `${apiPrefix}reject_friend/`,
+        {
+          user_id: user.user_id,
+          friend_id: friendId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then(() => {
+        toast.success('Friend request rejected', {
+          theme: 'dark',
+          position: 'top-center',
+        });
+        setPendingInvites(
+          pendingInvites.filter((invite) => invite.id !== friendId),
+        );
+      })
+      .catch((error) => {
+        toast.error(error.response.data.error, {
+          theme: 'dark',
+          position: 'top-center',
+        });
+      });
+  };
+
   if (!userProfile) {
     return <div className="loading">Loading...</div>;
   }
@@ -286,6 +355,42 @@ const UserProfilePage = ({ apiPrefix, user }) => {
                 <div className="fs-6 ms-1 text-success">{inviteMessage}</div>
               )}
             </div>
+            {pendingInvites.length > 0 && (
+              <>
+                <h2>Pending Friend Requests</h2>
+                <div className="user-profile-pending-invites">
+                  {pendingInvites.map((invite) => (
+                    <div className="user-profile-invite-tile" key={invite.id}>
+                      <Link to={`/user/${invite.id}`}>
+                        <img
+                          src={invite.profile_image_url}
+                          alt={`${invite.first_name}'s avatar`}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/static/default-profile.png';
+                          }}
+                        />
+                        <p>
+                          {invite.first_name} {invite.last_name}
+                        </p>
+                      </Link>
+                      <button
+                        className="btn user-profile-button"
+                        onClick={() => handleAccept(invite.id)}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="btn user-profile-button"
+                        onClick={() => handleReject(invite.id)}
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
             <h1>Your Friends</h1>
             <div className="friend-tiles justify-content-center">
               {friends.map((friend) => (
