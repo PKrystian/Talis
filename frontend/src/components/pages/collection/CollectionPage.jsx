@@ -68,7 +68,6 @@ const CollectionPage = ({ user, isFriendsProfile }) => {
       axios
         .get(`${apiPrefix}user/${user.user_id}`)
         .then((response) => {
-          console.log(response);
           setUserName(response.data.first_name);
         })
         .catch((error) => {
