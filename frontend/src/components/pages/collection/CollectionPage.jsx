@@ -55,25 +55,30 @@ const CollectionPage = ({ user, isFriendsProfile }) => {
     } finally {
       setIsLoading(false);
     }
-
-    axios
-      .get(`${apiPrefix}user/${user.user_id}`, {})
-      .then((response) => {
-        setUserName(response.data.first_name);
-      })
-      .catch((error) => {
-        toast.error(error, {
-          theme: 'dark',
-          position: 'top-center',
-        });
-      });
-  }, [apiPrefix, user, collectionUrl]);
+  }, [user, collectionUrl]);
 
   useEffect(() => {
     if (user && user.user_id) {
       fetchCollectionData();
     }
   }, [user, fetchCollectionData]);
+
+  useEffect(() => {
+    if (user && user.user_id) {
+      axios
+        .get(`${apiPrefix}user/${user.user_id}`, {})
+        .then((response) => {
+          console.log(response);
+          setUserName(response.data.first_name);
+        })
+        .catch((error) => {
+          toast.error(error, {
+            theme: 'dark',
+            position: 'top-center',
+          });
+        });
+    }
+  }, [apiPrefix, user, collectionUrl]);
 
   const handleWishlistSearch = (event) => {
     const term = event.target.value.toLowerCase();

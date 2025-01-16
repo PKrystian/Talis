@@ -12,7 +12,6 @@ class FriendListController:
     @staticmethod
     def action_friend_list(user_id: int, limit: int, tags: list | None) -> JsonResponse:
         friend_query = FriendList.objects.filter(user_id=user_id)
-        print(friend_query)
 
         if tags:
             friend_query = friend_query.filter(status=tags)
