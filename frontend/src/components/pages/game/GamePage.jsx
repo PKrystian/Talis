@@ -907,10 +907,10 @@ const GamePage = ({ apiPrefix, user }) => {
                       <div className="text-center">
                         <img
                           src={
-                        comment.profile_image_url
-                          ? comment.profile_image_url
-                          : '/static/default-profile.png'
-                      }
+                            comment.profile_image_url
+                              ? comment.profile_image_url
+                              : '/static/default-profile.png'
+                          }
                           alt={comment.user_name}
                           onError={(e) => {
                             e.target.onerror = null;
