@@ -906,7 +906,11 @@ const GamePage = ({ apiPrefix, user }) => {
                     <Link to={`/user/${comment.user_id}`}>
                       <div className="text-center">
                         <img
-                          src={comment.profile_image_url}
+                          src={
+                        comment.profile_image_url
+                          ? comment.profile_image_url
+                          : '/static/default-profile.png'
+                      }
                           alt={comment.user_name}
                           onError={(e) => {
                             e.target.onerror = null;
@@ -926,7 +930,7 @@ const GamePage = ({ apiPrefix, user }) => {
                           color="#F3DE9F"
                           className="me-1"
                         />{' '}
-                        {comment.rating}/10
+                        {comment.rating.toFixed(2)}/10
                       </span>
                     )}
                   </span>
