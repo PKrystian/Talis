@@ -66,7 +66,7 @@ const CollectionPage = ({ user, isFriendsProfile }) => {
   useEffect(() => {
     if (user && user.user_id) {
       axios
-        .get(`${apiPrefix}user/${user.user_id}`, {})
+        .get(`${apiPrefix}user/${user.user_id}`)
         .then((response) => {
           console.log(response);
           setUserName(response.data.first_name);
