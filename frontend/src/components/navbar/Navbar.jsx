@@ -1,13 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropsTypes from 'prop-types';
-import {
-  FaUserFriends,
-  FaCog,
-  FaBullhorn,
-  FaSignOutAlt,
-  FaUser,
-} from 'react-icons/fa';
+import { FaCog, FaBullhorn, FaSignOutAlt, FaUser } from 'react-icons/fa';
 import { MagnifyingGlass, Equals, MapPin, Bell } from '@phosphor-icons/react';
 import { MdAddHome } from 'react-icons/md';
 import axios from 'axios';
@@ -274,13 +268,6 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                       >
                         <FaUser className="me-1" />
                         Profile
-                      </Link>
-                      <Link
-                        className="nav-user-profile-link pb-2"
-                        to={`/friends`}
-                      >
-                        <FaUserFriends className="me-1" />
-                        Friends
                       </Link>
                       <Link
                         className="nav-user-profile-link pb-2"
