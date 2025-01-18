@@ -68,7 +68,7 @@ const UserProfilePage = ({ apiPrefix, user }) => {
             position: 'top-center',
           });
         });
-      if (user.user_id == id) {
+      if (user.user_id === parseInt(id)) {
         axios
           .get(`${apiPrefix}friend-invites/`, {
             params: { user_id: user.user_id },
