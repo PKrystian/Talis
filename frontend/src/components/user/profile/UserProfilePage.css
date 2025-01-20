@@ -1,6 +1,5 @@
 .user-profile-page {
   width: 100%;
-  max-width: 800px;
   margin: 50px auto;
   padding: 20px;
   text-align: left;
@@ -10,7 +9,6 @@
   display: flex;
   align-items: center;
   padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
   margin-bottom: 20px;
 }
 
@@ -29,4 +27,59 @@
 
 .profile-info p {
   margin: 10px 0;
+}
+
+.user-profile-button {
+  background-color: var(--accent-bright);
+  color: #fff;
+  --bs-btn-hover-bg: var(--highlight-color);
+  border: 1px solid var(--additional-gray);
+  border-radius: 10px;
+}
+
+.user-profile-form-control {
+  background-color: #0b0914;
+  color: var(--text-color-light);
+  width: 100%;
+  min-height: 35px;
+  padding-top: 0.375rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border: 1px solid #9D9CA5;
+  border-radius: 10px;
+}
+
+.user-profile-form-control::placeholder {
+  color: var(--text-color-light);
+  opacity: 0.3;
+  font-size: var(--font-size-small);
+  padding-left: 5px;
+}
+
+.friend-tiles, .user-profile-pending-invites {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.friend-tile, .user-profile-invite-tile {
+  transition: 0.3s;
+  box-shadow: rgba(255, 255, 255, 0.6) 0px 3px 8px;
+  padding: 10px;
+  width: 170px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.friend-tile img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.user-profile-invite-tile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }

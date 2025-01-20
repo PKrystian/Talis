@@ -7,7 +7,7 @@ import MetaComponent from '../../meta/MetaComponent';
 import { toast } from 'react-toastify';
 import { MagnifyingGlass, CaretDown, Equals } from '@phosphor-icons/react';
 
-const CollectionPage = ({ user }) => {
+const CollectionPage = ({ user, isFriendsProfile }) => {
   const [collectionData, setCollectionData] = useState(null);
   const [filteredWishlist, setFilteredWishlist] = useState(null);
   const [filteredLibrary, setFilteredLibrary] = useState(null);
@@ -18,6 +18,7 @@ const CollectionPage = ({ user }) => {
   const [wishlistSortOption, setWishlistSortOption] = useState('newest');
   const [librarySortOption, setLibrarySortOption] = useState('newest');
   const [activeTab, setActiveTab] = useState('wishlist');
+  const [userName, setUserName] = useState('');
   const apiPrefix =
     process.env.NODE_ENV === 'development'
       ? 'http://127.0.0.1:8000/api/'
@@ -61,6 +62,22 @@ const CollectionPage = ({ user }) => {
       fetchCollectionData();
     }
   }, [user, fetchCollectionData]);
+
+  useEffect(() => {
+    if (user && user.user_id) {
+      axios
+        .get(`${apiPrefix}user/${user.user_id}`)
+        .then((response) => {
+          setUserName(response.data.first_name);
+        })
+        .catch((error) => {
+          toast.error(error, {
+            theme: 'dark',
+            position: 'top-center',
+          });
+        });
+    }
+  }, [apiPrefix, user, collectionUrl]);
 
   const handleWishlistSearch = (event) => {
     const term = event.target.value.toLowerCase();
@@ -144,7 +161,10 @@ const CollectionPage = ({ user }) => {
       />
       <div className="d-flex align-items-center mb-4">
         <Equals size={24} className="me-2" />
-        <h1 className="text-left">Your {activeTab}</h1>
+        <h1 className="text-left">
+          {isFriendsProfile && `${userName}'s `} {!isFriendsProfile && 'Your'}{' '}
+          {activeTab}
+        </h1>
       </div>
       <ul className="nav nav-tabs border-bottom-0">
         <li>
@@ -278,6 +298,7 @@ CollectionPage.propTypes = {
   user: PropTypes.shape({
     user_id: PropTypes.number,
   }).isRequired,
+  isFriendsProfile: PropTypes.bool.isRequired,
 };
 
 export default CollectionPage;
