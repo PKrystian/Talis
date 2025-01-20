@@ -14,7 +14,7 @@ class FriendListController:
         friend_query = FriendList.objects.filter(user_id=user_id)
 
         if tags:
-            friend_query = friend_query.filter(status__in=tags)
+            friend_query = friend_query.filter(status=tags)
 
         friend_list = friend_query.order_by('-created_at')[:limit]
 

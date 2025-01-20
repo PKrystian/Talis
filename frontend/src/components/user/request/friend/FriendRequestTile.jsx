@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './FriendRequestTile.css';
 import PropTypes from 'prop-types';
 
-const FriendRequestTile = ({ invite, handleInviteAction }) => {
+const FriendRequestTile = ({ invite, handleInviteAction, user }) => {
   const onClickUserImage = () => {
     document.getElementById('closeNotifications').click();
   };
@@ -15,7 +15,7 @@ const FriendRequestTile = ({ invite, handleInviteAction }) => {
         <div className="d-flex flex-row align-items-center fs-4 mx-4">
           {invite.friend.first_name} {invite.friend.first_name}
         </div>
-        <Link to={`/friends`}>
+        <Link to={`/user/${user.user_id}`}>
           <img
             className="friend-image"
             src={invite.friend.profile_image_url}

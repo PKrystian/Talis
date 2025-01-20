@@ -23,21 +23,21 @@ describe('CollectionPage Component', () => {
 
   test('renders CollectionPage component', async () => {
     await act(async () => {
-      render(<CollectionPage user={mockUser} />);
+      render(<CollectionPage user={mockUser} isFriendsProfile={false} />);
     });
     expect(screen.getByText('Your wishlist')).toBeInTheDocument();
   });
 
   test('displays user wishlist', async () => {
     await act(async () => {
-      render(<CollectionPage user={mockUser} />);
+      render(<CollectionPage user={mockUser} isFriendsProfile={false} />);
     });
     expect(await screen.findByText('Game 1')).toBeInTheDocument();
   });
 
   test('displays user library', async () => {
     await act(async () => {
-      render(<CollectionPage user={mockUser} />);
+      render(<CollectionPage user={mockUser} isFriendsProfile={false} />);
     });
     fireEvent.click(screen.getByText('Library'));
     expect(await screen.findByText('Game 2')).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('CollectionPage Component', () => {
 
   test('handles wishlist search', async () => {
     await act(async () => {
-      render(<CollectionPage user={mockUser} />);
+      render(<CollectionPage user={mockUser} isFriendsProfile={false} />);
     });
     fireEvent.change(
       screen.getByPlaceholderText('Search for a game in wishlist...'),
@@ -58,7 +58,7 @@ describe('CollectionPage Component', () => {
 
   test('handles library search', async () => {
     await act(async () => {
-      render(<CollectionPage user={mockUser} />);
+      render(<CollectionPage user={mockUser} isFriendsProfile={false} />);
     });
     fireEvent.click(screen.getByText('Library'));
     fireEvent.change(
@@ -72,7 +72,7 @@ describe('CollectionPage Component', () => {
 
   test('handles wishlist sorting', async () => {
     await act(async () => {
-      render(<CollectionPage user={mockUser} />);
+      render(<CollectionPage user={mockUser} isFriendsProfile={false} />);
     });
     fireEvent.change(screen.getByDisplayValue('Newest'), {
       target: { value: 'oldest' },
@@ -82,7 +82,7 @@ describe('CollectionPage Component', () => {
 
   test('handles library sorting', async () => {
     await act(async () => {
-      render(<CollectionPage user={mockUser} />);
+      render(<CollectionPage user={mockUser} isFriendsProfile={false} />);
     });
     fireEvent.click(screen.getByText('Library'));
     fireEvent.change(screen.getByDisplayValue('Newest'), {
