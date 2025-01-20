@@ -30,31 +30,30 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="footer bg-dark text-light mt-auto">
-      <div className="container d-flex align-items-center">
-        <div className="row justify-content-center w-100">
-          <div className="col-md-4 text-center text-md-left">
-            <Link className="navbar-brand" to="/">
-              <div className="align-items-center">
+    <footer className="footer mt-auto">
+      <div className="container">
+        <div className="row align-items-bottom">
+          <div className="col-md-4 d-flex flex-column justify-content-between">
+            <div>
+              <Link className="navbar-brand d-flex align-items-center" to="/">
+                <span className="site-name text-light me-2">Talis</span>
                 <img
                   src="/static/logo512.png"
                   alt="Logo"
                   className="navbar-logo me-2"
                 />
-                <span className="site-name">Talis</span>
-              </div>
-            </Link>
-            <p className="mt-2">Board Game Helper</p>
-          </div>
-          <div className="col-md-4 text-center my-2 my-md-0">
-            <Link to="/policy" className="text-light">
+              </Link>
+              <p>Board Game Helper</p>
+            </div>
+            <Link to="/policy" className="align-self-start text-light">
               Privacy Policy
             </Link>
-            <p className="mt-2">
+          </div>
+          <div className="col-md-4 d-flex justify-content-center align-items-end">
+            <p className="mb-0 text-light">
               Powered by{' '}
               <a
                 href="https://boardgamegeek.com/wiki/page/BGG_XML_API2"
-                className="text-light"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -62,9 +61,9 @@ const Footer = () => {
               </a>
             </p>
           </div>
-          <div className="col-md-4 text-center text-md-right">
-            <p>This project is part of engineering thesis.</p>
-            <p>
+          <div className="col-md-4 d-flex flex-column justify-content-between align-items-end">
+            <p className="mb-2">This project is part of engineering thesis.</p>
+            <p className="mb-0 text-light">
               &copy; 2024 - {currentYear} Talis.{' '}
               <Link to="/license">MIT License</Link>
             </p>
@@ -74,7 +73,7 @@ const Footer = () => {
       {showTopBtn && (
         <button
           onClick={scrollToTop}
-          className="btn btn-light btn-sm jump-to-top"
+          className="btn-top jump-to-top"
           aria-label="Move to top"
         >
           <GoMoveToTop />
