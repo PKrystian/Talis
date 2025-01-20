@@ -14,7 +14,6 @@ import PolicyPage from './components/pages/policy/PolicyPage';
 import LicensePage from './components/pages/license/LicensePage';
 import LoginModal from './components/utils/login/modal/LoginModal';
 import CreateEventPage from './components/events/create/CreateEventPage';
-import FriendListPage from './components/pages/friendList/FriendListPage';
 import CookieConsentModal from './components/utils/cookie/CookieConsentModal';
 import NotificationModal from './components/utils/notification/NotificationModal';
 import axios from 'axios';
@@ -121,7 +120,10 @@ const App = () => {
             path="/"
             element={<LandingPage apiPrefix={apiPrefix} user={user} />}
           />
-          <Route path="/collection" element={<CollectionPage user={user} />} />
+          <Route
+            path="/collection"
+            element={<CollectionPage user={user} isFriendsProfile={false} />}
+          />
           <Route
             path="/events"
             element={<EventsPage apiPrefix={apiPrefix} user={user} />}
@@ -162,10 +164,6 @@ const App = () => {
           <Route
             path="/user/:id"
             element={<UserProfilePage apiPrefix={apiPrefix} user={user} />}
-          />
-          <Route
-            path="/friends"
-            element={<FriendListPage apiPrefix={apiPrefix} user={user} />}
           />
           <Route
             path="/search"

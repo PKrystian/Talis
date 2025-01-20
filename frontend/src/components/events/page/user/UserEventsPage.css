@@ -1,3 +1,15 @@
 .event-delete-button {
   color: var(--button-secondary-color);
 }
+
+.host-event {
+  border-top: 2px solid yellow;
+  border-bottom: 2px solid yellow;
+  border-left: 2px solid yellow;
+}
+
+.guest-event {
+  border-top: 2px solid green;
+  border-bottom: 2px solid green;
+  border-left: 2px solid green;
+}
