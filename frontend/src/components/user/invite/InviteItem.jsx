@@ -37,6 +37,7 @@ const InviteItem = ({ apiPrefix, user, invite, fetchInvites }) => {
           <FriendRequestTile
             invite={invite}
             handleInviteAction={handleInviteAction}
+            user={user}
           />
         );
       case InviteConstants.INVITE_TYPE_EVENT_JOIN_REQUEST:

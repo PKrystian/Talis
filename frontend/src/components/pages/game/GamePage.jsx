@@ -900,43 +900,41 @@ const GamePage = ({ apiPrefix, user }) => {
               key={comment.comment_id}
               className={`comment ${comment.rating !== null ? 'review' : ''} mb-3 row`}
             >
-              <div className="col-1 align-items-center justify-content-center d-flex">
-                <Link to={`/user/${comment.user_id}`}>
-                  <div className="text-center">
-                    <img
-                      src={
-                        comment.profile_image_url
-                          ? comment.profile_image_url
-                          : '/static/default-profile.png'
-                      }
-                      alt={comment.user_name}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = '/static/default-profile.png';
-                      }}
-                      className="comment-profile-img"
-                    />
-                  </div>
-                  <div className="text-center">
-                    <strong>{comment.user_name}</strong>
-                  </div>
-                </Link>
-              </div>
-              <div className="col-11 d-flex flex-column">
+              <div className="col pb-0 d-flex flex-column">
                 <div className="d-flex justify-content-between">
-                  <span>
+                  <span className="d-flex pb-0 justify-content-end">
+                    <Link to={`/user/${comment.user_id}`}>
+                      <div className="text-center">
+                        <img
+                          src={
+                            comment.profile_image_url
+                              ? comment.profile_image_url
+                              : '/static/default-profile.png'
+                          }
+                          alt={comment.user_name}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/static/default-profile.png';
+                          }}
+                          className="comment-profile-img"
+                        />
+                      </div>
+                      <div className="text-center">
+                        <strong>{comment.user_name}</strong>
+                      </div>
+                    </Link>
                     {comment.rating !== null && (
-                      <>
+                      <span className="d-flex pb-0 ms-2 flex-column justify-content-end">
                         <FontAwesomeIcon
                           icon={faStar}
                           color="#F3DE9F"
                           className="me-1"
                         />{' '}
                         {comment.rating.toFixed(2)}/10
-                      </>
+                      </span>
                     )}
                   </span>
-                  <span className="comment-date">
+                  <span className="comment-date pb-0 d-flex flex-column justify-content-end">
                     {formatDistanceToNow(new Date(comment.created_at))} ago
                   </span>
                 </div>
