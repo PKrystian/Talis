@@ -1,0 +1,7 @@
+.age-modal-content {
+  background-color: var(--button-secondary-color);
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 1000px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
