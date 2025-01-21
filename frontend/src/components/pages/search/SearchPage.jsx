@@ -10,6 +10,12 @@ import {
   MECHANIC_LIST,
 } from '../../../constValues/SearchConstants';
 import MetaComponent from '../../meta/MetaComponent';
+import { CaretDown, Plus } from '@phosphor-icons/react';
+import CategoriesModal from '../CategoriesModal/CategoriesModal';
+import MechanicsModal from '../mechanicsModal/MechanicsModal';
+import AgeModal from '../ageModal/AgeModal';
+import PlaytimeModal from '../playtimeModal/PlaytimeModal';
+import ExcludedModal from '../excludedModal/ExcludedModal';
 
 const EXCLUDED_LIST = [
   'no_expansions',
@@ -48,6 +54,13 @@ const SearchPage = ({ apiPrefix }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
+  const [isGameCategoriesModalOpen, setIsGameCategoriesModalOpen] =
+    useState(false);
+  const [isGameMechanicsModalOpen, setIsGameMechanicsModalOpen] =
+    useState(false);
+  const [isAgeModalOpen, setIsAgeModalOpen] = useState(false);
+  const [isPlaytimeModalOpen, setIsPlaytimeModalOpen] = useState(false);
+  const [isExcludedModalOpen, setIsExcludedModalOpen] = useState(false);
   const [filters, setFilters] = useState({
     category: filterType === 'Category' ? filter.split(',') : [],
     mechanic: filterType === 'Mechanic' ? filter.split(',') : [],
@@ -113,7 +126,7 @@ const SearchPage = ({ apiPrefix }) => {
     }));
 
     const searchParams = new URLSearchParams();
-    searchParams.append('query', encodeURIComponent(query));
+    searchParams.append('query', query);
 
     ['category', 'mechanic', 'age', 'playtime', 'excluded'].forEach(
       (filterType) => {
@@ -180,6 +193,26 @@ const SearchPage = ({ apiPrefix }) => {
       ...prevExpandedFilter,
       [section]: !prevExpandedFilter[section],
     }));
+  };
+
+  const toggleCategoriesModal = () => {
+    setIsGameCategoriesModalOpen((prev) => !prev);
+  };
+
+  const toggleMechanicsModal = () => {
+    setIsGameMechanicsModalOpen((prev) => !prev);
+  };
+
+  const toggleAgeModal = () => {
+    setIsAgeModalOpen((prev) => !prev);
+  };
+
+  const togglePlaytimeModal = () => {
+    setIsPlaytimeModalOpen((prev) => !prev);
+  };
+
+  const toggleExcludedModal = () => {
+    setIsExcludedModalOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -271,294 +304,190 @@ const SearchPage = ({ apiPrefix }) => {
       {query && (
         <h3 className="text-light">Search Results for &quot;{query}&quot;</h3>
       )}
-      <div className="row">
-        <div className="col-md-2">
-          <h4>Filters</h4>
-          <button
-            onClick={applyInputFilters}
-            className="btn btn-outline-light my-2"
-          >
-            Apply Filters
-          </button>
-          <button onClick={resetFilters} className="btn btn-outline-light my-2">
-            Reset Filters
-          </button>
-          <div className="filter-group">
-            <div
-              className="filter-header"
-              onClick={() => toggleFilterSection('publisher')}
-            >
-              <h5>
-                Publisher{' '}
-                {expandedFilter.publisher ? <FaChevronUp /> : <FaChevronDown />}
-              </h5>
-            </div>
-            {expandedFilter.publisher && (
-              <div className="filter-options">
-                <div className="d-flex">
-                  <input
-                    type="text"
-                    id="publisher"
-                    name="publisher"
-                    value={inputValues.publisher}
-                    onChange={handleInputChange}
-                    placeholder="Enter publisher name"
-                    className="form-control"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="filter-group">
-            <div
-              className="filter-header"
-              onClick={() => toggleFilterSection('category')}
-            >
-              <h5>
-                Category{' '}
-                {expandedFilter.category ? <FaChevronUp /> : <FaChevronDown />}
-              </h5>
-            </div>
-            {expandedFilter.category && (
-              <div className="filter-options">
-                {CATEGORY_LIST.map((category) => (
-                  <div key={category} className="form-check">
-                    <input
-                      type="checkbox"
-                      id={category}
-                      name="category"
-                      value={category}
-                      checked={filters.category.includes(category)}
-                      onChange={handleInputChange}
-                      className="form-check-input"
-                    />
-                    <label htmlFor={category} className="form-check-label">
-                      {category}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="filter-group">
-            <div
-              className="filter-header"
-              onClick={() => toggleFilterSection('mechanic')}
-            >
-              <h5>
-                Mechanic{' '}
-                {expandedFilter.mechanic ? <FaChevronUp /> : <FaChevronDown />}
-              </h5>
-            </div>
-            {expandedFilter.mechanic && (
-              <div className="filter-options">
-                {MECHANIC_LIST.map((mechanic) => (
-                  <div key={mechanic} className="form-check">
-                    <input
-                      type="checkbox"
-                      id={mechanic}
-                      name="mechanic"
-                      value={mechanic}
-                      checked={filters.mechanic.includes(mechanic)}
-                      onChange={handleInputChange}
-                      className="form-check-input"
-                    />
-                    <label htmlFor={mechanic} className="form-check-label">
-                      {mechanic}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="filter-group">
-            <div
-              className="filter-header"
-              onClick={() => toggleFilterSection('players')}
-            >
-              <h5>
-                Number of Players{' '}
-                {expandedFilter.players ? <FaChevronUp /> : <FaChevronDown />}
-              </h5>
-            </div>
-            {expandedFilter.players && (
-              <div className="filter-options">
-                <div className="d-flex">
-                  <input
-                    type="number"
-                    id="minPlayers"
-                    name="minPlayers"
-                    value={inputValues.minPlayers}
-                    onChange={handleInputChange}
-                    placeholder="Min"
-                    className="form-control me-2"
-                  />
-                  <input
-                    type="number"
-                    id="maxPlayers"
-                    name="maxPlayers"
-                    value={inputValues.maxPlayers}
-                    onChange={handleInputChange}
-                    placeholder="Max"
-                    className="form-control"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="filter-group">
-            <div
-              className="filter-header"
-              onClick={() => toggleFilterSection('year')}
-            >
-              <h5>
-                Year Published{' '}
-                {expandedFilter.year ? <FaChevronUp /> : <FaChevronDown />}
-              </h5>
-            </div>
-            {expandedFilter.year && (
-              <div className="filter-options">
-                <div className="d-flex">
-                  <input
-                    type="text"
-                    id="year"
-                    name="year"
-                    value={inputValues.year}
-                    onChange={handleInputChange}
-                    placeholder="20xx"
-                    className="form-control"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="filter-group">
-            <div
-              className="filter-header"
-              onClick={() => toggleFilterSection('age')}
-            >
-              <h5>
-                Age {expandedFilter.age ? <FaChevronUp /> : <FaChevronDown />}
-              </h5>
-            </div>
-            {expandedFilter.age && (
-              <div className="filter-options">
-                {[
-                  'up to 3 years',
-                  '3-4 years',
-                  '5-7 years',
-                  '8-11 years',
-                  '12-14 years',
-                  '15-17 years',
-                  '18+ years',
-                ].map((age) => (
-                  <div key={age} className="form-check">
-                    <input
-                      type="checkbox"
-                      id={age}
-                      name="age"
-                      value={age}
-                      checked={filters.age.includes(age)}
-                      onChange={handleInputChange}
-                      className="form-check-input"
-                    />
-                    <label htmlFor={age} className="form-check-label">
-                      {age}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="filter-group">
-            <div
-              className="filter-header"
-              onClick={() => toggleFilterSection('playtime')}
-            >
-              <h5>
-                Playtime{' '}
-                {expandedFilter.playtime ? <FaChevronUp /> : <FaChevronDown />}
-              </h5>
-            </div>
-            {expandedFilter.playtime && (
-              <div className="filter-options">
-                {['< 15 min', '< 30 min', '< 1h', '< 2h', '2h+'].map(
-                  (playtime) => (
-                    <div key={playtime} className="form-check">
-                      <input
-                        type="checkbox"
-                        id={playtime}
-                        name="playtime"
-                        value={playtime}
-                        checked={filters.playtime.includes(playtime)}
-                        onChange={handleInputChange}
-                        className="form-check-input"
-                      />
-                      <label htmlFor={playtime} className="form-check-label">
-                        {playtime}
-                      </label>
-                    </div>
-                  ),
-                )}
-              </div>
-            )}
-          </div>
-          <div className="filter-group">
-            <div
-              className="filter-header"
-              onClick={() => toggleFilterSection('excluded')}
-            >
-              <h5>
-                Excluded{' '}
-                {expandedFilter.excluded ? <FaChevronUp /> : <FaChevronDown />}
-              </h5>
-            </div>
-            {expandedFilter.excluded && (
-              <div className="filter-options">
-                {EXCLUDED_LIST.map((excluded) => (
-                  <div key={excluded} className="form-check">
-                    <input
-                      type="checkbox"
-                      id={excluded}
-                      name="excluded"
-                      value={excluded}
-                      checked={filters.excluded.includes(excluded)}
-                      onChange={handleInputChange}
-                      className="form-check-input"
-                    />
-                    <label htmlFor={excluded} className="form-check-label">
-                      {EXCLUDED_DISPLAY_NAMES[excluded]}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="filter-group">
-            <div className="filter-header">
-              <h5>Sort By</h5>
-            </div>
-            <div className="filter-options">
-              <select
-                className="form-select"
-                value={sort}
-                onChange={(e) => setSort(e.target.value)}
-              >
-                <option value="rating_desc">Rating &#x2193;</option>
-                <option value="rating_asc">Rating &#x2191;</option>
-                <option value="name_asc">Name &#x2191;</option>
-                <option value="name_desc">Name &#x2193;</option>
-                <option value="year_desc">Year Published &#x2193;</option>
-                <option value="year_asc">Year Published &#x2191;</option>
-              </select>
-            </div>
+      <div className="row mt-3 mb-3 text-center" id="meetingsFilter">
+        <div className="col-sm pb-2">
+          Publisher
+          <div>
+            <input
+              type="text"
+              id="publisher"
+              name="publisher"
+              value={inputValues.publisher}
+              onChange={handleInputChange}
+              placeholder="Publisher"
+              className="search-page-form-control filter-input mt-2"
+            />
           </div>
         </div>
+        <div className="col-sm mb-2">
+          Categories
+          <div>
+            <button
+              className="btn event-page-tags-button mt-1"
+              data-testid="event-page-tags-button"
+              onClick={toggleCategoriesModal}
+            >
+              <Plus size={25}></Plus>
+            </button>
+          </div>
+        </div>
+        {isGameCategoriesModalOpen && (
+          <CategoriesModal
+            toggleCategoriesModal={toggleCategoriesModal}
+            handleInputChange={handleInputChange}
+            filters={filters}
+          />
+        )}
+        <div className="col-sm mb-2">
+          Mechanic
+          <div>
+            <button
+              className="btn event-page-tags-button mt-1"
+              data-testid="event-page-tags-button"
+              onClick={toggleMechanicsModal}
+            >
+              <Plus size={25}></Plus>
+            </button>
+          </div>
+        </div>
+        {isGameMechanicsModalOpen && (
+          <MechanicsModal
+            toggleMechanicsModal={toggleMechanicsModal}
+            handleInputChange={handleInputChange}
+            filters={filters}
+          />
+        )}
+        <div className="col-sm">
+          No. of Players
+          <div className="row mt-2 justify-content-center">
+            <input
+              type="number"
+              id="minPlayers"
+              name="minPlayers"
+              value={inputValues.minPlayers}
+              onChange={handleInputChange}
+              placeholder="Min"
+              className="search-page-form-control filter-number-input col me-2"
+            />
+            <input
+              type="number"
+              id="maxPlayers"
+              name="maxPlayers"
+              value={inputValues.maxPlayers}
+              onChange={handleInputChange}
+              placeholder="Max"
+              className="search-page-form-control filter-number-input col"
+            />
+          </div>
+        </div>
+        <div className="col-sm">
+          Year
+          <div>
+            <input
+              type="text"
+              id="year"
+              name="year"
+              value={inputValues.year}
+              onChange={handleInputChange}
+              placeholder="20xx"
+              className="search-page-form-control filter-input mt-2"
+            />
+          </div>
+        </div>
+        <div className="col-sm mb-2">
+          Age
+          <div>
+            <button
+              className="btn event-page-tags-button mt-1"
+              data-testid="event-page-tags-button"
+              onClick={toggleAgeModal}
+            >
+              <Plus size={25}></Plus>
+            </button>
+          </div>
+        </div>
+        {isAgeModalOpen && (
+          <AgeModal
+            toggleAgeModal={toggleAgeModal}
+            handleInputChange={handleInputChange}
+            filters={filters}
+          />
+        )}
+        <div className="col-sm mb-2">
+          Playtime
+          <div>
+            <button
+              className="btn event-page-tags-button mt-1"
+              data-testid="event-page-tags-button"
+              onClick={togglePlaytimeModal}
+            >
+              <Plus size={25}></Plus>
+            </button>
+          </div>
+        </div>
+        {isPlaytimeModalOpen && (
+          <PlaytimeModal
+            togglePlaytimeModal={togglePlaytimeModal}
+            handleInputChange={handleInputChange}
+            filters={filters}
+          />
+        )}
+        <div className="col-sm mb-2">
+          Excluded
+          <div>
+            <button
+              className="btn event-page-tags-button mt-1"
+              data-testid="event-page-tags-button"
+              onClick={toggleExcludedModal}
+            >
+              <Plus size={25}></Plus>
+            </button>
+          </div>
+        </div>
+        {isExcludedModalOpen && (
+          <ExcludedModal
+            toggleExcludedModal={toggleExcludedModal}
+            handleInputChange={handleInputChange}
+            filters={filters}
+            EXCLUDED_LIST={EXCLUDED_LIST}
+            EXCLUDED_DISPLAY_NAMES={EXCLUDED_DISPLAY_NAMES}
+          />
+        )}
+      </div>
+      <div className="d-flex justify-content-between">
+        <div className="filter-group">
+          <div className="filter-header">
+            <h5>Sort By</h5>
+          </div>
+          <div className="filter-options">
+            <select
+              className="search-page-form-select"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+            >
+              <option value="rating_desc">Rating &#x2193;</option>
+              <option value="rating_asc">Rating &#x2191;</option>
+              <option value="name_asc">Name &#x2191;</option>
+              <option value="name_desc">Name &#x2193;</option>
+              <option value="year_desc">Year Published &#x2193;</option>
+              <option value="year_asc">Year Published &#x2191;</option>
+            </select>
+            <CaretDown size={20} className="dropdown-arrow"></CaretDown>
+          </div>
+        </div>
+        <button
+          className="btn search-page-filter-button mt-4"
+          onClick={() => applyInputFilters()}
+        >
+          Apply filters
+        </button>
+      </div>
+      <div className="row">
         {isLoading ? (
           loadingSpinner()
         ) : (
-          <div className="col-md-10">
-            <div className="d-flex flex-wrap">
+          <div className="col">
+            <div className="d-flex flex-wrap justify-content-evenly">
               {searchResults.length > 0 ? (
                 searchResults.map((boardGame) => (
                   <TableItem key={boardGame.id} boardGame={boardGame} />

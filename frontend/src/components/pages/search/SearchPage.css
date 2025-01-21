@@ -19,3 +19,53 @@
 .form-check-label {
   color: var(--text-color-light);
 }
+
+.search-page-form-control {
+  background-color: #0b0914;
+  color: var(--text-color-light);
+  width: 100%;
+  min-height: 35px;
+  height: 35px;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border: 1px solid #9D9CA5;
+  border-radius: 10px;
+}
+
+.search-page-filter-button {
+  background-color: var(--button-primary-color);
+  color: var(--background-color-dark-heavy);
+  --bs-btn-hover-bg: var(--accent-bright);
+  border: 1px solid var(--additional-gray);
+  border-radius: 10px;
+  height: 40px;
+}
+
+.search-page-form-select {
+  border-color: var(--background-color-dark-heavy);
+  background-color: transparent;
+  color: var(--text-color-light);
+  width: 130px;
+  padding-right: 10px;
+  transition: 0.4s;
+  appearance: none;
+}
+
+.search-page-form-select::placeholder {
+  color: var(--text-color-light);
+}
+
+.search-page-form-select:focus {
+  background-color: var(--button-secondary-color);
+  color: var(--text-color-light);
+}
+
+.filter-input {
+  max-width: 250px;
+}
+
+.filter-number-input {
+  max-width: 100px;
+}
