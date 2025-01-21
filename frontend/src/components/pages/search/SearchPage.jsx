@@ -464,7 +464,7 @@ const SearchPage = ({ apiPrefix }) => {
             className="btn search-page-filter-button mt-4"
             onClick={() => applyInputFilters()}
           >
-            Apply filters
+            Apply Filters
           </button>
         </div>
       </div>
