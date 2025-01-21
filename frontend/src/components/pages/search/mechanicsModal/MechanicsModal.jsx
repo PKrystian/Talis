@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MECHANIC_LIST } from '../../../constValues/SearchConstants';
+import { MECHANIC_LIST } from '../../../../constValues/SearchConstants';
 import './MechanicsModal.css';
 
 const MechanicsModal = ({

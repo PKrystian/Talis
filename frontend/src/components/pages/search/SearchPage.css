@@ -43,6 +43,13 @@
   height: 40px;
 }
 
+.search-page-reset-button {
+  transition: 0.4s;
+  background-color: var(--button-secondary-color);
+  color: var(--button-primary-color);
+  --bs-btn-hover-bg: var(--accent-bright);
+}
+
 .search-page-form-select {
   border-color: var(--background-color-dark-heavy);
   background-color: transparent;

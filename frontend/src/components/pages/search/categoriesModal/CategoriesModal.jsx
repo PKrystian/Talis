@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CATEGORY_LIST } from '../../../constValues/SearchConstants';
+import { CATEGORY_LIST } from '../../../../constValues/SearchConstants';
 import './CategoriesModal.css';
 
 const CategoriesModal = ({
