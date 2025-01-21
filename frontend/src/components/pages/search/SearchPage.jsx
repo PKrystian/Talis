@@ -2,20 +2,15 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import TableItem from '../../utils/table/TableItem';
 import './SearchPage.css';
-import {
-  CATEGORY_LIST,
-  MECHANIC_LIST,
-} from '../../../constValues/SearchConstants';
 import MetaComponent from '../../meta/MetaComponent';
 import { CaretDown, Plus } from '@phosphor-icons/react';
-import CategoriesModal from '../CategoriesModal/CategoriesModal';
-import MechanicsModal from '../mechanicsModal/MechanicsModal';
-import AgeModal from '../ageModal/AgeModal';
-import PlaytimeModal from '../playtimeModal/PlaytimeModal';
-import ExcludedModal from '../excludedModal/ExcludedModal';
+import CategoriesModal from './categoriesModal/CategoriesModal';
+import MechanicsModal from './mechanicsModal/MechanicsModal';
+import AgeModal from './ageModal/AgeModal';
+import PlaytimeModal from './playtimeModal/PlaytimeModal';
+import ExcludedModal from './excludedModal/ExcludedModal';
 
 const EXCLUDED_LIST = [
   'no_expansions',
@@ -71,16 +66,6 @@ const SearchPage = ({ apiPrefix }) => {
     publisher: '',
     year: '',
     excluded: [],
-  });
-  const [expandedFilter, setExpandedFilter] = useState({
-    category: false,
-    mechanic: false,
-    players: false,
-    age: false,
-    playtime: false,
-    publisher: false,
-    year: false,
-    excluded: false,
   });
   const [sort, setSort] = useState('rating_desc');
   const [inputValues, setInputValues] = useState({
@@ -186,13 +171,6 @@ const SearchPage = ({ apiPrefix }) => {
     });
     setSort('rating_desc');
     navigate(`?query=${encodeURIComponent(query)}`);
-  };
-
-  const toggleFilterSection = (section) => {
-    setExpandedFilter((prevExpandedFilter) => ({
-      ...prevExpandedFilter,
-      [section]: !prevExpandedFilter[section],
-    }));
   };
 
   const toggleCategoriesModal = () => {
@@ -475,19 +453,27 @@ const SearchPage = ({ apiPrefix }) => {
             <CaretDown size={20} className="dropdown-arrow"></CaretDown>
           </div>
         </div>
-        <button
-          className="btn search-page-filter-button mt-4"
-          onClick={() => applyInputFilters()}
-        >
-          Apply filters
-        </button>
+        <div>
+          <button
+            onClick={resetFilters}
+            className="btn search-page-reset-button mt-4 me-3"
+          >
+            Reset Filters
+          </button>
+          <button
+            className="btn search-page-filter-button mt-4"
+            onClick={() => applyInputFilters()}
+          >
+            Apply filters
+          </button>
+        </div>
       </div>
       <div className="row">
         {isLoading ? (
           loadingSpinner()
         ) : (
           <div className="col">
-            <div className="d-flex flex-wrap justify-content-evenly">
+            <div className="d-flex flex-wrap justify-content-start">
               {searchResults.length > 0 ? (
                 searchResults.map((boardGame) => (
                   <TableItem key={boardGame.id} boardGame={boardGame} />
