@@ -41,35 +41,37 @@ class SearchController:
             if query:
                 board_games = board_games.filter(name__icontains=query)
 
+            filter_q_objects = Q()
+
             for combined_filter in combined_filters:
                 if 'players|' in combined_filter:
                     min_players, max_players = combined_filter.replace('players|', '').split('-')
                     min_players = int(min_players) if min_players else None
                     max_players = int(max_players) if max_players else None
                     if min_players and max_players:
-                        board_games = board_games.filter(min_players__lte=min_players, max_players__gte=max_players)
+                        filter_q_objects |= Q(min_players__lte=min_players, max_players__gte=max_players)
                     elif min_players:
-                        board_games = board_games.filter(max_players__gte=min_players)
+                        filter_q_objects |= Q(max_players__gte=min_players)
                     elif max_players:
-                        board_games = board_games.filter(min_players__lte=max_players)
+                        filter_q_objects |= Q(min_players__lte=max_players)
                 elif 'excluded|' in combined_filter:
                     exclude_filter = combined_filter.replace('excluded|', '')
                     if exclude_filter == 'no_expansions':
-                        board_games = board_games.exclude(boardgamecategory__category_id=BoardGameCategory.CATEGORY_EXPANSION)
+                        filter_q_objects |= ~Q(boardgamecategory__category_id=BoardGameCategory.CATEGORY_EXPANSION)
                     elif exclude_filter == 'no_rating':
-                        board_games = board_games.exclude(rating=0)
+                        filter_q_objects |= ~Q(rating=0)
                     elif exclude_filter == 'no_image':
-                        board_games = board_games.exclude(image_url__isnull=True)
+                        filter_q_objects |= ~Q(image_url__isnull=True)
                     elif exclude_filter == 'no_age':
-                        board_games = board_games.exclude(age=0)
+                        filter_q_objects |= ~Q(age=0)
                     elif exclude_filter == 'no_playtime':
-                        board_games = board_games.exclude(min_playtime=0)
+                        filter_q_objects |= ~Q(min_playtime=0)
                     elif exclude_filter == 'no_categories':
-                        board_games = board_games.exclude(boardgamecategory__isnull=True)
+                        filter_q_objects |= ~Q(boardgamecategory__isnull=True)
                     elif exclude_filter == 'no_mechanics':
-                        board_games = board_games.exclude(boardgamemechanic__isnull=True)
+                        filter_q_objects |= ~Q(boardgamemechanic__isnull=True)
                     elif exclude_filter == 'no_year':
-                        board_games = board_games.exclude(year_published__isnull=True)
+                        filter_q_objects |= ~Q(year_published__isnull=True)
                 else:
                     filter_type, filter_value = combined_filter.split('|', 1)
                     filter_value = urllib.parse.unquote(filter_value)
@@ -82,27 +84,27 @@ class SearchController:
                     if filter_type == 'age':
                         age_min, age_max = self.AGE_RANGES[filter_value]
                         if age_max == 0:
-                            board_games = board_games.filter(age__gte=age_min)
+                            filter_q_objects |= Q(age__gte=age_min)
                         elif age_min == 0:
-                            board_games = board_games.filter(age__lte=age_max)
+                            filter_q_objects |= Q(age__lte=age_max)
                         else:
-                            board_games = board_games.filter(age__gte=age_min, age__lte=age_max)
+                            filter_q_objects |= Q(age__gte=age_min, age__lte=age_max)
                     elif filter_type == 'playtime':
                         playtime_min, playtime_max = self.PLAYTIME_RANGES[filter_value]
                         if playtime_max == 0:
-                            board_games = board_games.filter(min_playtime__gte=playtime_min)
+                            filter_q_objects |= Q(min_playtime__gte=playtime_min)
                         elif playtime_min == 0:
-                            board_games = board_games.filter(min_playtime__lte=playtime_max)
+                            filter_q_objects |= Q(min_playtime__lte=playtime_max)
                         else:
-                            board_games = board_games.filter(min_playtime__gte=playtime_min, min_playtime__lte=playtime_max)
+                            filter_q_objects |= Q(min_playtime__gte=playtime_min, min_playtime__lte=playtime_max)
                     elif filter_type == 'publisher':
-                        board_games = board_games.filter(
-                            boardgamepublisher__publisher__name__icontains=filter_value
-                        )
+                        filter_q_objects |= Q(boardgamepublisher__publisher__name__icontains=filter_value)
                     elif filter_type == 'year':
-                        board_games = board_games.filter(year_published=filter_value)
+                        filter_q_objects |= Q(year_published=filter_value)
                     else:
-                        board_games = board_games.filter(**{filter_type_to_field[filter_type]: filter_value})
+                        filter_q_objects |= Q(**{filter_type_to_field[filter_type]: filter_value})
+
+            board_games = board_games.filter(filter_q_objects)
 
             sort_mapping = {
                 'rating_desc': '-rating',
