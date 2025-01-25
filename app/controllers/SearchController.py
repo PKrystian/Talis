@@ -1,11 +1,9 @@
-import urllib.parse
 from collections import defaultdict
-
+from django.db.models import Q
 from django.http import JsonResponse
 from app.models import BoardGame, BoardGameCategory
-from django.db.models import Q, Count
 from app.utils.creators.LogErrorCreator import LogErrorCreator
-
+import urllib.parse
 
 class SearchController:
     ROUTE: str = 'search/'
@@ -67,21 +65,21 @@ class SearchController:
                             type_q_objects |= Q(min_players__lte=max_players)
                     elif filter_type == 'excluded':
                         if filter_value == 'no_expansions':
-                            type_q_objects |= ~Q(boardgamecategory__category_id=BoardGameCategory.CATEGORY_EXPANSION)
+                            type_q_objects &= ~Q(boardgamecategory__category_id=BoardGameCategory.CATEGORY_EXPANSION)
                         elif filter_value == 'no_rating':
-                            type_q_objects |= ~Q(rating=0)
+                            type_q_objects &= ~Q(rating=0)
                         elif filter_value == 'no_image':
-                            type_q_objects |= ~Q(image_url__isnull=True)
+                            type_q_objects &= ~Q(image_url__isnull=True)
                         elif filter_value == 'no_age':
-                            type_q_objects |= ~Q(age=0)
+                            type_q_objects &= ~Q(age=0)
                         elif filter_value == 'no_playtime':
-                            type_q_objects |= ~Q(min_playtime=0)
+                            type_q_objects &= ~Q(min_playtime=0)
                         elif filter_value == 'no_categories':
-                            type_q_objects |= ~Q(boardgamecategory__isnull=True)
+                            type_q_objects &= ~Q(boardgamecategory__isnull=True)
                         elif filter_value == 'no_mechanics':
-                            type_q_objects |= ~Q(boardgamemechanic__isnull=True)
+                            type_q_objects &= ~Q(boardgamemechanic__isnull=True)
                         elif filter_value == 'no_year':
-                            type_q_objects |= ~Q(year_published__isnull=True)
+                            type_q_objects &= ~Q(year_published__isnull=True)
                     else:
                         filter_type_to_field = {
                             'category': 'boardgamecategory__category__name__icontains',
