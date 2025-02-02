@@ -107,6 +107,7 @@ class UserController:
         return JsonResponse(
             data={
                 'detail': 'Logged in successfully',
+                'full_name': user.get_full_name(),
                 'username': user.username,
                 'is_authenticated': True,
                 'user_id': user.id,
@@ -146,6 +147,7 @@ class UserController:
 
             return JsonResponse(
                 data={
+                    'full_name': request.user.get_full_name(),
                     'is_authenticated': True,
                     'username': request.user.username,
                     'user_id': request.user.id,

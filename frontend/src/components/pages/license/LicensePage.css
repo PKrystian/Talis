@@ -2,7 +2,7 @@
   padding: 20px;
   max-width: 800px;
   margin: 40px auto;
-  background-color: var(--background-color-dark-medium);
+  background-color: var(--accent-dark);
   color: var(--text-color-light);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);

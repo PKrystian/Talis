@@ -258,52 +258,61 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                     />
                   </button>
                   {showUserDropdown ? (
-                    <div
-                      ref={userDropdownRef}
-                      className="user-dropdown row bg-dark"
-                    >
+                    <div ref={userDropdownRef} className="user-dropdown row">
+                      <div className="user-info text-center p-3">
+                        <img
+                          src={
+                            user.profile_image_url ||
+                            '/static/default-profile.png'
+                          }
+                          alt="User Avatar"
+                          className="rounded-circle big-avatar mb-2"
+                        />
+                        <div className="user-name pb-3 fw-bold">
+                          {user.full_name}
+                        </div>
+                        <div className="user-email pb-3 text-gray">
+                          {user.username}
+                        </div>
+                      </div>
+                      <hr className="dropdown-divider" />
                       <Link
-                        className="nav-user-profile-link pb-2"
+                        className="nav-user-profile-link pb-1 pt-4 move-right"
                         to={`/user/${user.user_id}`}
                       >
-                        <FaUser className="me-1" />
-                        Profile
+                        <FaUser className="me-2" />
+                        My profile
                       </Link>
                       <Link
-                        className="nav-user-profile-link pb-2"
+                        className="nav-user-profile-link pb-4 move-right"
                         to="/user-events"
                       >
-                        <MapPin size={20} className="me-1" />
-                        Scheduled Meetings
+                        <MapPin size={20} className="me-2" />
+                        Scheduled meetings
                       </Link>
+                      <hr className="dropdown-divider" />
                       <Link
-                        className="nav-user-profile-link pb-2"
+                        className="nav-user-profile-link pb-1 pt-4 move-right"
                         to="/settings"
                       >
-                        <FaCog className="me-1" />
-                        Settings
+                        <FaCog className="me-2" />
+                        Account settings
                       </Link>
                       <Link
-                        className="nav-user-profile-link pb-2"
-                        to="/game-add"
-                      >
-                        <MdAddHome className="me-1" />
-                        Add Game
-                      </Link>
-                      <Link
-                        className="nav-user-profile-link pb-2"
+                        className="nav-user-profile-link pb-4 move-right"
                         to="https://www.trustpilot.com/review/talis.live"
                         target="_blank"
                       >
-                        <FaBullhorn className="me-1" />
-                        Send Feedback
+                        <FaBullhorn className="me-2" />
+                        Send feedback
                       </Link>
+                      <hr className="dropdown-divider" />
                       <Link
-                        className="nav-user-profile-link pb-2"
+                        className="nav-user-profile-link pb-4 pt-4 move-right"
                         onClick={logout}
                       >
-                        <FaSignOutAlt className="me-1" />
-                        Log Out
+                        <FaSignOutAlt className="me-2" />
+                        Log out
                       </Link>
                     </div>
                   ) : null}
