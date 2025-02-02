@@ -96,6 +96,6 @@ describe('Navbar Component', () => {
 
     fireEvent.click(screen.getByAltText('User Profile'));
 
-    expect(screen.getByText('Profile')).toBeInTheDocument();
+    expect(screen.getByText('My profile')).toBeInTheDocument();
   });
 });
