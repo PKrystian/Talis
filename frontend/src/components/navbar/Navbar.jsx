@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropsTypes from 'prop-types';
-import { FaCog, FaBullhorn, FaSignOutAlt, FaUser } from 'react-icons/fa';
-import { MagnifyingGlass, Equals, MapPin, Bell } from '@phosphor-icons/react';
-import { MdAddHome } from 'react-icons/md';
+import {
+  MagnifyingGlass,
+  Equals,
+  MapPin,
+  Bell,
+  UserCircle,
+  MapPinSimpleArea,
+  Gear,
+  MegaphoneSimple,
+  SignOut,
+  GameController,
+} from '@phosphor-icons/react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -280,14 +289,14 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                         className="nav-user-profile-link pb-1 pt-4 move-right"
                         to={`/user/${user.user_id}`}
                       >
-                        <FaUser className="me-2" />
+                        <UserCircle size={20} className="me-2" />
                         My profile
                       </Link>
                       <Link
                         className="nav-user-profile-link pb-4 move-right"
                         to="/user-events"
                       >
-                        <MapPin size={20} className="me-2" />
+                        <MapPinSimpleArea size={20} className="me-2" />
                         Scheduled meetings
                       </Link>
                       <hr className="dropdown-divider" />
@@ -295,15 +304,22 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                         className="nav-user-profile-link pb-1 pt-4 move-right"
                         to="/settings"
                       >
-                        <FaCog className="me-2" />
+                        <Gear size={20} className="me-2" />
                         Account settings
+                      </Link>
+                      <Link
+                        className="nav-user-profile-link pb-1 move-right"
+                        to="/game-add"
+                      >
+                        <GameController size={20} className="me-2" />
+                        Add custom game
                       </Link>
                       <Link
                         className="nav-user-profile-link pb-4 move-right"
                         to="https://www.trustpilot.com/review/talis.live"
                         target="_blank"
                       >
-                        <FaBullhorn className="me-2" />
+                        <MegaphoneSimple size={20} className="me-2" />
                         Send feedback
                       </Link>
                       <hr className="dropdown-divider" />
@@ -311,7 +327,7 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                         className="nav-user-profile-link pb-4 pt-4 move-right"
                         onClick={logout}
                       >
-                        <FaSignOutAlt className="me-2" />
+                        <SignOut size={20} className="me-2" />
                         Log out
                       </Link>
                     </div>
