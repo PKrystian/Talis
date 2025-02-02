@@ -152,7 +152,7 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
             </button>
             <button
               type="button"
-              className="btn btn-primary"
+              className="modal-login send"
               onClick={handleSubmit}
             >
               Send reset request

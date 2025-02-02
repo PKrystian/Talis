@@ -102,18 +102,27 @@ body {
   overflow-y: auto;
   z-index: 1000;
   color: var(--text-color-light);
-  background-color: var(--background-color-dark-light);
-  border: 1px solid var(--border-color-dark);
+  background-color: var(--button-secondary-color);
+  border: 1px solid var(--accent-bright);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
-.search-suggestions .list-group-item {
+.list-group-item {
   cursor: pointer;
-  background-color: var(--background-color-dark-light);
+  background-color: var(--button-secondary-color);
+  color: var(--text-color-light);
+  border: 1px solid var(--accent-dark);
+}
+
+.search-suggestions {
+  cursor: pointer;
+  background-color: var(--button-secondary-color);
   color: var(--text-color-light);
 }
 
 .search-suggestions .list-group-item:hover {
-  background-color: var(--hover-background-color);
+  background-color: var(--accent-dark);
+  color: var(--text-color-light);
 }
 
 .form-control,
@@ -203,28 +212,61 @@ body {
   border-color: var(--border-color-dark);
 }
 
+.move-right {
+  margin-left: 25px; /* Adjust the value as needed */
+}
+
 .user-dropdown {
   display: flex;
+  flex-direction: column;
   position: absolute;
   width: 300px;
-  right: 0;
+  right: 50px;
+  background-color: var(--button-secondary-color);
+  border: 1px solid var(--button-secondary-color);
+  border-radius: var(--border-radius);
+  z-index: 1001;
+}
+
+.user-info {
+  background-color: var(--button-secondary-color);
+}
+
+.user-name, .user-email {
+  color: var(--text-color-light);
+}
+
+.dropdown-divider {
+  border-top: 1px solid var(--button-primary-color);
+  margin: 0 20px;
+  width: calc(100% - 40px);
+  background-color: transparent;
 }
 
 .nav-user-profile-link {
+  background-color: var(--button-secondary-color);
   font-size: var(--font-size-medium);
   color: var(--text-color-light);
   width: 100%;
   text-decoration: none;
+  padding: 10px;
 }
 
 .nav-user-profile-link:hover {
-  background-color: var(--hover-background-color);
-  border-radius: var(--border-radius);
+  color: var(--text-color-link);
 }
 
 .big-avatar {
   width: 100px;
   height: 80px;
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.text-gray {
+  color: var(--text-color-light-medium);
 }
 
 .small-avatar {
@@ -279,3 +321,4 @@ body {
   font-weight: 400;
   font-size: 18px;
 }
+

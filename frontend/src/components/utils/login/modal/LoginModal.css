@@ -78,3 +78,29 @@ div.forgot-password:hover {
   margin-left: 0.5rem;
   cursor: pointer;
 }
+
+.modal-login.login:hover, .modal-login.close:hover {
+  background-color: var(--accent-bright);
+  color: var(--text-color-light);
+}
+
+.modal-login.login {
+  color: var(--button-secondary-color);
+  background-color: var(--button-primary-color);
+}
+
+.modal-login.close {
+  color: var(--button-primary-color);
+  background-color: var(--button-secondary-color);
+}
+
+.modal-login {
+  min-width: 100px;
+  min-height: 40px;
+  border-radius: 8px;
+  border: none;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: 0.5s;
+}

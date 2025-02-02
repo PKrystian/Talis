@@ -174,6 +174,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
             updateAlert(toastId, 'success');
             setUserState(resp.data.is_authenticated);
             setUserData({
+              full_name: resp.data.full_name,
               username: resp.data.username,
               user_id: resp.data.user_id,
               is_superuser: resp.data.is_superuser,
@@ -220,6 +221,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
             if (resp.status === 200) {
               setUserState(resp.data.is_authenticated);
               setUserData({
+                full_name: resp.data.full_name,
                 username: resp.data.username,
                 user_id: resp.data.user_id,
                 is_superuser: resp.data.is_superuser,
@@ -334,18 +336,18 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
           <div className="modal-footer d-flex justify-content-between">
             <button
               type="button"
-              className="btn btn-secondary"
+              className="modal-login close"
               data-bs-dismiss="modal"
             >
               Close
             </button>
             <button
               type="button"
-              className="btn btn-primary"
+              className="modal-login login"
               onClick={handleSubmit}
               disabled={isLoading}
             >
-              Login
+              Log in
             </button>
           </div>
         </div>
