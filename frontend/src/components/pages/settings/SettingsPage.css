@@ -15,6 +15,7 @@
   color: var(--button-primary-color);
   font-size: var(--font-size-small);
   margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .settings-page-form-control {
@@ -34,8 +35,11 @@
   background-color: var(--button-primary-color);
   color: var(--background-color-dark-heavy);
   --bs-btn-hover-bg: var(--accent-bright);
-  max-width: 400px;
   border-radius: 60px;
+}
+
+.settings-page-input-container {
+  max-width: 350px;
 }
 
 .custom-form-control:focus {

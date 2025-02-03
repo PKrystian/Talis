@@ -22,6 +22,10 @@ const SettingsPage = ({ apiPrefix, user }) => {
   const navigate = useNavigate();
 
   const fetchUserData = useCallback(() => {
+    if (!user || !user.user_id) {
+      navigate('/');
+      return;
+    }
     if (user && user.user_id) {
       axios
         .get(`${apiPrefix}user/${user.user_id}/`)
@@ -108,8 +112,8 @@ const SettingsPage = ({ apiPrefix, user }) => {
       />
       <h2 className="mb-4">Settings</h2>
       <div className="row">
-        <form onSubmit={handleSubmit} className="col-md-6">
-          <div className="mb-3">
+        <form onSubmit={handleSubmit} className="col-md-6 me-6">
+          <div className="mb-3 m-auto settings-page-input-container">
             <label htmlFor="avatar" className="settings-page-form-label">
               Avatar
             </label>
@@ -125,18 +129,20 @@ const SettingsPage = ({ apiPrefix, user }) => {
                   className="avatar-preview mb-3"
                 />
               )}
-              <input
-                type="text"
-                id="avatar"
-                className="settings-page-form-control"
-                value={avatar}
-                onChange={(e) => setAvatar(e.target.value)}
-                placeholder="https://example.com/image.jpg"
-              />
+              <div className="text-center">
+                <input
+                  type="text"
+                  id="avatar"
+                  className="settings-page-form-control"
+                  value={avatar}
+                  onChange={(e) => setAvatar(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3 m-auto settings-page-input-container">
             <label htmlFor="firstName" className="settings-page-form-label">
               First Name
             </label>
@@ -150,7 +156,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
             />
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3 m-auto settings-page-input-container">
             <label htmlFor="lastName" className="settings-page-form-label">
               Last Name
             </label>
@@ -163,7 +169,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
             />
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3 m-auto settings-page-input-container">
             <label htmlFor="birthdate" className="settings-page-form-label">
               Birthdate
             </label>
@@ -176,7 +182,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
               required
             />
           </div>
-          <div className="text-center">
+          <div className="m-auto settings-page-input-container">
             <button
               type="submit"
               className="btn settings-page-save-button w-100"
