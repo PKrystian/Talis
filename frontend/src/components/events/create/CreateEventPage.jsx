@@ -405,13 +405,13 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.EVENT_TITLE_FIELD}
-                  className="form-label"
+                  className="create-event-page-form-label"
                 >
                   Event Title
                 </label>
                 <input
                   id={FormConstants.EVENT_TITLE_FIELD}
-                  className="form-control"
+                  className="create-event-page-form-control"
                   type="text"
                   value={eventName}
                   onChange={handleFormOnChange}
@@ -425,13 +425,13 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.EVENT_CITY_FIELD}
-                  className="form-label"
+                  className="create-event-page-form-label"
                 >
                   City
                 </label>
                 <input
                   id={FormConstants.EVENT_CITY_FIELD}
-                  className="form-control"
+                  className="create-event-page-form-control"
                   type="text"
                   value={city}
                   onChange={handleFormOnChange}
@@ -445,13 +445,13 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <div className="col-8 fade-in-2s">
                 <label
                   htmlFor={FormConstants.EVENT_STREET_FIELD}
-                  className="form-label"
+                  className="create-event-page-form-label"
                 >
                   Street
                 </label>
                 <input
                   id={FormConstants.EVENT_STREET_FIELD}
-                  className="form-control"
+                  className="create-event-page-form-control"
                   type="text"
                   value={street}
                   onChange={handleFormOnChange}
@@ -463,13 +463,13 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.EVENT_ZIP_CODE_FIELD}
-                  className="form-label"
+                  className="create-event-page-form-label"
                 >
                   ZipCode
                 </label>
                 <input
                   id={FormConstants.EVENT_ZIP_CODE_FIELD}
-                  className="form-control"
+                  className="create-event-page-form-control"
                   type="text"
                   pattern="[0-9]{5}"
                   value={zipCode}
@@ -483,13 +483,13 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
             <div className="form-group mt-2 fade-in-2s">
               <label
                 htmlFor={FormConstants.EVENT_EVENT_START_DATE_FIELD}
-                className="form-label"
+                className="create-event-page-form-label"
               >
                 Starting Date
               </label>
               <input
                 id={FormConstants.EVENT_EVENT_START_DATE_FIELD}
-                className="form-control"
+                className="create-event-page-form-control"
                 type="datetime-local"
                 onChange={handleFormOnChange}
                 required
@@ -499,13 +499,13 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
             <div className="form-group mt-2 fade-in-2s">
               <label
                 htmlFor={FormConstants.EVENT_BOARD_GAMES_FIELD}
-                className="form-label"
+                className="create-event-page-form-label"
               >
                 BoardGames
               </label>
               <input
                 id="board_games"
-                className="form-control flex-grow-1 mx-lg-1"
+                className="create-event-page-form-control flex-grow-1 mx-lg-1"
                 type="search"
                 placeholder="boardgames"
                 value={query}
@@ -549,12 +549,12 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
             <div className="form-group mt-2 fade-in-2s">
               <label
                 htmlFor={FormConstants.EVENT_TAGS_FIELD}
-                className="form-label"
+                className="create-event-page-form-label"
               >
                 Tags
               </label>
               <input
-                className="form-control flex-grow-1 mx-lg-1"
+                className="create-event-page-form-control flex-grow-1 mx-lg-1"
                 type="search"
                 placeholder="tags"
                 value={tagsQuery}
@@ -598,12 +598,12 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
             <div className="form-group mt-2 fade-in-2s">
               <label
                 htmlFor={FormConstants.INVITE_INVITED_FRIENDS}
-                className="form-label"
+                className="create-event-page-form-label"
               >
                 Friends
               </label>
               <input
-                className="form-control flex-grow-1 mx-lg-1"
+                className="create-event-page-form-control flex-grow-1 mx-lg-1"
                 type="search"
                 placeholder="friends"
                 value={friendsQuery}
@@ -648,13 +648,13 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.EVENT_MAX_PLAYERS_FIELD}
-                  className="form-label"
+                  className="create-event-page-form-label"
                 >
                   Max Players
                 </label>
                 <input
                   id={FormConstants.EVENT_MAX_PLAYERS_FIELD}
-                  className="form-control"
+                  className="create-event-page-form-control"
                   type="number"
                   value={maxPlayers}
                   onChange={handleFormOnChange}
@@ -667,13 +667,13 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
               <div className="col fade-in-2s">
                 <label
                   htmlFor={FormConstants.EVENT_DESCRIPTION_FIELD}
-                  className="form-label"
+                  className="create-event-page-form-label"
                 >
                   Description
                 </label>
                 <textarea
                   id={FormConstants.EVENT_DESCRIPTION_FIELD}
-                  className="form-control"
+                  className="create-event-page-form-control create-event-page-description-form-control"
                   type="text"
                   value={description}
                   onChange={handleFormOnChange}
@@ -682,15 +682,16 @@ const CreateEventPage = ({ apiPrefix, user, userState }) => {
                 />
               </div>
             </div>
-
-            <button
-              type="submit"
-              className={`btn ${submitButtonStyle} form-control mt-2`}
-              onClick={handleSubmit}
-              disabled={!isFormValid || isLoading}
-            >
-              Create
-            </button>
+            <div className="text-center">
+              <button
+                type="submit"
+                className={`btn ${submitButtonStyle} create-event-page-create-button w-100 mt-2`}
+                onClick={handleSubmit}
+                disabled={!isFormValid || isLoading}
+              >
+                Create
+              </button>
+            </div>
           </form>
         </div>
       </div>

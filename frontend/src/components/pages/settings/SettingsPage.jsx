@@ -22,6 +22,10 @@ const SettingsPage = ({ apiPrefix, user }) => {
   const navigate = useNavigate();
 
   const fetchUserData = useCallback(() => {
+    if (!user || !user.user_id) {
+      navigate('/');
+      return;
+    }
     if (user && user.user_id) {
       axios
         .get(`${apiPrefix}user/${user.user_id}/`)
@@ -106,84 +110,96 @@ const SettingsPage = ({ apiPrefix, user }) => {
         title="User Settings"
         description="Manage your account details"
       />
-      <h2 className="text-center mb-4">Settings</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="avatar" className="form-label">
-            Avatar
-          </label>
-          <div className="d-flex align-items-center">
+      <h2 className="mb-4">Settings</h2>
+      <div className="row">
+        <form onSubmit={handleSubmit} className="col-md-6 me-6">
+          <div className="mb-3 m-auto settings-page-input-container">
+            <label htmlFor="avatar" className="settings-page-form-label">
+              Avatar
+            </label>
+            <div className="align-items-center">
+              {avatar && (
+                <img
+                  src={avatar}
+                  alt="Avatar Preview"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/static/default-profile.png';
+                  }}
+                  className="avatar-preview mb-3"
+                />
+              )}
+              <div className="text-center">
+                <input
+                  type="text"
+                  id="avatar"
+                  className="settings-page-form-control"
+                  value={avatar}
+                  onChange={(e) => setAvatar(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-3 m-auto settings-page-input-container">
+            <label htmlFor="firstName" className="settings-page-form-label">
+              First Name
+            </label>
             <input
               type="text"
-              id="avatar"
-              className="form-control"
-              value={avatar}
-              onChange={(e) => setAvatar(e.target.value)}
-              placeholder="https://example.com/image.jpg"
+              id="firstName"
+              className="settings-page-form-control"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
             />
-            {avatar && (
-              <img
-                src={avatar}
-                alt="Avatar Preview"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/static/default-profile.png';
-                }}
-                className="avatar-preview ms-3"
-              />
-            )}
           </div>
-        </div>
 
-        <div className="mb-3">
-          <label htmlFor="firstName" className="form-label">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            className="form-control"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </div>
+          <div className="mb-3 m-auto settings-page-input-container">
+            <label htmlFor="lastName" className="settings-page-form-label">
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              className="settings-page-form-control"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
 
-        <div className="mb-3">
-          <label htmlFor="lastName" className="form-label">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            className="form-control"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <div className="mb-3 m-auto settings-page-input-container">
+            <label htmlFor="birthdate" className="settings-page-form-label">
+              Birthdate
+            </label>
+            <input
+              type="date"
+              id="birthdate"
+              className="settings-page-form-control"
+              value={birthdate}
+              onChange={(e) => setBirthdate(e.target.value)}
+              required
+            />
+          </div>
+          <div className="m-auto settings-page-input-container">
+            <button
+              type="submit"
+              className="btn settings-page-save-button w-100"
+              disabled={!isFormValid}
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+        <div className="registration-image col-md-6 d-none d-md-block align-content-center justify-content-center ps-3">
+          <img
+            className="img-fluid"
+            alt="noimg"
+            src="/static/assets/undraw_personal-information_gbtc.svg"
+          ></img>
         </div>
-
-        <div className="mb-3">
-          <label htmlFor="birthdate" className="form-label">
-            Birthdate
-          </label>
-          <input
-            type="date"
-            id="birthdate"
-            className="form-control"
-            value={birthdate}
-            onChange={(e) => setBirthdate(e.target.value)}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="btn btn-primary w-100"
-          disabled={!isFormValid}
-        >
-          Save Changes
-        </button>
-      </form>
+      </div>
     </div>
   );
 };
