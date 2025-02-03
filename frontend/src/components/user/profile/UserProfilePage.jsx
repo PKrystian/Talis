@@ -442,16 +442,17 @@ const UserProfilePage = ({ apiPrefix, user }) => {
                 >
                   Remove Friend
                 </button>
-                <div className="friend-collection">
-                  <CollectionPage
-                    user={{ user_id: parseInt(id) }}
-                    isFriendsProfile={true}
-                  />
-                </div>
               </>
             )}
           </div>
         )}
+
+        <div className="friend-collection">
+          <CollectionPage
+            user={{ user_id: parseInt(id) }}
+            isFriendsProfile={true}
+          />
+        </div>
 
         {user && user.is_superuser && (
           <>
