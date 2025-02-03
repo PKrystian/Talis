@@ -870,11 +870,7 @@ const GamePage = ({ apiPrefix, user }) => {
             />
             <button
               onClick={isEditing ? handleUpdateComment : handleAddComment}
-              disabled={
-                (newComment.trim() === '' && newRating.trim() === '') ||
-                newRating < 0.01 ||
-                newRating > 10
-              }
+              disabled={newComment.trim() === '' && newRating.trim() === ''}
             >
               {isEditing ? 'Update Comment' : 'Add Comment'}
             </button>
