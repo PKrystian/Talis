@@ -6,3 +6,34 @@
     max-height: 300px;
     overflow-y: auto;
 }
+
+.create-event-page-form-label {
+    color: var(--button-primary-color);
+    font-size: var(--font-size-small);
+    margin-bottom: 0.5rem;
+}
+
+.create-event-page-form-control {
+    background-color: #0b0914;
+    color: var(--text-color-light);
+    width: 100%;
+    min-height: 35px;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    border: 1px solid #9D9CA5;
+    border-radius: 60px;
+}
+
+.create-event-page-description-form-control {
+    border-radius: 20px;
+}
+
+.create-event-page-create-button {
+    background-color: var(--button-primary-color);
+    color: var(--background-color-dark-heavy);
+    --bs-btn-hover-bg: var(--accent-bright);
+    max-width: 400px;
+    border-radius: 60px;
+}

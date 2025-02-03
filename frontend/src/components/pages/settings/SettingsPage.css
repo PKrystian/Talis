@@ -1,10 +1,6 @@
 .settings-page {
-  max-width: 600px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: var(--background-color-dark-medium);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
   color: var(--text-color-light);
   transition: var(--transition);
 }
@@ -15,16 +11,31 @@
   margin-bottom: 1.5rem;
 }
 
-.custom-form-label {
-  font-size: var(--font-size-medium);
-  color: var(--text-color-light-medium);
+.settings-page-form-label {
+  color: var(--button-primary-color);
+  font-size: var(--font-size-small);
+  margin-bottom: 0.5rem;
 }
 
-.custom-form-control {
-  background-color: var(--background-color-dark-light);
-  color: var(--text-color-dark);
-  border: 1px solid var(--border-color-light);
-  transition: var(--transition);
+.settings-page-form-control {
+  background-color: #0b0914;
+  color: var(--text-color-light);
+  width: 100%;
+  min-height: 35px;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border: 1px solid #9D9CA5;
+  border-radius: 60px;
+}
+
+.settings-page-save-button {
+  background-color: var(--button-primary-color);
+  color: var(--background-color-dark-heavy);
+  --bs-btn-hover-bg: var(--accent-bright);
+  max-width: 400px;
+  border-radius: 60px;
 }
 
 .custom-form-control:focus {
