@@ -12,7 +12,7 @@
 }
 
 .cookie-consent-modal {
-  background: var(--background-color-dark-medium);
+  background: var(--button-secondary-color);
   padding: 20px;
   border-radius: 10px;
   width: 80%;
