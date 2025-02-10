@@ -13,7 +13,7 @@ const NotificationModal = ({ apiPrefix, user, invites, fetchInvites }) => {
       aria-hidden="true"
     >
       <div className="modal-dialog">
-        <div className="modal-content backplate-invite">
+        <div className="modal-content notifications text-center backplate-invite">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="notificationsLabel">
               Notifications
@@ -21,7 +21,7 @@ const NotificationModal = ({ apiPrefix, user, invites, fetchInvites }) => {
             <button
               id="closeNotifications"
               type="button"
-              className="btn-close"
+              className="btn-close btn-close-white"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>

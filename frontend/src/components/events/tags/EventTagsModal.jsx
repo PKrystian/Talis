@@ -44,7 +44,10 @@ const EventTagsModal = ({ toggleTagsModal, gameTags, setGameTags }) => {
             </div>
           ))}
         </div>
-        <button className="btn btn-secondary" onClick={toggleTagsModal}>
+        <button
+          className="btn search-modal-close-button"
+          onClick={toggleTagsModal}
+        >
           Close
         </button>
       </div>

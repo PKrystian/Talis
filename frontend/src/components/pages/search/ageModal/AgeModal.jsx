@@ -33,7 +33,10 @@ const AgeModal = ({ toggleAgeModal, handleInputChange, filters }) => {
             </div>
           ))}
         </div>
-        <button className="btn btn-secondary mt-2" onClick={toggleAgeModal}>
+        <button
+          className="btn search-modal-close-button mt-2"
+          onClick={toggleAgeModal}
+        >
           Close
         </button>
       </div>
