@@ -40,6 +40,6 @@ describe('LoginModal Component', () => {
   test('renders LoginModal component', () => {
     renderComponent();
     openModal();
-    expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /welcome/i })).toBeInTheDocument();
   });
 });
