@@ -1,6 +1,24 @@
 .backplate-invite {
-    background: var(--background-color-dark-light);
-    border-radius: 30px;
-    border-color: white;
-    text-align: center;
-  }
+  background: #0b0914;
+  border-radius: 30px;
+  border-color: white;
+}
+
+.notification-primary-button {
+  background-color: var(--button-primary-color);
+  color: var(--background-color-dark-heavy);
+  --bs-btn-hover-bg: var(--accent-bright);
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+.notification-secondary-button {
+  transition: 0.4s;
+  background-color: var(--button-secondary-color);
+  color: var(--button-primary-color);
+  --bs-btn-hover-bg: var(--accent-bright);
+}
+
+.modal-content.notifications {
+  width: 100%;
+}

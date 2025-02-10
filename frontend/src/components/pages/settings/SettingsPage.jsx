@@ -44,7 +44,7 @@ const SettingsPage = ({ apiPrefix, user }) => {
           });
         });
     }
-  }, [apiPrefix, user]);
+  }, [apiPrefix, user, navigate]);
 
   useEffect(() => {
     fetchUserData();

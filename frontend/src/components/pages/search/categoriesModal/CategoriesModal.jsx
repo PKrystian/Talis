@@ -38,7 +38,10 @@ const CategoriesModal = ({
             </div>
           ))}
         </div>
-        <button className="btn btn-secondary" onClick={toggleCategoriesModal}>
+        <button
+          className="btn search-modal-close-button"
+          onClick={toggleCategoriesModal}
+        >
           Close
         </button>
       </div>
