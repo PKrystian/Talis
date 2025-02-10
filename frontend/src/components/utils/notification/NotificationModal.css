@@ -1,5 +1,5 @@
 .backplate-invite {
-  background: #0b0914;
+  background: var(--button-secondary-color);
   border-radius: 30px;
   border-color: white;
 }
