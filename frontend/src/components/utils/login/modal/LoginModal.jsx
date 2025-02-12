@@ -272,7 +272,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
               ></button>
             </div>
             <div className="login-additional-info">
-              Enter your username and password to login.
+              Enter your username and password to log in.
             </div>
           </div>
           <div className="modal-body">
@@ -293,6 +293,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                   className={`login-form-control${emailErrorStyle}`}
                   type="email"
                   value={email}
+                  placeholder="youremail.com"
                   onChange={handleFormOnChange}
                   required
                 />
@@ -305,6 +306,7 @@ const LoginModal = ({ apiPrefix, setUserData, userState, setUserState }) => {
                 id={FormConstants.LOGIN_PASSWORD_FIELD}
                 value={password}
                 label={'Password'}
+                placeholder="Your password"
                 inputError={passwordError}
                 inputErrorStyle={passwordErrorStyle}
                 warningStyle={warningStyle}
