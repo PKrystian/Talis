@@ -62,9 +62,8 @@ class BoardGameRecommender:
             self.prediction_template[mechanic] = self.DEFAULT_VALUE
 
     def get_cluster_for_board_game(self, board_game: BoardGame) -> int:
-        self.__convert_to_template(board_game)
-
         try:
+            self.__convert_to_template(board_game)
             cluster = self.recommendation_model.predict(self.prediction_template)[0]
         except Exception as e:
             LogErrorCreator().create().critical().log(
