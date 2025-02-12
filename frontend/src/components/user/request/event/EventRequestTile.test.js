@@ -59,7 +59,7 @@ describe('EventRequestTile Component', () => {
 
   test('handles cancel button click', () => {
     renderComponent();
-    const cancelButton = screen.getByText('Cancel');
+    const cancelButton = screen.getByText('Reject');
     fireEvent.click(cancelButton);
     expect(mockHandleInviteAction).toHaveBeenCalledWith('rejected');
   });

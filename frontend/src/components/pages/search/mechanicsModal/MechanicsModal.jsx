@@ -38,7 +38,10 @@ const MechanicsModal = ({
             </div>
           ))}
         </div>
-        <button className="btn btn-secondary" onClick={toggleMechanicsModal}>
+        <button
+          className="btn search-modal-close-button"
+          onClick={toggleMechanicsModal}
+        >
           Close
         </button>
       </div>

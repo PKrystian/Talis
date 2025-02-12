@@ -30,7 +30,7 @@ const FriendRequestTile = ({ invite, handleInviteAction, user }) => {
       </div>
       <div className="mt-3">
         <button
-          className="btn btn-secondary w-50 mx-2"
+          className="btn notification-primary-button w-50 mx-2"
           onClick={() => handleInviteAction('dismissed')}
         >
           Dismiss

@@ -76,3 +76,10 @@
 .filter-number-input {
   max-width: 100px;
 }
+
+.search-modal-close-button {
+  transition: 0.4s;
+  background-color: var(--button-secondary-color);
+  color: var(--button-primary-color);
+  --bs-btn-hover-bg: var(--accent-bright);
+}

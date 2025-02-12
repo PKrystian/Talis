@@ -111,7 +111,7 @@ const LoginForgotPasswordModal = ({ apiPrefix, userState }) => {
             <button
               id="quitForgotPassword"
               type="button"
-              className="btn-close"
+              className="btn-close btn-close-white"
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>

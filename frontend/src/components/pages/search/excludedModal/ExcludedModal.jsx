@@ -32,7 +32,7 @@ const ExcludedModal = ({
           ))}
         </div>
         <button
-          className="btn btn-secondary mt-2"
+          className="btn search-modal-close-button mt-2"
           onClick={toggleExcludedModal}
         >
           Close
