@@ -9,8 +9,6 @@ from django.db.models import Max
 from app.controllers.SearchController import SearchController
 from app.models import UserBoardGameCollection, BoardGameCategory
 from app.models.board_game import BoardGame
-from app.models.category import Category
-from app.models.mechanic import Mechanic
 from app.utils.creators.LogErrorCreator import LogErrorCreator
 from app.utils.getters.BoardGameCategoryGetter import BoardGameCategoryGetter
 from app.utils.getters.BoardGameMechanicGetter import BoardGameMechanicGetter
@@ -30,6 +28,7 @@ class BoardGameRecommender:
         warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
         self.recommendation_model = pickle.load(open(self.MODELS_FOLDER + self.MODEL_FILENAME, 'rb'))
+        self.feature_names = self.recommendation_model.feature_names_in_
 
         self.__board_game_category_getter = board_game_category_getter
         self.__board_game_mechanic_getter = board_game_mechanic_getter
@@ -41,25 +40,8 @@ class BoardGameRecommender:
         self.MAX_MAX_PLAYTIME_SCALAR = self.__get_max_for_column(BoardGame.MAX_PLAYTIME)
         self.MAX_RATING_SCALAR = self.__get_max_for_column(BoardGame.RATING)
 
-        self.prediction_template = pd.DataFrame(
-            data={
-                BoardGame.MIN_PLAYERS: [self.DEFAULT_VALUE],
-                BoardGame.MAX_PLAYERS: [self.DEFAULT_VALUE],
-                BoardGame.AGE: [self.DEFAULT_VALUE],
-                BoardGame.MIN_PLAYTIME: [self.DEFAULT_VALUE],
-                BoardGame.MAX_PLAYTIME: [self.DEFAULT_VALUE],
-                BoardGame.RATING: [self.DEFAULT_VALUE]
-            }
-        )
-
-        all_categories = [category['name'] for category in Category.objects.values('name')]
-        all_mechanics = [mechanic['name'] for mechanic in Mechanic.objects.values('name')]
-
-        for category in all_categories:
-            self.prediction_template[category] = self.DEFAULT_VALUE
-
-        for mechanic in all_mechanics:
-            self.prediction_template[mechanic] = self.DEFAULT_VALUE
+        self.prediction_template = pd.DataFrame(columns=self.feature_names)
+        self.prediction_template.loc[0] = self.DEFAULT_VALUE
 
     def get_cluster_for_board_game(self, board_game: BoardGame) -> int:
         try:
@@ -87,10 +69,12 @@ class BoardGameRecommender:
         board_game_mechanics = self.__board_game_mechanic_getter.get_mechanics_for_board_game(board_game)
 
         for category in board_game_categories:
-            self.prediction_template[category] = 1
+            if category in self.prediction_template.columns:
+                self.prediction_template[category] = 1
 
         for mechanic in board_game_mechanics:
-            self.prediction_template[mechanic] = 1
+            if mechanic in self.prediction_template.columns:
+                self.prediction_template[mechanic] = 1
 
     @staticmethod
     def __get_max_for_column(column: str) -> float:
@@ -127,8 +111,10 @@ class BoardGameRecommender:
                 existing_recommendations=game_ids_to_exclude
             ))
 
+        recommended_games_list = [game for game in recommended_games_list if game[BoardGame.ID] not in board_game_ids]
+
         return recommended_games_list[:limit]
-    
+
     def __get_recommendations_for_game(self, board_game: BoardGame, cluster: int, recommendations_count: int, existing_recommendations: list) -> list:
         game_category_ids = self.__board_game_category_getter.get_categories_for_board_game(board_game, True)
 

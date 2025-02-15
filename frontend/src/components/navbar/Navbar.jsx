@@ -330,6 +330,15 @@ const Navbar = ({ apiPrefix, user, userState, resetUser, inviteCount }) => {
                         <SignOut size={20} className="me-2" />
                         Log out
                       </Link>
+                      {user.is_superuser ? (
+                        <div
+                          className="nav-user-profile-link pb-4 pt-1 move-right"
+                          onClick={() => (window.location.href = '/admin')}
+                        >
+                          <UserCircle size={20} className="me-2" />
+                          Admin panel
+                        </div>
+                      ) : null}
                     </div>
                   ) : null}
                 </li>
