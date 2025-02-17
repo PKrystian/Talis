@@ -111,7 +111,7 @@ const SearchPage = ({ apiPrefix }) => {
 
     setTimeout(() => {
       window.scrollTo(0, currentScrollY);
-    }, 100);
+    }, 500);
   };
 
   const applyInputFilters = () => {
