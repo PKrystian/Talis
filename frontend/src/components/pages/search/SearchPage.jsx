@@ -104,6 +104,16 @@ const SearchPage = ({ apiPrefix }) => {
     }
   };
 
+  const handleLoadMore = () => {
+    const currentScrollY = window.scrollY;
+
+    setCurrentPage((prevPage) => prevPage + 1);
+
+    setTimeout(() => {
+      window.scrollTo(0, currentScrollY);
+    }, 100);
+  };
+
   const applyInputFilters = () => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -485,9 +495,9 @@ const SearchPage = ({ apiPrefix }) => {
             {hasMore && (
               <div className="text-center">
                 <button
-                  onClick={() => setCurrentPage((prev) => prev + 1)}
-                  className="btn btn-primary my-3"
-                  disabled={isLoading}
+                  onClick={handleLoadMore}
+                  disabled={isLoading || !hasMore}
+                  className="btn search-page-load-more-button my-3"
                 >
                   {isLoading ? 'Loading...' : 'Load More'}
                 </button>

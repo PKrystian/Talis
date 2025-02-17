@@ -43,6 +43,15 @@
   height: 40px;
 }
 
+.search-page-load-more-button {
+  background-color: var(--button-primary-color);
+  color: var(--background-color-dark-heavy);
+  --bs-btn-hover-bg: var(--accent-bright);
+  border: 1px solid var(--additional-gray);
+  border-radius: 10px;
+  height: 40px;
+}
+
 .search-page-reset-button {
   transition: 0.4s;
   background-color: var(--button-secondary-color);
