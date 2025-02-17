@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -104,15 +104,19 @@ const SearchPage = ({ apiPrefix }) => {
     }
   };
 
-  const handleLoadMore = () => {
-    const currentScrollY = window.scrollY;
+  const [loading, setLoading] = useState(false);
+  const scrollPosition = useRef(0);
 
+  const handleLoadMore = async () => {
+    scrollPosition.current = window.scrollY;
+    setLoading(true);
     setCurrentPage((prevPage) => prevPage + 1);
-
-    setTimeout(() => {
-      window.scrollTo(0, currentScrollY);
-    }, 500);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, scrollPosition.current);
+    setLoading(false);
+  }, [loading, searchResults]);
 
   const applyInputFilters = () => {
     setFilters((prevFilters) => ({
